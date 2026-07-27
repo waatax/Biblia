@@ -311,7 +311,9 @@ button:hover { border-color: var(--accent); color: var(--accent); }
   right: 18px;
   bottom: 18px;
   z-index: 40;
-  width: 260px;
+  width: 320px;
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
   background: var(--bar);
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -337,7 +339,52 @@ button:hover { border-color: var(--accent); color: var(--accent); }
   font-weight: 700;
   color: var(--accent);
 }
+/* 原文字（希伯來文／希臘文）—— 字體放大才看得清母音符號 */
+.strong-orig {
+  font-size: 24px;
+  line-height: 1.5;
+  margin-top: 2px;
+  color: var(--fg);
+  font-family: "Times New Roman", "SBL Hebrew", "Ezra SIL", serif;
+  direction: ltr;
+  unicode-bidi: plaintext;
+}
+
 .strong-meta { color: var(--fg-dim); margin-top: 2px; }
+
+/* 詳細釋義：原始資料是排好版的純文字，保留換行與縮排 */
+.strong-dict {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  max-height: 260px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--fg);
+  font-family: "Segoe UI", "Microsoft JhengHei", system-ui, sans-serif;
+}
+.strong-dict.loading,
+.strong-dict.muted { color: var(--fg-dim); font-style: italic; white-space: normal; }
+
+.strong-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+}
+.strong-search-btn {
+  flex: 1 1 auto;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.strong-search-btn:hover { color: #fff; filter: brightness(1.1); }
+.strong-eng-btn { flex: 0 0 auto; font-size: 12px; }
 .strong-hits { margin-top: 8px; line-height: 1.6; }
 .strong-hits b { color: var(--fg); }
 

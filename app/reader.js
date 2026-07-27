@@ -101,6 +101,50 @@ var BIBLIA = (function () {
     searchIndexData = data;
   }
 
+  /* ---------- Strong 原文字典 ----------
+   * 1.4 萬筆、數 MB，所以不放進首頁載入路徑，
+   * 改成「第一次點到 Strong 號碼」時才注入 <script> 延遲載入。
+   */
+  /* 依語言分成 H／G 兩份，只載入實際點到的那一種 */
+  var strongDictData = { H: null, G: null };
+  var strongDictState = { H: 'idle', G: 'idle' };   // idle|loading|ready|failed
+  var strongDictWaiting = { H: [], G: [] };
+
+  function strongDict(lang, data) {   // 由 data/strong_dict_<lang>.js 呼叫
+    strongDictData[lang] = data;
+    strongDictState[lang] = 'ready';
+    var waiting = strongDictWaiting[lang];
+    strongDictWaiting[lang] = [];
+    waiting.forEach(function (fn) { fn(); });
+  }
+
+  function dictEntry(code) {
+    var lang = code.charAt(0);
+    var bag = strongDictData[lang];
+    return bag ? bag[code] : null;
+  }
+
+  function ensureStrongDict(code, cb) {
+    var lang = code.charAt(0) === 'H' ? 'H' : 'G';
+    if (strongDictState[lang] === 'ready' || strongDictState[lang] === 'failed') {
+      cb(); return;
+    }
+    strongDictWaiting[lang].push(cb);
+    if (strongDictState[lang] === 'loading') return;
+
+    strongDictState[lang] = 'loading';
+    var s = document.createElement('script');
+    s.src = 'data/strong_dict_' + lang + '.js';
+    s.charset = 'utf-8';
+    s.onerror = function () {
+      strongDictState[lang] = 'failed';
+      var waiting = strongDictWaiting[lang];
+      strongDictWaiting[lang] = [];
+      waiting.forEach(function (fn) { fn(); });
+    };
+    document.head.appendChild(s);
+  }
+
   /* ---------- 進入點：由 data/books.js 呼叫 ---------- */
   function books(list) {
     state.index = list;
@@ -128,7 +172,8 @@ var BIBLIA = (function () {
       'startView', 'readerView', 'otBook', 'otChap', 'ntBook', 'ntChap',
       'startVersions', 'startInter', 'startDark', 'bookSelect', 'chapSelect',
       'reader', 'versionBox', 'interlinearChk', 'strongPanel', 'strongNum',
-      'strongMeta', 'strongHits', 'startSearchBtn', 'searchBarBtn', 'searchModal',
+      'strongMeta', 'strongHits', 'strongOrig', 'strongDict', 'strongSearchBtn',
+      'strongEngBtn', 'startSearchBtn', 'searchBarBtn', 'searchModal',
       'searchOverlay', 'searchInput', 'searchExecBtn', 'searchCloseBtn',
       'searchVersionSelect', 'searchScopeSelect', 'searchSummary', 'searchResults',
       'searchFoot', 'searchMoreBtn'
@@ -308,6 +353,12 @@ var BIBLIA = (function () {
       save();
     });
     document.getElementById('strongClose').addEventListener('click', clearStrong);
+    if (el.strongSearchBtn) {
+      el.strongSearchBtn.addEventListener('click', searchCurrentStrong);
+    }
+    if (el.strongEngBtn) {
+      el.strongEngBtn.addEventListener('click', toggleDictLang);
+    }
 
     document.addEventListener('keydown', function (e) {
       if (el.readerView.hidden) return;
@@ -500,14 +551,71 @@ var BIBLIA = (function () {
     return span;
   }
 
-  /* ---------- Strong 高亮 ---------- */
+  /* ---------- Strong 高亮與釋義 ---------- */
   function showStrong(code, unit) {
     state.strong = code;
     el.strongNum.textContent = code;
     el.strongMeta.textContent = (code.charAt(0) === 'H' ? '希伯來文' : '希臘文') +
       ' Strong' + (unit && unit.m && unit.m.length ? '　文法 ' + unit.m.join('/') : '');
+    el.strongOrig.textContent = '';
+    el.strongDict.textContent = '載入釋義中…';
+    el.strongDict.className = 'strong-dict loading';
+    el.strongEngBtn.hidden = true;
     el.strongPanel.hidden = false;
     paintStrong();
+
+    ensureStrongDict(code, function () { renderDict(code); });
+  }
+
+  function renderDict(code) {
+    if (state.strong !== code) return;         // 使用者已改點別的字
+
+    var lang = code.charAt(0) === 'H' ? 'H' : 'G';
+    if (strongDictState[lang] !== 'ready') {
+      el.strongDict.className = 'strong-dict muted';
+      el.strongDict.textContent =
+        '尚無字典資料。請執行 scripts/fetch_strong_dict.py 與 build_strong_dict.py。';
+      return;
+    }
+    var entry = dictEntry(code);
+    if (!entry) {
+      // 可能是上游真的沒有這個號碼，也可能是字典還沒下載完整 —— 兩者要講清楚，
+      // 不要讓「還沒抓到」看起來像「查無此字」。
+      el.strongDict.className = 'strong-dict muted';
+      el.strongDict.textContent =
+        '此號碼尚無釋義資料。若字典尚未下載完整，請執行 '
+        + 'scripts/fetch_strong_dict.py 後再跑 build_strong_dict.py。';
+      return;
+    }
+
+    el.strongOrig.textContent = entry.o || '';
+    el.strongDict.className = 'strong-dict';
+    el.strongDict.textContent = entry.z || entry.e || '';
+
+    // 有英文釋義才給切換鈕
+    if (entry.e && entry.z) {
+      el.strongEngBtn.hidden = false;
+      el.strongEngBtn.textContent = '顯示英文釋義';
+      el.strongEngBtn.setAttribute('data-mode', 'zh');
+    } else {
+      el.strongEngBtn.hidden = true;
+    }
+  }
+
+  function toggleDictLang() {
+    var entry = state.strong ? dictEntry(state.strong) : null;
+    if (!entry) return;
+    var mode = el.strongEngBtn.getAttribute('data-mode') === 'zh' ? 'en' : 'zh';
+    el.strongEngBtn.setAttribute('data-mode', mode);
+    el.strongDict.textContent = mode === 'en' ? entry.e : entry.z;
+    el.strongEngBtn.textContent = mode === 'en' ? '顯示中文釋義' : '顯示英文釋義';
+  }
+
+  /* 從 Strong 面板直接跳到搜尋，並鎖定 Strong 號碼模式 */
+  function searchCurrentStrong() {
+    if (!state.strong) return;
+    if (el.searchVersionSelect) el.searchVersionSelect.value = 'strong';
+    openSearchModal(state.strong);
   }
 
   function clearStrong() {
@@ -787,6 +895,7 @@ var BIBLIA = (function () {
     setTimeout(guard, 1200);
   }
 
-  return { books: books, receive: receive, searchIndex: searchIndex };
+  return { books: books, receive: receive, searchIndex: searchIndex,
+           strongDict: strongDict };
 })();
 

@@ -299,6 +299,57 @@ def main():
         check("%s 全部 1,189 章與原始來源檔逐字相同（%d 節）" % (v["label"], verses),
               not bad, "\n".join(bad[:5]) if bad else "")
 
+    # ── Strong 原文字典完整性 ──────────────────────────────────────
+    dict_dir = os.path.join(common.RAW_DIR, "strong_dict")
+    if os.path.isdir(dict_dir):
+        emit()
+        emit("── Strong 原文字典 " + "─" * 47)
+        HEB_MAX, GRK_MAX = 8674, 5624
+
+        built = os.path.join(common.PARSED_DIR, "strong_dict.json")
+        if os.path.exists(built):
+            entries = common.read_json(built)
+            have = set(entries)
+            gapH = [i for i in range(1, HEB_MAX + 1) if ("H%d" % i) not in have]
+            gapG = [i for i in range(1, GRK_MAX + 1) if ("G%d" % i) not in have]
+
+            check("希伯來文 Strong 全收錄（H1–H%d）" % HEB_MAX, not gapH,
+                  "缺 %d 個，前 15：%s" % (len(gapH), gapH[:15]) if gapH else "")
+            check("希臘文 Strong 全收錄（G1–G%d）" % GRK_MAX, not gapG,
+                  "缺 %d 個，前 15：%s" % (len(gapG), gapG[:15]) if gapG else "")
+
+            no_orig = [c for c, v in entries.items() if not v.get("o")]
+            no_def = [c for c, v in entries.items()
+                      if not v.get("z") and not v.get("e")]
+            check("每筆皆有釋義內文", not no_def,
+                  "缺釋義 %d 筆，前 10：%s" % (len(no_def), sorted(no_def)[:10])
+                  if no_def else "")
+            emit("[INFO] 收錄 %d 筆；無原文字者 %d 筆" % (len(entries), len(no_orig)))
+
+            # 經文用到的號碼必須全部查得到釋義，否則點了會沒東西
+            used = set()
+            for fn in sorted(os.listdir(common.PARSED_DIR)):
+                if not fn.endswith(".json") or fn == "strong_dict.json":
+                    continue
+                d = common.read_json(os.path.join(common.PARSED_DIR, fn))
+                for ch in d.get("ch", []):
+                    for verse in ch.get("v", []):
+                        for units in (verse.get("w") or {}).values():
+                            for u in units:
+                                for s in u.get("s", []):
+                                    used.add(s)
+            miss_used = sorted(used - have)
+            check("經文用到的 %d 個號碼皆有釋義" % len(used), not miss_used,
+                  "缺 %d 個，前 10：%s" % (len(miss_used), miss_used[:10])
+                  if miss_used else "")
+        else:
+            check("Strong 字典已建置（parsed/strong_dict.json）", False,
+                  "請執行 scripts/build_strong_dict.py")
+
+        for lang in ("H", "G"):
+            p = os.path.join(common.APP_DATA_DIR, "strong_dict_%s.js" % lang)
+            check("app/data/strong_dict_%s.js 存在" % lang, os.path.exists(p))
+
     emit()
     emit("=" * 70)
     emit("失敗項目：%d" % FAILS[0])

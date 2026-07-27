@@ -21,6 +21,9 @@ python scripts/fetch_rvr1909.py       # 西班牙文 RVR1909（單檔下載，�
 python scripts/parse.py               # 解析 Strong 標記，產出 parsed/ 與 app/data/
 python scripts/verify.py              # 解析正確性驗證 → report.txt
 python scripts/check_completeness.py  # 完整性稽核 → completeness.txt
+
+python scripts/fetch_strong_dict.py   # Strong 原文字典釋義（14,279 筆，約 4 小時）
+python scripts/build_strong_dict.py   # → app/data/strong_dict_H.js / _G.js
 ```
 
 只需要 Python 3（**僅用標準庫**，無任何 pip 依賴）。
@@ -77,6 +80,27 @@ RVR1909 在 18 處依**希伯來文分章**，與英文分章不同（民 12/13�
 | World English Bible | 英文 | 公有領域 | — | FHL API |
 | Strong Number (1890) | — | 公有領域 | — | FHL API |
 
+### Strong 原文字典
+
+點擊逐字對照中的任一詞，除了高亮全章同號碼之外，還會顯示：
+
+- 原文字（如 `רֵאשִׁית`、`ἀγάπη`）
+- 中文詳細釋義（字源、詞性、欽定本譯法統計、分項字義），可切換英文釋義
+- 「🔍 搜尋全書此號碼」—— 一鍵跳到搜尋，列出全本出現該 Strong 的所有經節
+
+字典依語言切成 `strong_dict_H.js` / `strong_dict_G.js` 兩份，
+且是**點到 Strong 號碼才延遲載入**，不影響首頁開啟速度（讀舊約不會載到希臘文那份）。
+
+**字典授權依據**（已查證 <https://www.fhl.net/main/fhl/fhl8.html>）：
+
+- 信望愛《和合本》的 Strong's numbers 著作權為信望愛所有，採 **open source FDL**
+  授權，可散布；並要求「請勿任意移除 Strong's numbers 標記」—— 本專案完整保留。
+- 站上另有兩個詞典端點 `sbdag.php`（希臘文）與 `stwcbhdic.php`（希伯來文），
+  明載「僅授權給信望愛站使用」（向 UBS、浸宣出版社購買的僅為網路刊載權），
+  **本專案完全不使用這兩個端點**。
+- 本專案採用的 `sd.php` 原文字典不在上述受限清單中；其 `edic_text` 為公有領域的
+  BDB／Thayer 系精簡詞典資料。
+
 **受著作權的譯本（RVR1960 / NIV / NVI 等）一律不整本下載或儲存** ——
 整本重製受著作權譯本即使自用也構成侵權。若日後要支援，只能走「授權 API
 即時取單章顯示、標註出處、不快取」的線上模式。
@@ -86,15 +110,18 @@ RVR1909 在 18 處依**希伯來文分章**，與英文分章不同（民 12/13�
 ## 目錄結構
 
 ```
-config/books.csv     66 卷書卷表（代號自 FHL listall.html 取得，章數經 1,189 斷言）
-scripts/             下載、解析、驗證工具
-raw/                 原始 API 回應，唯一真相來源，永不覆寫
-parsed/              解析後的正規 JSON，一卷一檔
-app/                 離線閱讀器（純 HTML + CSS + 原生 JS，零框架）
-app/data/            前端用的資料（同 parsed，包成 JS）
-manifest.csv         每章的下載紀錄與 SHA1
-report.txt           驗證報告
-Biblia.md            原始設計藍圖
+config/books.csv       66 卷書卷表（代號自 FHL listall.html 取得，章數經 1,189 斷言）
+scripts/               下載、解析、驗證工具
+raw/                   原始 API 回應，唯一真相來源，永不覆寫
+raw/strong_dict/       Strong 原文字典原始回應（14,478 筆）
+raw/es_rvr1909/_source 西班牙文原始下載檔
+parsed/                解析後的正規 JSON，一卷一檔（可由 raw/ 重建，未進版控）
+app/                   離線閱讀器（純 HTML + CSS + 原生 JS，零框架）
+app/data/              前端資料：66 卷經文 + 搜尋索引 + Strong 字典（H／G 分檔）
+manifest.csv           每章的下載紀錄與 SHA1
+report.txt             解析正確性報告
+completeness.txt       完整性稽核報告
+Biblia.md              原始設計藍圖
 ```
 
 ## 幾個實作上的關鍵決定
