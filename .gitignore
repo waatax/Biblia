@@ -1,0 +1,11 @@
+# parsed/ 可由 raw/ 用 scripts/parse.py 在數秒內重建，不必進版控；
+# app/data/ 是前端實際要載入的資料，需保留才能 clone 下來直接開。
+parsed/
+
+# 暫存與系統檔
+scratch_*.out
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+desktop.ini

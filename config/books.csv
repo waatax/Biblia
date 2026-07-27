@@ -1,0 +1,67 @@
+book_no,engs,dir,chineses,name_zh,name_en,abbr,testament,chapters
+1,Gen,Gen,創,創世記,Genesis,Ge,OT,50
+2,Ex,Ex,出,出埃及記,Exodus,Ex,OT,40
+3,Lev,Lev,利,利未記,Leviticus,Le,OT,27
+4,Num,Num,民,民數記,Numbers,Nu,OT,36
+5,Deut,Deut,申,申命記,Deuteronomy,De,OT,34
+6,Josh,Josh,書,約書亞記,Joshua,Jos,OT,24
+7,Judg,Judg,士,士師記,Judges,Jud,OT,21
+8,Ruth,Ruth,得,路得記,Ruth,Ru,OT,4
+9,1 Sam,1Sam,撒上,撒母耳記上,First Samuel,1Sa,OT,31
+10,2 Sam,2Sam,撒下,撒母耳記下,Second Samuel,2Sa,OT,24
+11,1 Kin,1Kin,王上,列王紀上,First Kings,1Ki,OT,22
+12,2 Kin,2Kin,王下,列王紀下,Second Kings,2Ki,OT,25
+13,1 Chr,1Chr,代上,歷代志上,First Chronicles,1Ch,OT,29
+14,2 Chr,2Chr,代下,歷代志下,Second Chronicles,2Ch,OT,36
+15,Ezra,Ezra,拉,以斯拉記,Ezra,Ezr,OT,10
+16,Neh,Neh,尼,尼希米記,Nehemiah,Ne,OT,13
+17,Esth,Esth,斯,以斯帖記,Esther,Es,OT,10
+18,Job,Job,伯,約伯記,Job,Job,OT,42
+19,Ps,Ps,詩,詩篇,Psalms,Ps,OT,150
+20,Prov,Prov,箴,箴言,Proverbs,Pr,OT,31
+21,Eccl,Eccl,傳,傳道書,Ecclesiastes,Ec,OT,12
+22,Song,Song,歌,雅歌,Song of Solomon,So,OT,8
+23,Is,Is,賽,以賽亞書,Isaiah,Isa,OT,66
+24,Jer,Jer,耶,耶利米書,Jeremiah,Jer,OT,52
+25,Lam,Lam,哀,耶利米哀歌,Lamentations,La,OT,5
+26,Ezek,Ezek,結,以西結書,Ezekiel,Eze,OT,48
+27,Dan,Dan,但,但以理書,Daniel,Da,OT,12
+28,Hos,Hos,何,何西阿書,Hosea,Ho,OT,14
+29,Joel,Joel,珥,約珥書,Joel,Joe,OT,3
+30,Amos,Amos,摩,阿摩司書,Amos,Am,OT,9
+31,Obad,Obad,俄,俄巴底亞書,Obadiah,Ob,OT,1
+32,Jon,Jon,拿,約拿書,Jonah,Jon,OT,4
+33,Mic,Mic,彌,彌迦書,Micah,Mic,OT,7
+34,Nah,Nah,鴻,那鴻書,Nahum,Na,OT,3
+35,Hab,Hab,哈,哈巴谷書,Habakkuk,Hab,OT,3
+36,Zeph,Zeph,番,西番雅書,Zephaniah,Zep,OT,3
+37,Hag,Hag,該,哈該書,Haggai,Hag,OT,2
+38,Zech,Zech,亞,撒迦利亞書,Zechariah,Zec,OT,14
+39,Mal,Mal,瑪,瑪拉基書,Malachi,Mal,OT,4
+40,Matt,Matt,太,馬太福音,Matthew,Mt,NT,28
+41,Mark,Mark,可,馬可福音,Mark,Mr,NT,16
+42,Luke,Luke,路,路加福音,Luke,Lu,NT,24
+43,John,John,約,約翰福音,John,Joh,NT,21
+44,Acts,Acts,徒,使徒行傳,Acts,Ac,NT,28
+45,Rom,Rom,羅,羅馬書,Romans,Ro,NT,16
+46,1 Cor,1Cor,林前,哥林多前書,First Corinthians,1Co,NT,16
+47,2 Cor,2Cor,林後,哥林多後書,Second Corinthians,2Co,NT,13
+48,Gal,Gal,加,加拉太書,Galatians,Ga,NT,6
+49,Eph,Eph,弗,以弗所書,Ephesians,Eph,NT,6
+50,Phil,Phil,腓,腓立比書,Philippians,Php,NT,4
+51,Col,Col,西,歌羅西書,Colossians,Col,NT,4
+52,1 Thess,1Thess,帖前,帖撒羅尼迦前書,First Thessalonians,1Th,NT,5
+53,2 Thess,2Thess,帖後,帖撒羅尼迦後書,Second Thessalonians,2Th,NT,3
+54,1 Tim,1Tim,提前,提摩太前書,First Timothy,1Ti,NT,6
+55,2 Tim,2Tim,提後,提摩太後書,Second Timothy,2Ti,NT,4
+56,Titus,Titus,多,提多書,Titus,Tit,NT,3
+57,Philem,Philem,門,腓利門書,Philemon,Phm,NT,1
+58,Heb,Heb,來,希伯來書,Hebrews,Heb,NT,13
+59,James,James,雅,雅各書,James,Jas,NT,5
+60,1 Pet,1Pet,彼前,彼得前書,First Peter,1Pe,NT,5
+61,2 Pet,2Pet,彼後,彼得後書,Second Peter,2Pe,NT,3
+62,1 John,1John,約一,約翰一書,First John,1Jo,NT,5
+63,2 John,2John,約二,約翰二書,second John,2Jo,NT,1
+64,3 John,3John,約三,約翰三書,Third John,3Jo,NT,1
+65,Jude,Jude,猶,猶大書,Jude,Jude,NT,1
+66,Rev,Rev,啟,啟示錄,Revelation,Re,NT,22

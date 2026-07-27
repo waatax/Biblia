@@ -1,0 +1,12 @@
+# raw/ 是永久保存的原始資料，必須逐位元組穩定。
+# Windows 上 Git 預設會把 LF 換成 CRLF，那會改變檔案內容與雜湊，
+# 所以這裡一律固定為 LF。
+* text=auto eol=lf
+
+*.json text eol=lf
+*.js   text eol=lf
+*.csv  text eol=lf
+*.md   text eol=lf
+*.py   text eol=lf
+*.txt  text eol=lf
+*.log  text eol=lf

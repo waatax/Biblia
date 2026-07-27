@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biblia — 多語逐字對照聖經</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== 初始介面：選擇經文 ===================== -->
+<section id="startView" class="start">
+  <h1 class="start-title">閱讀經文</h1>
+
+  <div class="start-card">
+    <div class="pick">
+      <span class="pick-label">舊約：</span>
+      <select id="otBook" class="pick-book"></select>
+      <select id="otChap" class="pick-chap"></select>
+      <button id="otGo" type="button" class="go">閱讀</button>
+    </div>
+
+    <div class="pick">
+      <span class="pick-label">新約：</span>
+      <select id="ntBook" class="pick-book"></select>
+      <select id="ntChap" class="pick-chap"></select>
+      <button id="ntGo" type="button" class="go">閱讀</button>
+    </div>
+
+    <hr class="pick-sep">
+
+    <div class="pick pick-wrap">
+      <span class="pick-label">版本：</span>
+      <span id="startVersions" class="pick-versions"></span>
+    </div>
+
+    <div class="pick pick-wrap">
+      <span class="pick-label">顯示：</span>
+      <label class="pick-opt">
+        <input type="checkbox" id="startInter">
+        <span>逐字對照（含 strong number）</span>
+      </label>
+      <label class="pick-opt">
+        <input type="checkbox" id="startDark">
+        <span>深色背景</span>
+      </label>
+    </div>
+  </div>
+
+  <p class="start-foot">
+    和合本 1919 ・ King James Version ・ World English Bible ・ Strong 1890 —— 皆為公有領域<br>
+    經文資料來源：信望愛信仰與聖經資源中心 (bible.fhl.net)
+  </p>
+</section>
+
+<!-- ===================== 閱讀介面 ===================== -->
+<div id="readerView" hidden>
+
+  <header class="bar">
+    <div class="bar-row">
+      <button id="homeBtn" type="button" class="home" title="回選擇畫面">☰ 選擇</button>
+
+      <label class="ctl">
+        <span class="ctl-label">書卷</span>
+        <select id="bookSelect"></select>
+      </label>
+
+      <label class="ctl">
+        <span class="ctl-label">章</span>
+        <select id="chapSelect"></select>
+      </label>
+
+      <span class="nav-group">
+        <button id="prevBtn" type="button" title="上一章（←）">◀</button>
+        <button id="nextBtn" type="button" title="下一章（→）">▶</button>
+      </span>
+
+      <span class="spacer"></span>
+
+      <span class="versions" id="versionBox"></span>
+
+      <span class="spacer"></span>
+
+      <label class="ctl toggle">
+        <input type="checkbox" id="interlinearChk">
+        <span>逐字對照</span>
+      </label>
+
+      <span class="nav-group">
+        <button id="fontDown" type="button" title="縮小字級">A－</button>
+        <button id="fontUp" type="button" title="放大字級">A＋</button>
+        <button id="themeBtn" type="button" title="切換深淺色">◐</button>
+      </span>
+    </div>
+  </header>
+
+  <main id="reader" class="reader">
+    <p class="placeholder">載入中…</p>
+  </main>
+
+  <aside id="strongPanel" class="strong-panel" hidden>
+    <button id="strongClose" class="strong-close" type="button" title="關閉">×</button>
+    <div class="strong-num" id="strongNum"></div>
+    <div class="strong-meta" id="strongMeta"></div>
+    <div class="strong-hits" id="strongHits"></div>
+  </aside>
+
+  <footer class="foot">
+    <span>和合本 1919 ・ KJV ・ WEB ・ Strong 1890 —— 皆為公有領域</span>
+    <span>經文資料來源：信望愛信仰與聖經資源中心 (bible.fhl.net)</span>
+  </footer>
+
+</div>
+
+<script src="reader.js"></script>
+<script src="data/books.js"></script>
+</body>
+</html>

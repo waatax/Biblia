@@ -1,0 +1,40 @@
+Biblia 驗證報告  2026-07-27 13:48:05
+==================================================================
+[PASS] books.csv 共 66 卷
+         實得 66
+[PASS] books.csv 總章數 == 1189
+         實得 1189
+[PASS] raw 檔齊全（3567 個）
+[PASS] parsed 各卷章數與 books.csv 相符
+[PASS] parsed 總章數 == 1189
+         實得 1189
+[INFO] 節數統計（以聯集計 31107 節）
+         zh_unv 31103；en_kjv 31102；en_web 31105
+[INFO] 版本間節數落差 11 處（正常，非錯誤）
+         John 7:53 缺 zh_unv；Rom 14:24 缺 zh_unv；Rom 14:24 缺 en_kjv；Rom 14:25 缺 zh_unv；Rom 14:25 缺 en_kjv
+[INFO] 相異 Strong 號碼 14279 個
+[PASS] raw → parsed 經文保真（抽查 120 節）
+[PASS] 創 1:1 和合本 Strong 含 H7225/H430/H1254/H8064/H776
+         實得 ['H9002', 'H7225', 'H430', 'H1254', 'H853', 'H8064', 'H853', 'H776']
+[PASS] 太 1:1 和合本 Strong 含 G11/G1138/G2424/G5547（新約為 G）
+         實得 ['G11', 'G5207', 'G1138', 'G5207', 'G2424', 'G5547', 'G1078', 'G976']
+[PASS] 太 1:1 無誤植的 H 開頭 Strong
+         誤植：[]
+[PASS] 創 1:1「創造」文法碼 8804 收在 m、未混入 s
+         m=[['8804']]
+[PASS] 無 H0／G0 佔位符混入 Strong
+         殘留：[]
+[PASS] Strong 號碼無系統性超界（種類 <= 5 視為上游雜訊）
+         超界 3 種：['H19691', 'H31961', 'H8675']
+[INFO] 上游資料雜訊 3 種（已原樣保留於 raw/）
+         H19691 H31961 H8675
+[INFO] FHL 擴充前綴碼 5 種（正常，前綴質詞）
+         H9001 H9002 H9003 H9004 H9013
+[PASS] 所有輸出檔為 UTF-8 無 BOM
+[PASS] app/data 66 卷 JS 齊全
+[PASS] app/data/books.js 存在
+[PASS] app/index.html 存在
+[PASS] app/style.css 存在
+[PASS] app/reader.js 存在
+==================================================================
+失敗項目：0
