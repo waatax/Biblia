@@ -378,3 +378,229 @@ button:hover { border-color: var(--accent); color: var(--accent); }
   .foot { position: static; }
   .strong-panel { left: 12px; right: 12px; width: auto; }
 }
+
+/* ---------- 搜尋按鈕與搜尋彈窗 (Search System) ---------- */
+.go-search {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: opacity .15s ease;
+}
+.go-search:hover { opacity: .9; }
+
+.search-btn {
+  background: var(--bg-alt);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.search-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.search-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.search-modal[hidden] { display: none; }
+
+.search-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .45);
+  backdrop-filter: blur(2px);
+}
+
+.search-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  max-height: 85vh;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .24);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 101;
+  font-family: "Segoe UI", "Microsoft JhengHei", system-ui, sans-serif;
+}
+
+.search-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bar);
+}
+
+.search-input-group {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+}
+
+.search-input {
+  flex: 1;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 15px;
+  outline: none;
+}
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.search-exec-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.search-exec-btn:hover { opacity: .9; }
+
+.search-close-btn {
+  background: none;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.search-close-btn:hover { color: var(--fg); }
+
+.search-controls {
+  display: flex;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--fg-dim);
+}
+
+.search-ctl select {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 13px;
+}
+
+.search-summary {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--fg-dim);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.search-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-item {
+  background: var(--bar);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.search-item:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.search-ref {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.search-snippet {
+  font-size: 14px;
+  color: var(--fg);
+  line-height: 1.5;
+}
+
+.search-snippet mark {
+  background: var(--hit);
+  color: inherit;
+  padding: 1px 3px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.search-foot {
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  background: var(--bar);
+}
+
+.search-more-btn {
+  background: var(--bg-alt);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.search-more-btn:hover { background: var(--line); }
+
+/* 搜尋跳轉高亮動畫 */
+@keyframes highlight-target-verse {
+  0% { background: var(--hit); }
+  50% { background: var(--hit); }
+  100% { background: transparent; }
+}
+
+.verse.target-highlight {
+  animation: highlight-target-verse 2.5s ease-out;
+}
+

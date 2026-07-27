@@ -86,6 +86,21 @@ var BIBLIA = (function () {
     waiting.forEach(function (fn) { fn(data); });
   }
 
+  var searchIndexData = null;
+  var searchState = {
+    results: [],
+    page: 0,
+    pageSize: 25,
+    query: '',
+    tokens: [],
+    version: 'zh_unv',
+    scope: 'all'
+  };
+
+  function searchIndex(data) {
+    searchIndexData = data;
+  }
+
   /* ---------- 進入點：由 data/books.js 呼叫 ---------- */
   function books(list) {
     state.index = list;
@@ -103,6 +118,7 @@ var BIBLIA = (function () {
     cacheEls();
     buildStart();
     buildReaderControls();
+    buildSearchControls();
     applySize();
     showStart();
   }
@@ -112,7 +128,10 @@ var BIBLIA = (function () {
       'startView', 'readerView', 'otBook', 'otChap', 'ntBook', 'ntChap',
       'startVersions', 'startInter', 'startDark', 'bookSelect', 'chapSelect',
       'reader', 'versionBox', 'interlinearChk', 'strongPanel', 'strongNum',
-      'strongMeta', 'strongHits'
+      'strongMeta', 'strongHits', 'startSearchBtn', 'searchBarBtn', 'searchModal',
+      'searchOverlay', 'searchInput', 'searchExecBtn', 'searchCloseBtn',
+      'searchVersionSelect', 'searchScopeSelect', 'searchSummary', 'searchResults',
+      'searchFoot', 'searchMoreBtn'
     ].forEach(function (id) { el[id] = document.getElementById(id); });
   }
 
@@ -226,10 +245,10 @@ var BIBLIA = (function () {
     syncVersions();
   }
 
-  function showReader(no, chap) {
+  function showReader(no, chap, cb) {
     el.startView.hidden = true;
     el.readerView.hidden = false;
-    go(no, chap);
+    go(no, chap, cb);
   }
 
   /* ---------- 閱讀介面控制列 ---------- */
@@ -321,7 +340,7 @@ var BIBLIA = (function () {
     go(nextMeta.no, dir > 0 ? 1 : nextMeta.nch);
   }
 
-  function go(no, chap) {
+  function go(no, chap, cb) {
     state.bookNo = no;
     state.chap = chap;
     state.strong = null;
@@ -331,7 +350,7 @@ var BIBLIA = (function () {
     el.chapSelect.value = chap;
     save();
 
-    if (state.cache[no]) { render(); return; }
+    if (state.cache[no]) { render(); if (cb) cb(); return; }
     el.reader.innerHTML = '<p class="placeholder">載入 ' + state.byNo[no].zh + ' …</p>';
     loadBook(no, function (data) {
       if (!data) {
@@ -340,6 +359,7 @@ var BIBLIA = (function () {
         return;
       }
       render();
+      if (cb) cb();
     });
   }
 
@@ -386,6 +406,7 @@ var BIBLIA = (function () {
     chapter.v.forEach(function (verse) {
       var row = document.createElement('div');
       row.className = 'verse' + (verse.p ? ' para' : '');
+      row.setAttribute('data-sec', verse.s);
       row.style.gridTemplateColumns = tmpl;
       cols.forEach(function (v) { row.appendChild(cell(verse, v)); });
       el.reader.appendChild(row);
@@ -524,6 +545,220 @@ var BIBLIA = (function () {
       : (state.inter ? '本章其他版本未標此號。' : '切到「逐字對照」才會顯示高亮。');
   }
 
+  /* ---------- 搜尋系統引擎 ---------- */
+  function buildSearchControls() {
+    if (el.startSearchBtn) {
+      el.startSearchBtn.addEventListener('click', function () { openSearchModal(''); });
+    }
+    if (el.searchBarBtn) {
+      el.searchBarBtn.addEventListener('click', function () { openSearchModal(''); });
+    }
+    if (el.searchCloseBtn) {
+      el.searchCloseBtn.addEventListener('click', closeSearchModal);
+    }
+    if (el.searchOverlay) {
+      el.searchOverlay.addEventListener('click', closeSearchModal);
+    }
+    if (el.searchExecBtn) {
+      el.searchExecBtn.addEventListener('click', function () { runSearch(); });
+    }
+    if (el.searchInput) {
+      el.searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') runSearch();
+        if (e.key === 'Escape') closeSearchModal();
+      });
+    }
+    if (el.searchMoreBtn) {
+      el.searchMoreBtn.addEventListener('click', renderNextBatch);
+    }
+    if (el.searchVersionSelect) {
+      el.searchVersionSelect.addEventListener('change', function () { runSearch(); });
+    }
+    if (el.searchScopeSelect) {
+      el.searchScopeSelect.addEventListener('change', function () { runSearch(); });
+    }
+  }
+
+  function openSearchModal(initialQuery) {
+    el.searchModal.hidden = false;
+    if (initialQuery !== undefined && initialQuery !== '') el.searchInput.value = initialQuery;
+    el.searchInput.focus();
+    if (el.searchInput.value.trim()) runSearch();
+  }
+
+  function closeSearchModal() {
+    el.searchModal.hidden = true;
+  }
+
+  function filterBooksByScope(scope) {
+    if (scope === 'ot') return state.index.filter(function (b) { return b.no < FIRST_NT; });
+    if (scope === 'nt') return state.index.filter(function (b) { return b.no >= FIRST_NT; });
+    if (scope === 'current') return state.index.filter(function (b) { return b.no === state.bookNo; });
+    return state.index;
+  }
+
+  function runSearch() {
+    var rawQ = (el.searchInput.value || '').trim();
+    if (!rawQ) {
+      el.searchSummary.textContent = '請輸入關鍵字或 Strong 號碼進行搜尋';
+      el.searchResults.innerHTML = '';
+      el.searchFoot.hidden = true;
+      return;
+    }
+
+    var targetVersion = el.searchVersionSelect.value;
+    var targetScope = el.searchScopeSelect.value;
+    var isStrongMatch = /^[HG]\d+[a-zA-Z]?$/i.test(rawQ) || targetVersion === 'strong';
+
+    searchState.query = rawQ;
+    searchState.tokens = rawQ.toLowerCase().split(/\s+/).filter(Boolean);
+    searchState.version = targetVersion;
+    searchState.scope = targetScope;
+    searchState.results = [];
+    searchState.page = 0;
+
+    el.searchSummary.textContent = '搜尋中…';
+    el.searchResults.innerHTML = '';
+    el.searchFoot.hidden = true;
+
+    if (isStrongMatch && searchIndexData && searchIndexData.strong) {
+      var code = rawQ.toUpperCase();
+      var hits = searchIndexData.strong[code] || [];
+      if (!hits.length && !code.startsWith('H') && !code.startsWith('G')) {
+        hits = (searchIndexData.strong['H' + code] || []).concat(searchIndexData.strong['G' + code] || []);
+      }
+      var scopedBookNos = {};
+      filterBooksByScope(targetScope).forEach(function (b) { scopedBookNos[b.no] = true; });
+
+      var matchedRefs = hits.filter(function (ref) { return scopedBookNos[ref[0]]; });
+      searchState.results = matchedRefs.map(function (ref) {
+        return { bookNo: ref[0], chap: ref[1], sec: ref[2], vkey: 'zh_unv', isStrong: true, code: code };
+      });
+      finishSearchRender();
+    } else {
+      var allowedBooks = filterBooksByScope(targetScope);
+      var countLoaded = 0;
+
+      if (!allowedBooks.length) {
+        finishSearchRender();
+        return;
+      }
+
+      allowedBooks.forEach(function (b) {
+        loadBook(b.no, function (bookData) {
+          countLoaded++;
+          if (bookData && bookData.ch) {
+            bookData.ch.forEach(function (ch) {
+              ch.v.forEach(function (verse) {
+                var verseTexts = verse.t || {};
+                var checkVersions = (targetVersion === 'all' || targetVersion === 'strong')
+                  ? Object.keys(verseTexts)
+                  : [targetVersion];
+
+                checkVersions.forEach(function (vkey) {
+                  var text = verseTexts[vkey];
+                  if (!text) return;
+                  var lowerText = text.toLowerCase();
+                  var matchAll = searchState.tokens.every(function (t) { return lowerText.indexOf(t) !== -1; });
+                  if (matchAll) {
+                    searchState.results.push({
+                      bookNo: b.no, chap: ch.c, sec: verse.s, vkey: vkey, text: text, tokens: searchState.tokens
+                    });
+                  }
+                });
+              });
+            });
+          }
+          if (countLoaded === allowedBooks.length) {
+            finishSearchRender();
+          }
+        });
+      });
+    }
+  }
+
+  function finishSearchRender() {
+    var total = searchState.results.length;
+    if (!total) {
+      el.searchSummary.textContent = '未找到相符的經文結果（關鍵字：「' + searchState.query + '」）';
+      el.searchResults.innerHTML = '<p class="placeholder">嘗試更改關鍵字或切換搜尋範圍/版本</p>';
+      el.searchFoot.hidden = true;
+      return;
+    }
+
+    el.searchSummary.textContent = '共找到 ' + total + ' 筆結果（關鍵字：「' + searchState.query + '」）';
+    renderNextBatch();
+  }
+
+  function renderNextBatch() {
+    var start = searchState.page * searchState.pageSize;
+    var batch = searchState.results.slice(start, start + searchState.pageSize);
+    if (!batch.length) return;
+
+    var frag = document.createDocumentFragment();
+    batch.forEach(function (item) {
+      var bMeta = state.byNo[item.bookNo];
+      var div = document.createElement('div');
+      div.className = 'search-item';
+
+      var ref = document.createElement('div');
+      ref.className = 'search-ref';
+      var vLabel = (VERSIONS.find(function (v) { return v.key === item.vkey; }) || { label: item.vkey }).label;
+      ref.textContent = (bMeta ? bMeta.zh : ('第' + item.bookNo + '卷')) + ' ' + item.chap + ':' + item.sec +
+        ' (' + vLabel + ')';
+      div.appendChild(ref);
+
+      var snip = document.createElement('div');
+      snip.className = 'search-snippet';
+
+      if (item.text) {
+        var highlighted = escapeHtml(item.text);
+        item.tokens.forEach(function (tok) {
+          var re = new RegExp('(' + escapeRegExp(tok) + ')', 'gi');
+          highlighted = highlighted.replace(re, '<mark>$1</mark>');
+        });
+        snip.innerHTML = highlighted;
+      } else if (item.isStrong) {
+        snip.innerHTML = '包含 Strong 號碼 <mark>' + escapeHtml(item.code) + '</mark>';
+      }
+      div.appendChild(snip);
+
+      div.addEventListener('click', function () {
+        closeSearchModal();
+        jumpToVerse(item.bookNo, item.chap, item.sec);
+      });
+      frag.appendChild(div);
+    });
+
+    if (searchState.page === 0) el.searchResults.innerHTML = '';
+    el.searchResults.appendChild(frag);
+
+    searchState.page++;
+    el.searchFoot.hidden = (searchState.page * searchState.pageSize) >= searchState.results.length;
+  }
+
+  function escapeHtml(str) {
+    return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function jumpToVerse(bookNo, chap, sec) {
+    showReader(bookNo, chap, function () {
+      setTimeout(function () {
+        var row = el.reader.querySelector('.verse[data-sec="' + sec + '"]') ||
+                  el.reader.querySelectorAll('.verse')[sec - 1];
+        if (row) {
+          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          row.classList.add('target-highlight');
+          setTimeout(function () { row.classList.remove('target-highlight'); }, 2600);
+        }
+      }, 150);
+    });
+  }
+
   /* ---------- 啟動守門：資料沒載進來時給出可行動的訊息 ----------
    * 用 file:// 開啟時，若瀏覽器（例如某些 Firefox 設定）連 <script src> 都擋，
    * 畫面會停在空的下拉選單。與其靜靜壞掉，不如直接說明怎麼辦。
@@ -552,5 +787,6 @@ var BIBLIA = (function () {
     setTimeout(guard, 1200);
   }
 
-  return { books: books, receive: receive };
+  return { books: books, receive: receive, searchIndex: searchIndex };
 })();
+

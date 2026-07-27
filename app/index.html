@@ -45,6 +45,10 @@
         <span>深色背景</span>
       </label>
     </div>
+
+    <div class="pick pick-wrap">
+      <button id="startSearchBtn" type="button" class="go go-search">🔍 搜尋經文 / Strong 號碼</button>
+    </div>
   </div>
 
   <p class="start-foot">
@@ -76,6 +80,10 @@
         <button id="prevBtn" type="button" title="上一章（←）">◀</button>
         <button id="nextBtn" type="button" title="下一章（→）">▶</button>
       </span>
+
+      <span class="spacer"></span>
+
+      <button id="searchBarBtn" type="button" class="search-btn" title="搜尋經文或 Strong 號碼">🔍 搜尋</button>
 
       <span class="spacer"></span>
 
@@ -114,7 +122,54 @@
 
 </div>
 
+<!-- ===================== 搜尋彈窗/面板 ===================== -->
+<div id="searchModal" class="search-modal" hidden>
+  <div class="search-overlay" id="searchOverlay"></div>
+  <div class="search-dialog">
+    <header class="search-header">
+      <div class="search-input-group">
+        <input type="text" id="searchInput" class="search-input" placeholder="輸入關鍵字 (如: 愛 忍耐) 或 Strong 號碼 (如: H7225)..." autocomplete="off">
+        <button id="searchExecBtn" type="button" class="search-exec-btn">搜尋</button>
+      </div>
+      <button id="searchCloseBtn" type="button" class="search-close-btn" title="關閉">×</button>
+    </header>
+
+    <div class="search-controls">
+      <label class="search-ctl">
+        <span>版本：</span>
+        <select id="searchVersionSelect">
+          <option value="all">所有版本</option>
+          <option value="zh_unv" selected>和合本 (中文)</option>
+          <option value="es_rvr1909">RVR1909 (西班牙文)</option>
+          <option value="en_kjv">KJV (英文)</option>
+          <option value="en_web">WEB (英文)</option>
+          <option value="strong">Strong 號碼</option>
+        </select>
+      </label>
+
+      <label class="search-ctl">
+        <span>範圍：</span>
+        <select id="searchScopeSelect">
+          <option value="all" selected>全本 (66卷)</option>
+          <option value="ot">舊約 (39卷)</option>
+          <option value="nt">新約 (27卷)</option>
+          <option value="current">當前書卷</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="search-summary" id="searchSummary">輸入關鍵字開始搜尋</div>
+
+    <div class="search-results" id="searchResults"></div>
+
+    <div class="search-foot" id="searchFoot" hidden>
+      <button id="searchMoreBtn" type="button" class="search-more-btn">載入更多結果</button>
+    </div>
+  </div>
+</div>
+
 <script src="reader.js"></script>
 <script src="data/books.js"></script>
+<script src="data/search_index.js"></script>
 </body>
 </html>
