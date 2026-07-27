@@ -116,7 +116,7 @@ def main():
                 #    最後一節**，代表這章還有經文沒抓到。
                 #    （全書最後一章「啟 22」的 next 會往回指到本章第 20 節，
                 #      那不是截斷，所以必須比對節號而不是只看卷章。）
-                nxt = d.get("next")
+                nxt = d.get("next") if v["source"] == "fhl" else None
                 if isinstance(nxt, dict) and nxt.get("engs") == b["engs"] \
                         and nxt.get("chap") == chap and secs:
                     try:
@@ -128,7 +128,7 @@ def main():
                         pass
 
                 # 4) 起始正確
-                if secs and secs[0] != 1:
+                if secs and secs[0] != 1 and v["source"] == "fhl":
                     prv = d.get("prev")
                     same_chapter_prev = (isinstance(prv, dict)
                                          and prv.get("engs") == b["engs"]
@@ -176,12 +176,21 @@ def main():
           "%d 處錯置，前 5：\n%s" % (len(misfiled), "\n".join(misfiled[:5])) if misfiled else "")
     # 空白經文多半是上游本來就空（例：WEB 約三 14 節併入 15 節，FHL 回傳空字串），
     # 我們忠實保存。數量一多才代表抓取出問題。
-    check("空白經文在合理範圍（<= 30 節，屬上游版本化差異）", len(empty_text) <= 30,
+    check("空白經文在合理範圍（<= 40 節，屬上游版本化差異）", len(empty_text) <= 40,
           "%d 節為空，前 10：%s" % (len(empty_text), empty_text[:10]) if empty_text else "")
     if empty_text:
-        emit("[INFO] 上游本身為空的節 %d 處（已與網站核對一致）" % len(empty_text))
-        for e in empty_text[:10]:
-            emit("       " + e)
+        by_v = {}
+        for e in empty_text:
+            by_v.setdefault(e.split("/")[0], []).append(e)
+        emit("[INFO] 上游本身為空的節 %d 處，分佈如下（皆已核對，非抓取缺漏）"
+             % len(empty_text))
+        for vk, items in sorted(by_v.items()):
+            emit("       %-12s %2d 處：%s" % (vk, len(items),
+                 "、".join(i.split("/", 1)[1] for i in items[:6])
+                 + ("…" if len(items) > 6 else "")))
+        emit("       WEB：現代校勘本略去的節（如 Acts 8:37），保留節號但無內文。")
+        emit("       RVR1909：依希伯來文分章，跨章的經文併入前一章末節，")
+        emit("                章尾以空節補齊英文章長；內文完整未遺失。")
 
     if gaps:
         emit("[INFO] %d 章存在節號跳號（多為該版本原本就無該節，非抓取錯誤）" % len(gaps))
@@ -213,8 +222,9 @@ def main():
         emit()
         emit("── 抽樣實查（重新向 FHL 取回並逐字比對）" + "─" * 26)
         random.seed()
+        # 只有 FHL 版本能向網站重抓；RVR1909 來自外部檔案，改用雜湊比對（見下）
         jobs = []
-        for v in common.VERSIONS:
+        for v in common.FHL_VERSIONS:
             for b in books:
                 jobs.append((v, b))
         picks = []
@@ -253,6 +263,41 @@ def main():
     else:
         emit()
         emit("[SKIP] 未做抽樣實查（--sample 0）")
+
+    # ── 非 FHL 版本：與原始來源檔全量比對 ───────────────────────────
+    file_versions = [v for v in common.VERSIONS if v["source"] != "fhl"]
+    if file_versions:
+        emit()
+        emit("── 外部來源版本：與原始檔全量比對 " + "─" * 31)
+    for v in file_versions:
+        src = os.path.join(common.RAW_DIR, v["key"], "_source", "SpaRV.json")
+        if not os.path.exists(src):
+            check("%s 原始來源檔存在" % v["label"], False, "找不到 %s" % src)
+            continue
+        try:
+            data = common.read_json(src)
+        except ValueError as exc:
+            check("%s 原始來源檔可解析" % v["label"], False, str(exc))
+            continue
+
+        bad = []
+        verses = 0
+        for b, sb in zip(books, data.get("books") or []):
+            for ch in sb.get("chapters") or []:
+                chap = int(ch["chapter"])
+                want = [(int(x["verse"]), x.get("text") or "") for x in ch["verses"]]
+                verses += len(want)
+                p = os.path.join(common.RAW_DIR, v["key"], b["dir"], "%03d.json" % chap)
+                if not os.path.exists(p):
+                    bad.append("%s %d 檔案不存在" % (b["engs"], chap))
+                    continue
+                got = [(int(r["sec"]), r.get("bible_text") or "")
+                       for r in common.read_json(p).get("record", [])]
+                if got != want:
+                    bad.append("%s %d 內容與來源不符（%d vs %d 節）"
+                               % (b["engs"], chap, len(got), len(want)))
+        check("%s 全部 1,189 章與原始來源檔逐字相同（%d 節）" % (v["label"], verses),
+              not bad, "\n".join(bad[:5]) if bad else "")
 
     emit()
     emit("=" * 70)

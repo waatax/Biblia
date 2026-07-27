@@ -252,6 +252,15 @@ button:hover { border-color: var(--accent); color: var(--accent); }
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
+/* 節號存在但該譯本無內文（版本化差異，非資料缺漏） */
+.blank {
+  color: var(--fg-dim);
+  font-size: .78em;
+  font-style: italic;
+  opacity: .65;
+  cursor: help;
+}
+
 .note {
   display: block;
   margin-top: 4px;

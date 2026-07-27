@@ -37,12 +37,21 @@ REQUEST_INTERVAL = 1.5   # 秒，對信望愛站保持禮貌
 MAX_RETRIES = 3
 TIMEOUT = 45
 
-# 本次範圍的三個公有領域版本。strong=1 只有 unv 與 kjv 支援（實測 abv.php）。
+# 收錄的公有領域版本。
+#   source="fhl"  —— 由 FHL JSON API 逐章抓取；strong=1 只有 unv 與 kjv 支援。
+#   source="file" —— 由外部公有領域資料源取得（非 FHL），故不做 FHL 專屬檢查。
 VERSIONS = [
-    {"key": "zh_unv", "version": "unv", "strong": 1, "label": "和合本"},
-    {"key": "en_kjv", "version": "kjv", "strong": 1, "label": "KJV"},
-    {"key": "en_web", "version": "web", "strong": 0, "label": "WEB"},
+    {"key": "zh_unv", "version": "unv", "strong": 1,
+     "label": "和合本", "source": "fhl"},
+    {"key": "en_kjv", "version": "kjv", "strong": 1,
+     "label": "KJV", "source": "fhl"},
+    {"key": "en_web", "version": "web", "strong": 0,
+     "label": "WEB", "source": "fhl"},
+    {"key": "es_rvr1909", "version": "rvr1909", "strong": 0,
+     "label": "RVR1909", "source": "file"},
 ]
+
+FHL_VERSIONS = [v for v in VERSIONS if v["source"] == "fhl"]
 
 
 def utf8_stdout():

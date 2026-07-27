@@ -1,8 +1,9 @@
 # Biblia — 多語逐字對照聖經閱讀器
 
-離線、可長期保存的多語逐字對照聖經閱讀器。中文（和合本）、英文（KJV / WEB）
-三欄並排，中文與 KJV 兩欄都可展開 **Strong number 逐字對照**，點任一詞即可
-高亮全章中所有相同 Strong 的詞 —— 中英欄位會一起亮，直接把原文對應關係視覺化。
+離線、可長期保存的多語逐字對照聖經閱讀器。中文（和合本）、西班牙文（RVR1909）、
+英文（KJV / WEB）四欄並排，中文與 KJV 兩欄都可展開 **Strong number 逐字對照**，
+點任一詞即可高亮全章中所有相同 Strong 的詞 —— 中英欄位會一起亮，直接把原文
+對應關係視覺化。
 
 介面沿用信望愛 [read100.html](https://springbible.fhl.net/Bible2/cgic201/read100.html)
 的選擇方式（舊約 / 新約各自「書卷 → 章 → 閱讀」＋版本選擇）。
@@ -15,7 +16,8 @@
 
 ```bash
 python scripts/build_books.py         # 產生 config/books.csv（66 卷 / 1,189 章）
-python scripts/fetch_fhl.py           # 下載 3,567 章（約 90 分鐘，可中斷續傳）
+python scripts/fetch_fhl.py           # 中／英三版共 3,567 章（約 90 分鐘，可中斷續傳）
+python scripts/fetch_rvr1909.py       # 西班牙文 RVR1909（單檔下載，數秒）
 python scripts/parse.py               # 解析 Strong 標記，產出 parsed/ 與 app/data/
 python scripts/verify.py              # 解析正確性驗證 → report.txt
 python scripts/check_completeness.py  # 完整性稽核 → completeness.txt
@@ -37,23 +39,43 @@ python scripts/check_completeness.py  # 完整性稽核 → completeness.txt
 
 **抽樣實查**：隨機重抓數十章，與本機逐字比對，證明內容與網站一致。
 
-已知且已與網站核對過的上游特性（忠實保存，非缺漏）：
+RVR1909 不經由 FHL（FHL 89 個版本中沒有西班牙文），改為與原始下載檔
+`raw/es_rvr1909/_source/SpaRV.json` 做**全量**逐字比對，1,189 章、31,102 節全數相符。
 
-- 約翰三書 KJV 只有 14 節，和合本與 WEB 為 15 節
-- WEB 約翰三書第 14 節在 FHL 本來就是空字串（併入第 15 節）
+已知且已核對過的上游特性（忠實保存，非缺漏）：
+
+- 約翰三書 KJV 與 RVR1909 為 14 節，和合本與 WEB 為 15 節
+- WEB 有 7 節保留節號但無內文（Acts 8:37、Acts 15:34 等），
+  是現代校勘本略去的節
 - `H8675`、`H31961`、`H19691` 各出現 1 次，是 FHL 上游資料的筆誤
 - `H9001`–`H9013` 是 FHL 標示希伯來文前綴質詞的擴充碼（出現三萬餘次，正常）
+
+### RVR1909 的分章差異（重要）
+
+RVR1909 在 18 處依**希伯來文分章**，與英文分章不同（民 12/13、伯 38/39、
+伯 40/41、撒上 23/24、拿 1/2 等）。這些地方的處理方式是：跨章的經文併入
+前一章末節，章尾以空節補齊英文章長。
+
+實際影響：**經文一字未少**（已逐字核對，例如伯 39:30 是一節 575 字元的合併節，
+內含 KJV 伯 39:27–30 與 40:1–5），但在這 18 章（佔 1,189 章的 1.5%）
+西班牙文欄位會與其他欄位相差 1–5 節。
+
+這是 RVR1909 譯本本身的分章方式，不是資料來源的缺陷 —— 任何忠實的 RVR1909
+都會如此，換用 eBible.org 的 USFM 也一樣。由於合併是「多節併一節」，
+要重新對位就得切分譯文，那已超出資料處理的範圍，因此選擇**忠實保留並明確標示**：
+閱讀器在這些節會顯示「（此版本本節無內文）」並附說明，不會被誤認為資料缺漏。
 
 ## 版本與授權
 
 本專案**只收錄公有領域版本**：
 
-| 版本 | 語言 | 授權 | Strong |
-|---|---|---|---|
-| 和合本 (1919) | 中文 | 公有領域 | ✅ |
-| King James Version | 英文 | 公有領域 | ✅ |
-| World English Bible | 英文 | 公有領域 | — |
-| Strong Number (1890) | — | 公有領域 | — |
+| 版本 | 語言 | 授權 | Strong | 來源 |
+|---|---|---|---|---|
+| 和合本 (1919) | 中文 | 公有領域 | ✅ | FHL API |
+| Reina-Valera 1909 | 西班牙文 | 公有領域 | — | scrollmapper/bible_databases |
+| King James Version | 英文 | 公有領域 | ✅ | FHL API |
+| World English Bible | 英文 | 公有領域 | — | FHL API |
+| Strong Number (1890) | — | 公有領域 | — | FHL API |
 
 **受著作權的譯本（RVR1960 / NIV / NVI 等）一律不整本下載或儲存** ——
 整本重製受著作權譯本即使自用也構成侵權。若日後要支援，只能走「授權 API

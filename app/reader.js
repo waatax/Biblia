@@ -10,13 +10,15 @@
 var BIBLIA = (function () {
   'use strict';
 
+  /* 欄位順序沿用藍圖的 中 | 西 | 英 */
   var VERSIONS = [
     { key: 'zh_unv', label: '和合本', full: '和合本 (1919)', strong: true },
+    { key: 'es_rvr1909', label: 'RVR1909', full: 'Reina-Valera 1909', strong: false },
     { key: 'en_kjv', label: 'KJV', full: 'King James Version', strong: true },
     { key: 'en_web', label: 'WEB', full: 'World English Bible', strong: false }
   ];
 
-  var DEFAULTS = { zh_unv: true, en_kjv: true, en_web: true };
+  var DEFAULTS = { zh_unv: true, es_rvr1909: true, en_kjv: true, en_web: false };
   var FIRST_NT = 40;
 
   var state = {
@@ -417,7 +419,18 @@ var BIBLIA = (function () {
     num.textContent = verse.s;
     d.appendChild(num);
 
-    if (state.inter && units && units.length) {
+    if (!text) {
+      // 節號存在但無內文。多半是版本化差異：
+      //   WEB —— 現代校勘本略去的節（如 Acts 8:37），保留節號、無內文。
+      //   RVR1909 —— 依希伯來文分章，跨章經文併入前一章末節，章尾以空節補齊。
+      // 標示清楚，才不會被誤認為資料缺漏。
+      var blank = document.createElement('span');
+      blank.className = 'blank';
+      blank.textContent = '（此版本本節無內文）';
+      blank.title = '這是該譯本的版本化差異，不是資料缺漏。'
+                  + '經文可能併入鄰近章節，或為現代校勘本所略去。';
+      d.appendChild(blank);
+    } else if (state.inter && units && units.length) {
       var wrap = document.createElement('span');
       wrap.className = 'interlinear';
       units.forEach(function (u) { wrap.appendChild(unitNode(u)); });

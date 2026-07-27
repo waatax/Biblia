@@ -71,7 +71,7 @@ def main():
         if not books:
             raise SystemExit("--books 沒有比對到任何書卷")
 
-    versions = common.VERSIONS
+    versions = common.FHL_VERSIONS      # RVR1909 不在 FHL，由 fetch_rvr1909.py 處理
     if args.versions:
         want = {s.strip() for s in args.versions.split(",") if s.strip()}
         versions = [v for v in versions if v["version"] in want]
