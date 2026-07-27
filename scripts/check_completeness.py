@@ -24,6 +24,7 @@ import argparse
 import io
 import os
 import random
+import re
 import sys
 import time
 
@@ -338,10 +339,24 @@ def main():
                             for u in units:
                                 for s in u.get("s", []):
                                     used.add(s)
+            def in_std(code):
+                n = int(re.sub(r"[^0-9]", "", code) or 0)
+                return ((code.startswith("H") and 1 <= n <= HEB_MAX)
+                        or (code.startswith("G") and 1 <= n <= GRK_MAX))
+
             miss_used = sorted(used - have)
-            check("經文用到的 %d 個號碼皆有釋義" % len(used), not miss_used,
-                  "缺 %d 個，前 10：%s" % (len(miss_used), miss_used[:10])
-                  if miss_used else "")
+            # 落在標準編號範圍內卻查不到釋義 → 真的有問題。
+            # 範圍外的（如 H19691、H31961 這兩個上游筆誤）本來就不存在於
+            # Strong 字典，查不到是正常的，不該當成缺漏。
+            miss_std = [c for c in miss_used if in_std(c)]
+            miss_ext = [c for c in miss_used if not in_std(c)]
+            check("經文用到的標準 Strong 號碼皆有釋義（共 %d 個）"
+                  % len([c for c in used if in_std(c)]), not miss_std,
+                  "缺 %d 個，前 10：%s" % (len(miss_std), miss_std[:10])
+                  if miss_std else "")
+            if miss_ext:
+                emit("[INFO] 另有 %d 個非標準編號查無釋義（上游筆誤，各僅出現 1 次）：%s"
+                     % (len(miss_ext), miss_ext[:10]))
         else:
             check("Strong 字典已建置（parsed/strong_dict.json）", False,
                   "請執行 scripts/build_strong_dict.py")
