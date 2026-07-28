@@ -49,9 +49,31 @@ VERSIONS = [
      "label": "WEB", "source": "fhl"},
     {"key": "es_rvr1909", "version": "rvr1909", "strong": 0,
      "label": "RVR1909", "source": "file"},
+    # 舊約希伯來文原文。FHL 的 bhs 受 Deutsche Bibelgesellschaft 版權限制，
+    # 改用公有領域的 Westminster Leningrad Codex（openscriptures/morphhb）。
+    # 只有舊約，且帶 Strong 號碼，可併入跨語言高亮。
+    {"key": "he_wlc", "version": "wlc", "strong": 1,
+     "label": "WLC", "source": "file", "otonly": True},
 ]
 
 FHL_VERSIONS = [v for v in VERSIONS if v["source"] == "fhl"]
+
+
+def covers(version, book):
+    """這個版本是否涵蓋該卷書。
+
+    希伯來文 WLC 只有舊約，新約沒有它的檔案是正常的，不該算成缺漏。
+    """
+    if version.get("otonly") and book["testament"] != "OT":
+        return False
+    if version.get("ntonly") and book["testament"] != "NT":
+        return False
+    return True
+
+
+def expected_chapter_count(books):
+    """所有版本應有的章節檔總數（已扣除不涵蓋的約）。"""
+    return sum(b["chapters"] for v in VERSIONS for b in books if covers(v, b))
 
 
 def utf8_stdout():

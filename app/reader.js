@@ -10,15 +10,18 @@
 var BIBLIA = (function () {
   'use strict';
 
-  /* 欄位順序沿用藍圖的 中 | 西 | 英 */
+  /* 原文置首，其後沿用藍圖的 中 | 西 | 英 */
   var VERSIONS = [
+    { key: 'he_wlc', label: '原文', full: '希伯來文原文 WLC（僅舊約）',
+      strong: true, otonly: true, rtl: true },
     { key: 'zh_unv', label: '和合本', full: '和合本 (1919)', strong: true },
     { key: 'es_rvr1909', label: 'RVR1909', full: 'Reina-Valera 1909', strong: false },
     { key: 'en_kjv', label: 'KJV', full: 'King James Version', strong: true },
     { key: 'en_web', label: 'WEB', full: 'World English Bible', strong: false }
   ];
 
-  var DEFAULTS = { zh_unv: true, es_rvr1909: true, en_kjv: true, en_web: false };
+  var DEFAULTS = { he_wlc: true, zh_unv: true, es_rvr1909: true,
+                   en_kjv: true, en_web: false };
   var FIRST_NT = 40;
 
   var state = {
@@ -416,7 +419,16 @@ var BIBLIA = (function () {
 
   /* ---------- 繪製 ---------- */
   function activeVersions() {
-    return VERSIONS.filter(function (v) { return state.on[v.key]; });
+    // 只涵蓋舊約的版本（希伯來文原文）在新約整欄都會是空的，直接不顯示，
+    // 免得讀新約時多出一欄空白。
+    var meta = state.byNo[state.bookNo];
+    var isNT = meta ? meta.no >= FIRST_NT : false;
+    return VERSIONS.filter(function (v) {
+      if (!state.on[v.key]) return false;
+      if (v.otonly && isNT) return false;
+      if (v.ntonly && !isNT) return false;
+      return true;
+    });
   }
 
   function render() {
@@ -475,7 +487,7 @@ var BIBLIA = (function () {
 
   function cell(verse, v) {
     var d = document.createElement('div');
-    d.className = 'cell';
+    d.className = 'cell' + (v.rtl ? ' rtl' : '');
     d.setAttribute('data-label', v.label);
 
     var text = verse.t ? verse.t[v.key] : null;

@@ -79,6 +79,8 @@ def main():
         per_version_chaps[vk] = 0
 
         for b in books:
+            if not common.covers(v, b):
+                continue        # 如希伯來文 WLC 不涵蓋新約
             for chap in range(1, b["chapters"] + 1):
                 path = os.path.join(common.RAW_DIR, vk, b["dir"], "%03d.json" % chap)
                 if not os.path.exists(path):
@@ -162,7 +164,7 @@ def main():
                     if hole:
                         gaps.append("%s/%s/%03d 缺節 %s" % (vk, b["dir"], chap, hole))
 
-    total_expected = sum(b["chapters"] for b in books) * len(common.VERSIONS)
+    total_expected = common.expected_chapter_count(books)
 
     emit("── 全量結構檢查 " + "─" * 52)
     check("章節檔齊全（應 %d 個）" % total_expected, not missing,
@@ -271,34 +273,99 @@ def main():
         emit()
         emit("── 外部來源版本：與原始檔全量比對 " + "─" * 31)
     for v in file_versions:
-        src = os.path.join(common.RAW_DIR, v["key"], "_source", "SpaRV.json")
-        if not os.path.exists(src):
-            check("%s 原始來源檔存在" % v["label"], False, "找不到 %s" % src)
-            continue
-        try:
-            data = common.read_json(src)
-        except ValueError as exc:
-            check("%s 原始來源檔可解析" % v["label"], False, str(exc))
-            continue
+        if v["key"] == "es_rvr1909":
+            _check_rvr(v, books)
+        elif v["key"] == "he_wlc":
+            _check_wlc(v, books)
 
-        bad = []
-        verses = 0
-        for b, sb in zip(books, data.get("books") or []):
-            for ch in sb.get("chapters") or []:
-                chap = int(ch["chapter"])
-                want = [(int(x["verse"]), x.get("text") or "") for x in ch["verses"]]
-                verses += len(want)
-                p = os.path.join(common.RAW_DIR, v["key"], b["dir"], "%03d.json" % chap)
-                if not os.path.exists(p):
-                    bad.append("%s %d 檔案不存在" % (b["engs"], chap))
-                    continue
-                got = [(int(r["sec"]), r.get("bible_text") or "")
-                       for r in common.read_json(p).get("record", [])]
-                if got != want:
-                    bad.append("%s %d 內容與來源不符（%d vs %d 節）"
-                               % (b["engs"], chap, len(got), len(want)))
-        check("%s 全部 1,189 章與原始來源檔逐字相同（%d 節）" % (v["label"], verses),
-              not bad, "\n".join(bad[:5]) if bad else "")
+
+def _check_rvr(v, books):
+    src = os.path.join(common.RAW_DIR, v["key"], "_source", "SpaRV.json")
+    if not os.path.exists(src):
+        check("%s 原始來源檔存在" % v["label"], False, "找不到 %s" % src)
+        return
+    try:
+        data = common.read_json(src)
+    except ValueError as exc:
+        check("%s 原始來源檔可解析" % v["label"], False, str(exc))
+        return
+
+    bad = []
+    verses = 0
+    for b, sb in zip(books, data.get("books") or []):
+        for ch in sb.get("chapters") or []:
+            chap = int(ch["chapter"])
+            want = [(int(x["verse"]), x.get("text") or "") for x in ch["verses"]]
+            verses += len(want)
+            p = os.path.join(common.RAW_DIR, v["key"], b["dir"], "%03d.json" % chap)
+            if not os.path.exists(p):
+                bad.append("%s %d 檔案不存在" % (b["engs"], chap))
+                continue
+            got = [(int(r["sec"]), r.get("bible_text") or "")
+                   for r in common.read_json(p).get("record", [])]
+            if got != want:
+                bad.append("%s %d 內容與來源不符（%d vs %d 節）"
+                           % (b["engs"], chap, len(got), len(want)))
+    check("%s 全部 1,189 章與原始來源檔逐字相同（%d 節）" % (v["label"], verses),
+          not bad, "\n".join(bad[:5]) if bad else "")
+
+
+def _check_wlc(v, books):
+    """WLC 的來源是 39 個 OSIS XML，直接重新解析一次並與 raw/ 比對。
+
+    這等同 RVR1909 的全量比對：證明「XML → 逐章檔」這段轉換沒有掉字或錯位。
+    """
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    try:
+        import fetch_wlc
+    except ImportError as exc:
+        check("WLC 轉換程式可載入", False, str(exc))
+        return
+
+    srcdir = os.path.join(common.RAW_DIR, v["key"], "_source")
+    missing_src = [n for n in list(fetch_wlc.OSIS_TO_DIR) + ["VerseMap"]
+                   if not os.path.exists(os.path.join(srcdir, n + ".xml"))]
+    check("WLC 原始 OSIS XML 齊全（39 卷 + VerseMap）", not missing_src,
+          "缺：%s" % missing_src[:6] if missing_src else "")
+    if missing_src:
+        return
+
+    vmap = fetch_wlc.load_versemap(os.path.join(srcdir, "VerseMap.xml"))
+    want = {}
+    src_verses = 0
+    for osis, dirname in fetch_wlc.OSIS_TO_DIR.items():
+        for wlc_ref, tokens in fetch_wlc.parse_book(
+                os.path.join(srcdir, osis + ".xml")).items():
+            src_verses += 1
+            ref = vmap.get(wlc_ref, wlc_ref).split(".")
+            if len(ref) != 3:
+                continue
+            try:
+                key = (dirname, int(ref[1]), int(ref[2]))
+            except ValueError:
+                continue
+            want.setdefault(key, []).extend(tokens)
+
+    bad = []
+    checked = 0
+    for (dirname, chap, sec), tokens in want.items():
+        p = os.path.join(common.RAW_DIR, v["key"], dirname, "%03d.json" % chap)
+        if not os.path.exists(p):
+            bad.append("%s %d 檔案不存在" % (dirname, chap))
+            continue
+        recs = common.read_json(p).get("record", [])
+        got = next((r["bible_text"] for r in recs if int(r["sec"]) == sec), None)
+        if got is None:
+            bad.append("%s %d:%d 不存在於逐章檔" % (dirname, chap, sec))
+            continue
+        checked += 1
+        if got != fetch_wlc.to_markup(tokens):
+            bad.append("%s %d:%d 內容與 OSIS 來源不符" % (dirname, chap, sec))
+
+    check("WLC 全部 %d 節與 OSIS 原始檔逐字相同" % checked, not bad,
+          "\n".join(bad[:5]) if bad else "")
+    emit("[INFO] WLC 原始 OSIS 節數 %d，經 VerseMap 對位到 KJV 版本化後 %d 節"
+         % (src_verses, checked))
 
     # ── Strong 原文字典完整性 ──────────────────────────────────────
     dict_dir = os.path.join(common.RAW_DIR, "strong_dict")

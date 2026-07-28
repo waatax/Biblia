@@ -1,19 +1,19 @@
-Biblia 驗證報告  2026-07-28 03:51:10
+Biblia 驗證報告  2026-07-28 14:39:17
 ==================================================================
 [PASS] books.csv 共 66 卷
          實得 66
 [PASS] books.csv 總章數 == 1189
          實得 1189
-[PASS] raw 檔齊全（4756 個）
+[PASS] raw 檔齊全（5685 個）
 [PASS] parsed 各卷章數與 books.csv 相符
 [PASS] parsed 總章數 == 1189
          實得 1189
 [INFO] 節數統計（以聯集計 31107 節）
-         zh_unv 31103；en_kjv 31102；en_web 31105；es_rvr1909 31102
-[INFO] 版本間節數落差 16 處（正常，非錯誤）
-         John 7:53 缺 zh_unv；Rom 14:24 缺 zh_unv；Rom 14:24 缺 en_kjv；Rom 14:24 缺 es_rvr1909；Rom 14:25 缺 zh_unv
+         zh_unv 31103；en_kjv 31102；en_web 31105；es_rvr1909 31102；he_wlc 23142
+[INFO] 版本間節數落差 19 處（正常，非錯誤）
+         Neh 7:68 缺 he_wlc；Ps 13:6 缺 he_wlc；Is 64:1 缺 he_wlc；John 7:53 缺 zh_unv；Rom 14:24 缺 zh_unv
 [INFO] 相異 Strong 號碼 14279 個
-[PASS] raw → parsed 經文保真（抽查 160 節）
+[PASS] raw → parsed 經文保真（抽查 181 節）
 [PASS] 創 1:1 和合本 Strong 含 H7225/H430/H1254/H8064/H776
          實得 ['H9002', 'H7225', 'H430', 'H1254', 'H853', 'H8064', 'H853', 'H776']
 [PASS] 太 1:1 和合本 Strong 含 G11/G1138/G2424/G5547（新約為 G）

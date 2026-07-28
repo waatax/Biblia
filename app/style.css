@@ -238,6 +238,25 @@ button:hover { border-color: var(--accent); color: var(--accent); }
 .verse.para { border-top: 2px solid var(--line); margin-top: 14px; padding-top: 16px; }
 
 .cell { min-width: 0; }
+
+/* 希伯來文原文欄：由右至左，並加大字級才看得清母音與重音符號 */
+.cell.rtl {
+  direction: rtl;
+  text-align: right;
+  font-family: "Times New Roman", "SBL Hebrew", "Ezra SIL",
+               "David", "Noto Serif Hebrew", serif;
+  font-size: 1.18em;
+  line-height: 2.1;
+}
+.cell.rtl .vn {
+  float: right;
+  margin: 0 0 0 6px;
+  direction: ltr;
+}
+/* 逐字疊層在 RTL 下要由右往左排，Strong 號碼本身仍維持 LTR */
+.cell.rtl .interlinear { flex-direction: row; }
+.cell.rtl .unit .u-s,
+.cell.rtl .unit .u-m { direction: ltr; }
 .cell.empty::after {
   content: "—";
   color: var(--line);

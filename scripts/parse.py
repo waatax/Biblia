@@ -55,7 +55,13 @@ def build_book(book, stats):
     chapters = []
     for chap in range(1, book["chapters"] + 1):
         loaded = {}
-        for vkey in VERSION_KEYS:
+        for v in common.VERSIONS:
+            vkey = v["key"]
+            # 只涵蓋舊約的版本（如希伯來文 WLC）在新約沒有檔案是正常的
+            if v.get("otonly") and book["testament"] != "OT":
+                continue
+            if v.get("ntonly") and book["testament"] != "NT":
+                continue
             got = load_chapter(vkey, book["dir"], chap)
             if got is None:
                 stats["missing_files"].append("%s/%s/%03d" % (vkey, book["dir"], chap))
@@ -74,6 +80,8 @@ def build_book(book, stats):
             notes = {}
             para = False
             for vkey in VERSION_KEYS:
+                if vkey not in loaded:
+                    continue            # 該版本不涵蓋此約，不算節數落差
                 src = loaded.get(vkey, {}).get(sec)
                 if src is None:
                     stats["verse_gaps"].append("%s %d:%d %s"

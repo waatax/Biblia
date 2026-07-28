@@ -1,9 +1,13 @@
 # Biblia — 多語逐字對照聖經閱讀器
 
-離線、可長期保存的多語逐字對照聖經閱讀器。中文（和合本）、西班牙文（RVR1909）、
-英文（KJV / WEB）四欄並排，中文與 KJV 兩欄都可展開 **Strong number 逐字對照**，
-點任一詞即可高亮全章中所有相同 Strong 的詞 —— 中英欄位會一起亮，直接把原文
-對應關係視覺化。
+離線、可長期保存的多語逐字對照聖經閱讀器。**希伯來文原文（WLC，舊約）**、
+中文（和合本）、西班牙文（RVR1909）、英文（KJV / WEB）並排，
+原文、和合本、KJV 三欄都可展開 **Strong number 逐字對照**。
+
+點任一詞即可高亮全章中所有相同 Strong 的詞 —— 例如在創世記點「神」，
+希伯來文的 `אֱלֹהִים`、和合本的「神」、KJV 的 `God` 會**同時亮起**（各 32 處），
+直接把原文對應關係視覺化。點擊還會顯示該 Strong 的原文字與詳細釋義，
+並可一鍵搜尋全書出現該號碼的所有經節。
 
 介面沿用信望愛 [read100.html](https://springbible.fhl.net/Bible2/cgic201/read100.html)
 的選擇方式（舊約 / 新約各自「書卷 → 章 → 閱讀」＋版本選擇）。
@@ -18,6 +22,7 @@
 python scripts/build_books.py         # 產生 config/books.csv（66 卷 / 1,189 章）
 python scripts/fetch_fhl.py           # 中／英三版共 3,567 章（約 90 分鐘，可中斷續傳）
 python scripts/fetch_rvr1909.py       # 西班牙文 RVR1909（單檔下載，數秒）
+python scripts/fetch_wlc.py           # 舊約希伯來文原文 WLC（含節對位，數十秒）
 python scripts/parse.py               # 解析 Strong 標記，產出 parsed/ 與 app/data/
 python scripts/verify.py              # 解析正確性驗證 → report.txt
 python scripts/check_completeness.py  # 完整性稽核 → completeness.txt
@@ -74,11 +79,45 @@ RVR1909 在 18 處依**希伯來文分章**，與英文分章不同（民 12/13�
 
 | 版本 | 語言 | 授權 | Strong | 來源 |
 |---|---|---|---|---|
+| **WLC 原文**（僅舊約） | 希伯來文 | 公有領域 | ✅ | openscriptures/morphhb |
 | 和合本 (1919) | 中文 | 公有領域 | ✅ | FHL API |
 | Reina-Valera 1909 | 西班牙文 | 公有領域 | — | scrollmapper/bible_databases |
 | King James Version | 英文 | 公有領域 | ✅ | FHL API |
 | World English Bible | 英文 | 公有領域 | — | FHL API |
 | Strong Number (1890) | — | 公有領域 | — | FHL API |
+
+### 舊約希伯來文原文（WLC）
+
+信望愛站的「舊約馬索拉原文」為 **Biblia Hebraica Stuttgartensia**，著作權屬
+Deutsche Bibelgesellschaft、1967/77 版需授權，依本專案「只收公有領域」的立場
+不能整本保存。因此改用公有領域的替代方案：
+
+**Westminster Leningrad Codex**，取自
+[openscriptures/morphhb](https://github.com/openscriptures/morphhb)（Open Scriptures Hebrew Bible）
+
+- **WLC 本文：公有領域**
+- **詞形與 lemma 資料：CC BY 4.0** —— 需標示出處，本專案已於 README 與介面頁尾標明
+
+**節對位**：WLC 採希伯來文版本化（詩篇標題自成一節、珥、瑪等分章不同），
+與本專案其餘版本所用的 KJV 版本化有 1,973 處差異。所幸該倉庫附有
+`wlc/VerseMap.xml`，權威地列出 WLC ↔ KJV 的對應，因此不需自行推導。
+
+其中 7 筆為「跨節分割」，需分三種情況處理，一律套用反而會整節搬錯位置：
+
+1. WLC 端為整節（如 `1Kgs.22.44 → 1Kgs.22.43!b`）→ 套用
+2. WLC 一節拆成 KJV 兩節（如 `Ps.13.6!a`／`!b`）→ 取較前的節號，符合閱讀順序
+3. WLC 端只有開頭一小段屬前一節（如 `1Kgs.18.34!a → 1Kgs.18.33!b`）→ **不套用**，
+   主體仍留在原節號
+
+處理後，929 章中僅 3 節無希伯來文對應，且各有明確原因：
+
+| 節 | 原因 |
+|---|---|
+| 尼希米記 7:68 | 希伯來文傳統本無此節（真實文本差異） |
+| 詩篇 13:6 | WLC 13:6 橫跨 KJV 13:5–6，經文置於 13:5 |
+| 以賽亞書 64:1 | 即希伯來文 63:19 後半，保留在 63:19 未搬動 |
+
+**經文一字未少** —— 稽核會重新解析 39 個 OSIS XML 並與逐章檔逐字比對（23,142 節全數相符）。
 
 ### Strong 原文字典
 
@@ -115,6 +154,7 @@ scripts/               下載、解析、驗證工具
 raw/                   原始 API 回應，唯一真相來源，永不覆寫
 raw/strong_dict/       Strong 原文字典原始回應（14,478 筆）
 raw/es_rvr1909/_source 西班牙文原始下載檔
+raw/he_wlc/_source     希伯來文 OSIS XML（39 卷 + VerseMap.xml）
 parsed/                解析後的正規 JSON，一卷一檔（可由 raw/ 重建，未進版控）
 app/                   離線閱讀器（純 HTML + CSS + 原生 JS，零框架）
 app/data/              前端資料：66 卷經文 + 搜尋索引 + Strong 字典（H／G 分檔）
@@ -160,7 +200,9 @@ FHL 在經文內嵌一整族標記，實測歸納如下：
 
 ## 尚未納入（架構已預留）
 
-- 西班牙文 RVR1909（公有領域，需外部來源，屆時才需要節對位層）
+- **新約希臘文原文**：FHL 的 `fhlwh`（Westcott-Hort 1881）已逾著作權保護期，
+  可合法加入。加入後新約也會有原文欄，逐字對照即新舊約皆備。
 - 受著作權版本的線上模式（需自備 `scripture.api.bible` 金鑰）
 - 簡體中文（`python scripts/fetch_fhl.py --gb 1`）
-- 原文字典釋義（FHL 另有 `sd.php`）
+- 希伯來文詞形（morph）標記：OSHB 的 `morph` 屬性已在 `raw/` 中保留，
+  目前僅取用 Strong 號碼，日後可加上詞性與變化分析

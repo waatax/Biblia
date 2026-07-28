@@ -63,11 +63,13 @@ def main():
     missing_raw = []
     for v in common.VERSIONS:
         for b in books:
+            if not common.covers(v, b):
+                continue
             for c in range(1, b["chapters"] + 1):
                 p = os.path.join(common.RAW_DIR, v["key"], b["dir"], "%03d.json" % c)
                 if not os.path.exists(p):
                     missing_raw.append("%s/%s/%03d" % (v["key"], b["dir"], c))
-    expected_raw = total_ch * len(common.VERSIONS)
+    expected_raw = common.expected_chapter_count(books)
     check("raw 檔齊全（%d 個）" % expected_raw, not missing_raw,
           "缺 %d 個，前 5：%s" % (len(missing_raw), missing_raw[:5]) if missing_raw else "")
 
@@ -95,10 +97,11 @@ def main():
         for ch in data["ch"]:
             for verse in ch["v"]:
                 verse_total += 1
-                for k in vkeys:
+                for v in common.VERSIONS:
+                    k = v["key"]
                     if k in verse.get("t", {}):
                         verses_by_version[k] += 1
-                    else:
+                    elif common.covers(v, b):
                         gaps.append("%s %d:%d 缺 %s"
                                     % (b["engs"], ch["c"], verse["s"], k))
                 for k, units in (verse.get("w") or {}).items():
