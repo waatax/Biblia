@@ -15,7 +15,7 @@
   --reading-size: 18px;
 }
 
-body.dark {
+body.dark, html.dark {
   --bg: #16181c;
   --bg-alt: #1c1f24;
   --bar: #1c1f24;
@@ -34,6 +34,7 @@ body.dark {
 html, body {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
   background: var(--bg);
   color: var(--fg);
   font-family: "Noto Serif TC", "Source Han Serif TC", Georgia,

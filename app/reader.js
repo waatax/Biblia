@@ -149,6 +149,11 @@ var BIBLIA = (function () {
     document.head.appendChild(s);
   }
 
+  function setDarkMode(isDark) {
+    document.body.classList.toggle('dark', !!isDark);
+    document.documentElement.classList.toggle('dark', !!isDark);
+  }
+
   /* ---------- 進入點：由 data/books.js 呼叫 ---------- */
   function books(list) {
     state.index = list;
@@ -160,7 +165,7 @@ var BIBLIA = (function () {
     state.size = (saved && saved.size) || 18;
     state.bookNo = (saved && saved.bookNo) || 1;
     state.chap = (saved && saved.chap) || 1;
-    if (saved && saved.dark) document.body.classList.add('dark');
+    if (saved && saved.dark) setDarkMode(true);
     if (!state.byNo[state.bookNo]) { state.bookNo = 1; state.chap = 1; }
 
     cacheEls();
@@ -254,7 +259,7 @@ var BIBLIA = (function () {
 
     el.startDark.checked = document.body.classList.contains('dark');
     el.startDark.addEventListener('change', function () {
-      document.body.classList.toggle('dark', el.startDark.checked);
+      setDarkMode(el.startDark.checked);
       save();
     });
   }
@@ -352,7 +357,7 @@ var BIBLIA = (function () {
     document.getElementById('fontUp').addEventListener('click', function () { bump(1); });
     document.getElementById('fontDown').addEventListener('click', function () { bump(-1); });
     document.getElementById('themeBtn').addEventListener('click', function () {
-      document.body.classList.toggle('dark');
+      setDarkMode(!document.body.classList.contains('dark'));
       syncVersions();
       save();
     });
