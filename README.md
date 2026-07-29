@@ -22,6 +22,7 @@
 python scripts/build_books.py         # 產生 config/books.csv（66 卷 / 1,189 章）
 python scripts/fetch_fhl.py           # 中／英三版共 3,567 章（約 90 分鐘，可中斷續傳）
 python scripts/fetch_rvr1909.py       # 西班牙文 RVR1909（單檔下載，數秒）
+python scripts/fetch_rvc.py           # 西班牙文 Reina Valera Contemporánea（單檔下載，數秒）
 python scripts/fetch_wlc.py           # 舊約希伯來文原文 WLC（含節對位，數十秒）
 python scripts/parse.py               # 解析 Strong 標記，產出 parsed/ 與 app/data/
 python scripts/verify.py              # 解析正確性驗證 → report.txt
@@ -82,6 +83,7 @@ RVR1909 在 18 處依**希伯來文分章**，與英文分章不同（民 12/13�
 | **WLC 原文**（僅舊約） | 希伯來文 | 公有領域 | ✅ | openscriptures/morphhb |
 | 和合本 (1919) | 中文 | 公有領域 | ✅ | FHL API |
 | Reina-Valera 1909 | 西班牙文 | 公有領域 | — | scrollmapper/bible_databases |
+| Reina Valera Contemporánea | 西班牙文 | © SBU | — | mrk214/bible-data-es-spa |
 | King James Version | 英文 | 公有領域 | ✅ | FHL API |
 | World English Bible | 英文 | 公有領域 | — | FHL API |
 | Strong Number (1890) | — | 公有領域 | — | FHL API |

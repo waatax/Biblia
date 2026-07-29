@@ -49,6 +49,8 @@ VERSIONS = [
      "label": "WEB", "source": "fhl"},
     {"key": "es_rvr1909", "version": "rvr1909", "strong": 0,
      "label": "RVR1909", "source": "file"},
+    {"key": "es_rvc", "version": "rvc", "strong": 0,
+     "label": "RVC", "source": "file"},
     # 舊約希伯來文原文。FHL 的 bhs 受 Deutsche Bibelgesellschaft 版權限制，
     # 改用公有領域的 Westminster Leningrad Codex（openscriptures/morphhb）。
     # 只有舊約，且帶 Strong 號碼，可併入跨語言高亮。

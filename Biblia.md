@@ -22,6 +22,7 @@
 | 和合本 (1919, unv) | 中 | **公有領域** | ✅ 可 | FHL JSON API |
 | Strong Number (1890) | — | **公有領域** | ✅ 可 | FHL JSON API |
 | **Reina-Valera 1909 (RVR1909)** | 西 | **公有領域** | ✅ 可 | 公有領域資料源 |
+| **Reina Valera Contemporánea (RVC)** | 西 | © SBU | ✅ 可 | mrk214/bible-data-es-spa |
 | **World English Bible (WEB)** | 英 | **公有領域** | ✅ 可 | 公有領域資料源 |
 | King James Version (KJV) | 英 | **公有領域** | ✅ 可 | FHL / 公有領域資料源 |
 | Reina-Valera **1960** (RVR1960) | 西 | © 聯合聖經公會 | ❌ 不可整本存 | 僅授權 API 即時顯示 |
