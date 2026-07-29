@@ -1,11 +1,13 @@
 # Biblia — 多語逐字對照聖經閱讀器
 
-離線、可長期保存的多語逐字對照聖經閱讀器。**希伯來文原文（WLC，舊約）**、
-中文（和合本）、西班牙文（RVR1909）、英文（KJV / WEB）並排，
+離線、可長期保存的多語逐字對照聖經閱讀器。**原文欄新舊約皆備**
+（舊約希伯來文 WLC、新約希臘文 Westcott-Hort），
+中文（和合本）、西班牙文、法文、日韓越、英文（KJV / WEB）並排，
 原文、和合本、KJV 三欄都可展開 **Strong number 逐字對照**。
 
 點任一詞即可高亮全章中所有相同 Strong 的詞 —— 例如在創世記點「神」，
-希伯來文的 `אֱלֹהִים`、和合本的「神」、KJV 的 `God` 會**同時亮起**（各 32 處），
+希伯來文的 `אֱלֹהִים`、和合本的「神」、KJV 的 `God` 會**同時亮起**（各 32 處）；
+在約翰福音點「道」，希臘文的 `λόγος` 也會一起亮（各 4 處），
 直接把原文對應關係視覺化。點擊還會顯示該 Strong 的原文字與詳細釋義，
 並可一鍵搜尋全書出現該號碼的所有經節。
 
@@ -25,6 +27,7 @@ python scripts/fetch_rvr1909.py       # 西班牙文 RVR1909（單檔下載，�
 python scripts/fetch_rvc.py           # 西班牙文 Reina Valera Contemporánea（單檔下載，數秒）
 python scripts/fetch_nbs.py           # 法文 Nouvelle Bible Segond（單檔下載，數秒）
 python scripts/fetch_wlc.py           # 舊約希伯來文原文 WLC（含節對位，數十秒）
+python scripts/fetch_gnt.py           # 新約希臘文原文 WH（260 章 + Strong 對位，約 6 分）
 python scripts/parse.py               # 解析 Strong 標記，產出 parsed/ 與 app/data/
 python scripts/verify.py              # 解析正確性驗證 → report.txt
 python scripts/check_completeness.py  # 完整性稽核 → completeness.txt
@@ -82,6 +85,7 @@ RVR1909 在 18 處依**希伯來文分章**，與英文分章不同（民 12/13�
 | 版本 | 語言 | 授權 | Strong | 來源 |
 |---|---|---|---|---|
 | **WLC 原文**（僅舊約） | 希伯來文 | 公有領域 | ✅ | openscriptures/morphhb |
+| **WH 原文**（僅新約） | 希臘文 | 公有領域 | ✅ | FHL `fhlwh` + byztxt |
 | 和合本 (1919) | 中文 | 公有領域 | ✅ | FHL API |
 | Reina-Valera 1909 | 西班牙文 | 公有領域 | — | scrollmapper/bible_databases |
 | Reina Valera Contemporánea | 西班牙文 | © SBU | — | mrk214/bible-data-es-spa |
@@ -126,6 +130,32 @@ Deutsche Bibelgesellschaft、1967/77 版需授權，依本專案「只收公有�
 
 **經文一字未少** —— 稽核會重新解析 39 個 OSIS XML 並與逐章檔逐字比對（23,142 節全數相符）。
 
+### 新約希臘文原文（WH）
+
+**Westcott-Hort 1881**，已逾著作權保護期（信望愛版權頁載明「已超過美國的著作權
+保護期 70 年」）。UBS6／NA28 等現代校勘本受版權保護，本專案完全不使用。
+
+這一版需要合併兩個來源，因為單一來源都不夠：
+
+| 來源 | 有什麼 | 缺什麼 |
+|---|---|---|
+| FHL `fhlwh` | **有重音的 Unicode 希臘文**（`Ἐν ἀρχῇ ἦν ὁ λόγος`），節鍵與其餘版本同源 | 無 Strong（FHL 全站僅 unv／rcuv／kjv 帶 Strong） |
+| [byztxt/greektext-westcott-hort](https://github.com/byztxt/greektext-westcott-hort) | **Strong 號碼與詞形**，標示 Public Domain | 文字是無重音的 Beta Code（`logov`） |
+
+兩者同為 Westcott-Hort，因此可逐詞對位，把 Strong 掛到有重音的字上。
+
+**寧可少掛，絕不掛錯**：兩份數位化本在少數地方斷詞不同（WH 的括號異文，
+FHL 用 `+`、byztxt 用 `|` 標記）。作法是先把 Beta Code 轉成希臘字母、
+FHL 的字去掉重音，化為可比較的形式後用 `difflib` 做**序列比對**，
+只有字面真的相同的配對才掛 Strong；異文造成的插入／刪除會被跳過，
+不會錯位，也不會讓整節作廢。
+
+**實際覆蓋率：139,645 個希臘字中 134,088 個掛上 Strong（96.0%）。**
+其餘 4% 是兩份數位化本的用字差異，寧可留白也不猜。
+研經工具給錯字義比沒有字義更糟。
+
+（早期版本用嚴格的位置對齊，覆蓋率只有 81%；改用序列比對後提升到 96%。）
+
 ### Strong 原文字典
 
 點擊逐字對照中的任一詞，除了高亮全章同號碼之外，還會顯示：
@@ -162,6 +192,7 @@ raw/                   原始 API 回應，唯一真相來源，永不覆寫
 raw/strong_dict/       Strong 原文字典原始回應（14,478 筆）
 raw/es_rvr1909/_source 西班牙文原始下載檔
 raw/he_wlc/_source     希伯來文 OSIS XML（39 卷 + VerseMap.xml）
+raw/gr_wh/_source      希臘文兩個來源：fhl/（重音經文）與 byztxt/（Strong）
 parsed/                解析後的正規 JSON，一卷一檔（可由 raw/ 重建，未進版控）
 app/                   離線閱讀器（純 HTML + CSS + 原生 JS，零框架）
 app/data/              前端資料：66 卷經文 + 搜尋索引 + Strong 字典（H／G 分檔）
@@ -207,8 +238,6 @@ FHL 在經文內嵌一整族標記，實測歸納如下：
 
 ## 尚未納入（架構已預留）
 
-- **新約希臘文原文**：FHL 的 `fhlwh`（Westcott-Hort 1881）已逾著作權保護期，
-  可合法加入。加入後新約也會有原文欄，逐字對照即新舊約皆備。
 - 受著作權版本的線上模式（需自備 `scripture.api.bible` 金鑰）
 - 簡體中文（`python scripts/fetch_fhl.py --gb 1`）
 - 希伯來文詞形（morph）標記：OSHB 的 `morph` 屬性已在 `raw/` 中保留，

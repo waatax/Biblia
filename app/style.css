@@ -258,6 +258,14 @@ button:hover { border-color: var(--accent); color: var(--accent); }
 .cell.rtl .interlinear { flex-direction: row; }
 .cell.rtl .unit .u-s,
 .cell.rtl .unit .u-m { direction: ltr; }
+/* 希臘文原文欄：多音調符號需要合適字體與行高才不會擠在一起 */
+.cell.greek {
+  font-family: "Palatino Linotype", "SBL Greek", "Gentium Plus",
+               "Galatia SIL", "Times New Roman", serif;
+  font-size: 1.08em;
+  line-height: 1.95;
+}
+
 .cell.empty::after {
   content: "—";
   color: var(--line);

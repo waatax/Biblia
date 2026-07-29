@@ -64,6 +64,11 @@ VERSIONS = [
     # 只有舊約，且帶 Strong 號碼，可併入跨語言高亮。
     {"key": "he_wlc", "version": "wlc", "strong": 1,
      "label": "WLC", "source": "file", "otonly": True},
+    # 新約希臘文原文。Westcott-Hort 1881 已逾著作權保護期；
+    # 文字取自 FHL fhlwh（有重音的 Unicode），Strong 取自 byztxt 的同底本，
+    # 逐詞驗證相符才掛號碼（見 scripts/fetch_gnt.py）。
+    {"key": "gr_wh", "version": "wh", "strong": 1,
+     "label": "WH", "source": "file", "ntonly": True},
 ]
 
 FHL_VERSIONS = [v for v in VERSIONS if v["source"] == "fhl"]

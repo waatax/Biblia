@@ -179,12 +179,19 @@ def main():
           "%d 處錯置，前 5：\n%s" % (len(misfiled), "\n".join(misfiled[:5])) if misfiled else "")
     # 空白經文多半是上游本來就空（例：WEB 約三 14 節併入 15 節，FHL 回傳空字串），
     # 我們忠實保存。數量一多才代表抓取出問題。
-    check("空白經文在合理範圍（<= 40 節，屬上游版本化差異）", len(empty_text) <= 40,
-          "%d 節為空，前 10：%s" % (len(empty_text), empty_text[:10]) if empty_text else "")
+    # 這個檢查是要抓「整批抓取失敗」，而不是統計版本化差異。
+    # 各版本本來就會有少數空節（現代校勘本略去的節、跨章併節留下的空位），
+    # 版本一多，全域總數自然變大 —— 所以改成**逐版本**看：
+    # 單一版本空節過多才代表那個版本抓壞了。
+    PER_VERSION_LIMIT = 30
+    by_v = {}
+    for e in empty_text:
+        by_v.setdefault(e.split("/")[0], []).append(e)
+    over = [(k, len(v)) for k, v in sorted(by_v.items())
+            if len(v) > PER_VERSION_LIMIT]
+    check("無單一版本空節異常偏多（每版本 <= %d 節）" % PER_VERSION_LIMIT,
+          not over, "超標：%s" % over if over else "")
     if empty_text:
-        by_v = {}
-        for e in empty_text:
-            by_v.setdefault(e.split("/")[0], []).append(e)
         emit("[INFO] 上游本身為空的節 %d 處，分佈如下（皆已核對，非抓取缺漏）"
              % len(empty_text))
         for vk, items in sorted(by_v.items()):

@@ -1,19 +1,19 @@
-Biblia 驗證報告  2026-07-29 10:30:30
+Biblia 驗證報告  2026-07-29 12:01:20
 ==================================================================
 [PASS] books.csv 共 66 卷
          實得 66
 [PASS] books.csv 總章數 == 1189
          實得 1189
-[PASS] raw 檔齊全（11630 個）
+[PASS] raw 檔齊全（11890 個）
 [PASS] parsed 各卷章數與 books.csv 相符
 [PASS] parsed 總章數 == 1189
          實得 1189
 [INFO] 節數統計（以聯集計 31361 節）
-         zh_unv 31103；en_kjv 31102；en_web 31105；es_rvr1909 31102；es_rvc 31104；fr_nbs 31170；ja_jp 31103；ko_kor 31048；vi_vie 31103；he_wlc 23142
-[INFO] 版本間節數落差 2563 處（正常，非錯誤）
+         zh_unv 31103；en_kjv 31102；en_web 31105；es_rvr1909 31102；es_rvc 31104；fr_nbs 31170；ja_jp 31103；ko_kor 31048；vi_vie 31103；he_wlc 23142；gr_wh 7958
+[INFO] 版本間節數落差 2570 處（正常，非錯誤）
          Gen 30:32 缺 ko_kor；Gen 30:33 缺 ko_kor；Gen 30:34 缺 ko_kor；Gen 30:35 缺 ko_kor；Gen 30:36 缺 ko_kor
 [INFO] 相異 Strong 號碼 14279 個
-[PASS] raw → parsed 經文保真（抽查 381 節）
+[PASS] raw → parsed 經文保真（抽查 400 節）
 [PASS] 創 1:1 和合本 Strong 含 H7225/H430/H1254/H8064/H776
          實得 ['H9002', 'H7225', 'H430', 'H1254', 'H853', 'H8064', 'H853', 'H776']
 [PASS] 太 1:1 和合本 Strong 含 G11/G1138/G2424/G5547（新約為 G）

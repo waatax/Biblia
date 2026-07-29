@@ -14,6 +14,8 @@ var BIBLIA = (function () {
   var VERSIONS = [
     { key: 'he_wlc', label: '原文', full: '希伯來文原文 WLC（僅舊約）',
       strong: true, otonly: true, rtl: true },
+    { key: 'gr_wh', label: '原文', full: '希臘文原文 Westcott-Hort（僅新約）',
+      strong: true, ntonly: true, greek: true },
     { key: 'zh_unv', label: '和合本', full: '和合本 (1919)', strong: true },
     { key: 'es_rvr1909', label: 'RVR1909', full: 'Reina-Valera 1909', strong: false },
     { key: 'es_rvc', label: 'RVC', full: 'Reina Valera Contemporánea', strong: false },
@@ -25,7 +27,8 @@ var BIBLIA = (function () {
     { key: 'en_web', label: 'WEB', full: 'World English Bible', strong: false }
   ];
 
-  var DEFAULTS = { he_wlc: true, zh_unv: true, es_rvr1909: true, es_rvc: false,
+  var DEFAULTS = { he_wlc: true, gr_wh: true, zh_unv: true,
+                   es_rvr1909: true, es_rvc: false,
                    fr_nbs: false, ja_jp: false, ko_kor: false, vi_vie: false,
                    en_kjv: true, en_web: false };
   var FIRST_NT = 40;
@@ -498,7 +501,7 @@ var BIBLIA = (function () {
 
   function cell(verse, v) {
     var d = document.createElement('div');
-    d.className = 'cell' + (v.rtl ? ' rtl' : '');
+    d.className = 'cell' + (v.rtl ? ' rtl' : '') + (v.greek ? ' greek' : '');
     d.setAttribute('data-label', v.label);
 
     var text = verse.t ? verse.t[v.key] : null;
