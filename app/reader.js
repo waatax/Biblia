@@ -17,12 +17,14 @@ var BIBLIA = (function () {
     { key: 'zh_unv', label: '和合本', full: '和合本 (1919)', strong: true },
     { key: 'es_rvr1909', label: 'RVR1909', full: 'Reina-Valera 1909', strong: false },
     { key: 'es_rvc', label: 'RVC', full: 'Reina Valera Contemporánea', strong: false },
+    { key: 'fr_nbs', label: 'NBS', full: 'Nouvelle Bible Segond (法文)', strong: false },
+    { key: 'vi_vie', label: '越南語', full: '越南聖經 (Kinh Thánh)', strong: false },
     { key: 'en_kjv', label: 'KJV', full: 'King James Version', strong: true },
     { key: 'en_web', label: 'WEB', full: 'World English Bible', strong: false }
   ];
 
   var DEFAULTS = { he_wlc: true, zh_unv: true, es_rvr1909: true, es_rvc: false,
-                   en_kjv: true, en_web: false };
+                   fr_nbs: false, vi_vie: false, en_kjv: true, en_web: false };
   var FIRST_NT = 40;
 
   var state = {

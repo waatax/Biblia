@@ -124,6 +124,21 @@ def build_book(book, stats):
     }
 
 
+def safe_write_text(path, text):
+    tmp_path = path + ".tmp"
+    for attempt in range(5):
+        try:
+            with open(tmp_path, "w", encoding="utf-8") as fh:
+                fh.write(text)
+            os.replace(tmp_path, path)
+            return
+        except OSError:
+            import time
+            time.sleep(0.2)
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(text)
+
+
 def main():
     common.utf8_stdout()
     books = common.load_books()
@@ -146,8 +161,7 @@ def main():
 
         js_path = os.path.join(common.APP_DATA_DIR, stem + ".js")
         blob = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
-        with io.open(js_path, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write("BIBLIA.receive(" + blob + ");\n")
+        safe_write_text(js_path, "BIBLIA.receive(" + blob + ");\n")
         total_bytes += len(blob.encode("utf-8"))
 
         index.append({
