@@ -24,6 +24,8 @@
 | **Reina-Valera 1909 (RVR1909)** | 西 | **公有領域** | ✅ 可 | 公有領域資料源 |
 | **Reina Valera Contemporánea (RVC)** | 西 | © SBU | ✅ 可 | mrk214/bible-data-es-spa |
 | **Nouvelle Bible Segond (NBS)** | 法 | © SBS | ✅ 可 | develop4God/bible_versions |
+| **日語聖經 (口語訳, ja_jp)** | 日 | **公有領域** | ✅ 可 | FHL JSON API |
+| **韓語聖經 (개역한글, ko_kor)** | 韓 | **公有領域** | ✅ 可 | FHL JSON API / crizin/bible-db |
 | **越南聖經 (vietnamese)** | 越 | **公有領域** | ✅ 可 | FHL JSON API |
 | **World English Bible (WEB)** | 英 | **公有領域** | ✅ 可 | 公有領域資料源 |
 | King James Version (KJV) | 英 | **公有領域** | ✅ 可 | FHL / 公有領域資料源 |

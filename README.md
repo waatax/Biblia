@@ -86,6 +86,8 @@ RVR1909 在 18 處依**希伯來文分章**，與英文分章不同（民 12/13�
 | Reina-Valera 1909 | 西班牙文 | 公有領域 | — | scrollmapper/bible_databases |
 | Reina Valera Contemporánea | 西班牙文 | © SBU | — | mrk214/bible-data-es-spa |
 | Nouvelle Bible Segond | 法文 | © SBS | — | develop4God/bible_versions |
+| 日語聖經 (口語訳, 1955) | 日文 | 公有領域 | — | FHL API |
+| 韓語聖經 (개역한글, 1961) | 韓文 | 公有領域 | — | FHL API / crizin/bible-db |
 | 越南聖經 (Kinh Thánh) | 越南文 | 公有領域 | — | FHL API |
 | King James Version | 英文 | 公有領域 | ✅ | FHL API |
 | World English Bible | 英文 | 公有領域 | — | FHL API |

@@ -99,6 +99,12 @@ def main():
             try:
                 data = common.fetch_chapter(
                     b["chineses"], chap, v["version"], v["strong"], args.gb)
+                if v["version"] == "korean" and "record" in data:
+                    for rec in data["record"]:
+                        if "bible_text" in rec and rec["bible_text"]:
+                            words = rec["bible_text"].split("  ")
+                            clean_words = [w.replace(" ", "") for w in words if w.strip()]
+                            rec["bible_text"] = " ".join(clean_words)
             except RuntimeError as exc:
                 failed += 1
                 failures.append((v["version"], b["engs"], chap, str(exc)))

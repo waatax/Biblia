@@ -53,6 +53,10 @@ VERSIONS = [
      "label": "RVC", "source": "file"},
     {"key": "fr_nbs", "version": "nbs", "strong": 0,
      "label": "NBS", "source": "file"},
+    {"key": "ja_jp", "version": "jp", "strong": 0,
+     "label": "日語", "source": "fhl"},
+    {"key": "ko_kor", "version": "korean", "strong": 0,
+     "label": "韓語", "source": "fhl"},
     {"key": "vi_vie", "version": "vietnamese", "strong": 0,
      "label": "越南語", "source": "fhl"},
     # 舊約希伯來文原文。FHL 的 bhs 受 Deutsche Bibelgesellschaft 版權限制，
