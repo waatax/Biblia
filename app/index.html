@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Biblia — 多語逐字對照聖經</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -51,6 +54,23 @@
     </div>
   </div>
 
+  <!-- ===================== 教會讀經計畫入口卡片 ===================== -->
+  <div class="start-card start-plan-card">
+    <div class="start-plan-header">
+      <div class="start-plan-icon">📅</div>
+      <div>
+        <h2 class="start-plan-title">2026年聖經速讀進度表（第三季）</h2>
+        <span class="start-plan-subtitle">7/1 ~ 9/30 ・ 第 27 ~ 40 週</span>
+      </div>
+    </div>
+    <div class="start-plan-body" id="startPlanTodayBox">
+      <!-- 今日讀經動態載入 -->
+    </div>
+    <div class="start-plan-foot">
+      <button id="startPlanBtn" type="button" class="go go-plan">📅 開啟完整讀經計畫表</button>
+    </div>
+  </div>
+
   <p class="start-foot">
     希伯來文 WLC ・ 希臘文 Westcott-Hort ・ 和合本 1919 ・ Reina-Valera 1909 ・
     King James Version ・ World English Bible ・ Strong 1890 —— 皆為公有領域<br>
@@ -69,6 +89,7 @@
   <header class="bar">
     <div class="bar-row">
       <button id="homeBtn" type="button" class="home" title="回首頁">首頁</button>
+      <button id="readerPlanBtn" type="button" class="plan-nav-btn" title="查看教會讀經計畫">📅 讀經計畫</button>
 
       <label class="ctl">
         <span class="ctl-label">書卷</span>
@@ -138,6 +159,68 @@
 
 </div>
 
+<!-- ===================== 教會讀經計畫頁面 ===================== -->
+<section id="planView" class="plan-view" hidden>
+  <header class="bar">
+    <div class="bar-row">
+      <button id="planHomeBtn" type="button" class="home" title="回首頁">首頁</button>
+      <button id="planReaderBtn" type="button" class="go" title="前往經文閱讀器">閱讀經文</button>
+      <span class="plan-head-title">2026年聖經速讀進度表（第三季）</span>
+      <span class="spacer"></span>
+      <button id="planJumpTodayBtn" type="button" class="search-btn plan-today-btn">📍 定位到今天</button>
+      <span class="spacer"></span>
+      <button id="planThemeBtn" type="button" title="切換深淺色">◐</button>
+    </div>
+  </header>
+
+  <main class="plan-main">
+    <div class="plan-hero">
+      <div class="plan-hero-content">
+        <h1 class="plan-main-title">📖 教會讀經計畫</h1>
+        <p class="plan-subtitle">2026年聖經速讀進度表（第三季：7/1 ~ 9/30）</p>
+      </div>
+
+      <div class="plan-stats-card">
+        <div class="plan-stats-header">
+          <span class="plan-stats-label">個人讀經完成率</span>
+          <span class="plan-stats-val" id="planStatsPercent">0%</span>
+        </div>
+        <div class="plan-progress-bar">
+          <div class="plan-progress-fill" id="planProgressFill" style="width: 0%;"></div>
+        </div>
+        <div class="plan-stats-foot">
+          <span class="plan-stats-count" id="planStatsCount">已完成 0 / 92 天</span>
+          <button id="planMarkTodayBtn" type="button" class="plan-mark-today-btn">✓ 標記今天已讀</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="plan-filter-bar">
+      <div class="plan-tabs" id="planMonthTabs">
+        <button class="plan-tab active" data-month="all">全部 (92天)</button>
+        <button class="plan-tab" data-month="7">7 月</button>
+        <button class="plan-tab" data-month="8">8 月</button>
+        <button class="plan-tab" data-month="9">9 月</button>
+      </div>
+
+      <div class="plan-filter-inputs">
+        <label class="plan-filter-ctl">
+          <span>週次：</span>
+          <select id="planWeekSelect">
+            <option value="all">所有週次 (27~40)</option>
+          </select>
+        </label>
+
+        <input type="text" id="planSearchInput" class="plan-search-input" placeholder="搜尋日期或經文 (例如 7/15, 撒上, 詩篇)..." autocomplete="off">
+      </div>
+    </div>
+
+    <div id="planList" class="plan-list">
+      <!-- 讀經進度動態渲染區塊 -->
+    </div>
+  </main>
+</section>
+
 <!-- ===================== 搜尋彈窗/面板 ===================== -->
 <div id="searchModal" class="search-modal" hidden>
   <div class="search-overlay" id="searchOverlay"></div>
@@ -189,6 +272,7 @@
   </div>
 </div>
 
+<script src="data/plan_2026_q3.js"></script>
 <script src="reader.js"></script>
 <script src="data/books.js"></script>
 <script src="data/search_index.js"></script>
