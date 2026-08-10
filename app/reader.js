@@ -217,9 +217,11 @@ var BIBLIA = (function () {
     state.bookNo = (saved && saved.bookNo) || 1;
     state.chap = (saved && saved.chap) || 1;
 
+    // 寬螢幕的 ⚙ 面板是工具列第二排，記住使用者的選擇；
+    // 窄螢幕它只是暫時浮出來的下拉，一律從關閉開始，才不會一進頁面就擋住經文。
     document.body.classList.toggle('tools-open',
-      saved && typeof saved.tools === 'boolean'
-        ? saved.tools : (window.innerWidth || 1280) >= 900);
+      (window.innerWidth || 1280) >= 900 &&
+      (!saved || typeof saved.tools !== 'boolean' || saved.tools));
     if (!state.byNo[state.bookNo]) { state.bookNo = 1; state.chap = 1; }
 
     cacheEls();
@@ -277,6 +279,14 @@ var BIBLIA = (function () {
   function scheduleLayout() {
     if (layoutTimer) return;
     layoutTimer = setTimeout(measureLayout, 16);
+  }
+
+  /* ⚙ 面板開合。窄螢幕它是浮層（不影響工具列高度），寬螢幕是工具列第二排
+   * （會改變高度），所以兩種情況都要重量一次 --bar-h。 */
+  function setToolsOpen(open) {
+    document.body.classList.toggle('tools-open', !!open);
+    if (el.toolsBtn) el.toolsBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    measureLayout();
   }
 
   function observeLayout() {
@@ -1299,10 +1309,20 @@ var BIBLIA = (function () {
     if (el.toolsBtn) {
       el.toolsBtn.setAttribute('aria-expanded',
         document.body.classList.contains('tools-open') ? 'true' : 'false');
-      el.toolsBtn.addEventListener('click', function () {
-        var open = document.body.classList.toggle('tools-open');
-        el.toolsBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        measureLayout();
+      el.toolsBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setToolsOpen(!document.body.classList.contains('tools-open'));
+        save();
+      });
+
+      // 窄螢幕上 ⚙ 面板是浮在經文上的下拉，點到別處就該收起來
+      // （寬螢幕它是工具列的第二排，本來就該一直開著，不要亂關）。
+      document.addEventListener('click', function (e) {
+        if (!document.body.classList.contains('tools-open')) return;
+        if (window.matchMedia && window.matchMedia('(min-width: 900px)').matches) return;
+        if (el.barTools && el.barTools.contains(e.target)) return;
+        if (el.toolsBtn.contains(e.target)) return;
+        setToolsOpen(false);
         save();
       });
     }

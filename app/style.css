@@ -1883,7 +1883,27 @@ body.appearance-open .pager-aa-btn {
 
 /* --- < 900px：工具列精簡、翻章列登場 --- */
 @media (max-width: 899px) {
-  .bar-tools { gap: 12px; }
+  /* 手機／平板直式時，⚙ 面板改成「浮在經文上的下拉」而不是撐高固定工具列。
+   * 11 個版本膠囊在這個寬度會折成四五排；若還留在流程內，光是工具列就吃掉
+   * 三成以上的畫面高度，而且它是 sticky 的，會一路擋著捲不掉。 */
+  .bar-tools {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 31;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    max-height: min(64dvh, 460px);
+    padding: 10px var(--pad-x) 14px;
+    padding-left: max(var(--pad-x), env(safe-area-inset-left));
+    padding-right: max(var(--pad-x), env(safe-area-inset-right));
+    background: var(--bar);
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--sh-3);
+  }
   .tool-group { width: 100%; }
   .tool-versions { align-items: flex-start; }
   .versions { flex-wrap: wrap; }

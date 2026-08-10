@@ -34,9 +34,31 @@ python scripts/check_completeness.py  # 完整性稽核 → completeness.txt
 
 python scripts/fetch_strong_dict.py   # Strong 原文字典釋義（14,279 筆，約 4 小時）
 python scripts/build_strong_dict.py   # → app/data/strong_dict_H.js / _G.js
+
+python scripts/fetch_su101_plan.py    # 每日研經釋義讀經進度 → app/data/plan_su101_2026.js
 ```
 
 只需要 Python 3（**僅用標準庫**，無任何 pip 依賴）。
+
+## 讀經計畫
+
+閱讀器內建兩份讀經進度，首頁會直接列出兩者的「今日進度」，
+點經文按鈕即可跳到該段（有節號的會捲到該節並高亮）：
+
+| 計畫 | 範圍 | 來源 |
+|---|---|---|
+| 教會聖經速讀 | 2026 第三季，7/1 ~ 9/30，92 天 | 教會進度表（手動整理於 `app/data/plan_2026_q3.js`） |
+| 每日研經釋義 | 2026 年，1/1 起，逐日累積 | [國際讀經會台灣總會](https://www.su101.net/) |
+
+完成狀態存在 localStorage，兩份計畫各自獨立計算完成率。
+
+**每日研經釋義**由 `scripts/fetch_su101_plan.py` 從 su101.net 的 WordPress REST API
+取得「讀經大聯盟」每日貼文，標題形如
+`讀經大聯盟 2026年8月10日 (週一) 撒迦利亞書 5:1-11`，
+解析出日期與經文範圍後對到本專案的書卷編號。
+
+站方是**一天發佈一天**的，未來日期還沒有公開頁面，所以這份資料只能抓到「今天為止」；
+重跑腳本即可補上新的日子（腳本會檢查日期是否連續，缺日會列出來）。
 
 ## 完整性怎麼保證
 
