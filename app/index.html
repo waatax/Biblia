@@ -2,139 +2,207 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- viewport-fit=cover：iPhone 瀏海／底部橫條要靠 env(safe-area-inset-*) 讓開 -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181c" media="(prefers-color-scheme: dark)">
+<meta name="description" content="離線可用的多語逐字對照聖經閱讀器：希伯來文 WLC、希臘文 Westcott-Hort、和合本、KJV 等並排，支援 Strong number 逐字對照與友善排版設定。">
 <title>Biblia — 多語逐字對照聖經</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<a class="skip-link" href="#reader">跳到經文內容</a>
+
 <!-- ===================== 初始介面：選擇經文 ===================== -->
-<section id="startView" class="start">
-  <h1 class="start-title">閱讀經文</h1>
+<section id="startView" class="view start">
+  <div class="start-inner">
 
-  <div class="start-card">
-    <div class="pick">
-      <span class="pick-label">舊約：</span>
-      <select id="otBook" class="pick-book"></select>
-      <select id="otChap" class="pick-chap"></select>
-      <button id="otGo" type="button" class="go">閱讀</button>
-    </div>
+    <header class="start-head">
+      <h1 class="start-title">Biblia</h1>
+      <p class="start-tagline">多語逐字對照聖經　·　原文 ・ 和合本 ・ KJV ・ Strong 對照</p>
+    </header>
 
-    <div class="pick">
-      <span class="pick-label">新約：</span>
-      <select id="ntBook" class="pick-book"></select>
-      <select id="ntChap" class="pick-chap"></select>
-      <button id="ntGo" type="button" class="go">閱讀</button>
-    </div>
+    <div class="start-grid">
 
-    <hr class="pick-sep">
+      <div class="start-card" id="startPickCard">
+        <h2 class="card-title">閱讀經文</h2>
 
-    <div class="pick pick-wrap">
-      <span class="pick-label">版本：</span>
-      <span id="startVersions" class="pick-versions"></span>
-    </div>
+        <div class="pick">
+          <span class="pick-label">舊約</span>
+          <select id="otBook" class="pick-book" aria-label="舊約書卷"></select>
+          <select id="otChap" class="pick-chap" aria-label="舊約章數"></select>
+          <button id="otGo" type="button" class="btn btn-primary go">閱讀</button>
+        </div>
 
-    <div class="pick pick-wrap">
-      <span class="pick-label">顯示：</span>
-      <label class="pick-opt">
-        <input type="checkbox" id="startInter">
-        <span>逐字對照（含 strong number）</span>
-      </label>
-      <label class="pick-opt">
-        <input type="checkbox" id="startDark">
-        <span>深色背景</span>
-      </label>
-    </div>
+        <div class="pick">
+          <span class="pick-label">新約</span>
+          <select id="ntBook" class="pick-book" aria-label="新約書卷"></select>
+          <select id="ntChap" class="pick-chap" aria-label="新約章數"></select>
+          <button id="ntGo" type="button" class="btn btn-primary go">閱讀</button>
+        </div>
 
-    <div class="pick pick-wrap">
-      <button id="startSearchBtn" type="button" class="go go-search">🔍 搜尋經文 / Strong 號碼</button>
-    </div>
-  </div>
+        <hr class="pick-sep">
 
-  <!-- ===================== 教會讀經計畫入口卡片 ===================== -->
-  <div class="start-card start-plan-card">
-    <div class="start-plan-header">
-      <div class="start-plan-icon">📅</div>
-      <div>
-        <h2 class="start-plan-title">2026年聖經速讀進度表（第三季）</h2>
-        <span class="start-plan-subtitle">7/1 ~ 9/30 ・ 第 27 ~ 40 週</span>
+        <div class="pick pick-block">
+          <span class="pick-label">版本</span>
+          <div id="startVersions" class="pick-versions"></div>
+        </div>
+
+        <div class="pick pick-block">
+          <span class="pick-label">顯示</span>
+          <div class="pick-opts">
+            <label class="pick-opt">
+              <input type="checkbox" id="startInter">
+              <span>逐字對照（含 Strong number）</span>
+            </label>
+            <label class="pick-opt">
+              <input type="checkbox" id="startDark">
+              <span>深色背景</span>
+            </label>
+          </div>
+        </div>
+
+        <button id="startSearchBtn" type="button" class="btn btn-primary btn-block go-search">
+          <span aria-hidden="true">🔍</span> 搜尋經文 / Strong 號碼
+        </button>
       </div>
-    </div>
-    <div class="start-plan-body" id="startPlanTodayBox">
-      <!-- 今日讀經動態載入 -->
-    </div>
-    <div class="start-plan-foot">
-      <button id="startPlanBtn" type="button" class="go go-plan">📅 開啟完整讀經計畫表</button>
-    </div>
-  </div>
 
-  <p class="start-foot">
-    希伯來文 WLC ・ 希臘文 Westcott-Hort ・ 和合本 1919 ・ Reina-Valera 1909 ・
-    King James Version ・ World English Bible ・ Strong 1890 —— 皆為公有領域<br>
-    中文／英文經文與 Strong 字典：信望愛信仰與聖經資源中心 (bible.fhl.net)　·
-    西班牙文：scrollmapper/bible_databases (SpaRV)<br>
-    希伯來文原文：Westminster Leningrad Codex，取自 Open Scriptures Hebrew Bible
-    (openscriptures/morphhb)　·　本文為公有領域，詞形與 lemma 資料採 CC BY 4.0<br>
-    希臘文原文：Westcott-Hort 1881（已逾著作權保護期），
-    經文取自 bible.fhl.net，Strong 號碼取自 byztxt/greektext-westcott-hort
-  </p>
+      <!-- ===================== 讀經計畫入口卡片 ===================== -->
+      <div class="start-card start-plan-card">
+        <div class="start-plan-header">
+          <div class="start-plan-icon" aria-hidden="true">📖</div>
+          <div class="start-plan-heading">
+            <h2 class="start-plan-title">今日讀經進度</h2>
+            <span class="start-plan-subtitle" id="startPlanDate"></span>
+          </div>
+        </div>
+
+        <div class="start-plan-body" id="startPlanTodayBox">
+          <!-- 今日讀經動態載入 -->
+        </div>
+
+        <button id="startPlanBtn" type="button" class="btn btn-primary btn-block go-plan">
+          <span aria-hidden="true">📅</span> 開啟完整讀經計畫表
+        </button>
+      </div>
+
+    </div>
+
+    <p class="start-foot">
+      希伯來文 WLC ・ 希臘文 Westcott-Hort ・ 和合本 1919 ・ Reina-Valera 1909 ・
+      King James Version ・ World English Bible ・ Strong 1890 —— 皆為公有領域<br>
+      中文／英文經文與 Strong 字典：信望愛信仰與聖經資源中心 (bible.fhl.net)　·
+      西班牙文：scrollmapper/bible_databases (SpaRV)<br>
+      希伯來文原文：Westminster Leningrad Codex，取自 Open Scriptures Hebrew Bible
+      (openscriptures/morphhb)　·　本文為公有領域，詞形與 lemma 資料採 CC BY 4.0<br>
+      希臘文原文：Westcott-Hort 1881（已逾著作權保護期），
+      經文取自 bible.fhl.net，Strong 號碼取自 byztxt/greektext-westcott-hort<br>
+      每日研經釋義讀經進度：國際讀經會台灣總會 (su101.net)
+    </p>
+  </div>
 </section>
 
 <!-- ===================== 閱讀介面 ===================== -->
-<div id="readerView" hidden>
+<div id="readerView" class="view" hidden>
 
-  <header class="bar">
-    <div class="bar-row">
-      <button id="homeBtn" type="button" class="home" title="回首頁">首頁</button>
-      <button id="readerPlanBtn" type="button" class="plan-nav-btn" title="查看教會讀經計畫">📅 讀經計畫</button>
+  <header class="bar" id="readerBar">
+    <div class="bar-row bar-main">
+      <button id="homeBtn" type="button" class="btn btn-ghost btn-home" title="回首頁" aria-label="回首頁">
+        <span aria-hidden="true">⌂</span><span class="btn-text">首頁</span>
+      </button>
 
-      <label class="ctl">
-        <span class="ctl-label">書卷</span>
-        <select id="bookSelect"></select>
-      </label>
+      <div class="bar-nav">
+        <label class="ctl ctl-book">
+          <span class="ctl-label">書卷</span>
+          <select id="bookSelect" aria-label="書卷"></select>
+        </label>
 
-      <label class="ctl">
-        <span class="ctl-label">章</span>
-        <select id="chapSelect"></select>
-      </label>
+        <label class="ctl ctl-chap">
+          <span class="ctl-label">章</span>
+          <select id="chapSelect" aria-label="章"></select>
+        </label>
 
-      <span class="nav-group">
-        <button id="prevBtn" type="button" title="上一章（←）">◀</button>
-        <button id="nextBtn" type="button" title="下一章（→）">▶</button>
-      </span>
+        <span class="nav-group bar-chapter-nav">
+          <button id="prevBtn" type="button" class="btn btn-icon" title="上一章（←）" aria-label="上一章">◀</button>
+          <button id="nextBtn" type="button" class="btn btn-icon" title="下一章（→）" aria-label="下一章">▶</button>
+        </span>
+      </div>
 
-      <span class="spacer"></span>
+      <span class="bar-spacer"></span>
 
-      <button id="searchBarBtn" type="button" class="search-btn" title="搜尋經文或 Strong 號碼">🔍 搜尋</button>
+      <button id="searchBarBtn" type="button" class="btn search-btn" title="搜尋經文或 Strong 號碼（/）">
+        <span aria-hidden="true">🔍</span><span class="btn-text">搜尋</span>
+      </button>
 
-      <span class="spacer"></span>
+      <button id="readerPlanBtn" type="button" class="btn plan-nav-btn" title="查看讀經計畫">
+        <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
+      </button>
 
-      <span class="versions" id="versionBox"></span>
+      <button id="readerAaBtn" type="button" class="btn btn-aa-top" title="字級與排版設定" aria-label="字級與排版外觀設定">
+        <span class="aa-badge" aria-hidden="true">Aa</span>
+      </button>
 
-      <span class="spacer"></span>
+      <button id="toolsBtn" type="button" class="btn btn-icon tools-btn"
+              aria-expanded="false" aria-controls="barTools" title="版本與快速設定">
+        <span aria-hidden="true">⚙</span>
+      </button>
+    </div>
 
-      <label class="ctl toggle">
-        <input type="checkbox" id="interlinearChk">
-        <span>逐字對照</span>
-      </label>
+    <div class="bar-row bar-tools" id="barTools">
+      <div class="tool-group tool-versions">
+        <span class="tool-label">版本</span>
+        <span class="versions" id="versionBox"></span>
+      </div>
 
-      <span class="nav-group">
-        <button id="fontDown" type="button" title="縮小字級">A－</button>
-        <button id="fontUp" type="button" title="放大字級">A＋</button>
-        <button id="themeBtn" type="button" title="切換深淺色">◐</button>
-      </span>
+      <div class="tool-group tool-display">
+        <label class="ctl toggle switch">
+          <input type="checkbox" id="interlinearChk">
+          <span class="switch-track" aria-hidden="true"></span>
+          <span class="switch-text">逐字對照</span>
+        </label>
+
+        <button id="openAaModalBtn" type="button" class="btn btn-sm btn-aa-quick" title="開啟字級與外觀面板">
+          <span class="aa-badge" aria-hidden="true">Aa</span> 外觀排版
+        </button>
+
+        <span class="nav-group size-group" role="group" aria-label="字級微調">
+          <button id="fontDown" type="button" class="btn btn-icon" title="縮小字級" aria-label="縮小字級">A－</button>
+          <span class="size-val" id="sizeVal" aria-live="polite">18</span>
+          <button id="fontUp" type="button" class="btn btn-icon" title="放大字級" aria-label="放大字級">A＋</button>
+        </span>
+
+        <button id="themeBtn" type="button" class="btn btn-icon" title="切換深淺色" aria-label="切換深淺色">◐</button>
+      </div>
     </div>
   </header>
 
-  <main id="reader" class="reader">
+  <main id="reader" class="reader" tabindex="-1">
     <p class="placeholder">載入中…</p>
   </main>
 
-  <aside id="strongPanel" class="strong-panel" hidden>
-    <button id="strongClose" class="strong-close" type="button" title="關閉">×</button>
+  <!-- 手機／平板直式：拇指可及的專屬翻章操作列 -->
+  <nav class="pager" id="pager" aria-label="章節翻頁與排版">
+    <button id="pagerPrev" type="button" class="pager-btn pager-prev" aria-label="上一章">◀ 上一章</button>
+    <div class="pager-center">
+      <span class="pager-loc" id="pagerLoc" role="status"></span>
+      <button id="pagerAaBtn" type="button" class="pager-aa-btn" title="調整字級與排版外觀" aria-label="字級與排版外觀設定">
+        <span class="pager-aa-badge" aria-hidden="true">Aa</span>
+      </button>
+    </div>
+    <button id="pagerNext" type="button" class="pager-btn pager-next" aria-label="下一章">下一章 ▶</button>
+  </nav>
+
+  <!-- Strong 號碼遮罩（手機抽屜點擊空白處即關閉） -->
+  <div id="strongOverlay" class="strong-overlay" hidden></div>
+
+  <aside id="strongPanel" class="strong-panel" hidden aria-label="Strong 號碼釋義">
+    <div class="strong-grip" aria-hidden="true"></div>
+    <button id="strongClose" class="strong-close" type="button" title="關閉" aria-label="關閉釋義面板">×</button>
     <div class="strong-num" id="strongNum"></div>
     <div class="strong-orig" id="strongOrig"></div>
     <div class="strong-meta" id="strongMeta"></div>
@@ -143,10 +211,10 @@
     <div class="strong-dict" id="strongDict"></div>
 
     <div class="strong-actions">
-      <button id="strongSearchBtn" type="button" class="strong-search-btn">
-        🔍 搜尋全書此號碼
+      <button id="strongSearchBtn" type="button" class="btn btn-primary strong-search-btn">
+        <span aria-hidden="true">🔍</span> 搜尋全書此號碼
       </button>
-      <button id="strongEngBtn" type="button" class="strong-eng-btn" hidden>
+      <button id="strongEngBtn" type="button" class="btn strong-eng-btn" hidden>
         顯示英文釋義
       </button>
     </div>
@@ -159,25 +227,37 @@
 
 </div>
 
-<!-- ===================== 教會讀經計畫頁面 ===================== -->
-<section id="planView" class="plan-view" hidden>
+<!-- ===================== 讀經計畫頁面 ===================== -->
+<section id="planView" class="view plan-view" hidden>
   <header class="bar">
-    <div class="bar-row">
-      <button id="planHomeBtn" type="button" class="home" title="回首頁">首頁</button>
-      <button id="planReaderBtn" type="button" class="go" title="前往經文閱讀器">閱讀經文</button>
-      <span class="plan-head-title">2026年聖經速讀進度表（第三季）</span>
-      <span class="spacer"></span>
-      <button id="planJumpTodayBtn" type="button" class="search-btn plan-today-btn">📍 定位到今天</button>
-      <span class="spacer"></span>
-      <button id="planThemeBtn" type="button" title="切換深淺色">◐</button>
+    <div class="bar-row bar-main">
+      <button id="planHomeBtn" type="button" class="btn btn-ghost btn-home" title="回首頁">
+        <span aria-hidden="true">⌂</span><span class="btn-text">首頁</span>
+      </button>
+      <button id="planReaderBtn" type="button" class="btn" title="前往經文閱讀器">
+        <span aria-hidden="true">📖</span><span class="btn-text">閱讀經文</span>
+      </button>
+
+      <span class="bar-title" id="planHeadTitle">讀經計畫</span>
+
+      <span class="bar-spacer"></span>
+
+      <button id="planJumpTodayBtn" type="button" class="btn search-btn plan-today-btn" title="定位到今天">
+        <span aria-hidden="true">📍</span><span class="btn-text">定位到今天</span>
+      </button>
+      <button id="planThemeBtn" type="button" class="btn btn-icon" title="切換深淺色" aria-label="切換深淺色">◐</button>
     </div>
   </header>
 
   <main class="plan-main">
+    <!-- 計畫切換（教會速讀 / 每日研經釋義） -->
+    <div class="plan-switch" id="planSwitch" role="tablist" aria-label="選擇讀經計畫"></div>
+
     <div class="plan-hero">
       <div class="plan-hero-content">
-        <h1 class="plan-main-title">📖 教會讀經計畫</h1>
-        <p class="plan-subtitle">2026年聖經速讀進度表（第三季：7/1 ~ 9/30）</p>
+        <h1 class="plan-main-title" id="planTitle">讀經計畫</h1>
+        <p class="plan-subtitle" id="planSubtitle"></p>
+        <p class="plan-source" id="planSource"></p>
       </div>
 
       <div class="plan-stats-card">
@@ -185,33 +265,30 @@
           <span class="plan-stats-label">個人讀經完成率</span>
           <span class="plan-stats-val" id="planStatsPercent">0%</span>
         </div>
-        <div class="plan-progress-bar">
+        <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+             aria-valuenow="0" id="planProgressBar">
           <div class="plan-progress-fill" id="planProgressFill" style="width: 0%;"></div>
         </div>
         <div class="plan-stats-foot">
-          <span class="plan-stats-count" id="planStatsCount">已完成 0 / 92 天</span>
-          <button id="planMarkTodayBtn" type="button" class="plan-mark-today-btn">✓ 標記今天已讀</button>
+          <span class="plan-stats-count" id="planStatsCount">已完成 0 天</span>
+          <button id="planMarkTodayBtn" type="button" class="btn plan-mark-today-btn">✓ 標記今天已讀</button>
         </div>
       </div>
     </div>
 
     <div class="plan-filter-bar">
-      <div class="plan-tabs" id="planMonthTabs">
-        <button class="plan-tab active" data-month="all">全部 (92天)</button>
-        <button class="plan-tab" data-month="7">7 月</button>
-        <button class="plan-tab" data-month="8">8 月</button>
-        <button class="plan-tab" data-month="9">9 月</button>
-      </div>
+      <div class="plan-tabs" id="planMonthTabs" role="tablist" aria-label="月份篩選"></div>
 
       <div class="plan-filter-inputs">
         <label class="plan-filter-ctl">
-          <span>週次：</span>
-          <select id="planWeekSelect">
-            <option value="all">所有週次 (27~40)</option>
+          <span>週次</span>
+          <select id="planWeekSelect" aria-label="週次篩選">
+            <option value="all">所有週次</option>
           </select>
         </label>
 
-        <input type="text" id="planSearchInput" class="plan-search-input" placeholder="搜尋日期或經文 (例如 7/15, 撒上, 詩篇)..." autocomplete="off">
+        <input type="search" id="planSearchInput" class="plan-search-input"
+               placeholder="搜尋日期或經文（例如 7/15、撒上、詩篇）" autocomplete="off" aria-label="搜尋讀經進度">
       </div>
     </div>
 
@@ -221,21 +298,22 @@
   </main>
 </section>
 
-<!-- ===================== 搜尋彈窗/面板 ===================== -->
-<div id="searchModal" class="search-modal" hidden>
+<!-- ===================== 搜尋彈窗 ===================== -->
+<div id="searchModal" class="search-modal" hidden role="dialog" aria-modal="true" aria-label="搜尋經文">
   <div class="search-overlay" id="searchOverlay"></div>
   <div class="search-dialog">
     <header class="search-header">
       <div class="search-input-group">
-        <input type="text" id="searchInput" class="search-input" placeholder="輸入關鍵字 (如: 愛 忍耐) 或 Strong 號碼 (如: H7225)..." autocomplete="off">
-        <button id="searchExecBtn" type="button" class="search-exec-btn">搜尋</button>
+        <input type="search" id="searchInput" class="search-input"
+               placeholder="關鍵字（如 愛 忍耐）或 Strong 號碼（如 H7225）" autocomplete="off">
+        <button id="searchExecBtn" type="button" class="btn btn-primary search-exec-btn">搜尋</button>
       </div>
-      <button id="searchCloseBtn" type="button" class="search-close-btn" title="關閉">×</button>
+      <button id="searchCloseBtn" type="button" class="search-close-btn" title="關閉" aria-label="關閉搜尋">×</button>
     </header>
 
     <div class="search-controls">
       <label class="search-ctl">
-        <span>版本：</span>
+        <span>版本</span>
         <select id="searchVersionSelect">
           <option value="all">所有版本</option>
           <option value="zh_unv" selected>和合本 (中文)</option>
@@ -252,7 +330,7 @@
       </label>
 
       <label class="search-ctl">
-        <span>範圍：</span>
+        <span>範圍</span>
         <select id="searchScopeSelect">
           <option value="all" selected>全本 (66卷)</option>
           <option value="ot">舊約 (39卷)</option>
@@ -262,17 +340,162 @@
       </label>
     </div>
 
-    <div class="search-summary" id="searchSummary">輸入關鍵字開始搜尋</div>
+    <div class="search-summary" id="searchSummary" aria-live="polite">輸入關鍵字開始搜尋</div>
 
     <div class="search-results" id="searchResults"></div>
 
     <div class="search-foot" id="searchFoot" hidden>
-      <button id="searchMoreBtn" type="button" class="search-more-btn">載入更多結果</button>
+      <button id="searchMoreBtn" type="button" class="btn search-more-btn">載入更多結果</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 閱讀排版與字級外觀設定 (Aa) ===================== -->
+<div id="appearanceModal" class="appearance-modal" hidden role="dialog" aria-modal="true" aria-label="閱讀排版與外觀設定">
+  <div class="appearance-overlay" id="appearanceOverlay"></div>
+  <div class="appearance-dialog" id="appearanceDialog">
+    <div class="appearance-grip" aria-hidden="true"></div>
+    <header class="appearance-header">
+      <div class="appearance-heading">
+        <span class="aa-title-badge">Aa</span>
+        <h2 class="appearance-title">閱讀排版與外觀</h2>
+      </div>
+      <button id="appearanceCloseBtn" type="button" class="appearance-close-btn" title="關閉設定" aria-label="關閉設定">×</button>
+    </header>
+
+    <div class="appearance-body">
+      <!-- 1. 字級大小調整 -->
+      <section class="aa-section">
+        <div class="aa-section-head">
+          <span class="aa-section-title">字體大小</span>
+          <div class="aa-size-pill">
+            <span id="aaSizeText" class="aa-size-num">18</span>
+            <span class="aa-size-unit">px</span>
+          </div>
+        </div>
+
+        <div class="aa-slider-row">
+          <button id="aaFontDown" type="button" class="btn btn-icon aa-step-btn" title="縮小字級" aria-label="縮小字級">A－</button>
+          <div class="aa-slider-wrap">
+            <input type="range" id="aaFontSlider" class="aa-range-slider" min="13" max="34" step="1" value="18" aria-label="字體大小滑桿">
+            <div class="aa-slider-ticks">
+              <span>14</span>
+              <span>18</span>
+              <span>22</span>
+              <span>26</span>
+              <span>30</span>
+              <span>34</span>
+            </div>
+          </div>
+          <button id="aaFontUp" type="button" class="btn btn-icon aa-step-btn" title="放大字級" aria-label="放大字級">A＋</button>
+        </div>
+
+        <!-- 常用字級一鍵切換 -->
+        <div class="aa-presets" role="group" aria-label="常用字級預設">
+          <button type="button" class="aa-preset-btn" data-size="15">小<span class="aa-preset-sub">15px</span></button>
+          <button type="button" class="aa-preset-btn active" data-size="18">標準<span class="aa-preset-sub">18px</span></button>
+          <button type="button" class="aa-preset-btn" data-size="21">大<span class="aa-preset-sub">21px</span></button>
+          <button type="button" class="aa-preset-btn" data-size="25">特大<span class="aa-preset-sub">25px</span></button>
+          <button type="button" class="aa-preset-btn" data-size="30">長輩<span class="aa-preset-sub">30px</span></button>
+        </div>
+      </section>
+
+      <!-- 2. 行距與字型 -->
+      <section class="aa-section">
+        <div class="aa-two-col">
+          <!-- 行距 -->
+          <div class="aa-sub-group">
+            <span class="aa-section-title">行距間距</span>
+            <div class="aa-seg-control" role="radiogroup" aria-label="行距選擇" id="aaLhControls">
+              <button type="button" class="aa-seg-btn" data-lh="compact" role="radio" aria-checked="false">緊湊</button>
+              <button type="button" class="aa-seg-btn active" data-lh="normal" role="radio" aria-checked="true">標準</button>
+              <button type="button" class="aa-seg-btn" data-lh="relaxed" role="radio" aria-checked="false">寬鬆</button>
+            </div>
+          </div>
+
+          <!-- 字型 -->
+          <div class="aa-sub-group">
+            <span class="aa-section-title">經文字型</span>
+            <div class="aa-seg-control" role="radiogroup" aria-label="字型選擇" id="aaFontControls">
+              <button type="button" class="aa-seg-btn active" data-font="serif" role="radio" aria-checked="true">典雅明體</button>
+              <button type="button" class="aa-seg-btn" data-font="sans" role="radio" aria-checked="false">清晰黑體</button>
+              <button type="button" class="aa-seg-btn" data-font="kaiti" role="radio" aria-checked="false">經典楷體</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 色彩主題 -->
+      <section class="aa-section">
+        <span class="aa-section-title">色彩主題</span>
+        <div class="aa-themes" role="radiogroup" aria-label="色彩主題選擇" id="aaThemeControls">
+          <button type="button" class="aa-theme-card theme-light active" data-theme="light" role="radio" aria-checked="true">
+            <div class="aa-theme-preview aa-prev-light">
+              <span class="aa-theme-dot"></span>
+              <span class="aa-theme-sample">太初</span>
+            </div>
+            <span class="aa-theme-name">經典亮白</span>
+          </button>
+
+          <button type="button" class="aa-theme-card theme-sepia" data-theme="sepia" role="radio" aria-checked="false">
+            <div class="aa-theme-preview aa-prev-sepia">
+              <span class="aa-theme-dot"></span>
+              <span class="aa-theme-sample">太初</span>
+            </div>
+            <span class="aa-theme-name">羊皮護眼</span>
+          </button>
+
+          <button type="button" class="aa-theme-card theme-dark" data-theme="dark" role="radio" aria-checked="false">
+            <div class="aa-theme-preview aa-prev-dark">
+              <span class="aa-theme-dot"></span>
+              <span class="aa-theme-sample">太初</span>
+            </div>
+            <span class="aa-theme-name">深灰夜間</span>
+          </button>
+
+          <button type="button" class="aa-theme-card theme-oled" data-theme="oled" role="radio" aria-checked="false">
+            <div class="aa-theme-preview aa-prev-oled">
+              <span class="aa-theme-dot"></span>
+              <span class="aa-theme-sample">太初</span>
+            </div>
+            <span class="aa-theme-name">極致純黑</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 4. 閱讀偏好開關 -->
+      <section class="aa-section aa-section-last">
+        <span class="aa-section-title">顯示細項</span>
+        <div class="aa-toggle-list">
+          <label class="aa-toggle-item">
+            <span class="aa-toggle-label">
+              <span class="aa-toggle-main">逐字對照與 Strong 號碼</span>
+              <span class="aa-toggle-sub">顯示希伯來/希臘文詞彙與編號標籤</span>
+            </span>
+            <span class="switch">
+              <input type="checkbox" id="aaInterlinearSwitch">
+              <span class="switch-track" aria-hidden="true"></span>
+            </span>
+          </label>
+
+          <label class="aa-toggle-item">
+            <span class="aa-toggle-label">
+              <span class="aa-toggle-main">節號醒目放大</span>
+              <span class="aa-toggle-sub">增加節號對比與邊距，快速定位節次</span>
+            </span>
+            <span class="switch">
+              <input type="checkbox" id="aaLargeVnSwitch">
+              <span class="switch-track" aria-hidden="true"></span>
+            </span>
+          </label>
+        </div>
+      </section>
     </div>
   </div>
 </div>
 
 <script src="data/plan_2026_q3.js"></script>
+<script src="data/plan_su101_2026.js"></script>
 <script src="reader.js"></script>
 <script src="data/books.js"></script>
 <script src="data/search_index.js"></script>

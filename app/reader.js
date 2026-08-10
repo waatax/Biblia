@@ -6,6 +6,9 @@
  * 資料以 <script src="data/NN_Book.js"> 動態注入載入，而不是 fetch()。
  * 原因：用 file:// 直接開啟時，fetch()/XHR 會被 CORS 擋掉，讀不到本地檔案；
  * <script src> 不受此限。這是「雙擊 index.html 即可用、免架伺服器」的關鍵。
+ *
+ * 版面策略：欄數不寫死在 CSS，改由 JS 依「容器寬度 ÷ 單欄最小可讀寬度」算出
+ * --cols。因為要幾欄取決於使用者勾了幾個版本、字級調多大，不是只看螢幕寬度。
  */
 var BIBLIA = (function () {
   'use strict';
@@ -43,6 +46,10 @@ var BIBLIA = (function () {
     on: {},
     inter: false,
     size: 18,
+    lh: 'normal',       // 'compact' | 'normal' | 'relaxed'
+    font: 'serif',      // 'serif' | 'sans' | 'kaiti'
+    theme: 'light',     // 'light' | 'sepia' | 'dark' | 'oled'
+    largeVn: false,     // boolean
     strong: null
   };
 
@@ -52,9 +59,17 @@ var BIBLIA = (function () {
   function save() {
     try {
       localStorage.setItem('biblia', JSON.stringify({
-        on: state.on, inter: state.inter, size: state.size,
-        bookNo: state.bookNo, chap: state.chap,
-        dark: document.body.classList.contains('dark')
+        on: state.on,
+        inter: state.inter,
+        size: state.size,
+        lh: state.lh,
+        font: state.font,
+        theme: state.theme,
+        largeVn: state.largeVn,
+        bookNo: state.bookNo,
+        chap: state.chap,
+        dark: state.theme === 'dark' || state.theme === 'oled',
+        tools: document.body.classList.contains('tools-open')
       }));
     } catch (e) { /* 忽略 */ }
   }
@@ -113,11 +128,7 @@ var BIBLIA = (function () {
     searchIndexData = data;
   }
 
-  /* ---------- Strong 原文字典 ----------
-   * 1.4 萬筆、數 MB，所以不放進首頁載入路徑，
-   * 改成「第一次點到 Strong 號碼」時才注入 <script> 延遲載入。
-   */
-  /* 依語言分成 H／G 兩份，只載入實際點到的那一種 */
+  /* ---------- Strong 原文字典 ---------- */
   var strongDictData = { H: null, G: null };
   var strongDictState = { H: 'idle', G: 'idle' };   // idle|loading|ready|failed
   var strongDictWaiting = { H: [], G: [] };
@@ -157,9 +168,36 @@ var BIBLIA = (function () {
     document.head.appendChild(s);
   }
 
-  function setDarkMode(isDark) {
-    document.body.classList.toggle('dark', !!isDark);
-    document.documentElement.classList.toggle('dark', !!isDark);
+  function applyTheme(themeName) {
+    state.theme = themeName || 'light';
+    ['light', 'sepia', 'dark', 'oled'].forEach(function (t) {
+      document.body.classList.toggle(t, state.theme === t);
+      document.documentElement.classList.toggle(t, state.theme === t);
+    });
+
+    var meta = document.querySelector('meta[name="theme-color"]:not([media])');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'theme-color');
+      document.head.appendChild(meta);
+    }
+    var colors = { light: '#fbfaf7', sepia: '#f7f1e5', dark: '#16181c', oled: '#000000' };
+    meta.setAttribute('content', colors[state.theme] || '#fbfaf7');
+  }
+
+  function prefersDark() {
+    try {
+      return window.matchMedia &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } catch (e) { return false; }
+  }
+
+  function defaultSize() {
+    var w = window.innerWidth || 1280;
+    if (w >= 2560) return 22;
+    if (w >= 1920) return 19;
+    if (w <= 600) return 17;
+    return 18;
   }
 
   /* ---------- 進入點：由 data/books.js 呼叫 ---------- */
@@ -170,18 +208,29 @@ var BIBLIA = (function () {
     var saved = load();
     state.on = (saved && saved.on) || Object.assign({}, DEFAULTS);
     state.inter = saved ? !!saved.inter : false;
-    state.size = (saved && saved.size) || 18;
+    state.size = (saved && typeof saved.size === 'number') ? saved.size : defaultSize();
+    state.lh = (saved && saved.lh) || 'normal';
+    state.font = (saved && saved.font) || 'serif';
+    state.theme = (saved && saved.theme) ? saved.theme : ((saved && saved.dark) ? 'dark' : (prefersDark() ? 'dark' : 'light'));
+    state.largeVn = saved ? !!saved.largeVn : false;
+
     state.bookNo = (saved && saved.bookNo) || 1;
     state.chap = (saved && saved.chap) || 1;
-    if (saved && saved.dark) setDarkMode(true);
+
+    document.body.classList.toggle('tools-open',
+      saved && typeof saved.tools === 'boolean'
+        ? saved.tools : (window.innerWidth || 1280) >= 900);
     if (!state.byNo[state.bookNo]) { state.bookNo = 1; state.chap = 1; }
 
     cacheEls();
     buildStart();
     buildReaderControls();
+    buildAppearanceControls();
     buildSearchControls();
     buildPlanUI();
-    applySize();
+    initSwipeGesture();
+    observeLayout();
+    applyAppearance();
     showStart();
   }
 
@@ -189,16 +238,78 @@ var BIBLIA = (function () {
     [
       'startView', 'readerView', 'planView', 'otBook', 'otChap', 'ntBook', 'ntChap',
       'startVersions', 'startInter', 'startDark', 'bookSelect', 'chapSelect',
-      'reader', 'versionBox', 'interlinearChk', 'strongPanel', 'strongNum',
-      'strongMeta', 'strongHits', 'strongOrig', 'strongDict', 'strongSearchBtn',
-      'strongEngBtn', 'startSearchBtn', 'searchBarBtn', 'searchModal',
-      'searchOverlay', 'searchInput', 'searchExecBtn', 'searchCloseBtn',
-      'searchVersionSelect', 'searchScopeSelect', 'searchSummary', 'searchResults',
-      'searchFoot', 'searchMoreBtn', 'startPlanBtn', 'readerPlanBtn', 'planHomeBtn',
-      'planReaderBtn', 'planJumpTodayBtn', 'planThemeBtn', 'planStatsPercent',
-      'planProgressFill', 'planStatsCount', 'planMarkTodayBtn', 'planMonthTabs',
-      'planWeekSelect', 'planSearchInput', 'planList', 'startPlanTodayBox'
+      'reader', 'readerBar', 'versionBox', 'interlinearChk', 'strongPanel', 'strongOverlay',
+      'strongNum', 'strongMeta', 'strongHits', 'strongOrig', 'strongDict',
+      'strongSearchBtn', 'strongEngBtn', 'startSearchBtn', 'searchBarBtn',
+      'searchModal', 'searchOverlay', 'searchInput', 'searchExecBtn',
+      'searchCloseBtn', 'searchVersionSelect', 'searchScopeSelect', 'searchSummary',
+      'searchResults', 'searchFoot', 'searchMoreBtn', 'startPlanBtn',
+      'readerPlanBtn', 'planHomeBtn', 'planReaderBtn', 'planJumpTodayBtn',
+      'planThemeBtn', 'planStatsPercent', 'planProgressFill', 'planProgressBar',
+      'planStatsCount', 'planMarkTodayBtn', 'planMonthTabs', 'planWeekSelect',
+      'planSearchInput', 'planList', 'startPlanTodayBox', 'startPlanDate',
+      'planSwitch', 'planTitle', 'planSubtitle', 'planSource', 'planHeadTitle',
+      'toolsBtn', 'barTools', 'sizeVal', 'pager', 'pagerPrev', 'pagerNext', 'pagerLoc',
+      'readerAaBtn', 'openAaModalBtn', 'pagerAaBtn', 'appearanceModal', 'appearanceOverlay',
+      'appearanceCloseBtn', 'aaSizeText', 'aaFontSlider', 'aaFontDown', 'aaFontUp',
+      'aaLhControls', 'aaFontControls', 'aaThemeControls', 'aaInterlinearSwitch', 'aaLargeVnSwitch'
     ].forEach(function (id) { el[id] = document.getElementById(id); });
+  }
+
+  /* ---------- 版面度量 ---------- */
+  var layoutTimer = 0, lastReaderW = -1, lastBarH = -1;
+
+  function measureLayout() {
+    clearTimeout(layoutTimer);
+    layoutTimer = 0;
+
+    if (el.readerBar) {
+      var h = Math.round(el.readerBar.getBoundingClientRect().height);
+      if (h > 0 && h !== lastBarH) {
+        lastBarH = h;
+        document.documentElement.style.setProperty('--bar-h', h + 'px');
+      }
+    }
+    var w = el.reader ? el.reader.clientWidth : 0;
+    if (w !== lastReaderW) { lastReaderW = w; colLayout(); }
+  }
+
+  function scheduleLayout() {
+    if (layoutTimer) return;
+    layoutTimer = setTimeout(measureLayout, 16);
+  }
+
+  function observeLayout() {
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(scheduleLayout);
+      if (el.readerBar) ro.observe(el.readerBar);
+      if (el.reader) ro.observe(el.reader);
+    }
+    window.addEventListener('resize', scheduleLayout);
+    window.addEventListener('orientationchange', scheduleLayout);
+    measureLayout();
+  }
+
+  /* 依容器寬度與字級決定要排幾欄 */
+  function colLayout() {
+    if (!el.reader) return;
+    var total = activeVersions().length;
+    if (!total) return;
+
+    var w = el.reader.clientWidth || document.documentElement.clientWidth || 1280;
+    var cssMin = parseInt(getComputedStyle(document.documentElement)
+                            .getPropertyValue('--col-min'), 10) || 300;
+    var min = Math.round(cssMin * (state.size / 18));
+    var gap = w < 600 ? 14 : 24;
+
+    var fit = Math.max(1, Math.floor((w + gap) / (min + gap)));
+    if (w < 560) fit = 1;                 // 手機直式一律單欄
+
+    var rows = Math.ceil(total / Math.min(total, fit));
+    var n = Math.ceil(total / rows);
+
+    el.reader.style.setProperty('--cols', n);
+    el.reader.classList.toggle('wrapped', n < total);
   }
 
   /* ---------- 初始介面 ---------- */
@@ -269,9 +380,10 @@ var BIBLIA = (function () {
       if (!el.readerView.hidden) render();
     });
 
-    el.startDark.checked = document.body.classList.contains('dark');
+    el.startDark.checked = state.theme === 'dark' || state.theme === 'oled';
     el.startDark.addEventListener('change', function () {
-      setDarkMode(el.startDark.checked);
+      applyTheme(el.startDark.checked ? 'dark' : 'light');
+      syncVersions();
       save();
     });
   }
@@ -288,11 +400,13 @@ var BIBLIA = (function () {
         lab.querySelector('input').checked = !!state.on[k];
         lab.classList.toggle('on', !!state.on[k]);
       });
-    el.startInter.checked = state.inter;
-    el.interlinearChk.checked = state.inter;
-    el.startDark.checked = document.body.classList.contains('dark');
+    if (el.startInter) el.startInter.checked = state.inter;
+    if (el.interlinearChk) el.interlinearChk.checked = state.inter;
+    if (el.aaInterlinearSwitch) el.aaInterlinearSwitch.checked = state.inter;
+    if (el.startDark) el.startDark.checked = state.theme === 'dark' || state.theme === 'oled';
   }
 
+  /* ---------- 檢視切換 ---------- */
   function showStart() {
     el.readerView.hidden = true;
     if (el.planView) el.planView.hidden = true;
@@ -311,12 +425,14 @@ var BIBLIA = (function () {
     }
     syncVersions();
     renderStartPlanCard();
+    window.scrollTo(0, 0);
   }
 
   function showReader(no, chap, cb) {
     el.startView.hidden = true;
     if (el.planView) el.planView.hidden = true;
     el.readerView.hidden = false;
+    measureLayout();
     go(no, chap, cb);
   }
 
@@ -325,278 +441,795 @@ var BIBLIA = (function () {
     el.readerView.hidden = true;
     if (el.planView) el.planView.hidden = false;
     renderPlan();
+    window.scrollTo(0, 0);
   }
 
-  /* ---------- 教會讀經計畫（2026第三季） ---------- */
-  var planCompleted = loadPlanProgress();
+  /* ===================== 讀經計畫資料與邏輯 ===================== */
+  var PLAN_SOURCES = [
+    {
+      id: 'church_q3_2026',
+      name: '教會聖經速讀',
+      sub: '2026 第三季',
+      get: function () { return window.BIBLIA_PLAN_2026_Q3; },
+      note: '教會 2026 年聖經速讀進度表（第三季）'
+    },
+    {
+      id: 'su101_2026',
+      name: '每日研經釋義',
+      sub: '2026 全年',
+      get: function () { return window.BIBLIA_PLAN_SU101_2026; },
+      note: ''
+    }
+  ];
+
+  var WEEKDAY = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
+
+  var plans = [];
+  var planIdx = 0;
+  var planProgress = loadPlanProgress();
   var planFilterState = { month: 'all', week: 'all', query: '' };
 
+  function normalisePlans() {
+    plans = [];
+    PLAN_SOURCES.forEach(function (src) {
+      var raw = src.get();
+      if (!raw || !raw.items || !raw.items.length) return;
+
+      var items = raw.items.map(function (it) {
+        var iso = it.isoDate;
+        var wd = it.wd;
+        if (!wd && iso) {
+          var parts = iso.split('-');
+          wd = WEEKDAY[new Date(+parts[0], +parts[1] - 1, +parts[2]).getDay()];
+        }
+        return {
+          id: it.id,
+          isoDate: iso,
+          date: it.date,
+          month: it.month,
+          day: it.day,
+          week: it.week,
+          wd: wd || '',
+          rawText: it.rawText || '',
+          passages: it.passages || [],
+          link: it.link || ''
+        };
+      });
+
+      var months = [], weeks = [];
+      items.forEach(function (it) {
+        if (months.indexOf(it.month) === -1) months.push(it.month);
+        if (weeks.indexOf(it.week) === -1) weeks.push(it.week);
+      });
+      months.sort(function (a, b) { return a - b; });
+      weeks.sort(function (a, b) { return a - b; });
+
+      plans.push({
+        id: src.id,
+        name: src.name,
+        sub: src.sub,
+        title: raw.title || src.name,
+        subtitle: raw.subtitle || '',
+        org: raw.org || '',
+        sourceUrl: raw.sourceUrl || '',
+        note: src.note,
+        coverage: raw.coverage || '',
+        months: months,
+        weeks: weeks,
+        items: items
+      });
+    });
+
+    var savedId = null;
+    try { savedId = localStorage.getItem('biblia_plan_id'); } catch (e) {}
+    planIdx = 0;
+    plans.forEach(function (p, i) { if (p.id === savedId) planIdx = i; });
+  }
+
+  function currentPlan() { return plans[planIdx] || null; }
+
   function loadPlanProgress() {
+    var bag = {};
     try {
-      var raw = localStorage.getItem('biblia_q3_progress');
-      return raw ? JSON.parse(raw) : {};
-    } catch (e) { return {}; }
+      var raw = localStorage.getItem('biblia_plan_progress');
+      if (raw) bag = JSON.parse(raw) || {};
+    } catch (e) { bag = {}; }
+
+    if (!bag.church_q3_2026) {
+      try {
+        var old = localStorage.getItem('biblia_q3_progress');
+        if (old) bag.church_q3_2026 = JSON.parse(old) || {};
+      } catch (e) { /* 忽略 */ }
+    }
+    return bag;
   }
 
   function savePlanProgress() {
     try {
-      localStorage.setItem('biblia_q3_progress', JSON.stringify(planCompleted));
-    } catch (e) {}
+      localStorage.setItem('biblia_plan_progress', JSON.stringify(planProgress));
+    } catch (e) { /* 忽略 */ }
   }
 
-  function getTodayPlanItem() {
-    if (!window.BIBLIA_PLAN_2026_Q3 || !window.BIBLIA_PLAN_2026_Q3.items) return null;
-    var items = window.BIBLIA_PLAN_2026_Q3.items;
-    var now = new Date();
-    var m = now.getMonth() + 1;
-    var d = now.getDate();
-    var dateStr = m + '/' + d;
-
-    var match = items.find(function(it) { return it.date === dateStr; });
-    return match || items[0];
+  function progressOf(plan) {
+    if (!planProgress[plan.id]) planProgress[plan.id] = {};
+    return planProgress[plan.id];
   }
 
+  function todayIso() {
+    var d = new Date();
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+
+  function todayItemOf(plan) {
+    if (!plan) return null;
+    var iso = todayIso();
+    for (var i = 0; i < plan.items.length; i++) {
+      if (plan.items[i].isoDate === iso) return plan.items[i];
+    }
+    return null;
+  }
+
+  /* ---------- 計畫 UI ---------- */
   function buildPlanUI() {
-    if (!el.planView) return;
+    normalisePlans();
+    if (!plans.length) return;
 
-    // 填入週次選單
+    buildPlanSwitch();
+
     if (el.planWeekSelect) {
-      el.planWeekSelect.innerHTML = '<option value="all">所有週次 (27~40)</option>';
-      for (var w = 27; w <= 40; w++) {
-        var opt = document.createElement('option');
-        opt.value = w;
-        opt.textContent = '第 ' + w + ' 週';
-        el.planWeekSelect.appendChild(opt);
-      }
-      el.planWeekSelect.addEventListener('change', function() {
+      el.planWeekSelect.addEventListener('change', function () {
         planFilterState.week = el.planWeekSelect.value;
         renderPlan();
       });
     }
 
-    // 月份頁籤點擊
-    if (el.planMonthTabs) {
-      var tabs = el.planMonthTabs.querySelectorAll('.plan-tab');
-      Array.prototype.forEach.call(tabs, function(tab) {
-        tab.addEventListener('click', function() {
-          Array.prototype.forEach.call(tabs, function(t) { t.classList.remove('active'); });
-          tab.classList.add('active');
-          planFilterState.month = tab.getAttribute('data-month');
-          renderPlan();
-        });
-      });
-    }
-
-    // 搜尋功能
     if (el.planSearchInput) {
-      el.planSearchInput.addEventListener('input', function() {
+      el.planSearchInput.addEventListener('input', function () {
         planFilterState.query = el.planSearchInput.value.trim().toLowerCase();
         renderPlan();
       });
     }
 
-    // 按鈕事件綁定
     if (el.startPlanBtn) el.startPlanBtn.addEventListener('click', showPlan);
     if (el.readerPlanBtn) el.readerPlanBtn.addEventListener('click', showPlan);
     if (el.planHomeBtn) el.planHomeBtn.addEventListener('click', showStart);
-    if (el.planReaderBtn) el.planReaderBtn.addEventListener('click', function() {
-      showReader(state.bookNo, state.chap);
-    });
+    if (el.planReaderBtn) {
+      el.planReaderBtn.addEventListener('click', function () {
+        showReader(state.bookNo, state.chap);
+      });
+    }
 
     if (el.planThemeBtn) {
-      el.planThemeBtn.addEventListener('click', function() {
-        setDarkMode(!document.body.classList.contains('dark'));
+      el.planThemeBtn.addEventListener('click', function () {
+        var nextTheme = state.theme === 'light' ? 'dark' : (state.theme === 'dark' ? 'sepia' : 'light');
+        applyTheme(nextTheme);
         syncVersions();
         save();
       });
     }
 
     if (el.planJumpTodayBtn) {
-      el.planJumpTodayBtn.addEventListener('click', function() {
-        var todayItem = getTodayPlanItem();
-        if (todayItem) {
-          planFilterState.month = 'all';
-          planFilterState.week = 'all';
-          planFilterState.query = '';
-          if (el.planWeekSelect) el.planWeekSelect.value = 'all';
-          if (el.planSearchInput) el.planSearchInput.value = '';
-          if (el.planMonthTabs) {
-            var tabs = el.planMonthTabs.querySelectorAll('.plan-tab');
-            Array.prototype.forEach.call(tabs, function(t) {
-              t.classList.toggle('active', t.getAttribute('data-month') === 'all');
-            });
-          }
-          renderPlan(function() {
-            var card = el.planList.querySelector('.plan-card[data-id="' + todayItem.id + '"]');
-            if (card) {
-              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              card.classList.add('today-highlight');
-              setTimeout(function() { card.classList.remove('today-highlight'); }, 2000);
-            }
-          });
+      el.planJumpTodayBtn.addEventListener('click', function () {
+        var plan = currentPlan();
+        var todayItem = todayItemOf(plan);
+        if (!todayItem) {
+          if (el.planSearchInput) el.planSearchInput.focus();
+          return;
         }
+        resetPlanFilters();
+        renderPlan(function () {
+          var card = el.planList.querySelector('.plan-card[data-id="' + todayItem.id + '"]');
+          if (!card) return;
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.classList.add('today-highlight');
+          setTimeout(function () { card.classList.remove('today-highlight'); }, 2200);
+        });
       });
     }
 
     if (el.planMarkTodayBtn) {
-      el.planMarkTodayBtn.addEventListener('click', function() {
-        var todayItem = getTodayPlanItem();
-        if (todayItem) {
-          planCompleted[todayItem.id] = !planCompleted[todayItem.id];
-          savePlanProgress();
-          renderPlan();
-          renderStartPlanCard();
-        }
-      });
-    }
-
-    renderStartPlanCard();
-  }
-
-  function renderStartPlanCard() {
-    if (!el.startPlanTodayBox) return;
-    var todayItem = getTodayPlanItem();
-    if (!todayItem) return;
-
-    var isDone = !!planCompleted[todayItem.id];
-    var html = '<div class="today-summary-row">';
-    html += '<div>';
-    html += '<span class="today-tag">今日進度</span> ';
-    html += '<span class="today-date-str">第 ' + todayItem.week + ' 週 ・ ' + todayItem.date + '</span>';
-    html += '</div>';
-    html += '<div>';
-    if (isDone) {
-      html += '<span style="color:#27ae60; font-weight:700; font-size:13px;">✓ 今日已完成</span>';
-    } else {
-      html += '<span style="color:var(--fg-dim); font-size:13px;">未完成</span>';
-    }
-    html += '</div>';
-    html += '</div>';
-
-    html += '<div class="passage-chips" style="margin-top: 10px;">';
-    todayItem.passages.forEach(function(p) {
-      html += '<button type="button" class="passage-chip" data-b="' + p.bookNo + '" data-c="' + p.startChap + '">';
-      html += '📖 ' + p.label;
-      html += '</button>';
-    });
-    html += '</div>';
-
-    el.startPlanTodayBox.innerHTML = html;
-
-    var chips = el.startPlanTodayBox.querySelectorAll('.passage-chip');
-    Array.prototype.forEach.call(chips, function(chip) {
-      chip.addEventListener('click', function() {
-        var b = parseInt(chip.getAttribute('data-b'), 10);
-        var c = parseInt(chip.getAttribute('data-c'), 10);
-        showReader(b, c);
-      });
-    });
-  }
-
-  function renderPlan(cb) {
-    if (!el.planList || !window.BIBLIA_PLAN_2026_Q3) return;
-    var data = window.BIBLIA_PLAN_2026_Q3;
-    var items = data.items;
-    var todayItem = getTodayPlanItem();
-
-    var totalCount = items.length;
-    var completedCount = 0;
-    items.forEach(function(it) {
-      if (planCompleted[it.id]) completedCount++;
-    });
-    var pct = Math.round((completedCount / totalCount) * 100);
-
-    if (el.planStatsPercent) el.planStatsPercent.textContent = pct + '%';
-    if (el.planProgressFill) el.planProgressFill.style.width = pct + '%';
-    if (el.planStatsCount) el.planStatsCount.textContent = '已完成 ' + completedCount + ' / ' + totalCount + ' 天';
-
-    if (el.planMarkTodayBtn && todayItem) {
-      var isTodayDone = !!planCompleted[todayItem.id];
-      el.planMarkTodayBtn.textContent = isTodayDone ? '✓ 今日已完成 (取消)' : '✓ 標記今天已讀';
-    }
-
-    var filtered = items.filter(function(it) {
-      if (planFilterState.month !== 'all' && it.month !== parseInt(planFilterState.month, 10)) {
-        return false;
-      }
-      if (planFilterState.week !== 'all' && it.week !== parseInt(planFilterState.week, 10)) {
-        return false;
-      }
-      if (planFilterState.query) {
-        var q = planFilterState.query;
-        var matchDate = it.date.toLowerCase().indexOf(q) !== -1;
-        var matchRaw = it.rawText.toLowerCase().indexOf(q) !== -1;
-        var matchPassage = it.passages.some(function(p) {
-          return p.label.toLowerCase().indexOf(q) !== -1 || p.fullLabel.toLowerCase().indexOf(q) !== -1;
-        });
-        if (!matchDate && !matchRaw && !matchPassage) return false;
-      }
-      return true;
-    });
-
-    if (!filtered.length) {
-      el.planList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--fg-dim);">沒有符合條件的讀經進度</div>';
-      if (cb) cb();
-      return;
-    }
-
-    var html = '';
-    filtered.forEach(function(it) {
-      var isToday = todayItem && todayItem.id === it.id;
-      var isDone = !!planCompleted[it.id];
-      var cardCls = 'plan-card' + (isToday ? ' today' : '') + (isDone ? ' completed' : '');
-
-      html += '<div class="' + cardCls + '" data-id="' + it.id + '">';
-      
-      html += '<div class="plan-card-top">';
-      html += '<div class="plan-card-date-wrap">';
-      html += '<span class="plan-card-week">第 ' + it.week + ' 週</span>';
-      html += '<span class="plan-card-date">' + it.date + '</span>';
-      if (isToday) html += '<span class="plan-card-today-badge">今天</span>';
-      html += '</div>';
-
-      html += '<label class="plan-card-check">';
-      html += '<input type="checkbox" class="plan-check-box" data-id="' + it.id + '"' + (isDone ? ' checked' : '') + '>';
-      html += '<span>' + (isDone ? '已完成' : '勾選完成') + '</span>';
-      html += '</label>';
-      html += '</div>';
-
-      html += '<div class="plan-card-body">';
-      html += '<div class="passage-chips">';
-      it.passages.forEach(function(p) {
-        html += '<button type="button" class="passage-chip" data-b="' + p.bookNo + '" data-c="' + p.startChap + '" title="點擊閱讀 ' + p.fullLabel + '">';
-        html += '📖 ' + p.label;
-        html += '</button>';
-      });
-      html += '</div>';
-      html += '</div>';
-
-      html += '</div>';
-    });
-
-    el.planList.innerHTML = html;
-
-    var chips = el.planList.querySelectorAll('.passage-chip');
-    Array.prototype.forEach.call(chips, function(chip) {
-      chip.addEventListener('click', function() {
-        var b = parseInt(chip.getAttribute('data-b'), 10);
-        var c = parseInt(chip.getAttribute('data-c'), 10);
-        showReader(b, c);
-      });
-    });
-
-    var boxes = el.planList.querySelectorAll('.plan-check-box');
-    Array.prototype.forEach.call(boxes, function(box) {
-      box.addEventListener('change', function() {
-        var id = box.getAttribute('data-id');
-        planCompleted[id] = box.checked;
+      el.planMarkTodayBtn.addEventListener('click', function () {
+        var plan = currentPlan();
+        var todayItem = todayItemOf(plan);
+        if (!plan || !todayItem) return;
+        var done = progressOf(plan);
+        if (done[todayItem.id]) delete done[todayItem.id];
+        else done[todayItem.id] = 1;
         savePlanProgress();
         renderPlan();
         renderStartPlanCard();
       });
+    }
+
+    applyPlanMeta();
+    renderStartPlanCard();
+  }
+
+  function resetPlanFilters() {
+    planFilterState.month = 'all';
+    planFilterState.week = 'all';
+    planFilterState.query = '';
+    if (el.planWeekSelect) el.planWeekSelect.value = 'all';
+    if (el.planSearchInput) el.planSearchInput.value = '';
+    if (el.planMonthTabs) {
+      Array.prototype.forEach.call(
+        el.planMonthTabs.querySelectorAll('.plan-tab'), function (t) {
+          t.classList.toggle('active', t.getAttribute('data-month') === 'all');
+        });
+    }
+  }
+
+  function buildPlanSwitch() {
+    if (!el.planSwitch) return;
+    el.planSwitch.innerHTML = '';
+    if (plans.length < 2) { el.planSwitch.hidden = true; return; }
+    el.planSwitch.hidden = false;
+
+    plans.forEach(function (p, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'plan-switch-btn' + (i === planIdx ? ' active' : '');
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', i === planIdx ? 'true' : 'false');
+
+      var n = document.createElement('span');
+      n.className = 'sw-name';
+      n.textContent = p.name;
+      b.appendChild(n);
+
+      var s = document.createElement('span');
+      s.className = 'sw-sub';
+      s.textContent = p.sub + '　·　' + p.items.length + ' 天';
+      b.appendChild(s);
+
+      b.addEventListener('click', function () {
+        if (planIdx === i) return;
+        planIdx = i;
+        try { localStorage.setItem('biblia_plan_id', p.id); } catch (e) {}
+        buildPlanSwitch();
+        applyPlanMeta();
+        resetPlanFilters();
+        renderPlan();
+      });
+      el.planSwitch.appendChild(b);
+    });
+  }
+
+  function applyPlanMeta() {
+    var plan = currentPlan();
+    if (!plan) return;
+
+    if (el.planTitle) el.planTitle.textContent = plan.title;
+    if (el.planSubtitle) el.planSubtitle.textContent = plan.subtitle;
+    if (el.planHeadTitle) el.planHeadTitle.textContent = plan.name;
+
+    if (el.planSource) {
+      el.planSource.innerHTML = '';
+      if (plan.org || plan.sourceUrl) {
+        el.planSource.appendChild(document.createTextNode('資料來源：' + (plan.org || '')));
+        if (plan.sourceUrl) {
+          el.planSource.appendChild(document.createTextNode('　'));
+          var a = document.createElement('a');
+          a.href = plan.sourceUrl;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = plan.sourceUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+          el.planSource.appendChild(a);
+        }
+        if (plan.coverage) {
+          el.planSource.appendChild(document.createElement('br'));
+          el.planSource.appendChild(document.createTextNode(
+            '已收錄 ' + plan.coverage + '；站方逐日發佈，重跑 scripts/fetch_su101_plan.py 可補上新進度。'));
+        }
+      } else if (plan.note) {
+        el.planSource.textContent = plan.note;
+      }
+    }
+
+    if (el.planMonthTabs) {
+      el.planMonthTabs.innerHTML = '';
+      var mk = function (value, text) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'plan-tab' + (value === 'all' ? ' active' : '');
+        b.setAttribute('data-month', value);
+        b.textContent = text;
+        b.addEventListener('click', function () {
+          Array.prototype.forEach.call(
+            el.planMonthTabs.querySelectorAll('.plan-tab'),
+            function (t) { t.classList.remove('active'); });
+          b.classList.add('active');
+          planFilterState.month = value;
+          renderPlan();
+        });
+        el.planMonthTabs.appendChild(b);
+      };
+      mk('all', '全部 (' + plan.items.length + '天)');
+      plan.months.forEach(function (m) {
+        var n = 0;
+        plan.items.forEach(function (it) { if (it.month === m) n++; });
+        mk(String(m), m + ' 月 (' + n + ')');
+      });
+    }
+
+    if (el.planWeekSelect) {
+      el.planWeekSelect.innerHTML = '';
+      var all = document.createElement('option');
+      all.value = 'all';
+      all.textContent = plan.weeks.length
+        ? '所有週次 (' + plan.weeks[0] + '~' + plan.weeks[plan.weeks.length - 1] + ')'
+        : '所有週次';
+      el.planWeekSelect.appendChild(all);
+      plan.weeks.forEach(function (w) {
+        var o = document.createElement('option');
+        o.value = w;
+        o.textContent = '第 ' + w + ' 週';
+        el.planWeekSelect.appendChild(o);
+      });
+    }
+  }
+
+  function renderStartPlanCard() {
+    if (!el.startPlanTodayBox) return;
+
+    if (el.startPlanDate) {
+      var now = new Date();
+      el.startPlanDate.textContent =
+        now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日　' +
+        WEEKDAY[now.getDay()];
+    }
+
+    el.startPlanTodayBox.innerHTML = '';
+    if (!plans.length) {
+      el.startPlanTodayBox.textContent = '尚未載入任何讀經計畫資料。';
+      return;
+    }
+
+    plans.forEach(function (plan) {
+      var item = todayItemOf(plan);
+      var done = progressOf(plan);
+
+      var block = document.createElement('div');
+      block.className = 'today-block';
+
+      var row = document.createElement('div');
+      row.className = 'today-summary-row';
+
+      var name = document.createElement('span');
+      name.className = 'today-plan-name';
+      var tag = document.createElement('span');
+      tag.className = 'today-tag';
+      tag.textContent = plan.name;
+      name.appendChild(tag);
+      name.appendChild(document.createTextNode(
+        item ? (item.date + '（' + item.wd + '）') : '今日無進度'));
+      row.appendChild(name);
+
+      var st = document.createElement('span');
+      st.className = 'today-state' + (item && done[item.id] ? ' done' : '');
+      st.textContent = !item ? '—' : (done[item.id] ? '✓ 已完成' : '未完成');
+      row.appendChild(st);
+      block.appendChild(row);
+
+      var ref = document.createElement('div');
+      ref.className = 'today-ref';
+      ref.textContent = item ? item.rawText
+        : ('今天不在此計畫範圍內' + (plan.coverage ? '（收錄 ' + plan.coverage + '）' : ''));
+      block.appendChild(ref);
+
+      if (item && item.passages.length) {
+        block.appendChild(passageChips(item.passages));
+      }
+
+      el.startPlanTodayBox.appendChild(block);
+    });
+  }
+
+  function passageChips(passages) {
+    var wrap = document.createElement('div');
+    wrap.className = 'passage-chips';
+    passages.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'passage-chip';
+      b.textContent = '📖 ' + p.label;
+      b.title = '點擊閱讀 ' + p.fullLabel;
+      b.addEventListener('click', function () {
+        if (p.startVerse) jumpToVerse(p.bookNo, p.startChap, p.startVerse);
+        else showReader(p.bookNo, p.startChap);
+      });
+      wrap.appendChild(b);
+    });
+    return wrap;
+  }
+
+  function renderPlan(cb) {
+    var plan = currentPlan();
+    if (!el.planList || !plan) return;
+
+    var items = plan.items;
+    var done = progressOf(plan);
+    var todayItem = todayItemOf(plan);
+
+    var completedCount = 0;
+    items.forEach(function (it) { if (done[it.id]) completedCount++; });
+    var pct = items.length ? Math.round((completedCount / items.length) * 100) : 0;
+
+    if (el.planStatsPercent) el.planStatsPercent.textContent = pct + '%';
+    if (el.planProgressFill) el.planProgressFill.style.width = pct + '%';
+    if (el.planProgressBar) el.planProgressBar.setAttribute('aria-valuenow', pct);
+    if (el.planStatsCount) {
+      el.planStatsCount.textContent = '已完成 ' + completedCount + ' / ' + items.length + ' 天';
+    }
+
+    if (el.planMarkTodayBtn) {
+      if (!todayItem) {
+        el.planMarkTodayBtn.disabled = true;
+        el.planMarkTodayBtn.textContent = '今日不在此計畫';
+      } else {
+        el.planMarkTodayBtn.disabled = false;
+        el.planMarkTodayBtn.textContent =
+          done[todayItem.id] ? '✓ 今日已完成（取消）' : '✓ 標記今天已讀';
+      }
+    }
+    if (el.planJumpTodayBtn) el.planJumpTodayBtn.disabled = !todayItem;
+
+    var q = planFilterState.query;
+    var filtered = items.filter(function (it) {
+      if (planFilterState.month !== 'all' && it.month !== parseInt(planFilterState.month, 10)) return false;
+      if (planFilterState.week !== 'all' && it.week !== parseInt(planFilterState.week, 10)) return false;
+      if (q) {
+        var hit = it.date.toLowerCase().indexOf(q) !== -1 ||
+                  it.isoDate.indexOf(q) !== -1 ||
+                  it.rawText.toLowerCase().indexOf(q) !== -1 ||
+                  it.passages.some(function (p) {
+                    return p.label.toLowerCase().indexOf(q) !== -1 ||
+                           p.fullLabel.toLowerCase().indexOf(q) !== -1;
+                  });
+        if (!hit) return false;
+      }
+      return true;
     });
 
+    el.planList.innerHTML = '';
+
+    if (!filtered.length) {
+      var empty = document.createElement('div');
+      empty.className = 'plan-empty';
+      empty.textContent = '沒有符合條件的讀經進度';
+      el.planList.appendChild(empty);
+      if (cb) cb();
+      return;
+    }
+
+    var frag = document.createDocumentFragment();
+    filtered.forEach(function (it) {
+      frag.appendChild(planCard(it, plan, done, todayItem));
+    });
+    el.planList.appendChild(frag);
+
     if (cb) cb();
+  }
+
+  function planCard(it, plan, done, todayItem) {
+    var isToday = !!(todayItem && todayItem.id === it.id);
+    var isDone = !!done[it.id];
+
+    var card = document.createElement('div');
+    card.className = 'plan-card' + (isToday ? ' today' : '') + (isDone ? ' completed' : '');
+    card.setAttribute('data-id', it.id);
+
+    var top = document.createElement('div');
+    top.className = 'plan-card-top';
+
+    var dateWrap = document.createElement('div');
+    dateWrap.className = 'plan-card-date-wrap';
+
+    var wk = document.createElement('span');
+    wk.className = 'plan-card-week';
+    wk.textContent = '第 ' + it.week + ' 週';
+    dateWrap.appendChild(wk);
+
+    var dt = document.createElement('span');
+    dt.className = 'plan-card-date';
+    dt.textContent = it.date;
+    dateWrap.appendChild(dt);
+
+    if (it.wd) {
+      var wd = document.createElement('span');
+      wd.className = 'plan-card-wd';
+      wd.textContent = it.wd;
+      dateWrap.appendChild(wd);
+    }
+
+    if (isToday) {
+      var badge = document.createElement('span');
+      badge.className = 'plan-card-today-badge';
+      badge.textContent = '今天';
+      dateWrap.appendChild(badge);
+    }
+    top.appendChild(dateWrap);
+
+    var check = document.createElement('label');
+    check.className = 'plan-card-check';
+    var box = document.createElement('input');
+    box.type = 'checkbox';
+    box.checked = isDone;
+    box.addEventListener('change', function () {
+      if (box.checked) done[it.id] = 1;
+      else delete done[it.id];
+      savePlanProgress();
+      renderPlan();
+      renderStartPlanCard();
+    });
+    check.appendChild(box);
+    var checkText = document.createElement('span');
+    checkText.textContent = isDone ? '已完成' : '勾選完成';
+    check.appendChild(checkText);
+    top.appendChild(check);
+
+    card.appendChild(top);
+
+    var body = document.createElement('div');
+    body.className = 'plan-card-body';
+
+    var ref = document.createElement('div');
+    ref.className = 'plan-card-ref';
+    ref.textContent = it.rawText;
+    body.appendChild(ref);
+
+    if (it.passages.length) body.appendChild(passageChips(it.passages));
+
+    if (it.link) {
+      var a = document.createElement('a');
+      a.className = 'plan-card-link';
+      a.href = it.link;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = '看當日釋義 ↗';
+      body.appendChild(a);
+    }
+
+    card.appendChild(body);
+    return card;
+  }
+
+  /* ===================== 閱讀排版與外觀設定 (Aa Modal) 控制器 ===================== */
+  var appearanceOpener = null;
+
+  function buildAppearanceControls() {
+    // 按鈕綁定
+    if (el.readerAaBtn) el.readerAaBtn.addEventListener('click', openAppearanceModal);
+    if (el.openAaModalBtn) el.openAaModalBtn.addEventListener('click', openAppearanceModal);
+    if (el.pagerAaBtn) el.pagerAaBtn.addEventListener('click', openAppearanceModal);
+    if (el.appearanceCloseBtn) el.appearanceCloseBtn.addEventListener('click', closeAppearanceModal);
+    if (el.appearanceOverlay) el.appearanceOverlay.addEventListener('click', closeAppearanceModal);
+
+    // 字級滑桿與步進
+    if (el.aaFontSlider) {
+      el.aaFontSlider.addEventListener('input', function () {
+        state.size = parseInt(el.aaFontSlider.value, 10);
+        updateAaUI();
+        applyAppearance();
+        save();
+      });
+    }
+
+    if (el.aaFontDown) {
+      el.aaFontDown.addEventListener('click', function () { bump(-1); });
+    }
+    if (el.aaFontUp) {
+      el.aaFontUp.addEventListener('click', function () { bump(1); });
+    }
+
+    // 字級一鍵預設選取
+    if (el.appearanceModal) {
+      Array.prototype.forEach.call(el.appearanceModal.querySelectorAll('.aa-preset-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          var sz = parseInt(btn.getAttribute('data-size'), 10);
+          if (sz) {
+            state.size = sz;
+            updateAaUI();
+            applyAppearance();
+            save();
+          }
+        });
+      });
+    }
+
+    // 行距選取
+    if (el.aaLhControls) {
+      Array.prototype.forEach.call(el.aaLhControls.querySelectorAll('.aa-seg-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          state.lh = btn.getAttribute('data-lh') || 'normal';
+          updateAaUI();
+          applyAppearance();
+          save();
+        });
+      });
+    }
+
+    // 字型選取
+    if (el.aaFontControls) {
+      Array.prototype.forEach.call(el.aaFontControls.querySelectorAll('.aa-seg-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          state.font = btn.getAttribute('data-font') || 'serif';
+          updateAaUI();
+          applyAppearance();
+          save();
+        });
+      });
+    }
+
+    // 主題選取
+    if (el.aaThemeControls) {
+      Array.prototype.forEach.call(el.aaThemeControls.querySelectorAll('.aa-theme-card'), function (card) {
+        card.addEventListener('click', function () {
+          state.theme = card.getAttribute('data-theme') || 'light';
+          updateAaUI();
+          applyAppearance();
+          syncVersions();
+          save();
+        });
+      });
+    }
+
+    // 逐字對照與節號放大切換
+    if (el.aaInterlinearSwitch) {
+      el.aaInterlinearSwitch.addEventListener('change', function () {
+        state.inter = el.aaInterlinearSwitch.checked;
+        syncVersions();
+        save();
+        if (!el.readerView.hidden) render();
+      });
+    }
+
+    if (el.aaLargeVnSwitch) {
+      el.aaLargeVnSwitch.addEventListener('change', function () {
+        state.largeVn = el.aaLargeVnSwitch.checked;
+        applyAppearance();
+        save();
+      });
+    }
+  }
+
+  function openAppearanceModal() {
+    appearanceOpener = document.activeElement;
+    updateAaUI();
+    if (el.appearanceModal) {
+      el.appearanceModal.hidden = false;
+      document.body.classList.add('appearance-open');
+    }
+  }
+
+  function closeAppearanceModal() {
+    if (el.appearanceModal) {
+      el.appearanceModal.hidden = true;
+      document.body.classList.remove('appearance-open');
+    }
+    if (appearanceOpener && appearanceOpener.focus) appearanceOpener.focus();
+    appearanceOpener = null;
+  }
+
+  function updateAaUI() {
+    if (el.aaSizeText) el.aaSizeText.textContent = state.size;
+    if (el.aaFontSlider) el.aaFontSlider.value = state.size;
+    if (el.sizeVal) el.sizeVal.textContent = state.size;
+
+    // 預設字級高亮
+    if (el.appearanceModal) {
+      Array.prototype.forEach.call(el.appearanceModal.querySelectorAll('.aa-preset-btn'), function (btn) {
+        var sz = parseInt(btn.getAttribute('data-size'), 10);
+        btn.classList.toggle('active', sz === state.size);
+      });
+    }
+
+    // 行距按鈕高亮
+    if (el.aaLhControls) {
+      Array.prototype.forEach.call(el.aaLhControls.querySelectorAll('.aa-seg-btn'), function (btn) {
+        var isAct = btn.getAttribute('data-lh') === state.lh;
+        btn.classList.toggle('active', isAct);
+        btn.setAttribute('aria-checked', isAct ? 'true' : 'false');
+      });
+    }
+
+    // 字型按鈕高亮
+    if (el.aaFontControls) {
+      Array.prototype.forEach.call(el.aaFontControls.querySelectorAll('.aa-seg-btn'), function (btn) {
+        var isAct = btn.getAttribute('data-font') === state.font;
+        btn.classList.toggle('active', isAct);
+        btn.setAttribute('aria-checked', isAct ? 'true' : 'false');
+      });
+    }
+
+    // 主題卡片高亮
+    if (el.aaThemeControls) {
+      Array.prototype.forEach.call(el.aaThemeControls.querySelectorAll('.aa-theme-card'), function (card) {
+        var isAct = card.getAttribute('data-theme') === state.theme;
+        card.classList.toggle('active', isAct);
+        card.setAttribute('aria-checked', isAct ? 'true' : 'false');
+      });
+    }
+
+    if (el.aaInterlinearSwitch) el.aaInterlinearSwitch.checked = state.inter;
+    if (el.aaLargeVnSwitch) el.aaLargeVnSwitch.checked = !!state.largeVn;
+  }
+
+  function applyAppearance() {
+    document.documentElement.style.setProperty('--reading-size', state.size + 'px');
+    if (el.sizeVal) el.sizeVal.textContent = state.size;
+
+    // 字型族群
+    ['font-serif', 'font-sans', 'font-kaiti'].forEach(function (cls) {
+      document.body.classList.remove(cls);
+    });
+    document.body.classList.add('font-' + (state.font || 'serif'));
+
+    // 行距
+    ['lh-compact', 'lh-normal', 'lh-relaxed'].forEach(function (cls) {
+      document.body.classList.remove(cls);
+    });
+    document.body.classList.add('lh-' + (state.lh || 'normal'));
+
+    // 節號醒目放大
+    document.body.classList.toggle('large-vn', !!state.largeVn);
+
+    // 主題
+    applyTheme(state.theme);
+
+    // 重新佈局
+    colLayout();
+    measureLayout();
+  }
+
+  /* ---------- 手機直式章節滑動手勢引擎 (Swipe Gesture) ---------- */
+  function initSwipeGesture() {
+    var readerEl = el.reader;
+    if (!readerEl) return;
+
+    var startX = 0, startY = 0, startTime = 0, isSwiping = false;
+
+    readerEl.addEventListener('touchstart', function (e) {
+      if (e.touches.length !== 1) return;
+      var touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      startTime = Date.now();
+      isSwiping = true;
+    }, { passive: true });
+
+    readerEl.addEventListener('touchmove', function (e) {
+      if (!isSwiping || e.touches.length !== 1) return;
+      var touch = e.touches[0];
+      var dx = touch.clientX - startX;
+      var dy = touch.clientY - startY;
+
+      // 若垂直滾動大於水平滑動的 1.2 倍，判定為上下對焦閱讀，不干擾經文垂直滾動
+      if (Math.abs(dy) > Math.abs(dx) * 1.2) {
+        isSwiping = false;
+      }
+    }, { passive: true });
+
+    readerEl.addEventListener('touchend', function (e) {
+      if (!isSwiping) return;
+      isSwiping = false;
+      var touch = e.changedTouches[0];
+      if (!touch) return;
+
+      var dx = touch.clientX - startX;
+      var dy = touch.clientY - startY;
+      var duration = Date.now() - startTime;
+
+      // 觸控時間 50ms~600ms，水平位移 >= 55px，且水平位移顯著大於垂直位移 (dx > 1.8 * dy)
+      if (duration >= 50 && duration <= 600 && Math.abs(dx) >= 55 && Math.abs(dx) > Math.abs(dy) * 1.8) {
+        if (dx < 0) {
+          step(1);  // 向左滑 -> 下一章
+        } else {
+          step(-1); // 向右滑 -> 上一章
+        }
+      }
+    }, { passive: true });
   }
 
   /* ---------- 閱讀介面控制列 ---------- */
@@ -615,9 +1248,11 @@ var BIBLIA = (function () {
     VERSIONS.forEach(function (v) {
       var lab = document.createElement('label');
       lab.setAttribute('data-v', v.key);
+      lab.title = v.full;
       var box = document.createElement('input');
       box.type = 'checkbox';
       box.checked = !!state.on[v.key];
+      box.setAttribute('aria-label', v.full);
       box.addEventListener('change', function () {
         state.on[v.key] = box.checked;
         syncVersions();
@@ -651,35 +1286,58 @@ var BIBLIA = (function () {
     document.getElementById('fontUp').addEventListener('click', function () { bump(1); });
     document.getElementById('fontDown').addEventListener('click', function () { bump(-1); });
     document.getElementById('themeBtn').addEventListener('click', function () {
-      setDarkMode(!document.body.classList.contains('dark'));
+      var nextTheme = state.theme === 'light' ? 'dark' : (state.theme === 'dark' ? 'sepia' : 'light');
+      applyTheme(nextTheme);
       syncVersions();
       save();
     });
     document.getElementById('strongClose').addEventListener('click', clearStrong);
-    if (el.strongSearchBtn) {
-      el.strongSearchBtn.addEventListener('click', searchCurrentStrong);
-    }
-    if (el.strongEngBtn) {
-      el.strongEngBtn.addEventListener('click', toggleDictLang);
+    if (el.strongOverlay) el.strongOverlay.addEventListener('click', clearStrong);
+    if (el.strongSearchBtn) el.strongSearchBtn.addEventListener('click', searchCurrentStrong);
+    if (el.strongEngBtn) el.strongEngBtn.addEventListener('click', toggleDictLang);
+
+    if (el.toolsBtn) {
+      el.toolsBtn.setAttribute('aria-expanded',
+        document.body.classList.contains('tools-open') ? 'true' : 'false');
+      el.toolsBtn.addEventListener('click', function () {
+        var open = document.body.classList.toggle('tools-open');
+        el.toolsBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        measureLayout();
+        save();
+      });
     }
 
+    if (el.pagerPrev) el.pagerPrev.addEventListener('click', function () { step(-1); });
+    if (el.pagerNext) el.pagerNext.addEventListener('click', function () { step(1); });
+
     document.addEventListener('keydown', function (e) {
-      if (el.readerView.hidden) return;
-      if (e.target && /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
+      if (e.target && /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) {
+        if (e.key === 'Escape' && !el.searchModal.hidden) closeSearchModal();
+        if (e.key === 'Escape' && el.appearanceModal && !el.appearanceModal.hidden) closeAppearanceModal();
+        return;
+      }
+      if (e.key === 'Escape') {
+        if (!el.searchModal.hidden) { closeSearchModal(); return; }
+        if (el.appearanceModal && !el.appearanceModal.hidden) { closeAppearanceModal(); return; }
+        clearStrong();
+        return;
+      }
+      if (e.key === '/' && el.searchModal.hidden) {
+        e.preventDefault();
+        openSearchModal('');
+        return;
+      }
+      if (el.readerView.hidden || !el.searchModal.hidden) return;
       if (e.key === 'ArrowLeft') step(-1);
       else if (e.key === 'ArrowRight') step(1);
-      else if (e.key === 'Escape') clearStrong();
     });
   }
 
   function bump(dir) {
     state.size = Math.max(13, Math.min(34, state.size + dir));
-    applySize();
+    updateAaUI();
+    applyAppearance();
     save();
-  }
-
-  function applySize() {
-    document.documentElement.style.setProperty('--reading-size', state.size + 'px');
   }
 
   /* ---------- 導覽 ---------- */
@@ -697,11 +1355,11 @@ var BIBLIA = (function () {
   function go(no, chap, cb) {
     state.bookNo = no;
     state.chap = chap;
-    state.strong = null;
-    el.strongPanel.hidden = true;
+    clearStrong();
     el.bookSelect.value = no;
     fillChapSelect(el.chapSelect, state.byNo[no].nch, false);
     el.chapSelect.value = chap;
+    updatePager();
     save();
 
     if (state.cache[no]) { render(); if (cb) cb(); return; }
@@ -717,10 +1375,22 @@ var BIBLIA = (function () {
     });
   }
 
+  function updatePager() {
+    if (!el.pagerLoc) return;
+    var meta = state.byNo[state.bookNo];
+    if (!meta) return;
+    el.pagerLoc.textContent = meta.zh + ' ' + state.chap + ' / ' + meta.nch;
+
+    var atStart = state.chap <= 1 && !state.byNo[state.bookNo - 1];
+    var atEnd = state.chap >= meta.nch && !state.byNo[state.bookNo + 1];
+    if (el.pagerPrev) el.pagerPrev.disabled = atStart;
+    if (el.pagerNext) el.pagerNext.disabled = atEnd;
+    document.getElementById('prevBtn').disabled = atStart;
+    document.getElementById('nextBtn').disabled = atEnd;
+  }
+
   /* ---------- 繪製 ---------- */
   function activeVersions() {
-    // 只涵蓋舊約的版本（希伯來文原文）在新約整欄都會是空的，直接不顯示，
-    // 免得讀新約時多出一欄空白。
     var meta = state.byNo[state.bookNo];
     var isNT = meta ? meta.no >= FIRST_NT : false;
     return VERSIONS.filter(function (v) {
@@ -742,6 +1412,7 @@ var BIBLIA = (function () {
 
     var cols = activeVersions();
     el.reader.innerHTML = '';
+    colLayout();
 
     var head = document.createElement('div');
     head.className = 'chapter-head';
@@ -754,11 +1425,8 @@ var BIBLIA = (function () {
     if (!cols.length) { el.reader.appendChild(msg('請至少勾選一個版本。')); return; }
     if (!chapter || !chapter.v.length) { el.reader.appendChild(msg('本章尚無資料。')); return; }
 
-    var tmpl = 'repeat(' + cols.length + ', minmax(0, 1fr))';
-
     var ch = document.createElement('div');
     ch.className = 'colhead';
-    ch.style.gridTemplateColumns = tmpl;
     cols.forEach(function (v) {
       var d = document.createElement('div');
       d.textContent = v.label;
@@ -766,14 +1434,15 @@ var BIBLIA = (function () {
     });
     el.reader.appendChild(ch);
 
+    var frag = document.createDocumentFragment();
     chapter.v.forEach(function (verse) {
       var row = document.createElement('div');
       row.className = 'verse' + (verse.p ? ' para' : '');
       row.setAttribute('data-sec', verse.s);
-      row.style.gridTemplateColumns = tmpl;
       cols.forEach(function (v) { row.appendChild(cell(verse, v)); });
-      el.reader.appendChild(row);
+      frag.appendChild(row);
     });
+    el.reader.appendChild(frag);
 
     if (state.strong) paintStrong();
   }
@@ -794,7 +1463,7 @@ var BIBLIA = (function () {
     var units = verse.w ? verse.w[v.key] : null;
 
     if (text === undefined || text === null) {
-      d.className += ' empty';    // 該版本沒有這一節（如約三 KJV 只有 14 節）
+      d.className += ' empty';
       return d;
     }
 
@@ -804,10 +1473,6 @@ var BIBLIA = (function () {
     d.appendChild(num);
 
     if (!text) {
-      // 節號存在但無內文。多半是版本化差異：
-      //   WEB —— 現代校勘本略去的節（如 Acts 8:37），保留節號、無內文。
-      //   RVR1909 —— 依希伯來文分章，跨章經文併入前一章末節，章尾以空節補齊。
-      // 標示清楚，才不會被誤認為資料缺漏。
       var blank = document.createElement('span');
       blank.className = 'blank';
       blank.textContent = '（此版本本節無內文）';
@@ -874,13 +1539,15 @@ var BIBLIA = (function () {
     el.strongDict.className = 'strong-dict loading';
     el.strongEngBtn.hidden = true;
     el.strongPanel.hidden = false;
+    if (el.strongOverlay) el.strongOverlay.hidden = false;
+    document.body.classList.add('strong-open');
     paintStrong();
 
     ensureStrongDict(code, function () { renderDict(code); });
   }
 
   function renderDict(code) {
-    if (state.strong !== code) return;         // 使用者已改點別的字
+    if (state.strong !== code) return;
 
     var lang = code.charAt(0) === 'H' ? 'H' : 'G';
     if (strongDictState[lang] !== 'ready') {
@@ -891,8 +1558,6 @@ var BIBLIA = (function () {
     }
     var entry = dictEntry(code);
     if (!entry) {
-      // 可能是上游真的沒有這個號碼，也可能是字典還沒下載完整 —— 兩者要講清楚，
-      // 不要讓「還沒抓到」看起來像「查無此字」。
       el.strongDict.className = 'strong-dict muted';
       el.strongDict.textContent =
         '此號碼尚無釋義資料。若字典尚未下載完整，請執行 '
@@ -904,7 +1569,6 @@ var BIBLIA = (function () {
     el.strongDict.className = 'strong-dict';
     el.strongDict.textContent = entry.z || entry.e || '';
 
-    // 有英文釋義才給切換鈕
     if (entry.e && entry.z) {
       el.strongEngBtn.hidden = false;
       el.strongEngBtn.textContent = '顯示英文釋義';
@@ -923,7 +1587,6 @@ var BIBLIA = (function () {
     el.strongEngBtn.textContent = mode === 'en' ? '顯示中文釋義' : '顯示英文釋義';
   }
 
-  /* 從 Strong 面板直接跳到搜尋，並鎖定 Strong 號碼模式 */
   function searchCurrentStrong() {
     if (!state.strong) return;
     if (el.searchVersionSelect) el.searchVersionSelect.value = 'strong';
@@ -933,6 +1596,8 @@ var BIBLIA = (function () {
   function clearStrong() {
     state.strong = null;
     el.strongPanel.hidden = true;
+    if (el.strongOverlay) el.strongOverlay.hidden = true;
+    document.body.classList.remove('strong-open');
     Array.prototype.forEach.call(el.reader.querySelectorAll('.unit.hit'),
       function (n) { n.classList.remove('hit'); });
   }
@@ -965,7 +1630,9 @@ var BIBLIA = (function () {
       : (state.inter ? '本章其他版本未標此號。' : '切到「逐字對照」才會顯示高亮。');
   }
 
-  /* ---------- 搜尋系統引擎 ---------- */
+  /* ---------- 搜尋引擎 ---------- */
+  var searchOpener = null;
+
   function buildSearchControls() {
     if (el.startSearchBtn) {
       el.startSearchBtn.addEventListener('click', function () { openSearchModal(''); });
@@ -973,24 +1640,16 @@ var BIBLIA = (function () {
     if (el.searchBarBtn) {
       el.searchBarBtn.addEventListener('click', function () { openSearchModal(''); });
     }
-    if (el.searchCloseBtn) {
-      el.searchCloseBtn.addEventListener('click', closeSearchModal);
-    }
-    if (el.searchOverlay) {
-      el.searchOverlay.addEventListener('click', closeSearchModal);
-    }
-    if (el.searchExecBtn) {
-      el.searchExecBtn.addEventListener('click', function () { runSearch(); });
-    }
+    if (el.searchCloseBtn) el.searchCloseBtn.addEventListener('click', closeSearchModal);
+    if (el.searchOverlay) el.searchOverlay.addEventListener('click', closeSearchModal);
+    if (el.searchExecBtn) el.searchExecBtn.addEventListener('click', function () { runSearch(); });
     if (el.searchInput) {
       el.searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') runSearch();
         if (e.key === 'Escape') closeSearchModal();
       });
     }
-    if (el.searchMoreBtn) {
-      el.searchMoreBtn.addEventListener('click', renderNextBatch);
-    }
+    if (el.searchMoreBtn) el.searchMoreBtn.addEventListener('click', renderNextBatch);
     if (el.searchVersionSelect) {
       el.searchVersionSelect.addEventListener('change', function () { runSearch(); });
     }
@@ -1000,14 +1659,18 @@ var BIBLIA = (function () {
   }
 
   function openSearchModal(initialQuery) {
+    searchOpener = document.activeElement;
     el.searchModal.hidden = false;
     if (initialQuery !== undefined && initialQuery !== '') el.searchInput.value = initialQuery;
     el.searchInput.focus();
+    el.searchInput.select();
     if (el.searchInput.value.trim()) runSearch();
   }
 
   function closeSearchModal() {
     el.searchModal.hidden = true;
+    if (searchOpener && searchOpener.focus) searchOpener.focus();
+    searchOpener = null;
   }
 
   function filterBooksByScope(scope) {
@@ -1179,17 +1842,15 @@ var BIBLIA = (function () {
     });
   }
 
-  /* ---------- 啟動守門：資料沒載進來時給出可行動的訊息 ----------
-   * 用 file:// 開啟時，若瀏覽器（例如某些 Firefox 設定）連 <script src> 都擋，
-   * 畫面會停在空的下拉選單。與其靜靜壞掉，不如直接說明怎麼辦。
-   */
+  /* ---------- 啟動守門 ---------- */
   function guard() {
     if (state.index.length) return;
-    var box = document.getElementById('startView');
+    var box = document.getElementById('startPickCard');
     if (!box) return;
     var warn = document.createElement('div');
     warn.className = 'start-card';
     warn.style.borderColor = '#c0392b';
+    warn.style.marginTop = '16px';
     warn.innerHTML =
       '<b>載入不到經文資料</b><br><br>' +
       '請確認 <code>app/data/</code> 底下有 <code>books.js</code> 與 66 個卷檔；' +
@@ -1198,7 +1859,7 @@ var BIBLIA = (function () {
       '改用本機伺服器開啟即可：<br>' +
       '<code>python -m http.server 8777 --directory app</code><br>' +
       '然後開 <code>http://localhost:8777</code>';
-    box.appendChild(warn);
+    box.parentNode.appendChild(warn);
   }
 
   if (document.readyState === 'loading') {
@@ -1211,4 +1872,3 @@ var BIBLIA = (function () {
            strongDict: strongDict, showPlan: showPlan, showStart: showStart,
            showReader: showReader };
 })();
-
