@@ -2043,3 +2043,680 @@ body.appearance-open .pager-aa-btn {
   .verse { break-inside: avoid; }
   html, body { background: #fff; color: #000; }
 }
+
+
+/* ===================== 讀經會補充資料庫頁面 (Ref View) 樣式 ===================== */
+
+.ref-view {
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.ref-main {
+  max-width: var(--maxw-plan);
+  margin: 0 auto;
+  padding: 24px var(--pad-x);
+}
+
+.ref-hero {
+  background: linear-gradient(135deg, var(--bg-soft) 0%, var(--bg-alt) 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 28px var(--pad-x);
+  margin-bottom: 24px;
+  box-shadow: var(--sh-1);
+}
+
+.ref-main-title {
+  font-family: var(--font-ui);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+}
+
+.ref-subtitle {
+  font-size: 0.95rem;
+  color: var(--fg-dim);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 頁籤切換 Bar */
+.ref-nav-tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-soft);
+  padding: 6px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line-soft);
+  margin-bottom: 24px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ref-tab-btn {
+  flex: 1;
+  min-width: 140px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--fg-dim);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--t-fast) var(--ease);
+}
+
+.ref-tab-btn:hover {
+  color: var(--fg);
+  background: var(--bg-alt);
+}
+
+.ref-tab-btn.active {
+  color: var(--accent-ink);
+  background: var(--accent);
+  box-shadow: var(--sh-1);
+}
+
+/* Panel 次級標頭、搜尋框與篩選藥丸 */
+.ref-sub-header {
+  margin-bottom: 24px;
+}
+
+.ref-search-row {
+  margin-bottom: 14px;
+}
+
+.ref-search-input {
+  width: 100%;
+  padding: 12px 18px;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  color: var(--fg);
+  background: var(--bg-alt);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-1);
+  outline: none;
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.ref-search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.ref-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ref-pill-btn {
+  padding: 6px 14px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--fg-dim);
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: all var(--t-fast) ease;
+}
+
+.ref-pill-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ref-pill-btn.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.ref-count-bar {
+  font-size: 0.85rem;
+  color: var(--fg-mute);
+  font-weight: 500;
+}
+
+/* SU101 參考資料庫卡片網格 */
+.ref-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.ref-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  box-shadow: var(--sh-1);
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), border-color var(--t-fast) ease;
+}
+
+.ref-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-2);
+  border-color: var(--accent-hi);
+}
+
+.ref-card-header {
+  margin-bottom: 12px;
+}
+
+.ref-quarter-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: var(--r-pill);
+  margin-bottom: 8px;
+}
+
+.ref-card-title {
+  font-family: var(--font-ui);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.ref-card-body {
+  flex: 1;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.ref-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ref-ext-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  line-height: 1.4;
+  word-break: break-word;
+  transition: color var(--t-fast) ease;
+}
+
+.ref-ext-link:hover {
+  color: var(--accent-hi);
+  text-decoration: underline;
+}
+
+.ref-link-icon {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.ref-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.ref-orig-link {
+  color: var(--fg-dim);
+  text-decoration: none;
+}
+
+/* 66 卷書簡介網格 */
+.book-intros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+.book-intro-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  box-shadow: var(--sh-1);
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+
+.book-intro-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-2);
+}
+
+.book-intro-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.book-no-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--fg-mute);
+  margin-bottom: 2px;
+}
+
+.book-name-zh {
+  font-family: var(--font-ui);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0;
+}
+
+.book-name-en {
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+}
+
+.book-badges-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.testament-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+}
+
+.testament-badge.ot {
+  background: rgba(138, 90, 43, 0.15);
+  color: #8a5a2b;
+}
+
+.testament-badge.nt {
+  background: rgba(47, 125, 81, 0.15);
+  color: #2f7d51;
+}
+
+.cat-badge {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  background: var(--bg-soft);
+  color: var(--fg-dim);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-soft);
+}
+
+.book-intro-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  margin-bottom: 14px;
+}
+
+.book-intro-box {
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.theme-box {
+  background: var(--bg-soft);
+  border-left: 3px solid var(--accent);
+  color: var(--fg);
+}
+
+.keyverse-box {
+  background: var(--accent-soft);
+  color: var(--fg);
+  border-left: 3px solid var(--accent-hi);
+  font-style: italic;
+}
+
+.book-outline-section {
+  font-size: 0.88rem;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.book-outline-list {
+  padding-left: 20px;
+  margin: 6px 0 0 0;
+}
+
+.book-outline-list li {
+  margin-bottom: 6px;
+  line-height: 1.45;
+  color: var(--fg-dim);
+}
+
+.book-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-soft);
+}
+
+/* 時間表與年表 (Timelines & Tables) */
+.timeline-eras-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.timeline-era-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 22px;
+  box-shadow: var(--sh-1);
+}
+
+.era-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.era-no-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+}
+
+.era-title {
+  font-family: var(--font-ui);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0;
+
+.era-period-badge {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ok);
+  background: rgba(47, 125, 81, 0.1);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  margin-left: auto;
+}
+
+.era-books-bar {
+  font-size: 0.88rem;
+  color: var(--accent);
+  background: var(--bg-soft);
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  margin-bottom: 12px;
+}
+
+.era-summary {
+  font-size: 0.95rem;
+  color: var(--fg-dim);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.era-events-timeline {
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+}
+
+.era-events-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.era-events-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.era-events-list li {
+  display: flex;
+  gap: 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.ev-year {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-hi);
+  min-width: 110px;
+  white-space: nowrap;
+}
+
+.ev-text {
+  color: var(--fg);
+}
+
+/* 資料表格 */
+.timeline-table-wrap {
+  overflow-x: auto;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-1);
+}
+
+.ref-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.ref-data-table th, .ref-data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top;
+}
+
+.ref-data-table th {
+  background: var(--bg-soft);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.tbl-era-cell {
+  background: var(--bg-soft);
+  border-right: 1.5px solid var(--line);
+  width: 220px;
+}
+
+.tbl-time {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tbl-bg {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--fg-dim);
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.tbl-prophet-name {
+  font-weight: 700;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.target-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  padding: 2px 8px;
+  background: var(--bg-soft);
+  border-radius: var(--r-pill);
+  color: var(--fg-dim);
+}
+
+.tbl-date {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+
+.tbl-focus {
+  color: var(--fg);
+  line-height: 1.45;
+}
+
+.calendar-table .tbl-num {
+  font-weight: 600;
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+
+.calendar-table .tbl-jname {
+  color: var(--accent);
+}
+
+.feast-highlight {
+  font-weight: 600;
+  color: var(--accent-hi);
+}
+
+/* 圖表網格 */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.chart-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 18px;
+  box-shadow: var(--sh-1);
+}
+
+.chart-title {
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 12px 0;
+}
+
+.chart-img-wrap {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.chart-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.chart-card-body p {
+  font-size: 0.88rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+/* 首頁入口卡片樣式增強 */
+.start-ref-card {
+  border-left: 4px solid var(--accent);
+}
+
+.start-ref-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.start-ref-features li {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+}
+
+.ref-feat-icon {
+  margin-right: 6px;
+}
+
+.ref-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px var(--pad-x);
+  color: var(--fg-mute);
+  font-size: 1rem;
+  background: var(--bg-alt);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-lg);
+}
+
+/* 響應式微調 */
+@media (max-width: 600px) {
+  .ref-main-title { font-size: 1.5rem; }
+  .ref-nav-tabs { flex-direction: column; gap: 4px; }
+  .ref-tab-btn { width: 100%; justify-content: flex-start; }
+  .book-intros-grid, .ref-cards-grid, .charts-grid { grid-template-columns: 1fr; }
+  .era-events-list li { flex-direction: column; gap: 2px; }
+  .ev-year { min-width: auto; }
+}

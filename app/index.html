@@ -91,6 +91,29 @@
         </button>
       </div>
 
+      <!-- ===================== 讀經會補充資料庫入口卡片 ===================== -->
+      <div class="start-card start-ref-card">
+        <div class="start-plan-header">
+          <div class="start-plan-icon" aria-hidden="true">📚</div>
+          <div class="start-plan-heading">
+            <h2 class="start-plan-title">讀經會補充資料庫</h2>
+            <span class="start-plan-subtitle">66卷簡介 · 歷史時間表 · 每日研經釋義資料庫</span>
+          </div>
+        </div>
+
+        <div class="start-plan-body start-ref-body">
+          <ul class="start-ref-features">
+            <li><span class="ref-feat-icon">📑</span> <strong>每日研經釋義參考庫：</strong>逐季匯整各書卷註釋、影音與結構圖</li>
+            <li><span class="ref-feat-icon">📖</span> <strong>66 卷書簡介與大綱：</strong>全書背景、核心主題、鑰節與結構</li>
+            <li><span class="ref-feat-icon">⏳</span> <strong>聖經歷史年代時間表：</strong>大歷史年表、先知分期與猶太曆法</li>
+          </ul>
+        </div>
+
+        <button id="startRefBtn" type="button" class="btn btn-primary btn-block go-ref">
+          <span aria-hidden="true">📚</span> 開啟讀經會補充資料庫
+        </button>
+      </div>
+
     </div>
 
     <p class="start-foot">
@@ -141,6 +164,10 @@
 
       <button id="readerPlanBtn" type="button" class="btn plan-nav-btn" title="查看讀經計畫">
         <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
+      </button>
+
+      <button id="readerRefBtn" type="button" class="btn ref-nav-btn" title="查看讀經會補充資料庫">
+        <span aria-hidden="true">📚</span><span class="btn-text">補充資料</span>
       </button>
 
       <button id="readerAaBtn" type="button" class="btn btn-aa-top" title="字級與排版設定" aria-label="字級與排版外觀設定">
@@ -237,6 +264,9 @@
       <button id="planReaderBtn" type="button" class="btn" title="前往經文閱讀器">
         <span aria-hidden="true">📖</span><span class="btn-text">閱讀經文</span>
       </button>
+      <button id="planRefBtn" type="button" class="btn" title="前往讀經會補充資料庫">
+        <span aria-hidden="true">📚</span><span class="btn-text">補充資料</span>
+      </button>
 
       <span class="bar-title" id="planHeadTitle">讀經計畫</span>
 
@@ -294,6 +324,64 @@
 
     <div id="planList" class="plan-list">
       <!-- 讀經進度動態渲染區塊 -->
+    </div>
+  </main>
+</section>
+
+<!-- ===================== 讀經會補充資料庫頁面 ===================== -->
+<section id="refView" class="view ref-view" hidden>
+  <header class="bar">
+    <div class="bar-row bar-main">
+      <button id="refHomeBtn" type="button" class="btn btn-ghost btn-home" title="回首頁">
+        <span aria-hidden="true">⌂</span><span class="btn-text">首頁</span>
+      </button>
+      <button id="refReaderBtn" type="button" class="btn" title="前往經文閱讀器">
+        <span aria-hidden="true">📖</span><span class="btn-text">閱讀經文</span>
+      </button>
+      <button id="refPlanBtn" type="button" class="btn" title="前往讀經計畫">
+        <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
+      </button>
+
+      <span class="bar-title">讀經會補充資料庫</span>
+
+      <span class="bar-spacer"></span>
+
+      <button id="refThemeBtn" type="button" class="btn btn-icon" title="切換深淺色" aria-label="切換深淺色">◐</button>
+    </div>
+  </header>
+
+  <main class="ref-main">
+    <div class="ref-hero">
+      <div class="ref-hero-content">
+        <h1 class="ref-main-title">讀經會補充資料庫</h1>
+        <p class="ref-subtitle">國際讀經會台灣總會《每日研經釋義》參考資料庫 · 66 卷聖經簡介 · 歷史時間表</p>
+      </div>
+    </div>
+
+    <!-- 頁籤導覽 (Tab Switcher) -->
+    <div class="ref-nav-tabs" id="refNavTabs" role="tablist" aria-label="資料庫分頁選擇">
+      <button type="button" class="ref-tab-btn active" data-reftab="su101" role="tab" aria-selected="true">
+        <span aria-hidden="true">📑</span> 每日研經釋義參考庫
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="intros" role="tab" aria-selected="false">
+        <span aria-hidden="true">📖</span> 66 卷聖經書卷簡介
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="timeline" role="tab" aria-selected="false">
+        <span aria-hidden="true">⏳</span> 聖經歷史時間表與圖表
+      </button>
+    </div>
+
+    <!-- Tab Content Panels -->
+    <div id="refPanelSu101" class="ref-panel active">
+      <!-- SU101 Reference Database Panel -->
+    </div>
+
+    <div id="refPanelIntros" class="ref-panel" hidden>
+      <!-- 66 Book Intros Panel -->
+    </div>
+
+    <div id="refPanelTimeline" class="ref-panel" hidden>
+      <!-- Biblical Eras & Timelines Panel -->
     </div>
   </main>
 </section>
@@ -496,6 +584,9 @@
 
 <script src="data/plan_2026_q3.js"></script>
 <script src="data/plan_su101_2026.js"></script>
+<script src="data/su101_references.js"></script>
+<script src="data/book_intros.js"></script>
+<script src="data/timeline_data.js"></script>
 <script src="reader.js"></script>
 <script src="data/books.js"></script>
 <script src="data/search_index.js"></script>
