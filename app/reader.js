@@ -294,6 +294,8 @@ var BIBLIA = (function () {
     observeLayout();
     applyAppearance();
     showStart();
+    window.addEventListener('hashchange', handleHash);
+    if (window.location.hash) handleHash();
   }
 
   function cacheEls() {
@@ -1440,6 +1442,69 @@ var BIBLIA = (function () {
     if (el.shortcutsModal) el.shortcutsModal.hidden = true;
   }
 
+  /* ---------- URL Hash 路由與同步 ---------- */
+  function updateHash() {
+    if (!el.startView || el.startView.hidden === false) {
+      if (window.location.hash) {
+        try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch (e) {}
+      }
+    } else if (el.planView && !el.planView.hidden) {
+      try { history.replaceState(null, '', '#plan'); } catch (e) {}
+    } else if (el.refView && !el.refView.hidden) {
+      try { history.replaceState(null, '', '#ref' + (refState && refState.activeTab ? '/' + refState.activeTab : '')); } catch (e) {}
+    } else if (el.readerView && !el.readerView.hidden) {
+      var bMeta = state.byNo[state.bookNo];
+      var bKey = bMeta ? bMeta.abbr : state.bookNo;
+      try { history.replaceState(null, '', '#read/' + bKey + '/' + state.chap); } catch (e) {}
+    }
+  }
+
+  function handleHash() {
+    var hash = window.location.hash || '';
+    if (!hash || hash === '#' || hash === '#/') return;
+    if (hash === '#plan') {
+      showPlan();
+      return;
+    }
+    if (hash.indexOf('#ref') === 0) {
+      var refTab = hash.split('/')[1] || 'su101';
+      showRef(refTab);
+      return;
+    }
+    if (hash === '#study') {
+      openStudyCenter();
+      return;
+    }
+    var m = hash.match(/^#read\/([^\/]+)(?:\/(\d+))?(?:\/(\d+))?$/);
+    if (m) {
+      var bkKey = decodeURIComponent(m[1]).toLowerCase();
+      var chap = m[2] ? parseInt(m[2], 10) : 1;
+      var sec = m[3] ? parseInt(m[3], 10) : null;
+      var targetBookNo = null;
+      var num = parseInt(bkKey, 10);
+      if (!isNaN(num) && state.byNo[num]) {
+        targetBookNo = num;
+      } else {
+        for (var i = 0; i < state.index.length; i++) {
+          var b = state.index[i];
+          if ((b.abbr && b.abbr.toLowerCase() === bkKey) ||
+              (b.zh && b.zh.toLowerCase() === bkKey) ||
+              (b.en && b.en.toLowerCase() === bkKey)) {
+            targetBookNo = b.no;
+            break;
+          }
+        }
+      }
+      if (targetBookNo) {
+        if (sec) {
+          jumpToVerse(targetBookNo, chap, sec);
+        } else {
+          showReader(targetBookNo, chap);
+        }
+      }
+    }
+  }
+
   /* ---------- 檢視切換 ---------- */
   function showStart() {
     el.readerView.hidden = true;
@@ -1462,6 +1527,7 @@ var BIBLIA = (function () {
     renderStartPlanCard();
     renderDailyVerseWidget();
     window.scrollTo(0, 0);
+    updateHash();
   }
 
   function showReader(no, chap, cb) {
@@ -1471,6 +1537,7 @@ var BIBLIA = (function () {
     el.readerView.hidden = false;
     measureLayout();
     go(no, chap, cb);
+    updateHash();
   }
 
   function showPlan() {
@@ -1480,6 +1547,7 @@ var BIBLIA = (function () {
     if (el.planView) el.planView.hidden = false;
     renderPlan();
     window.scrollTo(0, 0);
+    updateHash();
   }
 
   /* ===================== 讀經計畫資料與邏輯 ===================== */
@@ -2087,6 +2155,7 @@ var BIBLIA = (function () {
     if (el.refView) el.refView.hidden = false;
     renderRefView();
     window.scrollTo(0, 0);
+    updateHash();
   }
 
   function renderRefView() {
@@ -3026,6 +3095,7 @@ var BIBLIA = (function () {
       var bMeta = state.byNo[no];
       el.quickNavBtnText.textContent = (bMeta ? bMeta.zh : '') + ' 第 ' + chap + ' 章';
     }
+    updateHash();
 
     if (state.cache[no]) { render(); if (cb) cb(); return; }
     el.reader.innerHTML = '<p class="placeholder">載入 ' + state.byNo[no].zh + ' …</p>';
