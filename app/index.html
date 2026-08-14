@@ -55,6 +55,9 @@
       <div class="daily-card-foot">
         <span class="daily-verse-ref" id="dailyVerseRef">詩篇 119:105</span>
         <div class="daily-actions">
+          <button id="dailyVerseShareBtn" type="button" class="btn btn-sm btn-ghost" title="原生分享金句">
+            <span aria-hidden="true">↗</span> 分享
+          </button>
           <button id="dailyVerseCopyBtn" type="button" class="btn btn-sm btn-ghost" title="複製金句手籤">
             <span aria-hidden="true">📋</span> 複製手籤
           </button>
@@ -345,16 +348,22 @@
     </div>
     <div class="vam-actions-row">
       <button id="vamCopyBtn" type="button" class="vam-btn" title="複製此節經文">
-        <span aria-hidden="true">📋</span> 複製經文
+        <span aria-hidden="true">📋</span> 複製
       </button>
       <button id="vamCompareBtn" type="button" class="vam-btn" title="單節 11 譯本即時對照">
-        <span aria-hidden="true">🔀</span> 單節對照
+        <span aria-hidden="true">🔀</span> 對照
       </button>
-      <button id="vamBookmarkBtn" type="button" class="vam-btn" title="加入或編輯書籤筆記">
-        <span aria-hidden="true">🔖</span> 書籤/筆記
+      <button id="vamBookmarkBtn" type="button" class="vam-btn" title="快速加入書籤">
+        <span aria-hidden="true">🔖</span> 書籤
+      </button>
+      <button id="vamNoteBtn" type="button" class="vam-btn" title="編輯自訂研經筆記與標籤">
+        <span aria-hidden="true">✏️</span> 筆記
+      </button>
+      <button id="vamShareBtn" type="button" class="vam-btn" title="原生分享此節經文">
+        <span aria-hidden="true">↗</span> 分享
       </button>
       <button id="vamAudioBtn" type="button" class="vam-btn" title="朗讀此節經文">
-        <span aria-hidden="true">🔊</span> 朗讀本節
+        <span aria-hidden="true">🔊</span> 朗讀
       </button>
     </div>
     <div class="vam-highlighter-row">
@@ -366,6 +375,50 @@
         <button type="button" class="vam-color-dot hl-pink" data-hl="pink" title="粉色高亮"></button>
         <button type="button" class="vam-color-dot hl-clear" data-hl="none" title="清除高亮">✕</button>
       </div>
+    </div>
+  </div>
+
+  <!-- 經文自訂研經筆記與標籤彈窗 (Verse Note Modal) -->
+  <div id="verseNoteModal" class="note-modal" hidden role="dialog" aria-modal="true" aria-label="經文靈修筆記">
+    <div class="note-overlay" id="noteOverlay"></div>
+    <div class="note-dialog">
+      <header class="note-header">
+        <div class="note-heading">
+          <span class="note-badge">✏️</span>
+          <div>
+            <h2 class="note-title" id="noteModalTitle">創世記 1:1 靈修筆記</h2>
+            <span class="note-subtitle" id="noteModalVerseText">起初，神創造天地。</span>
+          </div>
+        </div>
+        <button id="noteCloseBtn" type="button" class="note-close-btn" title="關閉" aria-label="關閉筆記">×</button>
+      </header>
+      <div class="note-body">
+        <label class="note-label">
+          <span>靈修心得與札記：</span>
+          <textarea id="noteInput" class="note-textarea" rows="4" placeholder="在此記錄您的靈修心得、講章筆記、啟發或默想感想…"></textarea>
+        </label>
+        <div class="note-tags-section">
+          <span class="note-tags-label">常用標籤快捷選擇：</span>
+          <div class="note-tag-pills" id="notePresetTags">
+            <button type="button" class="note-tag-btn" data-tag="#信心">#信心</button>
+            <button type="button" class="note-tag-btn" data-tag="#禱告">#禱告</button>
+            <button type="button" class="note-tag-btn" data-tag="#恩典">#恩典</button>
+            <button type="button" class="note-tag-btn" data-tag="#應許">#應許</button>
+            <button type="button" class="note-tag-btn" data-tag="#感恩">#感恩</button>
+            <button type="button" class="note-tag-btn" data-tag="#救恩">#救恩</button>
+            <button type="button" class="note-tag-btn" data-tag="#真理">#真理</button>
+            <button type="button" class="note-tag-btn" data-tag="#聖靈">#聖靈</button>
+          </div>
+          <input type="text" id="noteTagsInput" class="note-tags-input" placeholder="標籤 (以空格隔開，例如 #信心 #盼望)">
+        </div>
+      </div>
+      <footer class="note-footer">
+        <button id="noteDeleteBtn" type="button" class="btn btn-ghost note-del-btn" title="刪除本條筆記">刪除筆記</button>
+        <div class="note-footer-right">
+          <button id="noteCancelBtn" type="button" class="btn btn-ghost">取消</button>
+          <button id="noteSaveBtn" type="button" class="btn btn-primary">儲存筆記</button>
+        </div>
+      </footer>
     </div>
   </div>
 
@@ -528,7 +581,9 @@
       <div id="studyPanelBookmarks" class="study-panel" hidden>
         <div class="study-panel-head">
           <span id="bookmarksCountText">共 0 條書籤收藏</span>
+          <input type="search" id="studyBookmarkSearch" class="study-search-input" placeholder="🔍 搜尋筆記或標籤..." autocomplete="off" aria-label="搜尋筆記與標籤">
         </div>
+        <div class="study-tag-filter-row" id="studyTagFilterRow"></div>
         <div id="studyBookmarksList" class="study-items-list">
           <!-- 動態載入 -->
         </div>
@@ -646,7 +701,10 @@
 
       <div class="plan-stats-card">
         <div class="plan-stats-header">
-          <span class="plan-stats-label">個人讀經完成率</span>
+          <div class="plan-stats-heading-wrap">
+            <span class="plan-stats-label">個人讀經完成率</span>
+            <span class="plan-streak-badge" id="planStreakBadge" title="連續讀經天數">🔥 連續 0 天</span>
+          </div>
           <span class="plan-stats-val" id="planStatsPercent">0%</span>
         </div>
         <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
@@ -947,5 +1005,16 @@
 <script src="reader.js"></script>
 <script src="data/books.js"></script>
 <script src="data/search_index.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').then(function (reg) {
+        // SW 註冊成功
+      }).catch(function (err) {
+        console.warn('PWA ServiceWorker registration failed:', err);
+      });
+    });
+  }
+</script>
 </body>
 </html>

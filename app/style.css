@@ -4065,6 +4065,201 @@ body.zen-mode .reader {
 body.zen-mode .zen-exit-pill {
   display: inline-flex;
 }
+/* 圖表網格 */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.chart-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 18px;
+  box-shadow: var(--sh-1);
+}
+
+.chart-title {
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 12px 0;
+}
+
+.chart-img-wrap {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.chart-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.chart-card-body p {
+  font-size: 0.88rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+/* 首頁入口卡片樣式增強 */
+.start-ref-card {
+  border-left: 4px solid var(--accent);
+}
+
+.start-ref-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.start-ref-features li {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+}
+
+.ref-feat-icon {
+  margin-right: 6px;
+}
+
+.ref-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px var(--pad-x);
+  color: var(--fg-mute);
+  font-size: 1rem;
+  background: var(--bg-alt);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-lg);
+}
+
+/* 響應式微調 */
+@media (max-width: 600px) {
+  .ref-main-title { font-size: 1.5rem; }
+  .ref-nav-tabs { flex-direction: column; gap: 4px; }
+  .ref-tab-btn { width: 100%; justify-content: flex-start; }
+  .book-intros-grid, .ref-cards-grid, .charts-grid { grid-template-columns: 1fr; }
+  .era-events-list li { flex-direction: column; gap: 2px; }
+  .ev-year { min-width: auto; }
+}
+
+/* ===================== 12. 禪意專注閱讀模式 (Zen Focus Mode) 與閱讀進度 ===================== */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: transparent;
+  z-index: 1000;
+  pointer-events: none;
+}
+.reading-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-hi) 100%);
+  box-shadow: 0 0 8px var(--ring);
+  transition: width 0.12s linear;
+}
+
+body.zen-mode #readerBar {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+body.zen-mode #pager {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+body.zen-mode .reader {
+  max-width: 920px;
+  margin: 0 auto;
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+
+.zen-nav-btn {
+  font-weight: 700;
+  color: var(--fg);
+  border-color: var(--line);
+  background: var(--bg-soft);
+  gap: 5px;
+}
+.zen-nav-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pager-zen-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  color: var(--fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.pager-zen-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  transform: scale(1.06);
+}
+
+/* 專注模式下頂部微型浮島 */
+.zen-exit-pill {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--line);
+  color: var(--fg-dim);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--sh-2);
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+.zen-exit-pill:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+body.zen-mode .zen-exit-pill {
+  display: inline-flex;
+}
 
 /* ===================== 13. 和風每日金句手籤 (Omikuji Golden Verse) 與朱印 ===================== */
 .daily-seal-stamp {
@@ -4154,3 +4349,274 @@ body.font-shippori .compare-verse-quote {
 .cell.hl-green  { background-color: var(--hl-green) !important; color: var(--hl-green-text); border-radius: 4px; padding: 2px 4px; }
 .cell.hl-blue   { background-color: var(--hl-blue) !important; color: var(--hl-blue-text); border-radius: 4px; padding: 2px 4px; }
 .cell.hl-pink   { background-color: var(--hl-pink) !important; color: var(--hl-pink-text); border-radius: 4px; padding: 2px 4px; }
+
+/* ===================== 15. 經文靈修筆記與標籤彈窗 (Verse Note Modal) ===================== */
+.note-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.note-modal[hidden] {
+  display: none !important;
+}
+.note-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 16, 14, 0.6);
+  backdrop-filter: blur(4px);
+}
+.note-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.22s var(--ease);
+}
+.note-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--bg-soft);
+}
+.note-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.note-badge {
+  font-size: 1.3rem;
+}
+.note-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.note-subtitle {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--fg-dim);
+  font-family: var(--font-serif);
+  margin-top: 2px;
+  max-width: 380px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.note-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--fg-mute);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.note-close-btn:hover {
+  color: var(--fg);
+  background: var(--bg-glass);
+}
+.note-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.note-label span {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 6px;
+}
+.note-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+}
+.note-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+.note-tags-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.note-tags-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--fg-dim);
+}
+.note-tag-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.note-tag-btn {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  color: var(--fg-dim);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 4px 9px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.note-tag-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.note-tags-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 0.875rem;
+  outline: none;
+}
+.note-tags-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+.note-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line-soft);
+  background: var(--bg-soft);
+}
+.note-del-btn {
+  color: #c0382b !important;
+}
+.note-del-btn:hover {
+  background: rgba(192, 56, 43, 0.1) !important;
+}
+.note-footer-right {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===================== 16. 研經中心標籤與搜尋增強 ===================== */
+.study-search-input {
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--bg);
+  color: var(--fg);
+  width: 180px;
+  outline: none;
+}
+.study-search-input:focus {
+  border-color: var(--accent);
+  width: 220px;
+}
+.study-tag-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.study-tag-chip {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  color: var(--fg-dim);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.study-tag-chip:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.study-tag-chip.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.study-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+.study-tag-pill {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+  display: inline-block;
+}
+
+/* ===================== 17. 讀經計畫連續天數勳章 (Streak Badge) ===================== */
+.plan-stats-heading-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.plan-streak-badge {
+  background: linear-gradient(135deg, #ff8c00, #e52d27);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  box-shadow: 0 2px 6px rgba(229, 45, 39, 0.3);
+  letter-spacing: 0.02em;
+}
+
+/* ===================== 18. 列印優化樣式 ===================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+  }
+  .bar, .pager, .strong-panel, .verse-action-menu, .audio-control-bar,
+  .quick-nav-modal, .search-modal, .appearance-modal, .shortcuts-modal,
+  .study-modal, .note-modal, .compare-modal, .reading-progress-bar, .zen-exit-pill {
+    display: none !important;
+  }
+  .reader {
+    padding: 0 !important;
+  }
+  .verse {
+    page-break-inside: avoid;
+  }
+}

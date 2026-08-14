@@ -281,6 +281,7 @@ var BIBLIA = (function () {
     buildDailyVerseWidget();
     buildQuickNavUI();
     buildVerseActionMenu();
+    buildVerseNoteModal();
     buildCompareVerseModal();
     buildAudioTTS();
     buildStudyCenterUI();
@@ -295,6 +296,7 @@ var BIBLIA = (function () {
     applyAppearance();
     showStart();
     window.addEventListener('hashchange', handleHash);
+    window.addEventListener('popstate', handleHash);
     if (window.location.hash) handleHash();
   }
 
@@ -310,26 +312,28 @@ var BIBLIA = (function () {
       'searchResults', 'searchFoot', 'searchMoreBtn', 'startPlanBtn',
       'readerPlanBtn', 'planHomeBtn', 'planReaderBtn', 'planJumpTodayBtn',
       'planThemeBtn', 'planStatsPercent', 'planProgressFill', 'planProgressBar',
-      'planStatsCount', 'planMarkTodayBtn', 'planMonthTabs', 'planWeekSelect',
+      'planStatsCount', 'planStreakBadge', 'planMarkTodayBtn', 'planMonthTabs', 'planWeekSelect',
       'planSearchInput', 'planList', 'startPlanTodayBox', 'startPlanDate',
       'planSwitch', 'planTitle', 'planSubtitle', 'planSource', 'planHeadTitle',
       'startRefBtn', 'readerRefBtn', 'planRefBtn', 'refHomeBtn', 'refReaderBtn',
       'refPlanBtn', 'refThemeBtn', 'refNavTabs', 'refPanelSu101', 'refPanelIntros',
       'refPanelTimeline',
       'startDailyVerseCard', 'dailyVerseTheme', 'dailyVerseShuffleBtn', 'dailyVerseText',
-      'dailyVerseEn', 'dailyVerseOrig', 'dailyVerseRef', 'dailyVerseCopyBtn', 'dailyVerseReadBtn',
+      'dailyVerseEn', 'dailyVerseOrig', 'dailyVerseRef', 'dailyVerseCopyBtn', 'dailyVerseShareBtn', 'dailyVerseReadBtn',
       'startQuickNavBtn', 'quickNavBtn', 'quickNavBtnText', 'quickNavModal', 'quickNavOverlay',
       'quickNavCloseBtn', 'quickNavSearchInput', 'quickNavBooksPanel', 'quickNavTestamentTabs',
       'quickNavCategoryPills', 'quickNavBooksGrid', 'quickNavChapsPanel', 'quickNavBackBtn',
       'quickSelectedBookTitle', 'quickNavChapsGrid',
       'verseActionMenu', 'vamRefTitle', 'vamCloseBtn', 'vamCopyBtn', 'vamCompareBtn',
-      'vamBookmarkBtn', 'vamAudioBtn', 'vamHighlighterColors',
+      'vamBookmarkBtn', 'vamNoteBtn', 'vamShareBtn', 'vamAudioBtn', 'vamHighlighterColors',
+      'verseNoteModal', 'noteOverlay', 'noteModalTitle', 'noteModalVerseText', 'noteCloseBtn',
+      'noteInput', 'notePresetTags', 'noteTagsInput', 'noteDeleteBtn', 'noteCancelBtn', 'noteSaveBtn',
       'compareVerseModal', 'compareOverlay', 'compareVerseTitle', 'compareCopyAllBtn',
       'compareCloseBtn', 'compareVerseList',
       'studyCenterModal', 'studyOverlay', 'studyCloseBtn', 'studyNavTabs', 'studyPanelHistory',
       'studyPanelBookmarks', 'studyPanelHighlights', 'studyPanelBackup', 'studyHistoryList',
-      'studyBookmarksList', 'studyHighlightsList', 'bookmarksCountText', 'studyHlFilterPills',
-      'clearHistoryBtn', 'exportBackupBtn', 'importBackupInput', 'backupStatusMsg',
+      'studyBookmarksList', 'studyHighlightsList', 'bookmarksCountText', 'studyBookmarkSearch', 'studyTagFilterRow',
+      'studyHlFilterPills', 'clearHistoryBtn', 'exportBackupBtn', 'importBackupInput', 'backupStatusMsg',
       'startStudyCenterBtn', 'readerStudyBtn',
       'audioControlBar', 'audioProgressLabel', 'audioPrevBtn', 'audioToggleBtn',
       'audioNextBtn', 'audioStopBtn', 'audioSpeedSelect', 'audioLangSelect', 'audioCloseBtn', 'audioPlayBtn',
@@ -526,6 +530,25 @@ var BIBLIA = (function () {
         navigator.clipboard.writeText(copyText).then(function () {
           showToast('已複製每日經文手籤 📋');
         });
+      });
+    }
+
+    if (el.dailyVerseShareBtn) {
+      el.dailyVerseShareBtn.addEventListener('click', function () {
+        var gv = verses[currentGoldenVerseIdx];
+        if (!gv) return;
+        var shareText = '【Biblia 每日經文手籤】\n「' + gv.zh + '」\n' + (gv.en ? gv.en + '\n' : '') + '—— ' + gv.ref + '\n' + window.location.href;
+        if (navigator.share) {
+          navigator.share({
+            title: 'Biblia 每日金句 — ' + gv.ref,
+            text: shareText,
+            url: window.location.href
+          }).catch(function () {});
+        } else {
+          navigator.clipboard.writeText(shareText).then(function () {
+            showToast('已複製每日金句手籤 📋');
+          });
+        }
       });
     }
 
@@ -754,6 +777,23 @@ var BIBLIA = (function () {
       });
     }
 
+    if (el.vamNoteBtn) {
+      el.vamNoteBtn.addEventListener('click', function () {
+        if (!activeVerseCtx) return;
+        var ctx = activeVerseCtx;
+        closeVerseActionMenu();
+        openVerseNoteModal(ctx.bookNo, ctx.chap, ctx.sec);
+      });
+    }
+
+    if (el.vamShareBtn) {
+      el.vamShareBtn.addEventListener('click', function () {
+        if (!activeVerseCtx) return;
+        shareVerseText(activeVerseCtx.bookNo, activeVerseCtx.chap, activeVerseCtx.sec);
+        closeVerseActionMenu();
+      });
+    }
+
     if (el.vamAudioBtn) {
       el.vamAudioBtn.addEventListener('click', function () {
         if (!activeVerseCtx) return;
@@ -804,7 +844,7 @@ var BIBLIA = (function () {
     var rect = anchorEl.getBoundingClientRect();
     var top = window.scrollY + rect.bottom + 6;
     var left = window.scrollX + rect.left;
-    var maxLeft = window.innerWidth - 300;
+    var maxLeft = window.innerWidth - 320;
     if (left > maxLeft) left = maxLeft;
     if (left < 10) left = 10;
 
@@ -815,6 +855,33 @@ var BIBLIA = (function () {
   function closeVerseActionMenu() {
     if (el.verseActionMenu) el.verseActionMenu.hidden = true;
     activeVerseCtx = null;
+  }
+
+  function shareVerseText(bNo, chap, sec) {
+    var bMeta = state.byNo[bNo];
+    var data = state.cache[bNo];
+    if (!bMeta || !data) return;
+
+    var chapter = data.ch.find(function (c) { return c.c === chap; });
+    var verse = chapter ? chapter.v.find(function (v) { return v.s === sec; }) : null;
+    if (!verse) return;
+
+    var zhText = (verse.t && verse.t.zh_unv) || '';
+    var kjvText = (verse.t && verse.t.en_kjv) || '';
+    var shareText = '「' + zhText + '」（' + bMeta.zh + ' ' + chap + ':' + sec + ' 和合本）' +
+      (kjvText ? '\n' + kjvText + ' (KJV)' : '') + '\n' + window.location.href;
+
+    if (navigator.share) {
+      navigator.share({
+        title: (bMeta ? bMeta.zh : '') + ' ' + chap + ':' + sec + ' — Biblia',
+        text: shareText,
+        url: window.location.href
+      }).catch(function () {});
+    } else {
+      navigator.clipboard.writeText(shareText).then(function () {
+        showToast('已複製經文與連結至剪貼簿 📋');
+      });
+    }
   }
 
   function copyVerseText(bNo, chap, sec) {
@@ -851,7 +918,8 @@ var BIBLIA = (function () {
       var text = (v && v.t && v.t.zh_unv) || '';
 
       var now = new Date();
-      var dateStr = (now.getMonth() + 1) + '/' + now.getDate() + ' ' + now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+      var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+      var dateStr = (now.getMonth() + 1) + '/' + pad(now.getDate()) + ' ' + now.getHours() + ':' + pad(now.getMinutes());
 
       bookmarks[key] = {
         bookNo: bNo,
@@ -860,12 +928,126 @@ var BIBLIA = (function () {
         bookZh: bMeta ? bMeta.zh : '',
         text: text,
         time: dateStr,
-        note: ''
+        note: '',
+        tags: []
       };
       saveUserAsset('biblia_bookmarks', bookmarks);
       showToast('已加入書籤 🔖');
     }
     render();
+  }
+
+  /* ---------- 經文靈修筆記彈窗 (Verse Note Modal) ---------- */
+  var activeNoteCtx = null;
+
+  function buildVerseNoteModal() {
+    if (el.noteCloseBtn) el.noteCloseBtn.addEventListener('click', closeVerseNoteModal);
+    if (el.noteCancelBtn) el.noteCancelBtn.addEventListener('click', closeVerseNoteModal);
+    if (el.noteOverlay) el.noteOverlay.addEventListener('click', closeVerseNoteModal);
+
+    if (el.notePresetTags) {
+      el.notePresetTags.querySelectorAll('.note-tag-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var tag = btn.getAttribute('data-tag');
+          if (!el.noteTagsInput) return;
+          var cur = el.noteTagsInput.value.trim();
+          if (cur.indexOf(tag) === -1) {
+            el.noteTagsInput.value = cur ? (cur + ' ' + tag) : tag;
+          }
+        });
+      });
+    }
+
+    if (el.noteSaveBtn) {
+      el.noteSaveBtn.addEventListener('click', function () {
+        if (!activeNoteCtx) return;
+        saveVerseNote(activeNoteCtx.bookNo, activeNoteCtx.chap, activeNoteCtx.sec);
+        closeVerseNoteModal();
+      });
+    }
+
+    if (el.noteDeleteBtn) {
+      el.noteDeleteBtn.addEventListener('click', function () {
+        if (!activeNoteCtx) return;
+        deleteVerseNote(activeNoteCtx.bookNo, activeNoteCtx.chap, activeNoteCtx.sec);
+        closeVerseNoteModal();
+      });
+    }
+  }
+
+  function openVerseNoteModal(bNo, chap, sec) {
+    activeNoteCtx = { bookNo: bNo, chap: chap, sec: sec };
+    var bMeta = state.byNo[bNo];
+    var data = state.cache[bNo];
+    var chapter = data ? data.ch.find(function (c) { return c.c === chap; }) : null;
+    var verse = chapter ? chapter.v.find(function (v) { return v.s === sec; }) : null;
+    var vText = (verse && verse.t && verse.t.zh_unv) || '';
+
+    if (el.noteModalTitle) {
+      el.noteModalTitle.textContent = (bMeta ? bMeta.zh : '') + ' ' + chap + ':' + sec + ' 靈修筆記';
+    }
+    if (el.noteModalVerseText) {
+      el.noteModalVerseText.textContent = vText ? ('「' + vText + '」') : '';
+    }
+
+    var key = bNo + ':' + chap + ':' + sec;
+    var bm = bookmarks[key];
+    if (el.noteInput) el.noteInput.value = (bm && bm.note) ? bm.note : '';
+    if (el.noteTagsInput) el.noteTagsInput.value = (bm && bm.tags) ? bm.tags.join(' ') : '';
+    if (el.noteDeleteBtn) el.noteDeleteBtn.hidden = !(bm && (bm.note || (bm.tags && bm.tags.length)));
+
+    if (el.verseNoteModal) el.verseNoteModal.hidden = false;
+    if (el.noteInput) el.noteInput.focus();
+  }
+
+  function closeVerseNoteModal() {
+    if (el.verseNoteModal) el.verseNoteModal.hidden = true;
+    activeNoteCtx = null;
+  }
+
+  function saveVerseNote(bNo, chap, sec) {
+    var bMeta = state.byNo[bNo];
+    var key = bNo + ':' + chap + ':' + sec;
+    var noteVal = (el.noteInput ? el.noteInput.value.trim() : '');
+    var tagsVal = (el.noteTagsInput ? el.noteTagsInput.value.trim() : '');
+    var tagList = tagsVal ? tagsVal.split(/\s+/).filter(Boolean) : [];
+
+    var data = state.cache[bNo];
+    var ch = data ? data.ch.find(function (c) { return c.c === chap; }) : null;
+    var v = ch ? ch.v.find(function (item) { return item.s === sec; }) : null;
+    var text = (v && v.t && v.t.zh_unv) || '';
+
+    var now = new Date();
+    var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+    var dateStr = (now.getMonth() + 1) + '/' + pad(now.getDate()) + ' ' + now.getHours() + ':' + pad(now.getMinutes());
+
+    bookmarks[key] = {
+      bookNo: bNo,
+      chap: chap,
+      sec: sec,
+      bookZh: bMeta ? bMeta.zh : '',
+      text: text,
+      time: dateStr,
+      note: noteVal,
+      tags: tagList
+    };
+
+    saveUserAsset('biblia_bookmarks', bookmarks);
+    showToast('已儲存靈修筆記 ✏️');
+    render();
+    if (el.studyCenterModal && !el.studyCenterModal.hidden) renderStudyCenter();
+  }
+
+  function deleteVerseNote(bNo, chap, sec) {
+    var key = bNo + ':' + chap + ':' + sec;
+    if (bookmarks[key]) {
+      bookmarks[key].note = '';
+      bookmarks[key].tags = [];
+      saveUserAsset('biblia_bookmarks', bookmarks);
+      showToast('已刪除筆記內容');
+      render();
+      if (el.studyCenterModal && !el.studyCenterModal.hidden) renderStudyCenter();
+    }
   }
 
   function setVerseHighlight(bNo, chap, sec, color) {
@@ -1098,6 +1280,15 @@ var BIBLIA = (function () {
     utter.rate = audioState.rate;
     utter.lang = audioState.lang;
 
+    // 嘗試選擇優質語音
+    if (window.speechSynthesis && window.speechSynthesis.getVoices) {
+      var voices = window.speechSynthesis.getVoices();
+      var matchingVoice = voices.find(function (v) {
+        return v.lang && v.lang.replace('_', '-').toLowerCase().startsWith(audioState.lang.toLowerCase().slice(0, 2));
+      });
+      if (matchingVoice) utter.voice = matchingVoice;
+    }
+
     utter.onend = function () {
       if (!audioState.isPlaying || audioState.isPaused) return;
       if (audioState.sec < audioState.totalSecs) {
@@ -1114,7 +1305,39 @@ var BIBLIA = (function () {
     };
 
     audioState.currentUtterance = utter;
+    updateMediaSession(bNo, chap, sec);
     audioState.synth.speak(utter);
+  }
+
+  function updateMediaSession(bNo, chap, sec) {
+    if (!('mediaSession' in navigator)) return;
+    var bMeta = state.byNo[bNo];
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: (bMeta ? bMeta.zh : '') + ' 第 ' + chap + ' 章 ' + sec + ' 節',
+        artist: 'Biblia 多語逐字對照聖經',
+        album: (bMeta ? bMeta.en : 'Bible') + ' ' + chap,
+        artwork: [
+          { src: 'icons/icon.svg', sizes: '512x512', type: 'image/svg+xml' }
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('play', function () {
+        if (audioState.isPaused) toggleAudioPlayPause();
+      });
+      navigator.mediaSession.setActionHandler('pause', function () {
+        if (audioState.isPlaying && !audioState.isPaused) toggleAudioPlayPause();
+      });
+      navigator.mediaSession.setActionHandler('previoustrack', function () {
+        stepAudioVerse(-1);
+      });
+      navigator.mediaSession.setActionHandler('nexttrack', function () {
+        stepAudioVerse(1);
+      });
+      navigator.mediaSession.setActionHandler('stop', function () {
+        stopAudioTTS();
+      });
+    } catch (e) {}
   }
 
   function toggleAudioPlayPause() {
@@ -1127,10 +1350,12 @@ var BIBLIA = (function () {
       audioState.synth.resume();
       audioState.isPaused = false;
       if (el.audioToggleBtn) el.audioToggleBtn.textContent = '⏸';
+      if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
     } else {
       audioState.synth.pause();
       audioState.isPaused = true;
       if (el.audioToggleBtn) el.audioToggleBtn.textContent = '▶';
+      if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
     }
   }
 
@@ -1149,6 +1374,7 @@ var BIBLIA = (function () {
     audioState.isPaused = false;
     if (audioState.synth) audioState.synth.cancel();
     if (el.audioControlBar) el.audioControlBar.hidden = true;
+    if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'none';
     document.querySelectorAll('.audio-reading-active').forEach(function (n) {
       n.classList.remove('audio-reading-active');
     });
@@ -1158,8 +1384,11 @@ var BIBLIA = (function () {
   var studyCenterTab = 'history';
   var hlFilterColor = 'all';
 
+  var studyBookmarkQuery = '';
+  var studySelectedTag = 'all';
+
   function buildStudyCenterUI() {
-    if (el.readerStudyBtn) el.readerStudyBtn.addEventListener('click', openStudyCenter);
+    if (el.readerStudyBtn) el.readerStudyBtn.addEventListener('click', function () { openStudyCenter(); });
     if (el.studyCloseBtn) el.studyCloseBtn.addEventListener('click', closeStudyCenter);
     if (el.studyOverlay) el.studyOverlay.addEventListener('click', closeStudyCenter);
 
@@ -1169,6 +1398,13 @@ var BIBLIA = (function () {
           studyCenterTab = btn.getAttribute('data-studytab');
           renderStudyCenter();
         });
+      });
+    }
+
+    if (el.studyBookmarkSearch) {
+      el.studyBookmarkSearch.addEventListener('input', function () {
+        studyBookmarkQuery = (el.studyBookmarkSearch.value || '').trim().toLowerCase();
+        renderStudyBookmarks();
       });
     }
 
@@ -1194,7 +1430,7 @@ var BIBLIA = (function () {
     if (el.exportBackupBtn) {
       el.exportBackupBtn.addEventListener('click', function () {
         var backupData = {
-          version: 'Biblia_Backup_v3',
+          version: 'Biblia_Backup_v4',
           exportedAt: new Date().toISOString(),
           bookmarks: bookmarks,
           highlights: highlights,
@@ -1302,17 +1538,77 @@ var BIBLIA = (function () {
 
   function renderStudyBookmarks() {
     if (!el.studyBookmarksList) return;
-    var keys = Object.keys(bookmarks);
-    if (el.bookmarksCountText) el.bookmarksCountText.textContent = '共 ' + keys.length + ' 條書籤收藏';
+    var allKeys = Object.keys(bookmarks);
 
-    if (!keys.length) {
-      el.studyBookmarksList.innerHTML = '<p class="placeholder">尚無書籤收藏。點擊經文節號即可將感動經文加入書籤！</p>';
+    // 收集所有標籤
+    var tagCounts = {};
+    allKeys.forEach(function (k) {
+      var bm = bookmarks[k];
+      if (bm && bm.tags && Array.isArray(bm.tags)) {
+        bm.tags.forEach(function (t) {
+          tagCounts[t] = (tagCounts[t] || 0) + 1;
+        });
+      }
+    });
+
+    // 渲染標籤篩選列
+    if (el.studyTagFilterRow) {
+      var tagKeys = Object.keys(tagCounts);
+      if (tagKeys.length > 0) {
+        var pillsHtml = '<button type="button" class="study-tag-chip' + (studySelectedTag === 'all' ? ' active' : '') + '" data-tag="all">全部 (' + allKeys.length + ')</button>';
+        tagKeys.forEach(function (t) {
+          pillsHtml += '<button type="button" class="study-tag-chip' + (studySelectedTag === t ? ' active' : '') + '" data-tag="' + escapeHtml(t) + '">' + escapeHtml(t) + ' (' + tagCounts[t] + ')</button>';
+        });
+        el.studyTagFilterRow.innerHTML = pillsHtml;
+        el.studyTagFilterRow.querySelectorAll('.study-tag-chip').forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            studySelectedTag = chip.getAttribute('data-tag');
+            renderStudyBookmarks();
+          });
+        });
+      } else {
+        el.studyTagFilterRow.innerHTML = '';
+      }
+    }
+
+    // 依關鍵字與標籤過濾
+    var filteredKeys = allKeys.filter(function (k) {
+      var bm = bookmarks[k];
+      if (!bm) return false;
+      if (studySelectedTag !== 'all') {
+        if (!bm.tags || bm.tags.indexOf(studySelectedTag) === -1) return false;
+      }
+      if (studyBookmarkQuery) {
+        var matchRef = (bm.bookZh + ' ' + bm.chap + ':' + bm.sec).toLowerCase().indexOf(studyBookmarkQuery) !== -1;
+        var matchText = (bm.text || '').toLowerCase().indexOf(studyBookmarkQuery) !== -1;
+        var matchNote = (bm.note || '').toLowerCase().indexOf(studyBookmarkQuery) !== -1;
+        var matchTag = (bm.tags || []).some(function (t) { return t.toLowerCase().indexOf(studyBookmarkQuery) !== -1; });
+        return matchRef || matchText || matchNote || matchTag;
+      }
+      return true;
+    });
+
+    if (el.bookmarksCountText) {
+      el.bookmarksCountText.textContent = '共 ' + filteredKeys.length + ' 條書籤' + (allKeys.length !== filteredKeys.length ? '（篩選中）' : '');
+    }
+
+    if (!filteredKeys.length) {
+      el.studyBookmarksList.innerHTML = '<p class="placeholder">' + (allKeys.length ? '查無相符之書籤筆記' : '尚無書籤收藏。點擊經文節號即可將感動經文加入書籤！') + '</p>';
       return;
     }
 
     var htmlStr = '';
-    keys.forEach(function (k) {
+    filteredKeys.forEach(function (k) {
       var bm = bookmarks[k];
+      var tagsHtml = '';
+      if (bm.tags && bm.tags.length) {
+        tagsHtml = '<div class="study-card-tags">';
+        bm.tags.forEach(function (t) {
+          tagsHtml += '<span class="study-tag-pill">' + escapeHtml(t) + '</span>';
+        });
+        tagsHtml += '</div>';
+      }
+
       htmlStr += '<div class="study-item-card">' +
         '<div class="study-item-top">' +
           '<span class="study-item-ref" data-bookno="' + bm.bookNo + '" data-chap="' + bm.chap + '" data-sec="' + bm.sec + '">' +
@@ -1321,8 +1617,9 @@ var BIBLIA = (function () {
         '</div>' +
         '<div class="study-item-text">' + escapeHtml(bm.text || '') + '</div>' +
         (bm.note ? ('<div class="study-note-box">📝 <strong>筆記：</strong>' + escapeHtml(bm.note) + '</div>') : '') +
+        tagsHtml +
         '<div class="study-item-actions">' +
-          '<button type="button" class="btn btn-sm btn-ghost edit-note-btn" data-key="' + k + '">📝 編輯筆記</button>' +
+          '<button type="button" class="btn btn-sm btn-ghost edit-note-btn" data-key="' + k + '">✏️ 編輯筆記/標籤</button>' +
           '<button type="button" class="btn btn-sm btn-ghost del-bm-btn" data-key="' + k + '">✕ 刪除</button>' +
         '</div></div>';
     });
@@ -1353,12 +1650,8 @@ var BIBLIA = (function () {
       btn.addEventListener('click', function () {
         var k = btn.getAttribute('data-key');
         var bm = bookmarks[k];
-        var newNote = prompt('輸入此節經文的研經靈修筆記：', bm ? (bm.note || '') : '');
-        if (newNote !== null) {
-          bookmarks[k].note = newNote.trim();
-          saveUserAsset('biblia_bookmarks', bookmarks);
-          renderStudyBookmarks();
-          showToast('筆記已儲存 ✓');
+        if (bm) {
+          openVerseNoteModal(bm.bookNo, bm.chap, bm.sec);
         }
       });
     });
@@ -1935,6 +2228,49 @@ var BIBLIA = (function () {
     });
   }
 
+  function computeReadingStreaks() {
+    var allDays = {};
+    try {
+      var prog = planProgress || {};
+      Object.keys(prog).forEach(function (pk) {
+        if (prog[pk] && typeof prog[pk] === 'object') {
+          Object.keys(prog[pk]).forEach(function (k) { if (prog[pk][k]) allDays[k] = true; });
+        }
+      });
+    } catch (e) {}
+
+    (readHistory || []).forEach(function (h) {
+      if (h.time) {
+        var parts = h.time.split(' ')[0];
+        if (parts) allDays['2026/' + parts] = true;
+      }
+    });
+
+    var today = new Date();
+    var streak = 0;
+    var checkDate = new Date(today);
+
+    for (var i = 0; i < 365; i++) {
+      var y = checkDate.getFullYear();
+      var m = checkDate.getMonth() + 1;
+      var d = checkDate.getDate();
+      var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+      var kIso = y + '-' + pad(m) + '-' + pad(d);
+
+      var isHit = Object.keys(allDays).some(function (k) {
+        return k.indexOf(kIso) !== -1 || k.indexOf(m + '/' + d) !== -1 || k.indexOf(pad(m) + '/' + pad(d)) !== -1;
+      });
+
+      if (isHit || (i === 0 && streak === 0)) {
+        if (isHit) streak++;
+        checkDate.setDate(checkDate.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
   function updatePlanStats() {
     var plan = currentPlan();
     if (!plan) return;
@@ -1948,6 +2284,12 @@ var BIBLIA = (function () {
     if (el.planStatsCount) el.planStatsCount.textContent = '已完成 ' + done + ' / ' + total + ' 天';
     if (el.planProgressFill) el.planProgressFill.style.width = percent + '%';
     if (el.planProgressBar) el.planProgressBar.setAttribute('aria-valuenow', percent);
+
+    if (el.planStreakBadge) {
+      var streaks = computeReadingStreaks();
+      el.planStreakBadge.textContent = '🔥 連續 ' + streaks + ' 天';
+      el.planStreakBadge.title = '持續讀經 ' + streaks + ' 天！堅持不懈，生命豐盛！';
+    }
 
     var todayIt = todayItemOf(plan);
     if (el.planMarkTodayBtn) {
@@ -3080,6 +3422,26 @@ var BIBLIA = (function () {
     go(nextMeta.no, dir > 0 ? 1 : nextMeta.nch);
   }
 
+  function schedulePreloadAdjacent(no, chap) {
+    var meta = state.byNo[no];
+    if (!meta) return;
+
+    function doPreload() {
+      if (chap >= meta.nch - 1 && state.byNo[no + 1] && !state.cache[no + 1]) {
+        loadBook(no + 1, function () {});
+      }
+      if (chap <= 2 && state.byNo[no - 1] && !state.cache[no - 1]) {
+        loadBook(no - 1, function () {});
+      }
+    }
+
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(doPreload, { timeout: 2500 });
+    } else {
+      setTimeout(doPreload, 800);
+    }
+  }
+
   function go(no, chap, cb) {
     state.bookNo = no;
     state.chap = chap;
@@ -3097,7 +3459,12 @@ var BIBLIA = (function () {
     }
     updateHash();
 
-    if (state.cache[no]) { render(); if (cb) cb(); return; }
+    if (state.cache[no]) {
+      render();
+      schedulePreloadAdjacent(no, chap);
+      if (cb) cb();
+      return;
+    }
     el.reader.innerHTML = '<p class="placeholder">載入 ' + state.byNo[no].zh + ' …</p>';
     loadBook(no, function (data) {
       if (!data) {
@@ -3106,6 +3473,7 @@ var BIBLIA = (function () {
         return;
       }
       render();
+      schedulePreloadAdjacent(no, chap);
       if (cb) cb();
     });
   }
