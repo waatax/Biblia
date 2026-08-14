@@ -1,0 +1,18 @@
+{
+  "name": "Biblia — 多語逐字對照聖經",
+  "short_name": "Biblia",
+  "description": "離線可用的多語逐字對照聖經閱讀器：希伯來文 WLC、希臘文 Westcott-Hort、和合本、KJV 等並排，支援 Strong number 逐字對照與研經工具。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fbfaf7",
+  "theme_color": "#8a5a2b",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

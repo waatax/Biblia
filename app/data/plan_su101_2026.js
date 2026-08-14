@@ -1,9 +1,9 @@
 /* Biblia — 每日研經釋義 2026 年讀經進度（國際讀經會台灣總會 su101.net）
  *
  * 由 scripts/fetch_su101_plan.py 產生，請勿手動編輯。
- * 涵蓋範圍：2026-01-01 ~ 2026-09-30（共 273 天：貼文 224 天、官方季表 49 天）
+ * 涵蓋範圍：2026-01-01 ~ 2026-09-30（共 273 天：貼文 227 天、官方季表 46 天）
  * 站方一天發佈一天的進度；未來日期取自 scripts/data/su101_plan_2026.tsv。
- * 抓取日期：2026-08-12
+ * 抓取日期：2026-08-14
  */
 window.BIBLIA_PLAN_SU101_2026 = {
   "id": "su101_2026",
@@ -67,10 +67,10 @@ window.BIBLIA_PLAN_SU101_2026 = {
     40
   ],
   "coverage": "2026-01-01 ~ 2026-09-30",
-  "postDays": 224,
-  "planDays": 49,
-  "coverageNote": "其中 224 天來自站方每日貼文，49 天來自官方整季經文進度表；站方逐日發佈，重跑 scripts/fetch_su101_plan.py 可補上新進度。",
-  "fetchedAt": "2026-08-12",
+  "postDays": 227,
+  "planDays": 46,
+  "coverageNote": "其中 227 天來自站方每日貼文，46 天來自官方整季經文進度表；站方逐日發佈，重跑 scripts/fetch_su101_plan.py 可補上新進度。",
+  "fetchedAt": "2026-08-14",
   "items": [
     {"id":"su2026-01-01","isoDate":"2026-01-01","date":"1/1","month":1,"day":1,"week":1,"wd":"週四","rawText":"馬太福音 1:1-17","passages":[{"abbr":"太","bookNo":40,"bookZh":"馬太福音","startChap":1,"startVerse":1,"endChap":1,"endVerse":17,"label":"太 1:1-17","fullLabel":"馬太福音 1章1-17節"}],"link":"https://www.su101.net/archives/104026","src":"post"},
     {"id":"su2026-01-02","isoDate":"2026-01-02","date":"1/2","month":1,"day":2,"week":1,"wd":"週五","rawText":"馬太福音 1:18-25","passages":[{"abbr":"太","bookNo":40,"bookZh":"馬太福音","startChap":1,"startVerse":18,"endChap":1,"endVerse":25,"label":"太 1:18-25","fullLabel":"馬太福音 1章18-25節"}],"link":"https://www.su101.net/archives/104095","src":"post"},
@@ -296,9 +296,9 @@ window.BIBLIA_PLAN_SU101_2026 = {
     {"id":"su2026-08-10","isoDate":"2026-08-10","date":"8/10","month":8,"day":10,"week":33,"wd":"週一","rawText":"撒迦利亞書 5:1-11","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":5,"startVerse":1,"endChap":5,"endVerse":11,"label":"亞 5:1-11","fullLabel":"撒迦利亞書 5章1-11節"}],"link":"https://www.su101.net/archives/109830","src":"post"},
     {"id":"su2026-08-11","isoDate":"2026-08-11","date":"8/11","month":8,"day":11,"week":33,"wd":"週二","rawText":"撒迦利亞書 6:1-15","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":6,"startVerse":1,"endChap":6,"endVerse":15,"label":"亞 6:1-15","fullLabel":"撒迦利亞書 6章1-15節"}],"link":"https://www.su101.net/archives/109846","src":"post"},
     {"id":"su2026-08-12","isoDate":"2026-08-12","date":"8/12","month":8,"day":12,"week":33,"wd":"週三","rawText":"撒迦利亞書 7:1-14","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":7,"startVerse":1,"endChap":7,"endVerse":14,"label":"亞 7:1-14","fullLabel":"撒迦利亞書 7章1-14節"}],"link":"https://www.su101.net/archives/109856","src":"post"},
-    {"id":"su2026-08-13","isoDate":"2026-08-13","date":"8/13","month":8,"day":13,"week":33,"wd":"週四","rawText":"亞 8:1-13","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":8,"startVerse":1,"endChap":8,"endVerse":13,"label":"亞 8:1-13","fullLabel":"撒迦利亞書 8章1-13節"}],"link":"https://togc.org.tw/wp-content/uploads/2026/06/2026-3-%E6%AF%8F%E6%97%A5%E7%A0%94%E7%B6%93%E9%87%8B%E7%BE%A9%E7%B6%93%E6%96%87%E9%80%B2%E5%BA%A6.pdf","src":"plan"},
-    {"id":"su2026-08-14","isoDate":"2026-08-14","date":"8/14","month":8,"day":14,"week":33,"wd":"週五","rawText":"亞 8:14-23","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":8,"startVerse":14,"endChap":8,"endVerse":23,"label":"亞 8:14-23","fullLabel":"撒迦利亞書 8章14-23節"}],"link":"https://togc.org.tw/wp-content/uploads/2026/06/2026-3-%E6%AF%8F%E6%97%A5%E7%A0%94%E7%B6%93%E9%87%8B%E7%BE%A9%E7%B6%93%E6%96%87%E9%80%B2%E5%BA%A6.pdf","src":"plan"},
-    {"id":"su2026-08-15","isoDate":"2026-08-15","date":"8/15","month":8,"day":15,"week":33,"wd":"週六","rawText":"亞 9:1-8","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":9,"startVerse":1,"endChap":9,"endVerse":8,"label":"亞 9:1-8","fullLabel":"撒迦利亞書 9章1-8節"}],"link":"https://togc.org.tw/wp-content/uploads/2026/06/2026-3-%E6%AF%8F%E6%97%A5%E7%A0%94%E7%B6%93%E9%87%8B%E7%BE%A9%E7%B6%93%E6%96%87%E9%80%B2%E5%BA%A6.pdf","src":"plan"},
+    {"id":"su2026-08-13","isoDate":"2026-08-13","date":"8/13","month":8,"day":13,"week":33,"wd":"週四","rawText":"撒迦利亞書 8:1-13","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":8,"startVerse":1,"endChap":8,"endVerse":13,"label":"亞 8:1-13","fullLabel":"撒迦利亞書 8章1-13節"}],"link":"https://www.su101.net/archives/109893","src":"post"},
+    {"id":"su2026-08-14","isoDate":"2026-08-14","date":"8/14","month":8,"day":14,"week":33,"wd":"週五","rawText":"撒迦利亞書 8:14-23","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":8,"startVerse":14,"endChap":8,"endVerse":23,"label":"亞 8:14-23","fullLabel":"撒迦利亞書 8章14-23節"}],"link":"https://www.su101.net/archives/109937","src":"post"},
+    {"id":"su2026-08-15","isoDate":"2026-08-15","date":"8/15","month":8,"day":15,"week":33,"wd":"週六","rawText":"撒迦利亞書 9:1-8","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":9,"startVerse":1,"endChap":9,"endVerse":8,"label":"亞 9:1-8","fullLabel":"撒迦利亞書 9章1-8節"}],"link":"https://www.su101.net/archives/109971","src":"post"},
     {"id":"su2026-08-16","isoDate":"2026-08-16","date":"8/16","month":8,"day":16,"week":33,"wd":"週日","rawText":"亞 9:9-17","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":9,"startVerse":9,"endChap":9,"endVerse":17,"label":"亞 9:9-17","fullLabel":"撒迦利亞書 9章9-17節"}],"link":"https://togc.org.tw/wp-content/uploads/2026/06/2026-3-%E6%AF%8F%E6%97%A5%E7%A0%94%E7%B6%93%E9%87%8B%E7%BE%A9%E7%B6%93%E6%96%87%E9%80%B2%E5%BA%A6.pdf","src":"plan"},
     {"id":"su2026-08-17","isoDate":"2026-08-17","date":"8/17","month":8,"day":17,"week":34,"wd":"週一","rawText":"亞 10:1-12","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":10,"startVerse":1,"endChap":10,"endVerse":12,"label":"亞 10:1-12","fullLabel":"撒迦利亞書 10章1-12節"}],"link":"https://togc.org.tw/wp-content/uploads/2026/06/2026-3-%E6%AF%8F%E6%97%A5%E7%A0%94%E7%B6%93%E9%87%8B%E7%BE%A9%E7%B6%93%E6%96%87%E9%80%B2%E5%BA%A6.pdf","src":"plan"},
     {"id":"su2026-08-18","isoDate":"2026-08-18","date":"8/18","month":8,"day":18,"week":34,"wd":"週二","rawText":"亞 11:1-17","passages":[{"abbr":"亞","bookNo":38,"bookZh":"撒迦利亞書","startChap":11,"startVerse":1,"endChap":11,"endVerse":17,"label":"亞 11:1-17","fullLabel":"撒迦利亞書 11章1-17節"}],"link":"https://togc.org.tw/wp-content/uploads/2026/06/2026-3-%E6%AF%8F%E6%97%A5%E7%A0%94%E7%B6%93%E9%87%8B%E7%BE%A9%E7%B6%93%E6%96%87%E9%80%B2%E5%BA%A6.pdf","src":"plan"},
