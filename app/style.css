@@ -1858,26 +1858,119 @@ body.appearance-open .pager-aa-btn {
 }
 
 .plan-card-body { display: flex; flex-direction: column; gap: 8px; }
-.plan-card-ref { font-size: .8125rem; color: var(--fg-dim); font-weight: 600; }
+.plan-card-ref {
+  font-size: .875rem;
+  color: var(--fg);
+  font-weight: 700;
+  transition: color var(--t-fast) ease;
+}
+.plan-card-ref:hover {
+  color: var(--accent);
+}
 
-.passage-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.plan-passages, .passage-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 2px;
+}
 
-.passage-chip {
+.plan-pass-btn, .passage-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: var(--bg);
   color: var(--accent);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   padding: 6px 13px;
+  font-family: inherit;
   font-size: .8125rem;
-  font-weight: 800;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
   transition: background var(--t-fast) ease, color var(--t-fast) ease,
-              border-color var(--t-fast) ease, transform var(--t-fast) ease;
+              border-color var(--t-fast) ease, transform var(--t-fast) ease, box-shadow var(--t-fast) ease;
 }
-.passage-chip:hover {
+.plan-pass-btn:hover, .passage-chip:hover {
   background: var(--accent);
   color: var(--accent-ink);
   border-color: var(--accent);
   transform: translateY(-1px);
+  box-shadow: var(--sh-1);
+}
+.plan-pass-btn:active, .passage-chip:active {
+  transform: translateY(0);
+}
+.plan-pass-icon {
+  font-size: .85rem;
+  line-height: 1;
+}
+.plan-pass-label {
+  letter-spacing: -.01em;
+}
+
+.start-plan-subcard {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 13px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+.start-plan-subcard:hover {
+  border-color: var(--accent);
+}
+.start-plan-subtop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.start-plan-subname {
+  font-size: .875rem;
+  font-weight: 800;
+  color: var(--fg);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.start-plan-chk {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--fg-dim);
+  cursor: pointer;
+  user-select: none;
+}
+.start-plan-chk input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+.start-plan-subbody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.start-plan-rawtext {
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--fg);
+  transition: color var(--t-fast) ease;
+}
+.start-plan-rawtext:hover {
+  color: var(--accent);
+}
+.start-plan-nodata {
+  font-size: .8125rem;
+  color: var(--fg-mute);
+  font-style: italic;
 }
 
 .plan-card-link {
@@ -3423,12 +3516,14 @@ html.dark .verse.hl-pink, html.oled .verse.hl-pink {
   font-size: 1.15rem;
 }
 
-/* ===================== 19. 語音朗讀播放條 (Audio TTS Control Bar) ===================== */
+/* ===================== 19. 有聲聖經播放控制器 (Bible Audio Player Bar) ===================== */
 .audio-control-bar {
   position: sticky;
   top: var(--bar-h);
   z-index: 100;
   background: var(--bar);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
   box-shadow: var(--sh-2);
   padding: 8px var(--pad-x);
@@ -3453,19 +3548,49 @@ html.dark .verse.hl-pink, html.oled .verse.hl-pink {
 .audio-info {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  min-width: 140px;
+}
+
+.audio-titles {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.audio-verse-label {
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--accent);
+  white-space: nowrap;
+}
+
+.audio-mode-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--fg-dim);
+  background: var(--bg-soft);
+  padding: 1px 6px;
+  border-radius: var(--r-sm);
+  display: inline-block;
+  margin-top: 2px;
+  width: fit-content;
+  border: 1px solid var(--line-soft);
 }
 
 .audio-status-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--ok);
+  background: var(--fg-muted);
   display: inline-block;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.audio-status-dot.playing {
+  background: var(--ok);
   box-shadow: 0 0 0 0 rgba(47, 125, 81, 0.7);
   animation: pulse 1.6s infinite;
 }
@@ -3479,42 +3604,159 @@ html.dark .verse.hl-pink, html.oled .verse.hl-pink {
 .audio-controls {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .audio-play-toggle {
   background: var(--accent);
-  color: var(--accent-ink);
+  color: var(--accent-ink) !important;
   border-color: var(--accent);
   font-weight: 700;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
+  font-size: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--sh-1);
 }
 .audio-play-toggle:hover {
   background: var(--accent-hi);
-  color: var(--accent-ink);
+  color: var(--accent-ink) !important;
+  transform: scale(1.05);
+}
+
+.audio-skip-btn {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  padding: 4px 6px;
+  min-width: 32px;
+  height: 32px;
+}
+
+/* 進度條容器 (Seekbar) */
+.audio-track-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 180px;
+  max-width: 320px;
+}
+
+.audio-time {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  color: var(--fg-dim);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  text-align: center;
+}
+
+.audio-seek-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 20px;
+}
+
+.audio-seek-bar {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+  transition: background var(--t-fast);
+}
+
+.audio-seek-bar:hover {
+  background: var(--line-soft);
+}
+
+.audio-seek-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bar);
+  box-shadow: var(--sh-1);
+  cursor: pointer;
+  transition: transform var(--t-fast);
+}
+
+.audio-seek-bar::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+.audio-seek-bar::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bar);
+  box-shadow: var(--sh-1);
+  cursor: pointer;
+}
+
+.audio-seek-progress {
+  display: none;
 }
 
 .audio-settings {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-size: 0.82rem;
+  flex-wrap: wrap;
 }
 
-.audio-speed-ctl, .audio-lang-ctl {
-  display: flex;
+.audio-setting-item {
+  display: inline-flex;
   align-items: center;
   gap: 4px;
   color: var(--fg-dim);
+  background: var(--bg-soft);
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line-soft);
 }
 
-.audio-speed-ctl select, .audio-lang-ctl select {
+.audio-ctl-icon {
+  font-size: 0.85rem;
+}
+
+.audio-setting-item select {
   font-size: 0.82rem;
-  padding: 3px 6px;
-  height: 28px;
+  padding: 2px 4px;
+  height: 26px;
   min-height: auto;
+  border: none;
+  background: transparent;
+  color: var(--fg);
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+}
+
+.audio-autonext-label {
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.audio-autonext-label input[type="checkbox"] {
+  accent-color: var(--accent);
+  cursor: pointer;
 }
 
 .audio-close-btn {
@@ -3526,6 +3768,7 @@ html.dark .verse.hl-pink, html.oled .verse.hl-pink {
   cursor: pointer;
   padding: 2px 6px;
   border-radius: var(--r-sm);
+  transition: all var(--t-fast);
 }
 .audio-close-btn:hover { color: var(--fg); background: var(--bg-soft); }
 
@@ -3533,6 +3776,182 @@ html.dark .verse.hl-pink, html.oled .verse.hl-pink {
   outline: 2px solid var(--accent);
   background-color: var(--accent-soft) !important;
   border-radius: var(--r-sm);
+}
+
+/* ===================== 有聲聖經資源庫 (Audio Resource Hub Panel) ===================== */
+.audio-hub-container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 10px 0 40px;
+}
+
+.audio-hub-hero {
+  background: linear-gradient(135deg, var(--bg-soft) 0%, var(--bg-alt) 100%);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.audio-hub-hero-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.audio-hub-hero-desc {
+  font-size: 0.95rem;
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+
+.audio-hub-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.audio-hub-feature-card {
+  background: var(--bar);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--sh-1);
+}
+
+.audio-hub-feature-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.audio-hub-feature-body {
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+}
+
+.audio-hub-table-card {
+  background: var(--bar);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  box-shadow: var(--sh-1);
+  margin-bottom: 24px;
+}
+
+.audio-hub-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.audio-hub-filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.audio-hub-pill {
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-soft);
+  color: var(--fg-dim);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.audio-hub-pill.active, .audio-hub-pill:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.audio-book-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.audio-book-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform var(--t-fast), border-color var(--t-fast);
+}
+
+.audio-book-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--sh-1);
+}
+
+.audio-book-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.audio-book-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.audio-book-chaps {
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+
+.audio-book-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.audio-book-action-btn {
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  border-radius: var(--r-sm);
+  background: var(--bg-soft);
+  color: var(--fg);
+  border: 1px solid var(--line-soft);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--t-fast);
+}
+
+.audio-book-action-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* ===================== 20. 靈修研經與書籤中心 (Study Center Drawer / Modal) ===================== */

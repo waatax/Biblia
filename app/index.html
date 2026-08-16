@@ -157,6 +157,7 @@
             <li><span class="ref-feat-icon">📑</span> <strong>每日研經釋義參考庫：</strong>逐季匯整各書卷註釋、影音與結構圖</li>
             <li><span class="ref-feat-icon">📖</span> <strong>66 卷書簡介與大綱：</strong>全書背景、核心主題、鑰節與結構</li>
             <li><span class="ref-feat-icon">⏳</span> <strong>聖經歷史年代時間表：</strong>大歷史年表、先知分期與猶太曆法</li>
+            <li><span class="ref-feat-icon">🎧</span> <strong>全書卷有聲聖經庫：</strong>國語、粵語、英文 KJV 真人原聲與連續倍速播放</li>
           </ul>
         </div>
 
@@ -226,7 +227,7 @@
       </button>
 
       <!-- 語音朗讀按鈕 -->
-      <button id="audioPlayBtn" type="button" class="btn audio-nav-btn" title="語音朗讀經文 (Web Speech)">
+      <button id="audioPlayBtn" type="button" class="btn audio-nav-btn" title="有聲聖經朗讀與播放 (真人原聲 / AI 朗讀)">
         <span aria-hidden="true">🔊</span><span class="btn-text">朗讀</span>
       </button>
 
@@ -289,33 +290,80 @@
     </div>
   </header>
 
-  <!-- 浮動語音播放控制器 -->
-  <div id="audioControlBar" class="audio-control-bar" hidden role="region" aria-label="語音朗讀控制條">
+  <!-- 浮動有聲聖經播放控制器 (Bible Audio Player) -->
+  <div id="audioControlBar" class="audio-control-bar" hidden role="region" aria-label="有聲聖經播放控制條">
     <div class="audio-bar-inner">
+      <!-- 左側：書卷章節資訊與播放狀態 -->
       <div class="audio-info">
-        <span class="audio-status-dot"></span>
-        <span class="audio-verse-label" id="audioProgressLabel">創世記 1:1</span>
+        <span class="audio-status-dot" id="audioStatusDot" title="播放中"></span>
+        <div class="audio-titles">
+          <span class="audio-verse-label" id="audioProgressLabel">創世記 1 章</span>
+          <span class="audio-mode-badge" id="audioModeBadge">國語和合本</span>
+        </div>
       </div>
+
+      <!-- 中間：主播放控制鍵群 -->
       <div class="audio-controls">
-        <button id="audioPrevBtn" type="button" class="btn btn-icon audio-btn" title="上一節" aria-label="上一節">⏮</button>
+        <button id="audioPrevChapBtn" type="button" class="btn btn-icon audio-btn" title="上一章" aria-label="上一章">⏮</button>
+        <button id="audioRewind10Btn" type="button" class="btn btn-icon audio-btn audio-skip-btn" title="倒退 10 秒" aria-label="倒退 10 秒">↺10s</button>
         <button id="audioToggleBtn" type="button" class="btn btn-icon audio-play-toggle" title="播放/暫停 (空白鍵)" aria-label="播放/暫停">▶</button>
-        <button id="audioNextBtn" type="button" class="btn btn-icon audio-btn" title="下一節" aria-label="下一節">⏭</button>
-        <button id="audioStopBtn" type="button" class="btn btn-icon audio-btn" title="停止朗讀" aria-label="停止朗讀">⏹</button>
+        <button id="audioForward10Btn" type="button" class="btn btn-icon audio-btn audio-skip-btn" title="快進 10 秒" aria-label="快進 10 秒">10s↻</button>
+        <button id="audioNextChapBtn" type="button" class="btn btn-icon audio-btn" title="下一章" aria-label="下一章">⏭</button>
+        <button id="audioStopBtn" type="button" class="btn btn-icon audio-btn" title="停止播放" aria-label="停止播放">⏹</button>
       </div>
+
+      <!-- 進度與時間控制條 (Seekbar) -->
+      <div class="audio-track-box" id="audioTrackBox">
+        <span class="audio-time" id="audioCurrentTime">0:00</span>
+        <div class="audio-seek-wrapper">
+          <input type="range" id="audioSeekBar" class="audio-seek-bar" min="0" max="100" value="0" step="0.1" aria-label="播放進度">
+          <div class="audio-seek-progress" id="audioSeekProgress"></div>
+        </div>
+        <span class="audio-time audio-duration" id="audioDuration">0:00</span>
+      </div>
+
+      <!-- 右側：設定選單（版本/語音、倍速、自動連續播放、外部下載） -->
       <div class="audio-settings">
-        <label class="audio-speed-ctl">
-          <span>語速</span>
-          <select id="audioSpeedSelect" aria-label="語速調整">
-            <option value="0.75">0.75x</option>
-            <option value="1.0" selected>1.0x</option>
-            <option value="1.25">1.25x</option>
-            <option value="1.5">1.5x</option>
+        <!-- 朗讀版本選擇 -->
+        <label class="audio-setting-item audio-version-ctl" title="選擇有聲版本或語音">
+          <span class="audio-ctl-icon" aria-hidden="true">🎙️</span>
+          <select id="audioVersionSelect" aria-label="朗讀版本">
+            <option value="zh_unv" selected>國語和合本 (真人原聲)</option>
+            <option value="zh_yue">粵語和合本 (真人原聲)</option>
+            <option value="en_kjv">英文 KJV (真人原聲)</option>
+            <option value="es_spa">西班牙文 (真人原聲)</option>
+            <option value="fr_fra">法文 (真人原聲)</option>
+            <option value="ja_jpn">日本語 (真人原聲)</option>
+            <option value="ko_kor">한국어 (真人原聲)</option>
+            <option value="tts">AI 語音合成 (逐節跟讀)</option>
           </select>
         </label>
-        <label class="audio-lang-ctl">
-          <span>語言</span>
-          <select id="audioLangSelect" aria-label="朗讀語言"></select>
+
+        <!-- 倍速調整 -->
+        <label class="audio-setting-item audio-speed-ctl" title="調整播放速度">
+          <span class="audio-ctl-icon" aria-hidden="true">⚡</span>
+          <select id="audioSpeedSelect" aria-label="播放倍速">
+            <option value="0.75">0.75x</option>
+            <option value="1.0" selected>1.0x (正常)</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="1.75">1.75x</option>
+            <option value="2.0">2.0x (雙倍)</option>
+          </select>
         </label>
+
+        <!-- 自動接續下一章 -->
+        <label class="audio-setting-item audio-autonext-label" title="播完本章自動播下一章 (連續播放)">
+          <input type="checkbox" id="audioAutoNextCheck" checked>
+          <span class="autonext-text">自動接續</span>
+        </label>
+
+        <!-- 外部原始音檔與下載按鈕 -->
+        <a id="audioDownloadLink" class="btn btn-icon audio-btn" href="#" target="_blank" rel="noopener noreferrer" title="開啟或下載當前章節 MP3 音檔" aria-label="下載音檔">
+          📥
+        </a>
+
+        <!-- 關閉播放控制器按鈕 -->
         <button id="audioCloseBtn" type="button" class="audio-close-btn" title="關閉播放列" aria-label="關閉播放列">×</button>
       </div>
     </div>
@@ -781,12 +829,16 @@
       <button type="button" class="ref-tab-btn" data-reftab="timeline" role="tab" aria-selected="false">
         <span aria-hidden="true">⏳</span> 聖經歷史時間表與圖表
       </button>
+      <button type="button" class="ref-tab-btn" data-reftab="audio" role="tab" aria-selected="false">
+        <span aria-hidden="true">🎧</span> 有聲聖經資源庫
+      </button>
     </div>
 
     <!-- Tab Content Panels -->
     <div id="refPanelSu101" class="ref-panel active"></div>
     <div id="refPanelIntros" class="ref-panel" hidden></div>
     <div id="refPanelTimeline" class="ref-panel" hidden></div>
+    <div id="refPanelAudio" class="ref-panel" hidden></div>
   </main>
 </section>
 

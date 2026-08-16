@@ -283,7 +283,7 @@ var BIBLIA = (function () {
     buildVerseActionMenu();
     buildVerseNoteModal();
     buildCompareVerseModal();
-    buildAudioTTS();
+    buildAudioPlayer();
     buildStudyCenterUI();
     buildShortcutsGuide();
     buildReaderControls();
@@ -335,8 +335,12 @@ var BIBLIA = (function () {
       'studyBookmarksList', 'studyHighlightsList', 'bookmarksCountText', 'studyBookmarkSearch', 'studyTagFilterRow',
       'studyHlFilterPills', 'clearHistoryBtn', 'exportBackupBtn', 'importBackupInput', 'backupStatusMsg',
       'startStudyCenterBtn', 'readerStudyBtn',
-      'audioControlBar', 'audioProgressLabel', 'audioPrevBtn', 'audioToggleBtn',
-      'audioNextBtn', 'audioStopBtn', 'audioSpeedSelect', 'audioLangSelect', 'audioCloseBtn', 'audioPlayBtn',
+      'audioControlBar', 'audioStatusDot', 'audioProgressLabel', 'audioModeBadge',
+      'audioPrevChapBtn', 'audioRewind10Btn', 'audioToggleBtn', 'audioForward10Btn',
+      'audioNextChapBtn', 'audioStopBtn', 'audioCurrentTime', 'audioSeekBar',
+      'audioSeekProgress', 'audioDuration', 'audioVersionSelect', 'audioSpeedSelect',
+      'audioAutoNextCheck', 'audioDownloadLink', 'audioCloseBtn', 'audioPlayBtn',
+      'refPanelAudio',
       'shortcutsModal', 'shortcutsOverlay', 'shortcutsCloseBtn', 'shortcutsBtn',
       'toolsBtn', 'barTools', 'sizeVal', 'pager', 'pagerPrev', 'pagerNext', 'pagerLoc',
       'readerAaBtn', 'openAaModalBtn', 'pagerAaBtn', 'zenBtn', 'pagerZenBtn', 'readingProgressBar', 'readingProgressFill',
@@ -799,7 +803,7 @@ var BIBLIA = (function () {
         if (!activeVerseCtx) return;
         var sec = activeVerseCtx.sec;
         closeVerseActionMenu();
-        startAudioTTS(state.bookNo, state.chap, sec);
+        startAudio(state.bookNo, state.chap, sec);
       });
     }
 
@@ -1134,96 +1138,429 @@ var BIBLIA = (function () {
     if (el.compareVerseModal) el.compareVerseModal.hidden = true;
   }
 
-  /* ---------- Web Speech API 語音朗讀經文 (Audio TTS) ---------- */
+  /* ---------- 聖經有聲朗讀播放器 (Dual Engine: Real MP3 Streaming & Web Speech TTS) ---------- */
+  var AUDIO_SOURCES = {
+    'zh_unv': { id: 4, label: '國語和合本 (真人原聲)', lang: 'zh-TW', mode: 'mp3' },
+    'zh_yue': { id: 13, label: '粵語和合本 (真人原聲)', lang: 'zh-HK', mode: 'mp3' },
+    'en_kjv': { id: 1, label: '英文 KJV (真人原聲)', lang: 'en-US', mode: 'mp3' },
+    'es_spa': { id: 6, label: '西班牙文 (真人原聲)', lang: 'es-ES', mode: 'mp3' },
+    'fr_fra': { id: 7, label: '法文 (真人原聲)', lang: 'fr-FR', mode: 'mp3' },
+    'ja_jpn': { id: 12, label: '日本語 (真人原聲)', lang: 'ja-JP', mode: 'mp3' },
+    'ko_kor': { id: 11, label: '한국어 (真人原聲)', lang: 'ko-KR', mode: 'mp3' },
+    'tts':    { id: null, label: 'AI 語音合成 (逐節跟讀)', lang: 'zh-TW', mode: 'tts' }
+  };
+
   var audioState = {
     isPlaying: false,
     isPaused: false,
+    versionKey: 'zh_unv',
+    rate: 1.0,
+    autoNext: true,
     bookNo: 1,
     chap: 1,
     sec: 1,
     totalSecs: 1,
-    rate: 1.0,
-    lang: 'zh-TW',
+    audioEl: null,
     synth: window.speechSynthesis,
-    currentUtterance: null
+    currentUtterance: null,
+    isSeeking: false
   };
 
-  function buildAudioTTS() {
-    if (el.audioPlayBtn) el.audioPlayBtn.addEventListener('click', function () {
-      if (audioState.isPlaying) {
-        stopAudioTTS();
-      } else {
-        startAudioTTS(state.bookNo, state.chap, 1);
-      }
-    });
+  function getAudioUrl(versionKey, bookNo, chap) {
+    var src = AUDIO_SOURCES[versionKey] || AUDIO_SOURCES['zh_unv'];
+    if (!src.id) return null;
+    return 'https://www.wordproaudio.net/bibles/app/audio/' + src.id + '/' + bookNo + '/' + chap + '.mp3';
+  }
 
-    if (el.audioToggleBtn) el.audioToggleBtn.addEventListener('click', toggleAudioPlayPause);
-    if (el.audioStopBtn) el.audioStopBtn.addEventListener('click', stopAudioTTS);
-    if (el.audioCloseBtn) el.audioCloseBtn.addEventListener('click', stopAudioTTS);
+  function formatTime(sec) {
+    if (isNaN(sec) || sec === Infinity || sec < 0) return '0:00';
+    var s = Math.floor(sec);
+    var m = Math.floor(s / 60);
+    var remS = s % 60;
+    return m + ':' + (remS < 10 ? '0' : '') + remS;
+  }
 
-    if (el.audioNextBtn) el.audioNextBtn.addEventListener('click', function () { stepAudioVerse(1); });
-    if (el.audioPrevBtn) el.audioPrevBtn.addEventListener('click', function () { stepAudioVerse(-1); });
+  function buildAudioPlayer() {
+    if (!audioState.audioEl) {
+      audioState.audioEl = new Audio();
+      audioState.audioEl.preload = 'auto';
 
-    if (el.audioSpeedSelect) {
-      el.audioSpeedSelect.addEventListener('change', function () {
-        audioState.rate = parseFloat(el.audioSpeedSelect.value) || 1.0;
-        if (audioState.isPlaying && !audioState.isPaused) {
-          readCurrentVerseAudio();
+      audioState.audioEl.addEventListener('play', function () {
+        audioState.isPlaying = true;
+        audioState.isPaused = false;
+        updateAudioUIState();
+        updateMediaSession();
+      });
+
+      audioState.audioEl.addEventListener('pause', function () {
+        if (audioState.isPlaying) {
+          audioState.isPaused = true;
+          updateAudioUIState();
+          updateMediaSession();
+        }
+      });
+
+      audioState.audioEl.addEventListener('timeupdate', function () {
+        if (!audioState.audioEl) return;
+        var cur = audioState.audioEl.currentTime || 0;
+        var dur = audioState.audioEl.duration || 0;
+        if (el.audioCurrentTime) el.audioCurrentTime.textContent = formatTime(cur);
+        if (dur > 0 && !audioState.isSeeking && el.audioSeekBar) {
+          el.audioSeekBar.value = (cur / dur) * 100;
+        }
+      });
+
+      audioState.audioEl.addEventListener('loadedmetadata', function () {
+        if (!audioState.audioEl) return;
+        var dur = audioState.audioEl.duration || 0;
+        if (el.audioDuration) el.audioDuration.textContent = formatTime(dur);
+        audioState.audioEl.playbackRate = audioState.rate;
+      });
+
+      audioState.audioEl.addEventListener('ended', function () {
+        handleAudioEnded();
+      });
+
+      audioState.audioEl.addEventListener('error', function () {
+        if (audioState.isPlaying && audioState.versionKey !== 'tts') {
+          showToast('此章節原聲載入失敗，建議切換為 AI 語音合成或重試 ⚠️');
+          stopAudio();
         }
       });
     }
 
-    if (el.audioLangSelect) {
-      var supportedLangs = [
-        { key: 'zh-TW', label: '國語 / 中文 (和合本)' },
-        { key: 'en-US', label: 'English (KJV / WEB)' },
-        { key: 'es-ES', label: 'Español (RVR1909)' },
-        { key: 'fr-FR', label: 'Français (NBS)' },
-        { key: 'ja-JP', label: '日本語 (口語訳)' },
-        { key: 'ko-KR', label: '한국어 (개역한글)' },
-        { key: 'vi-VN', label: 'Tiếng Việt (Kinh Thánh)' }
-      ];
-      el.audioLangSelect.innerHTML = '';
-      supportedLangs.forEach(function (lg) {
-        var opt = document.createElement('option');
-        opt.value = lg.key;
-        opt.textContent = lg.label;
-        el.audioLangSelect.appendChild(opt);
+    if (el.audioPlayBtn) {
+      el.audioPlayBtn.addEventListener('click', function () {
+        if (audioState.isPlaying) {
+          toggleAudioPlayPause();
+        } else {
+          startAudio(state.bookNo, state.chap, 1);
+        }
       });
-      el.audioLangSelect.addEventListener('change', function () {
-        audioState.lang = el.audioLangSelect.value;
-        if (audioState.isPlaying) readCurrentVerseAudio();
+    }
+
+    if (el.audioToggleBtn) el.audioToggleBtn.addEventListener('click', toggleAudioPlayPause);
+    if (el.audioStopBtn) el.audioStopBtn.addEventListener('click', stopAudio);
+    if (el.audioCloseBtn) el.audioCloseBtn.addEventListener('click', closeAudioBar);
+
+    if (el.audioPrevChapBtn) el.audioPrevChapBtn.addEventListener('click', function () { stepAudioChapter(-1); });
+    if (el.audioNextChapBtn) el.audioNextChapBtn.addEventListener('click', function () { stepAudioChapter(1); });
+
+    if (el.audioRewind10Btn) el.audioRewind10Btn.addEventListener('click', function () { seekAudioRelative(-10); });
+    if (el.audioForward10Btn) el.audioForward10Btn.addEventListener('click', function () { seekAudioRelative(10); });
+
+    if (el.audioSeekBar) {
+      el.audioSeekBar.addEventListener('mousedown', function () { audioState.isSeeking = true; });
+      el.audioSeekBar.addEventListener('touchstart', function () { audioState.isSeeking = true; }, { passive: true });
+      el.audioSeekBar.addEventListener('input', function () {
+        if (audioState.audioEl && audioState.audioEl.duration) {
+          var pct = parseFloat(el.audioSeekBar.value) || 0;
+          var previewSec = (pct / 100) * audioState.audioEl.duration;
+          if (el.audioCurrentTime) el.audioCurrentTime.textContent = formatTime(previewSec);
+        }
+      });
+      el.audioSeekBar.addEventListener('change', function () {
+        audioState.isSeeking = false;
+        if (audioState.audioEl && audioState.audioEl.duration) {
+          var pct = parseFloat(el.audioSeekBar.value) || 0;
+          audioState.audioEl.currentTime = (pct / 100) * audioState.audioEl.duration;
+        }
+      });
+      el.audioSeekBar.addEventListener('mouseup', function () { audioState.isSeeking = false; });
+      el.audioSeekBar.addEventListener('touchend', function () { audioState.isSeeking = false; });
+    }
+
+    if (el.audioSpeedSelect) {
+      el.audioSpeedSelect.addEventListener('change', function () {
+        var rate = parseFloat(el.audioSpeedSelect.value) || 1.0;
+        setAudioSpeed(rate);
+      });
+    }
+
+    if (el.audioVersionSelect) {
+      el.audioVersionSelect.addEventListener('change', function () {
+        audioState.versionKey = el.audioVersionSelect.value;
+        if (audioState.isPlaying) {
+          startAudio(audioState.bookNo, audioState.chap, audioState.sec);
+        } else {
+          updateAudioLabels();
+        }
+      });
+    }
+
+    if (el.audioAutoNextCheck) {
+      el.audioAutoNextCheck.addEventListener('change', function () {
+        audioState.autoNext = el.audioAutoNextCheck.checked;
+        showToast(audioState.autoNext ? '已開啟：播完自動接續下一章 🔄' : '已關閉自動接續');
       });
     }
   }
 
-  function startAudioTTS(bNo, chap, startSec) {
-    if (!window.speechSynthesis) {
-      showToast('您的瀏覽器不支援語音朗讀功能 (Web Speech API)');
-      return;
+  function setAudioSpeed(rate) {
+    audioState.rate = rate;
+    if (el.audioSpeedSelect) el.audioSpeedSelect.value = String(rate);
+    if (audioState.audioEl) {
+      audioState.audioEl.playbackRate = rate;
     }
+    if (audioState.isPlaying && audioState.versionKey === 'tts') {
+      readCurrentVerseTTS();
+    }
+    showToast('播放速度已設為 ' + rate + 'x ⚡');
+  }
 
-    audioState.bookNo = bNo;
-    audioState.chap = chap;
+  function startAudio(bNo, chap, startSec) {
+    audioState.bookNo = bNo || state.bookNo;
+    audioState.chap = chap || state.chap;
     audioState.sec = startSec || 1;
     audioState.isPlaying = true;
     audioState.isPaused = false;
 
-    var bMeta = state.byNo[bNo];
+    if (el.audioControlBar) el.audioControlBar.hidden = false;
+    updateAudioLabels();
+
+    var src = AUDIO_SOURCES[audioState.versionKey] || AUDIO_SOURCES['zh_unv'];
+    if (src.mode === 'tts') {
+      if (audioState.audioEl) {
+        audioState.audioEl.pause();
+        audioState.audioEl.removeAttribute('src');
+      }
+      startAudioTTS(audioState.bookNo, audioState.chap, audioState.sec);
+    } else {
+      if (audioState.synth) audioState.synth.cancel();
+      document.querySelectorAll('.audio-reading-active').forEach(function (n) {
+        n.classList.remove('audio-reading-active');
+      });
+      playChapterMp3(audioState.bookNo, audioState.chap);
+    }
+  }
+
+  function playChapterMp3(bNo, chap) {
+    var url = getAudioUrl(audioState.versionKey, bNo, chap);
+    if (!url || !audioState.audioEl) return;
+
+    if (el.audioCurrentTime) el.audioCurrentTime.textContent = '0:00';
+    if (el.audioSeekBar) el.audioSeekBar.value = 0;
+
+    audioState.audioEl.src = url;
+    audioState.audioEl.playbackRate = audioState.rate;
+    audioState.audioEl.play().catch(function (err) {
+      console.warn('Audio play prevented:', err);
+    });
+
+    updateAudioUIState();
+    updateMediaSession();
+  }
+
+  function handleAudioEnded() {
+    if (!audioState.isPlaying) return;
+    if (audioState.autoNext) {
+      var meta = state.byNo[audioState.bookNo];
+      if (!meta) { stopAudio(); return; }
+
+      if (audioState.chap < meta.nch) {
+        var nextChap = audioState.chap + 1;
+        showToast('本章播放完畢，自動接續第 ' + nextChap + ' 章 🎧');
+        go(audioState.bookNo, nextChap, function () {
+          startAudio(audioState.bookNo, nextChap, 1);
+        });
+      } else if (state.byNo[audioState.bookNo + 1]) {
+        var nextBook = audioState.bookNo + 1;
+        var nextMeta = state.byNo[nextBook];
+        showToast('《' + meta.zh + '》全卷播畢，自動進入《' + nextMeta.zh + '》第 1 章 🎧');
+        go(nextBook, 1, function () {
+          startAudio(nextBook, 1, 1);
+        });
+      } else {
+        stopAudio();
+        showToast('全書朗讀已全部播放完畢 ✓');
+      }
+    } else {
+      stopAudio();
+      showToast('本章音檔播放完畢 ✓');
+    }
+  }
+
+  function stepAudioChapter(dir) {
+    var meta = state.byNo[audioState.bookNo];
+    if (!meta) return;
+    var targetChap = audioState.chap + dir;
+    var targetBook = audioState.bookNo;
+
+    if (targetChap >= 1 && targetChap <= meta.nch) {
+      go(targetBook, targetChap, function () {
+        startAudio(targetBook, targetChap, 1);
+      });
+    } else if (dir > 0 && state.byNo[targetBook + 1]) {
+      go(targetBook + 1, 1, function () {
+        startAudio(targetBook + 1, 1, 1);
+      });
+    } else if (dir < 0 && state.byNo[targetBook - 1]) {
+      var prevMeta = state.byNo[targetBook - 1];
+      go(targetBook - 1, prevMeta.nch, function () {
+        startAudio(targetBook - 1, prevMeta.nch, 1);
+      });
+    }
+  }
+
+  function seekAudioRelative(offsetSeconds) {
+    var src = AUDIO_SOURCES[audioState.versionKey] || AUDIO_SOURCES['zh_unv'];
+    if (src.mode === 'mp3' && audioState.audioEl && !isNaN(audioState.audioEl.duration)) {
+      var newTime = Math.max(0, Math.min(audioState.audioEl.duration, audioState.audioEl.currentTime + offsetSeconds));
+      audioState.audioEl.currentTime = newTime;
+      if (el.audioCurrentTime) el.audioCurrentTime.textContent = formatTime(newTime);
+      showToast((offsetSeconds > 0 ? '快進 +' : '倒退 ') + Math.abs(offsetSeconds) + ' 秒');
+    } else if (src.mode === 'tts') {
+      stepAudioVerse(offsetSeconds > 0 ? 1 : -1);
+    }
+  }
+
+  function toggleAudioPlayPause() {
+    if (!audioState.isPlaying) {
+      startAudio(state.bookNo, state.chap, 1);
+      return;
+    }
+
+    var src = AUDIO_SOURCES[audioState.versionKey] || AUDIO_SOURCES['zh_unv'];
+    if (src.mode === 'tts') {
+      if (audioState.synth.paused || audioState.isPaused) {
+        audioState.synth.resume();
+        audioState.isPaused = false;
+      } else {
+        audioState.synth.pause();
+        audioState.isPaused = true;
+      }
+    } else if (audioState.audioEl) {
+      if (audioState.audioEl.paused) {
+        audioState.audioEl.play().catch(function () {});
+        audioState.isPaused = false;
+      } else {
+        audioState.audioEl.pause();
+        audioState.isPaused = true;
+      }
+    }
+
+    updateAudioUIState();
+    updateMediaSession();
+  }
+
+  function stopAudio() {
+    audioState.isPlaying = false;
+    audioState.isPaused = false;
+    if (audioState.audioEl) {
+      audioState.audioEl.pause();
+      audioState.audioEl.currentTime = 0;
+    }
+    if (audioState.synth) audioState.synth.cancel();
+    updateAudioUIState();
+    if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'none';
+    document.querySelectorAll('.audio-reading-active').forEach(function (n) {
+      n.classList.remove('audio-reading-active');
+    });
+  }
+
+  function closeAudioBar() {
+    stopAudio();
+    if (el.audioControlBar) el.audioControlBar.hidden = true;
+  }
+
+  function updateAudioLabels() {
+    var bMeta = state.byNo[audioState.bookNo];
+    var bookName = bMeta ? bMeta.zh : '';
+    if (el.audioProgressLabel) {
+      el.audioProgressLabel.textContent = bookName + ' 第 ' + audioState.chap + ' 章';
+    }
+    var src = AUDIO_SOURCES[audioState.versionKey] || AUDIO_SOURCES['zh_unv'];
+    if (el.audioModeBadge) {
+      el.audioModeBadge.textContent = src.label;
+    }
+    if (el.audioDownloadLink) {
+      var mp3Url = getAudioUrl(audioState.versionKey, audioState.bookNo, audioState.chap);
+      if (mp3Url) {
+        el.audioDownloadLink.href = mp3Url;
+        el.audioDownloadLink.style.display = 'inline-flex';
+        el.audioDownloadLink.title = '開啟或下載 ' + bookName + ' 第 ' + audioState.chap + ' 章 MP3 音檔';
+      } else {
+        el.audioDownloadLink.style.display = 'none';
+      }
+    }
+    if (el.audioVersionSelect && el.audioVersionSelect.value !== audioState.versionKey) {
+      el.audioVersionSelect.value = audioState.versionKey;
+    }
+  }
+
+  function updateAudioUIState() {
+    var isActuallyPlaying = audioState.isPlaying && !audioState.isPaused;
+    if (el.audioToggleBtn) {
+      el.audioToggleBtn.textContent = isActuallyPlaying ? '⏸' : '▶';
+      el.audioToggleBtn.title = isActuallyPlaying ? '暫停 (空白鍵)' : '播放 (空白鍵)';
+    }
+    if (el.audioStatusDot) {
+      el.audioStatusDot.classList.toggle('playing', isActuallyPlaying);
+      el.audioStatusDot.title = isActuallyPlaying ? '正在播放中…' : '已暫停';
+    }
+    if (el.audioPlayBtn) {
+      el.audioPlayBtn.classList.toggle('active', audioState.isPlaying);
+    }
+  }
+
+  function updateMediaSession() {
+    if (!('mediaSession' in navigator)) return;
+    var bMeta = state.byNo[audioState.bookNo];
+    var src = AUDIO_SOURCES[audioState.versionKey] || AUDIO_SOURCES['zh_unv'];
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: (bMeta ? bMeta.zh : '') + ' 第 ' + audioState.chap + ' 章',
+        artist: 'Biblia 有聲聖經 · ' + src.label,
+        album: (bMeta ? bMeta.en : 'Bible') + ' Chapter ' + audioState.chap,
+        artwork: [
+          { src: 'icons/icon.svg', sizes: '512x512', type: 'image/svg+xml' }
+        ]
+      });
+
+      navigator.mediaSession.playbackState = (audioState.isPlaying && !audioState.isPaused) ? 'playing' : 'paused';
+
+      navigator.mediaSession.setActionHandler('play', function () {
+        if (audioState.isPaused) toggleAudioPlayPause();
+      });
+      navigator.mediaSession.setActionHandler('pause', function () {
+        if (audioState.isPlaying && !audioState.isPaused) toggleAudioPlayPause();
+      });
+      navigator.mediaSession.setActionHandler('previoustrack', function () {
+        stepAudioChapter(-1);
+      });
+      navigator.mediaSession.setActionHandler('nexttrack', function () {
+        stepAudioChapter(1);
+      });
+      navigator.mediaSession.setActionHandler('seekbackward', function () {
+        seekAudioRelative(-10);
+      });
+      navigator.mediaSession.setActionHandler('seekforward', function () {
+        seekAudioRelative(10);
+      });
+      navigator.mediaSession.setActionHandler('stop', function () {
+        stopAudio();
+      });
+    } catch (e) {}
+  }
+
+  /* ---------- Web Speech API AI 逐節語音朗讀 ---------- */
+  function startAudioTTS(bNo, chap, startSec) {
+    if (!window.speechSynthesis) {
+      showToast('您的瀏覽器不支援語音合成功能 (Web Speech API)');
+      stopAudio();
+      return;
+    }
+    audioState.sec = startSec || 1;
     var data = state.cache[bNo];
     if (data) {
       var chapter = data.ch.find(function (c) { return c.c === chap; });
       audioState.totalSecs = chapter ? chapter.v.length : 30;
     }
-
-    if (el.audioControlBar) el.audioControlBar.hidden = false;
-    if (el.audioToggleBtn) el.audioToggleBtn.textContent = '⏸';
-
-    readCurrentVerseAudio();
+    readCurrentVerseTTS();
   }
 
-  function readCurrentVerseAudio() {
-    if (!audioState.isPlaying) return;
+  function readCurrentVerseTTS() {
+    if (!audioState.isPlaying || audioState.versionKey !== 'tts') return;
     if (audioState.synth) audioState.synth.cancel();
 
     var bNo = audioState.bookNo;
@@ -1235,7 +1572,6 @@ var BIBLIA = (function () {
       el.audioProgressLabel.textContent = (bMeta ? bMeta.zh : '') + ' ' + chap + ':' + sec;
     }
 
-    // 捲動並高亮經文
     document.querySelectorAll('.audio-reading-active').forEach(function (n) {
       n.classList.remove('audio-reading-active');
     });
@@ -1248,29 +1584,18 @@ var BIBLIA = (function () {
 
     var data = state.cache[bNo];
     if (!data) {
-      loadBook(bNo, function () { readCurrentVerseAudio(); });
+      loadBook(bNo, function () { readCurrentVerseTTS(); });
       return;
     }
 
     var chapter = data.ch.find(function (c) { return c.c === chap; });
     var verse = chapter ? chapter.v.find(function (v) { return v.s === sec; }) : null;
     if (!verse) {
-      stopAudioTTS();
+      handleAudioEnded();
       return;
     }
 
-    // 根據選定語言取得朗讀文字
-    var vkeyMap = {
-      'zh-TW': 'zh_unv',
-      'en-US': 'en_kjv',
-      'es-ES': 'es_rvr1909',
-      'fr-FR': 'fr_nbs',
-      'ja-JP': 'ja_jp',
-      'ko-KR': 'ko_kor',
-      'vi-VN': 'vi_vie'
-    };
-    var vkey = vkeyMap[audioState.lang] || 'zh_unv';
-    var text = (verse.t && verse.t[vkey]) || (verse.t && verse.t.zh_unv) || '';
+    var text = (verse.t && verse.t.zh_unv) || (verse.t && verse.t.en_kjv) || '';
     if (!text) {
       stepAudioVerse(1);
       return;
@@ -1278,106 +1603,43 @@ var BIBLIA = (function () {
 
     var utter = new SpeechSynthesisUtterance(text);
     utter.rate = audioState.rate;
-    utter.lang = audioState.lang;
+    utter.lang = 'zh-TW';
 
-    // 嘗試選擇優質語音
     if (window.speechSynthesis && window.speechSynthesis.getVoices) {
       var voices = window.speechSynthesis.getVoices();
       var matchingVoice = voices.find(function (v) {
-        return v.lang && v.lang.replace('_', '-').toLowerCase().startsWith(audioState.lang.toLowerCase().slice(0, 2));
+        return v.lang && v.lang.replace('_', '-').toLowerCase().startsWith('zh');
       });
       if (matchingVoice) utter.voice = matchingVoice;
     }
 
     utter.onend = function () {
-      if (!audioState.isPlaying || audioState.isPaused) return;
+      if (!audioState.isPlaying || audioState.isPaused || audioState.versionKey !== 'tts') return;
       if (audioState.sec < audioState.totalSecs) {
         audioState.sec++;
-        readCurrentVerseAudio();
+        readCurrentVerseTTS();
       } else {
-        stopAudioTTS();
-        showToast('本章經文朗讀完畢 ✓');
+        handleAudioEnded();
       }
     };
 
     utter.onerror = function () {
-      if (audioState.isPlaying) stepAudioVerse(1);
+      if (audioState.isPlaying && audioState.versionKey === 'tts') stepAudioVerse(1);
     };
 
     audioState.currentUtterance = utter;
-    updateMediaSession(bNo, chap, sec);
+    updateAudioUIState();
     audioState.synth.speak(utter);
-  }
-
-  function updateMediaSession(bNo, chap, sec) {
-    if (!('mediaSession' in navigator)) return;
-    var bMeta = state.byNo[bNo];
-    try {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: (bMeta ? bMeta.zh : '') + ' 第 ' + chap + ' 章 ' + sec + ' 節',
-        artist: 'Biblia 多語逐字對照聖經',
-        album: (bMeta ? bMeta.en : 'Bible') + ' ' + chap,
-        artwork: [
-          { src: 'icons/icon.svg', sizes: '512x512', type: 'image/svg+xml' }
-        ]
-      });
-
-      navigator.mediaSession.setActionHandler('play', function () {
-        if (audioState.isPaused) toggleAudioPlayPause();
-      });
-      navigator.mediaSession.setActionHandler('pause', function () {
-        if (audioState.isPlaying && !audioState.isPaused) toggleAudioPlayPause();
-      });
-      navigator.mediaSession.setActionHandler('previoustrack', function () {
-        stepAudioVerse(-1);
-      });
-      navigator.mediaSession.setActionHandler('nexttrack', function () {
-        stepAudioVerse(1);
-      });
-      navigator.mediaSession.setActionHandler('stop', function () {
-        stopAudioTTS();
-      });
-    } catch (e) {}
-  }
-
-  function toggleAudioPlayPause() {
-    if (!audioState.isPlaying) {
-      startAudioTTS(state.bookNo, state.chap, 1);
-      return;
-    }
-
-    if (audioState.synth.paused || audioState.isPaused) {
-      audioState.synth.resume();
-      audioState.isPaused = false;
-      if (el.audioToggleBtn) el.audioToggleBtn.textContent = '⏸';
-      if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
-    } else {
-      audioState.synth.pause();
-      audioState.isPaused = true;
-      if (el.audioToggleBtn) el.audioToggleBtn.textContent = '▶';
-      if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
-    }
   }
 
   function stepAudioVerse(dir) {
     var nextSec = audioState.sec + dir;
     if (nextSec >= 1 && nextSec <= audioState.totalSecs) {
       audioState.sec = nextSec;
-      readCurrentVerseAudio();
+      readCurrentVerseTTS();
     } else if (nextSec > audioState.totalSecs) {
-      stopAudioTTS();
+      handleAudioEnded();
     }
-  }
-
-  function stopAudioTTS() {
-    audioState.isPlaying = false;
-    audioState.isPaused = false;
-    if (audioState.synth) audioState.synth.cancel();
-    if (el.audioControlBar) el.audioControlBar.hidden = true;
-    if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'none';
-    document.querySelectorAll('.audio-reading-active').forEach(function (n) {
-      n.classList.remove('audio-reading-active');
-    });
   }
 
   /* ---------- 靈修研經與書籤中心 (Study Center Modal) ---------- */
@@ -1824,6 +2086,8 @@ var BIBLIA = (function () {
   }
 
   function showReader(no, chap, cb) {
+    no = parseInt(no, 10) || state.bookNo || 1;
+    chap = parseInt(chap, 10) || state.chap || 1;
     el.startView.hidden = true;
     if (el.planView) el.planView.hidden = true;
     if (el.refView) el.refView.hidden = true;
@@ -2126,6 +2390,21 @@ var BIBLIA = (function () {
         var rawT = document.createElement('div');
         rawT.className = 'start-plan-rawtext';
         rawT.textContent = it.rawText;
+        if (it.passages && it.passages.length) {
+          rawT.title = '點擊前往閱讀今日進度經文（和合本）';
+          rawT.style.cursor = 'pointer';
+          rawT.addEventListener('click', function () {
+            var p0 = it.passages[0];
+            var sChap = parseInt(p0.startChap || p0.chap, 10) || 1;
+            var sVerse = parseInt(p0.startVerse || p0.secStart || p0.sec, 10) || 1;
+            var eVerse = parseInt(p0.endVerse || p0.secEnd, 10) || (p0.startVerse ? sVerse : null);
+            if (!state.on['zh_unv']) {
+              state.on['zh_unv'] = true;
+              syncVersions();
+            }
+            jumpToVerse(p0.bookNo, sChap, sVerse, eVerse);
+          });
+        }
         body.appendChild(rawT);
 
         if (it.passages && it.passages.length) {
@@ -2418,9 +2697,24 @@ var BIBLIA = (function () {
     var ref = document.createElement('div');
     ref.className = 'plan-card-ref';
     ref.textContent = it.rawText;
+    if (it.passages && it.passages.length) {
+      ref.title = '點擊前往閱讀此進度經文（和合本）';
+      ref.style.cursor = 'pointer';
+      ref.addEventListener('click', function () {
+        var p0 = it.passages[0];
+        var sChap = parseInt(p0.startChap || p0.chap, 10) || 1;
+        var sVerse = parseInt(p0.startVerse || p0.secStart || p0.sec, 10) || 1;
+        var eVerse = parseInt(p0.endVerse || p0.secEnd, 10) || (p0.startVerse ? sVerse : null);
+        if (!state.on['zh_unv']) {
+          state.on['zh_unv'] = true;
+          syncVersions();
+        }
+        jumpToVerse(p0.bookNo, sChap, sVerse, eVerse);
+      });
+    }
     body.appendChild(ref);
 
-    if (it.passages.length) body.appendChild(passageChips(it.passages));
+    if (it.passages && it.passages.length) body.appendChild(passageChips(it.passages));
 
     if (it.link) {
       var a = document.createElement('a');
@@ -2439,18 +2733,54 @@ var BIBLIA = (function () {
   function passageChips(passages) {
     var wrap = document.createElement('div');
     wrap.className = 'plan-passages';
-    passages.forEach(function (pass) {
+    (passages || []).forEach(function (pass) {
       var bMeta = state.byNo[pass.bookNo];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'plan-pass-btn';
-      btn.innerHTML = '<span class="plan-pass-icon" aria-hidden="true">📖</span>' +
-                      '<span class="plan-pass-label">' + escapeHtml(pass.label) + '</span>';
-      btn.title = '前往 ' + (bMeta ? bMeta.zh : '') + ' 第 ' + pass.chap + ' 章';
-      btn.addEventListener('click', function () {
-        jumpToVerse(pass.bookNo, pass.chap, pass.secStart || 1);
-      });
-      wrap.appendChild(btn);
+      var bookName = bMeta ? bMeta.zh : (pass.bookZh || '');
+      var startChap = parseInt(pass.startChap || pass.chap, 10) || 1;
+      var endChap = parseInt(pass.endChap || pass.startChap || pass.chap, 10) || startChap;
+      var startVerse = parseInt(pass.startVerse || pass.secStart || pass.sec, 10) || 1;
+      var endVerse = parseInt(pass.endVerse || pass.secEnd || pass.sec, 10) || (pass.startVerse ? startVerse : null);
+
+      if (startChap === endChap) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'plan-pass-btn';
+        var label = pass.label || (bookName + ' ' + startChap + (pass.startVerse ? ':' + startVerse + (endVerse && endVerse !== startVerse ? '-' + endVerse : '') : ''));
+        btn.innerHTML = '<span class="plan-pass-icon" aria-hidden="true">📖</span>' +
+                        '<span class="plan-pass-label">' + escapeHtml(label) + '</span>';
+        btn.title = '前往 ' + bookName + ' 第 ' + startChap + ' 章' + (pass.startVerse ? ' ' + startVerse + (endVerse ? '-' + endVerse : '') + '節' : '') + '（和合本）';
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (!state.on['zh_unv']) {
+            state.on['zh_unv'] = true;
+            syncVersions();
+          }
+          jumpToVerse(pass.bookNo, startChap, startVerse, endVerse);
+        });
+        wrap.appendChild(btn);
+      } else {
+        // 多章節跨度（如 王下 10-11，士 8-9，得 1-4）
+        for (var c = startChap; c <= endChap; c++) {
+          (function (chapNum) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'plan-pass-btn';
+            var cLabel = (pass.abbr || bookName) + ' ' + chapNum + '章';
+            btn.innerHTML = '<span class="plan-pass-icon" aria-hidden="true">📖</span>' +
+                            '<span class="plan-pass-label">' + escapeHtml(cLabel) + '</span>';
+            btn.title = '前往 ' + bookName + ' 第 ' + chapNum + ' 章（和合本）';
+            btn.addEventListener('click', function (e) {
+              e.stopPropagation();
+              if (!state.on['zh_unv']) {
+                state.on['zh_unv'] = true;
+                syncVersions();
+              }
+              jumpToVerse(pass.bookNo, chapNum, 1);
+            });
+            wrap.appendChild(btn);
+          })(c);
+        }
+      }
     });
     return wrap;
   }
@@ -2512,10 +2842,12 @@ var BIBLIA = (function () {
     if (el.refPanelSu101) el.refPanelSu101.hidden = (refState.activeTab !== 'su101');
     if (el.refPanelIntros) el.refPanelIntros.hidden = (refState.activeTab !== 'intros');
     if (el.refPanelTimeline) el.refPanelTimeline.hidden = (refState.activeTab !== 'timeline');
+    if (el.refPanelAudio) el.refPanelAudio.hidden = (refState.activeTab !== 'audio');
 
     if (refState.activeTab === 'su101') renderRefPanelSu101();
     else if (refState.activeTab === 'intros') renderRefPanelIntros();
     else if (refState.activeTab === 'timeline') renderRefPanelTimeline();
+    else if (refState.activeTab === 'audio') renderRefPanelAudio();
   }
 
   function findBookNoFromTitle(title) {
@@ -2916,6 +3248,122 @@ var BIBLIA = (function () {
         btn.addEventListener('click', function () {
           refState.timelineTab = btn.getAttribute('data-sub');
           renderRefPanelTimeline();
+        });
+      });
+    }
+  }
+
+  function renderRefPanelAudio() {
+    var container = el.refPanelAudio;
+    if (!container) return;
+
+    var books = state.index || [];
+    var html = '<div class="audio-hub-container">' +
+      '<div class="audio-hub-hero">' +
+        '<div class="audio-hub-hero-title"><span>🎧</span> 全書卷有聲聖經資源庫 (Audio Bible Hub)</div>' +
+        '<div class="audio-hub-hero-desc">' +
+          '完整收錄聖經 66 卷書每一章節的真人原聲朗讀音檔與 AI 語音合成資源，支援多版本切換、1.0x～2.0x 倍速播放、以及自動連續接續下一章。' +
+        '</div>' +
+        '<div class="audio-hub-features-grid">' +
+          '<div class="audio-hub-feature-card">' +
+            '<div class="audio-hub-feature-head"><span>🎙️</span> 國語和合本原聲</div>' +
+            '<div class="audio-hub-feature-body">標準國語真人清晰朗讀，語調自然溫潤，支援全本舊約與新約 1,189 章線上即時串流與 MP3 下載。</div>' +
+          '</div>' +
+          '<div class="audio-hub-feature-card">' +
+            '<div class="audio-hub-feature-head"><span>🎙️</span> 粵語和合本原聲</div>' +
+            '<div class="audio-hub-feature-body">純正廣東話真人朗讀，發音典雅，適合粵語使用者靈修、聆聽與研讀。</div>' +
+          '</div>' +
+          '<div class="audio-hub-feature-card">' +
+            '<div class="audio-hub-feature-head"><span>🎙️</span> 英文欽定本 (KJV)</div>' +
+            '<div class="audio-hub-feature-body">經典 King James Version 原聲朗讀，莊嚴典雅，提供清晰美式/英式發音。</div>' +
+          '</div>' +
+          '<div class="audio-hub-feature-card">' +
+            '<div class="audio-hub-feature-head"><span>⚡</span> 連續播放與倍速</div>' +
+            '<div class="audio-hub-feature-body">支援 1.0x、1.25x、1.5x、1.75x、2.0x 任意切換，章節播畢無縫接續下一章。</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="audio-hub-table-card">' +
+        '<div class="audio-hub-filter-bar">' +
+          '<h3 style="margin:0;font-size:1.1rem;color:var(--fg);">📚 66 卷書音檔目錄與試聽</h3>' +
+          '<div class="audio-hub-filter-pills" id="audioHubFilterPills">' +
+            '<button type="button" class="audio-hub-pill active" data-filter="all">全部 (66)</button>' +
+            '<button type="button" class="audio-hub-pill" data-filter="OT">舊約 (39)</button>' +
+            '<button type="button" class="audio-hub-pill" data-filter="NT">新約 (27)</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="audio-book-list-grid" id="audioBookListGrid"></div>' +
+      '</div>' +
+    '</div>';
+
+    container.innerHTML = html;
+
+    var filter = 'all';
+    function renderBookCards() {
+      var grid = document.getElementById('audioBookListGrid');
+      if (!grid) return;
+      var filtered = books.filter(function (b) {
+        if (filter === 'OT') return b.t === 'OT';
+        if (filter === 'NT') return b.t === 'NT';
+        return true;
+      });
+
+      var cardsHtml = '';
+      filtered.forEach(function (b) {
+        cardsHtml += '<div class="audio-book-card">' +
+          '<div class="audio-book-head">' +
+            '<span class="audio-book-name">' + escapeHtml(b.zh) + ' <small style="font-weight:normal;color:var(--fg-dim);">' + escapeHtml(b.en) + '</small></span>' +
+            '<span class="audio-book-chaps">共 ' + b.nch + ' 章</span>' +
+          '</div>' +
+          '<div class="audio-book-actions">' +
+            '<button type="button" class="audio-book-action-btn play-book-audio" data-book="' + b.no + '" data-ver="zh_unv" title="播放國語和合本第 1 章">' +
+              '▶ 國語' +
+            '</button>' +
+            '<button type="button" class="audio-book-action-btn play-book-audio" data-book="' + b.no + '" data-ver="zh_yue" title="播放粵語和合本第 1 章">' +
+              '▶ 粵語' +
+            '</button>' +
+            '<button type="button" class="audio-book-action-btn play-book-audio" data-book="' + b.no + '" data-ver="en_kjv" title="播放英文 KJV 第 1 章">' +
+              '▶ KJV' +
+            '</button>' +
+            '<button type="button" class="audio-book-action-btn go-book-read" data-book="' + b.no + '" title="前往閱讀經文">' +
+              '📖 閱讀' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      });
+      grid.innerHTML = cardsHtml;
+
+      grid.querySelectorAll('.play-book-audio').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var bNo = parseInt(btn.getAttribute('data-book'), 10);
+          var ver = btn.getAttribute('data-ver');
+          audioState.versionKey = ver;
+          showReader(bNo, 1, function () {
+            startAudio(bNo, 1, 1);
+          });
+        });
+      });
+
+      grid.querySelectorAll('.go-book-read').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var bNo = parseInt(btn.getAttribute('data-book'), 10);
+          showReader(bNo, 1);
+        });
+      });
+    }
+
+    renderBookCards();
+
+    var filterPills = document.getElementById('audioHubFilterPills');
+    if (filterPills) {
+      filterPills.querySelectorAll('.audio-hub-pill').forEach(function (p) {
+        p.addEventListener('click', function () {
+          filterPills.querySelectorAll('.audio-hub-pill').forEach(function (x) { x.classList.remove('active'); });
+          p.classList.add('active');
+          filter = p.getAttribute('data-filter');
+          renderBookCards();
         });
       });
     }
@@ -3443,6 +3891,12 @@ var BIBLIA = (function () {
   }
 
   function go(no, chap, cb) {
+    no = parseInt(no, 10) || state.bookNo || 1;
+    chap = parseInt(chap, 10) || state.chap || 1;
+    var meta = state.byNo[no];
+    if (meta && meta.nch && (chap < 1 || chap > meta.nch)) {
+      chap = Math.max(1, Math.min(chap, meta.nch));
+    }
     state.bookNo = no;
     state.chap = chap;
     clearStrong();
@@ -3458,6 +3912,17 @@ var BIBLIA = (function () {
       el.quickNavBtnText.textContent = (bMeta ? bMeta.zh : '') + ' 第 ' + chap + ' 章';
     }
     updateHash();
+
+    // 更新音訊標籤與同步播放
+    if (audioState && audioState.isPlaying) {
+      if (audioState.bookNo !== no || audioState.chap !== chap) {
+        startAudio(no, chap, 1);
+      }
+    } else if (typeof updateAudioLabels === 'function') {
+      audioState.bookNo = no;
+      audioState.chap = chap;
+      updateAudioLabels();
+    }
 
     if (state.cache[no]) {
       render();
@@ -3508,9 +3973,10 @@ var BIBLIA = (function () {
     var data = state.cache[state.bookNo];
     if (!data) return;
 
+    var targetChap = parseInt(state.chap, 10);
     var chapter = null;
     for (var i = 0; i < data.ch.length; i++) {
-      if (data.ch[i].c === state.chap) { chapter = data.ch[i]; break; }
+      if (parseInt(data.ch[i].c, 10) === targetChap) { chapter = data.ch[i]; break; }
     }
 
     var cols = activeVersions();
@@ -3970,15 +4436,37 @@ var BIBLIA = (function () {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  function jumpToVerse(bookNo, chap, sec) {
+  function jumpToVerse(bookNo, chap, sec, secEnd) {
+    bookNo = parseInt(bookNo, 10) || state.bookNo || 1;
+    chap = parseInt(chap, 10) || state.chap || 1;
+    sec = parseInt(sec, 10) || 1;
+    secEnd = parseInt(secEnd, 10) || sec;
+
+    if (!state.on['zh_unv']) {
+      state.on['zh_unv'] = true;
+      syncVersions();
+    }
+
     showReader(bookNo, chap, function () {
       setTimeout(function () {
-        var row = el.reader.querySelector('.verse[data-sec="' + sec + '"]') ||
-                  el.reader.querySelectorAll('.verse')[sec - 1];
-        if (row) {
-          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          row.classList.add('target-highlight');
-          setTimeout(function () { row.classList.remove('target-highlight'); }, 2600);
+        var firstRow = null;
+        for (var i = sec; i <= secEnd; i++) {
+          var row = el.reader.querySelector('.verse[data-sec="' + i + '"]') ||
+                    el.reader.querySelectorAll('.verse')[i - 1];
+          if (row) {
+            if (!firstRow) firstRow = row;
+            row.classList.add('target-highlight');
+          }
+        }
+        if (firstRow) {
+          firstRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(function () {
+            for (var j = sec; j <= secEnd; j++) {
+              var r = el.reader.querySelector('.verse[data-sec="' + j + '"]') ||
+                      el.reader.querySelectorAll('.verse')[j - 1];
+              if (r) r.classList.remove('target-highlight');
+            }
+          }, 2800);
         }
       }, 150);
     });
