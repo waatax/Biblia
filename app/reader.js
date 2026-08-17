@@ -292,6 +292,7 @@ var BIBLIA = (function () {
     buildAudioPlayer();
     buildStudyCenterUI();
     buildShortcutsGuide();
+    buildMobileMenu();
     buildReaderControls();
     buildAppearanceControls();
     buildSearchControls();
@@ -358,7 +359,9 @@ var BIBLIA = (function () {
       'readerAaBtn', 'openAaModalBtn', 'pagerAaBtn', 'zenBtn', 'pagerZenBtn', 'readingProgressBar', 'readingProgressFill',
       'appearanceModal', 'appearanceOverlay',
       'appearanceCloseBtn', 'aaSizeText', 'aaFontSlider', 'aaFontDown', 'aaFontUp',
-      'aaLhControls', 'aaFontControls', 'aaThemeControls', 'aaInterlinearSwitch', 'aaLargeVnSwitch'
+      'aaLhControls', 'aaFontControls', 'aaThemeControls', 'aaInterlinearSwitch', 'aaLargeVnSwitch',
+      'mobileMenuBtn', 'mobileMenuModal', 'mobileMenuOverlay', 'mobileMenuCloseBtn',
+      'mobSearchBtn', 'mobStudyBtn', 'mobPlanBtn', 'mobRefBtn', 'mobAudioBtn', 'mobZenBtn', 'mobAaBtn', 'mobHomeBtn'
     ].forEach(function (id) { el[id] = document.getElementById(id); });
   }
 
@@ -1257,7 +1260,21 @@ var BIBLIA = (function () {
 
     if (el.audioToggleBtn) el.audioToggleBtn.addEventListener('click', toggleAudioPlayPause);
     if (el.audioStopBtn) el.audioStopBtn.addEventListener('click', stopAudio);
-    if (el.audioCloseBtn) el.audioCloseBtn.addEventListener('click', closeAudioBar);
+    if (el.audioCloseBtn) el.audioCloseBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      closeAudioBar();
+    });
+
+    if (el.audioControlBar) {
+      el.audioControlBar.addEventListener('click', function (e) {
+        if (window.matchMedia && window.matchMedia('(max-width: 599px)').matches) {
+          if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('a')) {
+            return;
+          }
+          el.audioControlBar.classList.toggle('audio-expanded');
+        }
+      });
+    }
 
     if (el.audioPrevChapBtn) el.audioPrevChapBtn.addEventListener('click', function () { stepAudioChapter(-1); });
     if (el.audioNextChapBtn) el.audioNextChapBtn.addEventListener('click', function () { stepAudioChapter(1); });
@@ -2011,6 +2028,30 @@ var BIBLIA = (function () {
 
   function closeShortcutsGuide() {
     if (el.shortcutsModal) el.shortcutsModal.hidden = true;
+  }
+
+  /* ---------- 手機版選單 (Mobile Menu) ---------- */
+  function buildMobileMenu() {
+    if (el.mobileMenuBtn) el.mobileMenuBtn.addEventListener('click', openMobileMenu);
+    if (el.mobileMenuCloseBtn) el.mobileMenuCloseBtn.addEventListener('click', closeMobileMenu);
+    if (el.mobileMenuOverlay) el.mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+    if (el.mobSearchBtn) el.mobSearchBtn.addEventListener('click', function() { closeMobileMenu(); goSearch(); });
+    if (el.mobStudyBtn) el.mobStudyBtn.addEventListener('click', function() { closeMobileMenu(); openStudyCenter(); });
+    if (el.mobPlanBtn) el.mobPlanBtn.addEventListener('click', function() { closeMobileMenu(); goPlan(); });
+    if (el.mobRefBtn) el.mobRefBtn.addEventListener('click', function() { closeMobileMenu(); goRef(); });
+    if (el.mobAudioBtn) el.mobAudioBtn.addEventListener('click', function() { closeMobileMenu(); openAudioPlayer(); });
+    if (el.mobZenBtn) el.mobZenBtn.addEventListener('click', function() { closeMobileMenu(); toggleZenMode(); });
+    if (el.mobAaBtn) el.mobAaBtn.addEventListener('click', function() { closeMobileMenu(); openAppearanceModal(); });
+    if (el.mobHomeBtn) el.mobHomeBtn.addEventListener('click', function() { closeMobileMenu(); goHome(); });
+  }
+
+  function openMobileMenu() {
+    if (el.mobileMenuModal) el.mobileMenuModal.hidden = false;
+  }
+
+  function closeMobileMenu() {
+    if (el.mobileMenuModal) el.mobileMenuModal.hidden = true;
   }
 
   /* ---------- URL Hash 路由與同步 ---------- */
@@ -3640,11 +3681,25 @@ var BIBLIA = (function () {
     showToast(next ? '🍵 進入禪意專注閱讀模式 (按 Z 或 Esc 退出)' : '📖 退出專注模式');
   }
 
+  var lastScrollTop = 0;
   function updateReadingProgress() {
     if (el.readerView && el.readerView.hidden) return;
+    var st = window.pageYOffset || document.documentElement.scrollTop || 0;
+    
+    // 手機版往下捲動自動隱藏導覽列
+    if (window.matchMedia && window.matchMedia('(max-width: 599px)').matches) {
+      if (st > lastScrollTop && st > 100) {
+        document.body.classList.add('bar-hidden');
+      } else if (st < lastScrollTop) {
+        document.body.classList.remove('bar-hidden');
+      }
+    } else {
+      document.body.classList.remove('bar-hidden');
+    }
+    lastScrollTop = st <= 0 ? 0 : st;
+
     var fill = document.getElementById('readingProgressFill');
     if (!fill) return;
-    var st = window.pageYOffset || document.documentElement.scrollTop || 0;
     var sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     var pct = sh > 0 ? Math.min(100, Math.max(0, (st / sh) * 100)) : 0;
     fill.style.width = pct + '%';

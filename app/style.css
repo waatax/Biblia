@@ -603,6 +603,11 @@ body.appearance-open .btn-aa-top {
   box-shadow: var(--sh-1);
   padding-top: env(safe-area-inset-top);
   backdrop-filter: blur(12px);
+  transition: transform var(--t-mid) var(--ease), background-color var(--t-mid) ease;
+}
+
+body.bar-hidden .bar {
+  transform: translateY(-100%);
 }
 
 .bar-row {
@@ -2518,6 +2523,18 @@ body.appearance-open .pager-aa-btn {
   .ctl-chap select { max-width: 4.4em; font-size: .8125rem; }
   .bar-chapter-nav { display: none; } /* 手機直式主要使用底部 Pager 翻章，節省頂部空間 */
 
+  .mobile-menu-btn { display: inline-flex; }
+  .bar-main .btn-home,
+  .bar-main .btn-quick-nav,
+  .bar-main .zen-nav-btn,
+  .bar-main .audio-nav-btn,
+  .bar-main .study-nav-btn,
+  .bar-main .search-btn,
+  .bar-main .plan-nav-btn,
+  .bar-main .ref-nav-btn,
+  .bar-main .btn-aa-top,
+  .bar-main .shortcuts-btn,
+  .bar-main .tools-btn { display: none; }
   .pick-book, .pick-chap { max-width: none; width: auto; flex: 1 1 40%; }
   .pick .go { flex: 0 0 auto; }
 
@@ -2555,6 +2572,81 @@ body.appearance-open .pager-aa-btn {
   .aa-presets { grid-template-columns: repeat(5, 1fr); gap: 4px; }
   .aa-preset-btn { padding: 5px 2px; }
   .aa-themes { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  /* 手機版語音播放器優化 (Mini Player / Bottom Sheet) */
+  .audio-control-bar {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    left: 16px;
+    right: 16px;
+    border-radius: var(--r-xl);
+    padding: 10px 14px;
+    box-shadow: var(--sh-3);
+    cursor: pointer;
+    transition: all 0.3s var(--ease);
+  }
+  .audio-bar-inner {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .audio-info { flex: 1 1 auto; }
+  .audio-controls { gap: 4px; }
+  
+  .audio-control-bar:not(.audio-expanded) .audio-track-box,
+  .audio-control-bar:not(.audio-expanded) .audio-settings,
+  .audio-control-bar:not(.audio-expanded) #audioPrevChapBtn,
+  .audio-control-bar:not(.audio-expanded) #audioRewind10Btn,
+  .audio-control-bar:not(.audio-expanded) #audioForward10Btn,
+  .audio-control-bar:not(.audio-expanded) #audioNextChapBtn,
+  .audio-control-bar:not(.audio-expanded) #audioStopBtn {
+    display: none;
+  }
+  
+  .audio-control-bar.audio-expanded {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+    cursor: default;
+  }
+  .audio-control-bar.audio-expanded .audio-bar-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+  .audio-control-bar.audio-expanded .audio-controls {
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .audio-control-bar.audio-expanded .audio-controls .btn-icon {
+    min-width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
+  .audio-control-bar.audio-expanded .audio-settings {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .audio-control-bar.audio-expanded .audio-setting-item {
+    justify-content: space-between;
+  }
+  .audio-close-btn {
+    position: absolute;
+    top: -12px;
+    right: -4px;
+    width: 32px;
+    height: 32px;
+    background: var(--bg-alt);
+    border-radius: 50%;
+    box-shadow: var(--sh-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    font-size: 1.25rem;
+  }
 
   /* 搜尋頁面手機適配 */
   .search-hero-box { padding: 14px 14px; gap: 12px; }
@@ -4558,6 +4650,92 @@ html.dark .verse.hl-pink, html.oled .verse.hl-pink {
 .backup-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .backup-import-label { margin: 0; cursor: pointer; }
 .backup-status-msg { margin-top: 14px; font-size: 0.88rem; color: var(--ok); font-weight: 600; }
+
+/* ===================== 手機版滑出選單 (Mobile Menu Drawer) ===================== */
+.mobile-menu-btn { display: none; }
+
+.mobile-menu-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0;
+}
+.mobile-menu-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  animation: fade-in var(--t-mid) var(--ease);
+}
+.mobile-menu-dialog {
+  position: relative;
+  width: 100%;
+  max-height: 85dvh;
+  background: var(--bg);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  box-shadow: var(--sh-4);
+  display: flex;
+  flex-direction: column;
+  animation: sheet-up 0.25s var(--ease);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.mobile-menu-grip {
+  width: 44px;
+  height: 4px;
+  margin: 12px auto 4px;
+  border-radius: var(--r-pill);
+  background: var(--line);
+}
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 16px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.mobile-menu-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+.mobile-menu-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--fg-mute);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+.mobile-menu-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mobile-menu-item {
+  justify-content: flex-start;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--bg-alt);
+  border-color: var(--line-soft);
+}
+.mobile-menu-item:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.mobile-menu-sep {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 4px 0;
+}
 
 /* ===================== 21. 快捷鍵指南彈窗 (Shortcuts Modal) ===================== */
 .shortcuts-modal {

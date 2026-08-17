@@ -260,6 +260,10 @@
               aria-expanded="false" aria-controls="barTools" title="版本與快速設定">
         <span aria-hidden="true">⚙</span>
       </button>
+      
+      <button id="mobileMenuBtn" type="button" class="btn btn-icon mobile-menu-btn" title="開啟選單" aria-label="開啟選單" aria-expanded="false" aria-controls="mobileMenuModal">
+        <span aria-hidden="true">☰</span>
+      </button>
     </div>
 
     <div class="bar-row bar-tools" id="barTools">
@@ -671,6 +675,46 @@
           <div id="backupStatusMsg" class="backup-status-msg"></div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 手機版滑出選單 (Mobile Menu Drawer) ===================== -->
+<div id="mobileMenuModal" class="mobile-menu-modal" hidden role="dialog" aria-modal="true" aria-label="手機選單">
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+  <div class="mobile-menu-dialog">
+    <div class="mobile-menu-grip" aria-hidden="true"></div>
+    <header class="mobile-menu-header">
+      <h2 class="mobile-menu-title">選單</h2>
+      <button id="mobileMenuCloseBtn" type="button" class="mobile-menu-close-btn" title="關閉" aria-label="關閉選單">×</button>
+    </header>
+    <div class="mobile-menu-body">
+      <!-- 手機選單的按鈕會透過 JS 鏡像或使用 CSS 排版在此處 (或者是將原有的按鈕挪過來，為了好管理，我們會直接在此寫按鈕) -->
+      <button id="mobSearchBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">🔍</span> 搜尋經文 / Strong
+      </button>
+      <button id="mobStudyBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">🔖</span> 研經筆記與書籤
+      </button>
+      <button id="mobPlanBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">📅</span> 讀經計畫
+      </button>
+      <button id="mobRefBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">📚</span> 補充資料庫
+      </button>
+      <hr class="mobile-menu-sep">
+      <button id="mobAudioBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">🔊</span> 語音朗讀
+      </button>
+      <button id="mobZenBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">🍵</span> 專注模式
+      </button>
+      <button id="mobAaBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span class="aa-badge" aria-hidden="true">Aa</span> 外觀排版
+      </button>
+      <button id="mobHomeBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">⌂</span> 回首頁
+      </button>
     </div>
   </div>
 </div>
