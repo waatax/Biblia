@@ -3437,10 +3437,12 @@ body.appearance-open .pager-aa-btn {
 }
 
 .daily-verse-ref {
+  display: block;
   font-family: var(--font-ui);
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--accent-hi);
+  margin: 0 0 12px 0;
 }
 
 .daily-actions {

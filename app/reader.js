@@ -592,7 +592,6 @@ var BIBLIA = (function () {
     if (el.dailyVerseTheme) el.dailyVerseTheme.textContent = gv.theme || '靈修金句';
     if (el.dailyVerseText) el.dailyVerseText.textContent = '「' + gv.zh + '」';
     if (el.dailyVerseEn) el.dailyVerseEn.textContent = gv.en || '';
-    if (el.dailyVerseOrig) el.dailyVerseOrig.textContent = gv.orig || '';
     if (el.dailyVerseRef) el.dailyVerseRef.textContent = gv.ref;
   }
 
