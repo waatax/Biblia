@@ -1140,12 +1140,14 @@ var BIBLIA = (function () {
         if (text === undefined || text === null) return;
 
         var rtlCls = v.rtl ? 'rtl' : '';
+        // dir/lang 只掛在內文上；掛在整張卡會把標籤列也翻過去。
+        var langAttr = (v.lang ? ' lang="' + v.lang + '"' : '') + (v.rtl ? ' dir="rtl"' : '');
         cardsHtml += '<div class="compare-card ' + rtlCls + '">' +
           '<div class="compare-card-head">' +
             '<span class="compare-v-tag">' + escapeHtml(v.label) + '</span>' +
             '<span class="compare-v-lang">' + escapeHtml(v.full) + '</span>' +
           '</div>' +
-          '<div class="compare-card-text">' + (text ? escapeHtml(text) : '<span class="blank">（此版本本節無內文）</span>') + '</div>' +
+          '<div class="compare-card-text"' + langAttr + '>' + (text ? escapeHtml(text) : '<span class="blank">（此版本本節無內文）</span>') + '</div>' +
         '</div>';
       });
 
@@ -4118,6 +4120,9 @@ var BIBLIA = (function () {
     var d = document.createElement('div');
     d.className = 'cell' + (v.rtl ? ' rtl' : '') + (v.greek ? ' greek' : '');
     d.setAttribute('data-label', v.label);
+    // dir/lang 讓瀏覽器自己跑 bidi（標點、數字、複製出去的字串才會對）。
+    if (v.lang) d.setAttribute('lang', v.lang);
+    if (v.rtl) d.setAttribute('dir', 'rtl');
 
     var text = verse.t ? verse.t[v.key] : null;
     var units = verse.w ? verse.w[v.key] : null;
@@ -4695,10 +4700,18 @@ var BIBLIA = (function () {
 
       // 檢查是否已有暫存內文
       var verseText = item.text || '';
+      // 內文可能退回和合本（該版本此節缺內文），那時就不能當成原文版本排版。
+      var textIsOwnVersion = true;
       if (!verseText && state.cache[item.bookNo] && state.cache[item.bookNo].ch) {
         var chapter = state.cache[item.bookNo].ch.find(function (c) { return c.c === item.chap; });
         var verse = chapter ? chapter.v.find(function (v) { return v.s === item.sec; }) : null;
-        if (verse && verse.t) verseText = verse.t[item.vkey] || verse.t['zh_unv'] || '';
+        if (verse && verse.t) {
+          verseText = verse.t[item.vkey] || '';
+          if (!verseText) {
+            verseText = verse.t['zh_unv'] || '';
+            textIsOwnVersion = false;
+          }
+        }
       }
 
       var cardHeader = document.createElement('header');
@@ -4784,6 +4797,13 @@ var BIBLIA = (function () {
 
       var cardBody = document.createElement('div');
       cardBody.className = 'search-card-body';
+      // 希伯來文要由右到左，希臘文沿用原文字體。
+      if (vMeta && textIsOwnVersion) {
+        if (vMeta.rtl) cardBody.className += ' rtl';
+        if (vMeta.greek) cardBody.className += ' greek';
+        if (vMeta.lang) cardBody.setAttribute('lang', vMeta.lang);
+        if (vMeta.rtl) cardBody.setAttribute('dir', 'rtl');
+      }
 
       if (verseText) {
         var highlighted = escapeHtml(verseText);

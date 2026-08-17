@@ -1919,6 +1919,22 @@ body.appearance-open .pager-aa-btn {
   font-family: var(--font-serif);
 }
 
+/* 搜尋結果的原文卡片：希伯來文由右到左，字體行距比照閱讀欄 */
+.search-card-body.rtl {
+  direction: rtl;
+  text-align: right;
+  font-family: "Times New Roman", "SBL Hebrew", "Ezra SIL",
+               "David", "Noto Serif Hebrew", serif;
+  font-size: 1.18rem;
+  line-height: 2.25;
+}
+
+.search-card-body.greek {
+  font-family: "Palatino Linotype", "SBL Greek", "Gentium Plus",
+               "Galatia SIL", "Times New Roman", serif;
+  line-height: 2.05;
+}
+
 .search-card-body mark {
   background: var(--hit);
   color: inherit;
