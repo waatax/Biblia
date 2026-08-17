@@ -13,27 +13,27 @@
 var BIBLIA = (function () {
   'use strict';
 
-  /* 原文置首，其後沿用藍圖的 中 | 西 | 英 */
+  /* 譯本順序：和合本置首，接著 KJV、WEB、其他現代譯本，最後為希伯來文與希臘文原文 */
   var VERSIONS = [
-    { key: 'he_wlc', label: '原文', full: '希伯來文原文 WLC（僅舊約）',
-      strong: true, otonly: true, rtl: true, lang: 'he' },
-    { key: 'gr_wh', label: '原文', full: '希臘文原文 Westcott-Hort（僅新約）',
-      strong: true, ntonly: true, greek: true, lang: 'el' },
     { key: 'zh_unv', label: '和合本', full: '和合本 (1919)', strong: true, lang: 'zh-TW' },
+    { key: 'en_kjv', label: 'KJV', full: 'King James Version', strong: true, lang: 'en-US' },
+    { key: 'en_web', label: 'WEB', full: 'World English Bible', strong: false, lang: 'en-US' },
     { key: 'es_rvr1909', label: 'RVR1909', full: 'Reina-Valera 1909', strong: false, lang: 'es-ES' },
     { key: 'es_rvc', label: 'RVC', full: 'Reina Valera Contemporánea', strong: false, lang: 'es-ES' },
     { key: 'fr_nbs', label: 'NBS', full: 'Nouvelle Bible Segond (法文)', strong: false, lang: 'fr-FR' },
     { key: 'ja_jp', label: '日語', full: '日語聖經 (口語訳)', strong: false, lang: 'ja-JP' },
     { key: 'ko_kor', label: '韓語', full: '韓語聖經 (개역한글)', strong: false, lang: 'ko-KR' },
     { key: 'vi_vie', label: '越南語', full: '越南聖經 (Kinh Thánh)', strong: false, lang: 'vi-VN' },
-    { key: 'en_kjv', label: 'KJV', full: 'King James Version', strong: true, lang: 'en-US' },
-    { key: 'en_web', label: 'WEB', full: 'World English Bible', strong: false, lang: 'en-US' }
+    { key: 'he_wlc', label: '希伯來文', full: '希伯來文原文 WLC（僅舊約）',
+      strong: true, otonly: true, rtl: true, orig: true, lang: 'he' },
+    { key: 'gr_wh', label: '希臘文', full: '希臘文原文 Westcott-Hort（僅新約）',
+      strong: true, ntonly: true, greek: true, orig: true, lang: 'el' }
   ];
 
-  var DEFAULTS = { he_wlc: true, gr_wh: true, zh_unv: true,
+  var DEFAULTS = { zh_unv: true, en_kjv: true, en_web: false,
                    es_rvr1909: true, es_rvc: false,
                    fr_nbs: false, ja_jp: false, ko_kor: false, vi_vie: false,
-                   en_kjv: true, en_web: false };
+                   he_wlc: true, gr_wh: true };
   var FIRST_NT = 40;
 
   var state = {
@@ -170,12 +170,18 @@ var BIBLIA = (function () {
   var searchIndexData = null;
   var searchState = {
     results: [],
-    page: 0,
-    pageSize: 25,
+    filteredResults: [],
+    activeBookFilter: 'all',
+    bookCounts: {},
+    otCount: 0,
+    ntCount: 0,
+    page: 1,
+    pageSize: 20,
     query: '',
     tokens: [],
     version: 'zh_unv',
-    scope: 'all'
+    scope: 'all',
+    isSearching: false
   };
 
   function searchIndex(data) {
@@ -302,15 +308,21 @@ var BIBLIA = (function () {
 
   function cacheEls() {
     [
-      'startView', 'readerView', 'planView', 'refView', 'otBook', 'otChap', 'ntBook', 'ntChap',
+      'startView', 'readerView', 'planView', 'refView', 'searchView', 'searchBar', 'otBook', 'otChap', 'ntBook', 'ntChap',
       'startVersions', 'startInter', 'startDark', 'bookSelect', 'chapSelect',
-      'reader', 'readerBar', 'versionBox', 'interlinearChk', 'strongPanel', 'strongOverlay',
+      'reader', 'readerBar', 'versionBox', 'origVersionBox', 'interlinearChk', 'strongPanel', 'strongOverlay',
       'strongNum', 'strongMeta', 'strongHits', 'strongOrig', 'strongDict', 'strongCopyBtn', 'strongMorphBox',
       'strongSearchBtn', 'strongEngBtn', 'startSearchBtn', 'searchBarBtn',
-      'searchModal', 'searchOverlay', 'searchInput', 'searchExecBtn',
-      'searchCloseBtn', 'searchVersionSelect', 'searchScopeSelect', 'searchSummary',
-      'searchResults', 'searchFoot', 'searchMoreBtn', 'startPlanBtn',
-      'readerPlanBtn', 'planHomeBtn', 'planReaderBtn', 'planJumpTodayBtn',
+      'searchHomeBtn', 'searchReaderBtn', 'searchPlanBtn', 'searchRefBtn', 'searchThemeBtn',
+      'searchInput', 'searchClearBtn', 'searchExecBtn', 'searchVersionSelect', 'searchScopeSelect',
+      'searchPageSizeSelect', 'searchPresetTags', 'searchStatsCard', 'searchSummary',
+      'searchProgressWrap', 'searchProgressFill', 'searchProgressText',
+      'searchBookFilterRow', 'searchBookPills',
+      'searchPaginationTop', 'searchPageInfoTop', 'searchPaginationControlsTop',
+      'searchResults',
+      'searchPaginationBottom', 'searchPageInfoBottom', 'searchPaginationControlsBottom',
+      'searchScrollTopBtn', 'planSearchNavBtn', 'refSearchNavBtn',
+      'startPlanBtn', 'readerPlanBtn', 'planHomeBtn', 'planReaderBtn', 'planJumpTodayBtn',
       'planThemeBtn', 'planStatsPercent', 'planProgressFill', 'planProgressBar',
       'planStatsCount', 'planStreakBadge', 'planMarkTodayBtn', 'planMonthTabs', 'planWeekSelect',
       'planSearchInput', 'planList', 'startPlanTodayBox', 'startPlanDate',
@@ -491,17 +503,21 @@ var BIBLIA = (function () {
   }
 
   function syncVersions() {
-    Array.prototype.forEach.call(
-      el.startVersions.querySelectorAll('label'), function (lab) {
-        var k = lab.getAttribute('data-v');
-        lab.querySelector('input').checked = !!state.on[k];
-      });
-    Array.prototype.forEach.call(
-      el.versionBox.querySelectorAll('label'), function (lab) {
-        var k = lab.getAttribute('data-v');
-        lab.querySelector('input').checked = !!state.on[k];
-        lab.classList.toggle('on', !!state.on[k]);
-      });
+    if (el.startVersions) {
+      Array.prototype.forEach.call(
+        el.startVersions.querySelectorAll('label'), function (lab) {
+          var k = lab.getAttribute('data-v');
+          lab.querySelector('input').checked = !!state.on[k];
+        });
+    }
+    var readerVersionLabels = [];
+    if (el.versionBox) readerVersionLabels = readerVersionLabels.concat(Array.prototype.slice.call(el.versionBox.querySelectorAll('label')));
+    if (el.origVersionBox) readerVersionLabels = readerVersionLabels.concat(Array.prototype.slice.call(el.origVersionBox.querySelectorAll('label')));
+    readerVersionLabels.forEach(function (lab) {
+      var k = lab.getAttribute('data-v');
+      lab.querySelector('input').checked = !!state.on[k];
+      lab.classList.toggle('on', !!state.on[k]);
+    });
     if (el.startInter) el.startInter.checked = state.inter;
     if (el.interlinearChk) el.interlinearChk.checked = state.inter;
     if (el.aaInterlinearSwitch) el.aaInterlinearSwitch.checked = state.inter;
@@ -2007,6 +2023,9 @@ var BIBLIA = (function () {
       try { history.replaceState(null, '', '#plan'); } catch (e) {}
     } else if (el.refView && !el.refView.hidden) {
       try { history.replaceState(null, '', '#ref' + (refState && refState.activeTab ? '/' + refState.activeTab : '')); } catch (e) {}
+    } else if (el.searchView && !el.searchView.hidden) {
+      var q = searchState.query ? '?q=' + encodeURIComponent(searchState.query) : '';
+      try { history.replaceState(null, '', '#search' + q); } catch (e) {}
     } else if (el.readerView && !el.readerView.hidden) {
       var bMeta = state.byNo[state.bookNo];
       var bKey = bMeta ? bMeta.abbr : state.bookNo;
@@ -2024,6 +2043,16 @@ var BIBLIA = (function () {
     if (hash.indexOf('#ref') === 0) {
       var refTab = hash.split('/')[1] || 'su101';
       showRef(refTab);
+      return;
+    }
+    if (hash.indexOf('#search') === 0) {
+      var q = '';
+      if (hash.indexOf('?q=') !== -1) {
+        q = decodeURIComponent(hash.split('?q=')[1].split('&')[0]);
+      } else if (hash.indexOf('#search/') === 0) {
+        q = decodeURIComponent(hash.slice(8));
+      }
+      showSearch(q);
       return;
     }
     if (hash === '#study') {
@@ -2065,6 +2094,7 @@ var BIBLIA = (function () {
     el.readerView.hidden = true;
     if (el.planView) el.planView.hidden = true;
     if (el.refView) el.refView.hidden = true;
+    if (el.searchView) el.searchView.hidden = true;
     el.startView.hidden = false;
     var meta = state.byNo[state.bookNo];
     if (meta) {
@@ -2091,6 +2121,7 @@ var BIBLIA = (function () {
     el.startView.hidden = true;
     if (el.planView) el.planView.hidden = true;
     if (el.refView) el.refView.hidden = true;
+    if (el.searchView) el.searchView.hidden = true;
     el.readerView.hidden = false;
     measureLayout();
     go(no, chap, cb);
@@ -2101,6 +2132,7 @@ var BIBLIA = (function () {
     el.startView.hidden = true;
     el.readerView.hidden = true;
     if (el.refView) el.refView.hidden = true;
+    if (el.searchView) el.searchView.hidden = true;
     if (el.planView) el.planView.hidden = false;
     renderPlan();
     window.scrollTo(0, 0);
@@ -2824,6 +2856,7 @@ var BIBLIA = (function () {
     el.startView.hidden = true;
     el.readerView.hidden = true;
     if (el.planView) el.planView.hidden = true;
+    if (el.searchView) el.searchView.hidden = true;
     if (el.refView) el.refView.hidden = false;
     renderRefView();
     window.scrollTo(0, 0);
@@ -3669,7 +3702,11 @@ var BIBLIA = (function () {
       lab.appendChild(box);
       lab.appendChild(document.createTextNode(v.label));
       lab.classList.toggle('on', box.checked);
-      el.versionBox.appendChild(lab);
+      if (v.orig && el.origVersionBox) {
+        el.origVersionBox.appendChild(lab);
+      } else {
+        el.versionBox.appendChild(lab);
+      }
     });
 
     el.interlinearChk.checked = state.inter;
@@ -3747,7 +3784,6 @@ var BIBLIA = (function () {
     document.addEventListener('keydown', function (e) {
       if (e.target && /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) {
         if (e.key === 'Escape') {
-          if (el.searchModal && !el.searchModal.hidden) closeSearchModal();
           if (el.quickNavModal && !el.quickNavModal.hidden) closeQuickNav();
           if (el.appearanceModal && !el.appearanceModal.hidden) closeAppearanceModal();
           if (el.compareVerseModal && !el.compareVerseModal.hidden) closeCompareVerseModal();
@@ -3759,7 +3795,6 @@ var BIBLIA = (function () {
 
       if (e.key === 'Escape') {
         if (document.body.classList.contains('zen-mode')) { toggleZen(false); return; }
-        if (el.searchModal && !el.searchModal.hidden) { closeSearchModal(); return; }
         if (el.quickNavModal && !el.quickNavModal.hidden) { closeQuickNav(); return; }
         if (el.appearanceModal && !el.appearanceModal.hidden) { closeAppearanceModal(); return; }
         if (el.compareVerseModal && !el.compareVerseModal.hidden) { closeCompareVerseModal(); return; }
@@ -3776,9 +3811,9 @@ var BIBLIA = (function () {
         return;
       }
 
-      if (e.key === '/' && el.searchModal.hidden) {
+      if (e.key === '/' && (el.searchView ? el.searchView.hidden : true)) {
         e.preventDefault();
-        openSearchModal('');
+        showSearch('');
         return;
       }
 
@@ -3843,7 +3878,7 @@ var BIBLIA = (function () {
         return;
       }
 
-      if (el.readerView.hidden || !el.searchModal.hidden) return;
+      if (el.readerView.hidden || (el.searchView && !el.searchView.hidden)) return;
       if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') step(-1);
       else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') step(1);
       else if (e.key === 'j' || e.key === 'J') window.scrollBy({ top: 140, behavior: 'smooth' });
@@ -4198,7 +4233,7 @@ var BIBLIA = (function () {
   function searchCurrentStrong() {
     if (!state.strong) return;
     if (el.searchVersionSelect) el.searchVersionSelect.value = 'strong';
-    openSearchModal(state.strong);
+    showSearch(state.strong, 'strong');
   }
 
   function clearStrong() {
@@ -4238,67 +4273,153 @@ var BIBLIA = (function () {
       : (state.inter ? '本章其他版本未標此號。' : '切到「逐字對照」才會顯示高亮。');
   }
 
-  /* ---------- 搜尋引擎 ---------- */
-  var searchOpener = null;
+  /* ===================== 全域經文與 Strong 原文搜尋中心 ===================== */
+  function showSearch(initialQuery, targetVersion, targetScope) {
+    el.startView.hidden = true;
+    el.readerView.hidden = true;
+    if (el.planView) el.planView.hidden = true;
+    if (el.refView) el.refView.hidden = true;
+    if (el.searchView) el.searchView.hidden = false;
+
+    if (targetVersion && el.searchVersionSelect) el.searchVersionSelect.value = targetVersion;
+    if (targetScope && el.searchScopeSelect) el.searchScopeSelect.value = targetScope;
+
+    if (initialQuery !== undefined && initialQuery !== null && initialQuery !== '') {
+      if (el.searchInput) {
+        el.searchInput.value = initialQuery;
+        if (el.searchClearBtn) el.searchClearBtn.hidden = false;
+      }
+      runSearch();
+    } else {
+      if (el.searchInput) {
+        el.searchInput.focus();
+        if (el.searchClearBtn) el.searchClearBtn.hidden = !el.searchInput.value.trim();
+      }
+    }
+
+    window.scrollTo(0, 0);
+    updateHash();
+  }
 
   function buildSearchControls() {
     if (el.startSearchBtn) {
-      el.startSearchBtn.addEventListener('click', function () { openSearchModal(''); });
+      el.startSearchBtn.addEventListener('click', function () { showSearch(''); });
     }
     if (el.searchBarBtn) {
-      el.searchBarBtn.addEventListener('click', function () { openSearchModal(''); });
-    }
-    if (el.searchCloseBtn) el.searchCloseBtn.addEventListener('click', closeSearchModal);
-    if (el.searchOverlay) el.searchOverlay.addEventListener('click', closeSearchModal);
-    if (el.searchExecBtn) el.searchExecBtn.addEventListener('click', function () { runSearch(); });
-    if (el.searchInput) {
-      el.searchInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') runSearch();
-        if (e.key === 'Escape') closeSearchModal();
+      el.searchBarBtn.addEventListener('click', function () {
+        showSearch(searchState.query || '');
       });
     }
-    if (el.searchMoreBtn) el.searchMoreBtn.addEventListener('click', renderNextBatch);
+    if (el.planSearchNavBtn) {
+      el.planSearchNavBtn.addEventListener('click', function () { showSearch(''); });
+    }
+    if (el.refSearchNavBtn) {
+      el.refSearchNavBtn.addEventListener('click', function () { showSearch(''); });
+    }
+    if (el.searchHomeBtn) el.searchHomeBtn.addEventListener('click', showStart);
+    if (el.searchReaderBtn) el.searchReaderBtn.addEventListener('click', function () { showReader(); });
+    if (el.searchPlanBtn) el.searchPlanBtn.addEventListener('click', showPlan);
+    if (el.searchRefBtn) el.searchRefBtn.addEventListener('click', function () { showRef(); });
+    if (el.searchThemeBtn) el.searchThemeBtn.addEventListener('click', function () {
+      var nextTheme = { light: 'sepia', sepia: 'matcha', matcha: 'dark', dark: 'oled', oled: 'light' }[state.theme] || 'light';
+      applyTheme(nextTheme);
+      save();
+      showToast('切換主題：' + state.theme);
+    });
+
+    if (el.searchExecBtn) el.searchExecBtn.addEventListener('click', function () { runSearch(); });
+    if (el.searchInput) {
+      el.searchInput.addEventListener('input', function () {
+        if (el.searchClearBtn) el.searchClearBtn.hidden = !el.searchInput.value.trim();
+      });
+      el.searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          runSearch();
+        }
+      });
+    }
+    if (el.searchClearBtn) {
+      el.searchClearBtn.addEventListener('click', function () {
+        if (el.searchInput) {
+          el.searchInput.value = '';
+          el.searchInput.focus();
+        }
+        el.searchClearBtn.hidden = true;
+      });
+    }
+
     if (el.searchVersionSelect) {
-      el.searchVersionSelect.addEventListener('change', function () { runSearch(); });
+      el.searchVersionSelect.addEventListener('change', function () {
+        if (searchState.query) runSearch();
+      });
     }
     if (el.searchScopeSelect) {
-      el.searchScopeSelect.addEventListener('change', function () { runSearch(); });
+      el.searchScopeSelect.addEventListener('change', function () {
+        if (searchState.query) runSearch();
+      });
     }
-  }
+    if (el.searchPageSizeSelect) {
+      el.searchPageSizeSelect.addEventListener('change', function () {
+        searchState.pageSize = parseInt(el.searchPageSizeSelect.value, 10) || 20;
+        searchState.page = 1;
+        renderSearchResults();
+      });
+    }
 
-  function openSearchModal(initialQuery) {
-    searchOpener = document.activeElement;
-    el.searchModal.hidden = false;
-    if (initialQuery !== undefined && initialQuery !== '') el.searchInput.value = initialQuery;
-    el.searchInput.focus();
-    el.searchInput.select();
-    if (el.searchInput.value.trim()) runSearch();
-  }
+    if (el.searchPresetTags) {
+      el.searchPresetTags.addEventListener('click', function (e) {
+        var btn = e.target.closest('.search-tag-chip');
+        if (!btn) return;
+        var q = btn.getAttribute('data-q') || btn.textContent.trim();
+        if (/^[HG]\d+$/i.test(q)) {
+          if (el.searchVersionSelect) el.searchVersionSelect.value = 'strong';
+        }
+        showSearch(q);
+      });
+    }
 
-  function closeSearchModal() {
-    el.searchModal.hidden = true;
-    if (searchOpener && searchOpener.focus) searchOpener.focus();
-    searchOpener = null;
+    if (el.searchScrollTopBtn) {
+      el.searchScrollTopBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      window.addEventListener('scroll', function () {
+        if (el.searchView && !el.searchView.hidden) {
+          var showScrollTop = window.scrollY > 300;
+          el.searchScrollTopBtn.hidden = !showScrollTop;
+        }
+      }, { passive: true });
+    }
   }
 
   function filterBooksByScope(scope) {
     if (scope === 'ot') return state.index.filter(function (b) { return b.no < FIRST_NT; });
     if (scope === 'nt') return state.index.filter(function (b) { return b.no >= FIRST_NT; });
+    if (scope === 'law') return state.index.filter(function (b) { return b.no >= 1 && b.no <= 5; });
+    if (scope === 'history_ot') return state.index.filter(function (b) { return b.no >= 6 && b.no <= 17; });
+    if (scope === 'poetry') return state.index.filter(function (b) { return b.no >= 18 && b.no <= 22; });
+    if (scope === 'prophets_major') return state.index.filter(function (b) { return b.no >= 23 && b.no <= 27; });
+    if (scope === 'prophets_minor') return state.index.filter(function (b) { return b.no >= 28 && b.no <= 39; });
+    if (scope === 'gospels') return state.index.filter(function (b) { return b.no >= 40 && b.no <= 44; });
+    if (scope === 'pauline') return state.index.filter(function (b) { return b.no >= 45 && b.no <= 57; });
+    if (scope === 'general') return state.index.filter(function (b) { return b.no >= 58 && b.no <= 66; });
     if (scope === 'current') return state.index.filter(function (b) { return b.no === state.bookNo; });
     return state.index;
   }
 
   function runSearch() {
-    var rawQ = (el.searchInput.value || '').trim();
+    var rawQ = (el.searchInput ? el.searchInput.value : '').trim();
     if (!rawQ) {
-      el.searchSummary.textContent = '請輸入關鍵字或 Strong 號碼進行搜尋';
-      el.searchResults.innerHTML = '';
-      el.searchFoot.hidden = true;
+      el.searchSummary.innerHTML = '請輸入關鍵字或 Strong 號碼進行搜尋';
+      el.searchResults.innerHTML = '<div class="search-empty-state"><div class="search-empty-icon">📖</div><h3 class="search-empty-title">探索聖經經文與原文寶庫</h3><p class="search-empty-desc">在上方輸入字詞或點選推薦關鍵字開始檢索。</p></div>';
+      if (el.searchPaginationTop) el.searchPaginationTop.hidden = true;
+      if (el.searchPaginationBottom) el.searchPaginationBottom.hidden = true;
+      if (el.searchBookFilterRow) el.searchBookFilterRow.hidden = true;
       return;
     }
 
-    var targetVersion = el.searchVersionSelect.value;
-    var targetScope = el.searchScopeSelect.value;
+    var targetVersion = el.searchVersionSelect ? el.searchVersionSelect.value : 'zh_unv';
+    var targetScope = el.searchScopeSelect ? el.searchScopeSelect.value : 'all';
     var isStrongMatch = /^[HG]\d+[a-zA-Z]?$/i.test(rawQ) || targetVersion === 'strong';
 
     searchState.query = rawQ;
@@ -4306,11 +4427,18 @@ var BIBLIA = (function () {
     searchState.version = targetVersion;
     searchState.scope = targetScope;
     searchState.results = [];
-    searchState.page = 0;
+    searchState.filteredResults = [];
+    searchState.activeBookFilter = 'all';
+    searchState.page = 1;
+    searchState.isSearching = true;
 
-    el.searchSummary.textContent = '搜尋中…';
-    el.searchResults.innerHTML = '';
-    el.searchFoot.hidden = true;
+    el.searchSummary.innerHTML = '正在檢索經文資料庫（關鍵字：「<mark>' + escapeHtml(rawQ) + '</mark>」）…';
+    el.searchResults.innerHTML = '<div class="search-empty-state"><div class="search-empty-icon">⏳</div><h3 class="search-empty-title">正在檢索中…</h3><p class="search-empty-desc">系統正在搜尋書卷內容，請稍候。</p></div>';
+    if (el.searchPaginationTop) el.searchPaginationTop.hidden = true;
+    if (el.searchPaginationBottom) el.searchPaginationBottom.hidden = true;
+    if (el.searchBookFilterRow) el.searchBookFilterRow.hidden = true;
+
+    updateHash();
 
     if (isStrongMatch && searchIndexData && searchIndexData.strong) {
       var code = rawQ.toUpperCase();
@@ -4323,21 +4451,37 @@ var BIBLIA = (function () {
 
       var matchedRefs = hits.filter(function (ref) { return scopedBookNos[ref[0]]; });
       searchState.results = matchedRefs.map(function (ref) {
-        return { bookNo: ref[0], chap: ref[1], sec: ref[2], vkey: 'zh_unv', isStrong: true, code: code };
+        return { bookNo: ref[0], chap: ref[1], sec: ref[2], vkey: 'zh_unv', isStrong: true, code: code, text: '' };
       });
-      finishSearchRender();
+
+      ensureStrongDict(code, function () {
+        finishSearchRender();
+      });
     } else {
       var allowedBooks = filterBooksByScope(targetScope);
       var countLoaded = 0;
+      var totalBooks = allowedBooks.length;
 
-      if (!allowedBooks.length) {
+      if (!totalBooks) {
         finishSearchRender();
         return;
+      }
+
+      if (el.searchProgressWrap) {
+        el.searchProgressWrap.hidden = false;
+        if (el.searchProgressFill) el.searchProgressFill.style.width = '0%';
+        if (el.searchProgressText) el.searchProgressText.textContent = '0 / ' + totalBooks + ' 卷';
       }
 
       allowedBooks.forEach(function (b) {
         loadBook(b.no, function (bookData) {
           countLoaded++;
+          if (el.searchProgressWrap) {
+            var pct = Math.round((countLoaded / totalBooks) * 100);
+            if (el.searchProgressFill) el.searchProgressFill.style.width = pct + '%';
+            if (el.searchProgressText) el.searchProgressText.textContent = countLoaded + ' / ' + totalBooks + ' 卷';
+          }
+
           if (bookData && bookData.ch) {
             bookData.ch.forEach(function (ch) {
               ch.v.forEach(function (verse) {
@@ -4360,7 +4504,8 @@ var BIBLIA = (function () {
               });
             });
           }
-          if (countLoaded === allowedBooks.length) {
+
+          if (countLoaded === totalBooks) {
             finishSearchRender();
           }
         });
@@ -4369,63 +4514,316 @@ var BIBLIA = (function () {
   }
 
   function finishSearchRender() {
+    searchState.isSearching = false;
+    if (el.searchProgressWrap) el.searchProgressWrap.hidden = true;
+
+    // 計算各書卷及新舊約分佈
+    searchState.bookCounts = {};
+    searchState.otCount = 0;
+    searchState.ntCount = 0;
+    searchState.results.forEach(function (item) {
+      searchState.bookCounts[item.bookNo] = (searchState.bookCounts[item.bookNo] || 0) + 1;
+      if (item.bookNo < FIRST_NT) searchState.otCount++;
+      else searchState.ntCount++;
+    });
+
+    renderBookFilterPills();
+    applyBookFilter('all');
+  }
+
+  function renderBookFilterPills() {
+    if (!el.searchBookFilterRow || !el.searchBookPills) return;
     var total = searchState.results.length;
-    if (!total) {
-      el.searchSummary.textContent = '未找到相符的經文結果（關鍵字：「' + searchState.query + '」）';
-      el.searchResults.innerHTML = '<p class="placeholder">嘗試更改關鍵字或切換搜尋範圍/版本</p>';
-      el.searchFoot.hidden = true;
+    if (total <= 1) {
+      el.searchBookFilterRow.hidden = true;
       return;
     }
 
-    el.searchSummary.textContent = '共找到 ' + total + ' 筆結果（關鍵字：「' + searchState.query + '」）';
-    renderNextBatch();
+    el.searchBookFilterRow.hidden = false;
+    var html = '';
+    html += '<button type="button" class="search-book-pill' + (searchState.activeBookFilter === 'all' ? ' active' : '') + '" data-bfilter="all">全部 (' + total + ')</button>';
+
+    if (searchState.otCount > 0 && searchState.ntCount > 0) {
+      html += '<button type="button" class="search-book-pill' + (searchState.activeBookFilter === 'ot' ? ' active' : '') + '" data-bfilter="ot">舊約 (' + searchState.otCount + ')</button>';
+      html += '<button type="button" class="search-book-pill' + (searchState.activeBookFilter === 'nt' ? ' active' : '') + '" data-bfilter="nt">新約 (' + searchState.ntCount + ')</button>';
+    }
+
+    var bookNos = Object.keys(searchState.bookCounts).map(Number).sort(function (a, b) { return a - b; });
+    bookNos.forEach(function (bNo) {
+      var bMeta = state.byNo[bNo];
+      var name = bMeta ? bMeta.zh : ('第' + bNo + '卷');
+      var count = searchState.bookCounts[bNo];
+      var isActive = searchState.activeBookFilter === bNo;
+      html += '<button type="button" class="search-book-pill' + (isActive ? ' active' : '') + '" data-bfilter="' + bNo + '">' + escapeHtml(name) + ' (' + count + ')</button>';
+    });
+
+    el.searchBookPills.innerHTML = html;
+
+    el.searchBookPills.querySelectorAll('.search-book-pill').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var val = btn.getAttribute('data-bfilter');
+        var filterVal = (val === 'all' || val === 'ot' || val === 'nt') ? val : parseInt(val, 10);
+        applyBookFilter(filterVal);
+      });
+    });
   }
 
-  function renderNextBatch() {
-    var start = searchState.page * searchState.pageSize;
-    var batch = searchState.results.slice(start, start + searchState.pageSize);
-    if (!batch.length) return;
+  function applyBookFilter(bFilter) {
+    searchState.activeBookFilter = bFilter;
 
+    // 更新 pills 狀態
+    if (el.searchBookPills) {
+      el.searchBookPills.querySelectorAll('.search-book-pill').forEach(function (btn) {
+        var val = btn.getAttribute('data-bfilter');
+        var btnVal = (val === 'all' || val === 'ot' || val === 'nt') ? val : parseInt(val, 10);
+        var isAct = (btnVal === bFilter);
+        btn.classList.toggle('active', isAct);
+      });
+    }
+
+    if (bFilter === 'all') {
+      searchState.filteredResults = searchState.results;
+    } else if (bFilter === 'ot') {
+      searchState.filteredResults = searchState.results.filter(function (item) { return item.bookNo < FIRST_NT; });
+    } else if (bFilter === 'nt') {
+      searchState.filteredResults = searchState.results.filter(function (item) { return item.bookNo >= FIRST_NT; });
+    } else {
+      searchState.filteredResults = searchState.results.filter(function (item) { return item.bookNo === bFilter; });
+    }
+
+    searchState.page = 1;
+    renderSearchResults();
+  }
+
+  function renderSearchResults() {
+    var total = searchState.filteredResults.length;
+    var allTotal = searchState.results.length;
+
+    if (!allTotal) {
+      el.searchSummary.innerHTML = '未找到相符的經文結果（關鍵字：「<mark>' + escapeHtml(searchState.query) + '</mark>」）';
+      el.searchResults.innerHTML = '<div class="search-empty-state"><div class="search-empty-icon">🔍</div><h3 class="search-empty-title">查無相符經文</h3><p class="search-empty-desc">請嘗試更改搜尋詞、減少關鍵字，或調整譯本與書卷範圍。</p></div>';
+      if (el.searchPaginationTop) el.searchPaginationTop.hidden = true;
+      if (el.searchPaginationBottom) el.searchPaginationBottom.hidden = true;
+      return;
+    }
+
+    var summaryText = '共找到 <strong>' + allTotal + '</strong> 筆結果（關鍵字：「<mark>' + escapeHtml(searchState.query) + '</mark>」）';
+    if (searchState.activeBookFilter !== 'all') {
+      summaryText += ' · 當前篩選顯示 <strong>' + total + '</strong> 筆';
+    }
+    el.searchSummary.innerHTML = summaryText;
+
+    var pageSize = searchState.pageSize;
+    var totalPages = Math.max(1, Math.ceil(total / pageSize));
+    if (searchState.page > totalPages) searchState.page = totalPages;
+    if (searchState.page < 1) searchState.page = 1;
+
+    var startIndex = (searchState.page - 1) * pageSize;
+    var endIndex = Math.min(total, startIndex + pageSize);
+    var pageBatch = searchState.filteredResults.slice(startIndex, endIndex);
+
+    // 渲染分頁控制器
+    renderPaginationBars(searchState.page, totalPages, total, startIndex + 1, endIndex);
+
+    // 渲染經文卡片
     var frag = document.createDocumentFragment();
-    batch.forEach(function (item) {
+    pageBatch.forEach(function (item) {
       var bMeta = state.byNo[item.bookNo];
-      var div = document.createElement('div');
-      div.className = 'search-item';
+      var bookZh = bMeta ? bMeta.zh : ('第' + item.bookNo + '卷');
+      var isNT = item.bookNo >= FIRST_NT;
+      var testamentLabel = isNT ? '新約' : '舊約';
+      var vMeta = VERSIONS.find(function (v) { return v.key === item.vkey; });
+      var vLabel = vMeta ? vMeta.label : item.vkey;
 
-      var ref = document.createElement('div');
-      ref.className = 'search-ref';
-      var vLabel = (VERSIONS.find(function (v) { return v.key === item.vkey; }) || { label: item.vkey }).label;
-      ref.textContent = (bMeta ? bMeta.zh : ('第' + item.bookNo + '卷')) + ' ' + item.chap + ':' + item.sec +
-        ' (' + vLabel + ')';
-      div.appendChild(ref);
+      var card = document.createElement('article');
+      card.className = 'search-card';
 
-      var snip = document.createElement('div');
-      snip.className = 'search-snippet';
+      // 檢查是否已有暫存內文
+      var verseText = item.text || '';
+      if (!verseText && state.cache[item.bookNo] && state.cache[item.bookNo].ch) {
+        var chapter = state.cache[item.bookNo].ch.find(function (c) { return c.c === item.chap; });
+        var verse = chapter ? chapter.v.find(function (v) { return v.s === item.sec; }) : null;
+        if (verse && verse.t) verseText = verse.t[item.vkey] || verse.t['zh_unv'] || '';
+      }
 
-      if (item.text) {
-        var highlighted = escapeHtml(item.text);
-        item.tokens.forEach(function (tok) {
+      var cardHeader = document.createElement('header');
+      cardHeader.className = 'search-card-header';
+
+      var refWrap = document.createElement('div');
+      refWrap.className = 'search-card-ref-wrap';
+
+      var refLink = document.createElement('span');
+      refLink.className = 'search-card-ref';
+      refLink.textContent = bookZh + ' ' + item.chap + ':' + item.sec;
+      refWrap.appendChild(refLink);
+
+      var vTag = document.createElement('span');
+      vTag.className = 'search-card-version-tag';
+      vTag.textContent = vLabel;
+      refWrap.appendChild(vTag);
+
+      var tBadge = document.createElement('span');
+      tBadge.className = 'search-card-testament-badge';
+      tBadge.textContent = testamentLabel;
+      refWrap.appendChild(tBadge);
+
+      cardHeader.appendChild(refWrap);
+
+      // 卡片操作按鈕群
+      var actions = document.createElement('div');
+      actions.className = 'search-card-actions';
+
+      var readBtn = document.createElement('button');
+      readBtn.type = 'button';
+      readBtn.className = 'search-action-btn primary';
+      readBtn.title = '跳轉至此章節閱讀';
+      readBtn.innerHTML = '<span aria-hidden="true">📖</span> 閱讀';
+      readBtn.addEventListener('click', function () {
+        jumpToVerse(item.bookNo, item.chap, item.sec);
+      });
+      actions.appendChild(readBtn);
+
+      var compareBtn = document.createElement('button');
+      compareBtn.type = 'button';
+      compareBtn.className = 'search-action-btn';
+      compareBtn.title = '單節 11 譯本即時對照';
+      compareBtn.innerHTML = '<span aria-hidden="true">🔀</span> 對照';
+      compareBtn.addEventListener('click', function () {
+        openCompareVerseModal(item.bookNo, item.chap, item.sec);
+      });
+      actions.appendChild(compareBtn);
+
+      var copyBtn = document.createElement('button');
+      copyBtn.type = 'button';
+      copyBtn.className = 'search-action-btn';
+      copyBtn.title = '複製此節經文';
+      copyBtn.innerHTML = '<span aria-hidden="true">📋</span> 複製';
+      copyBtn.addEventListener('click', function () {
+        var copyText = bookZh + ' ' + item.chap + ':' + item.sec + ' ' + (item.text || verseText);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(copyText).then(function () {
+            showToast('已複製：' + bookZh + ' ' + item.chap + ':' + item.sec);
+          });
+        } else {
+          showToast('已複製經文');
+        }
+      });
+      actions.appendChild(copyBtn);
+
+      var bmBtn = document.createElement('button');
+      bmBtn.type = 'button';
+      bmBtn.className = 'search-action-btn';
+      var bmKey = item.bookNo + '_' + item.chap + '_' + item.sec;
+      var isBm = !!bookmarks[bmKey];
+      bmBtn.title = isBm ? '已收藏在書籤' : '加入靈修書籤';
+      bmBtn.innerHTML = isBm ? '<span>🔖</span> 已收藏' : '<span>🔖</span> 書籤';
+      bmBtn.addEventListener('click', function () {
+        toggleVerseBookmark(item.bookNo, item.chap, item.sec);
+        var nowBm = !!bookmarks[bmKey];
+        bmBtn.innerHTML = nowBm ? '<span>🔖</span> 已收藏' : '<span>🔖</span> 書籤';
+      });
+      actions.appendChild(bmBtn);
+
+      cardHeader.appendChild(actions);
+      card.appendChild(cardHeader);
+
+      var cardBody = document.createElement('div');
+      cardBody.className = 'search-card-body';
+
+      if (verseText) {
+        var highlighted = escapeHtml(verseText);
+        searchState.tokens.forEach(function (tok) {
           var re = new RegExp('(' + escapeRegExp(tok) + ')', 'gi');
           highlighted = highlighted.replace(re, '<mark>$1</mark>');
         });
-        snip.innerHTML = highlighted;
+        cardBody.innerHTML = highlighted;
       } else if (item.isStrong) {
-        snip.innerHTML = '包含 Strong 號碼 <mark>' + escapeHtml(item.code) + '</mark>';
+        cardBody.innerHTML = '包含 Strong 原文字典編號 <mark>' + escapeHtml(item.code) + '</mark>';
+        // 如果該書尚未載入，背景載入並補齊內文
+        loadBook(item.bookNo, function (data) {
+          if (data && data.ch) {
+            var cObj = data.ch.find(function (c) { return c.c === item.chap; });
+            var vObj = cObj ? cObj.v.find(function (v) { return v.s === item.sec; }) : null;
+            if (vObj && vObj.t && vObj.t['zh_unv']) {
+              item.text = vObj.t['zh_unv'];
+              var hl = escapeHtml(item.text) + ' <span class="search-strong-badge">[' + escapeHtml(item.code) + ']</span>';
+              cardBody.innerHTML = hl;
+            }
+          }
+        });
       }
-      div.appendChild(snip);
+      card.appendChild(cardBody);
 
-      div.addEventListener('click', function () {
-        closeSearchModal();
-        jumpToVerse(item.bookNo, item.chap, item.sec);
-      });
-      frag.appendChild(div);
+      frag.appendChild(card);
     });
 
-    if (searchState.page === 0) el.searchResults.innerHTML = '';
+    el.searchResults.innerHTML = '';
     el.searchResults.appendChild(frag);
+  }
 
-    searchState.page++;
-    el.searchFoot.hidden = (searchState.page * searchState.pageSize) >= searchState.results.length;
+  function renderPaginationBars(currentPage, totalPages, totalCount, startNum, endNum) {
+    var isMultiple = totalPages > 1;
+    if (el.searchPaginationTop) el.searchPaginationTop.hidden = !isMultiple;
+    if (el.searchPaginationBottom) el.searchPaginationBottom.hidden = !isMultiple;
+    if (!isMultiple) return;
+
+    var infoHtml = '第 <strong>' + currentPage + '</strong> / <strong>' + totalPages + '</strong> 頁（顯示第 ' + startNum + ' - ' + endNum + ' 筆，共 ' + totalCount + ' 筆）';
+    if (el.searchPageInfoTop) el.searchPageInfoTop.innerHTML = infoHtml;
+    if (el.searchPageInfoBottom) el.searchPageInfoBottom.innerHTML = infoHtml;
+
+    var generateBtnsHtml = function () {
+      var html = '';
+      // 上一頁
+      html += '<button type="button" class="search-page-btn" data-page="' + (currentPage - 1) + '" ' + (currentPage <= 1 ? 'disabled' : '') + ' aria-label="上一頁">◀ 上一頁</button>';
+
+      // 計算頁碼範圍
+      var pagesToShow = [];
+      if (totalPages <= 7) {
+        for (var i = 1; i <= totalPages; i++) pagesToShow.push(i);
+      } else {
+        pagesToShow.push(1);
+        var left = Math.max(2, currentPage - 2);
+        var right = Math.min(totalPages - 1, currentPage + 2);
+        if (left > 2) pagesToShow.push('...');
+        for (var j = left; j <= right; j++) pagesToShow.push(j);
+        if (right < totalPages - 1) pagesToShow.push('...');
+        pagesToShow.push(totalPages);
+      }
+
+      pagesToShow.forEach(function (p) {
+        if (p === '...') {
+          html += '<span class="search-page-ellipsis">…</span>';
+        } else {
+          var isCur = p === currentPage;
+          html += '<button type="button" class="search-page-btn' + (isCur ? ' active' : '') + '" data-page="' + p + '" ' + (isCur ? 'aria-current="page"' : '') + '>' + p + '</button>';
+        }
+      });
+
+      // 下一頁
+      html += '<button type="button" class="search-page-btn" data-page="' + (currentPage + 1) + '" ' + (currentPage >= totalPages ? 'disabled' : '') + ' aria-label="下一頁">下一頁 ▶</button>';
+      return html;
+    };
+
+    var btnsHtml = generateBtnsHtml();
+    if (el.searchPaginationControlsTop) el.searchPaginationControlsTop.innerHTML = btnsHtml;
+    if (el.searchPaginationControlsBottom) el.searchPaginationControlsBottom.innerHTML = btnsHtml;
+
+    var attachPaginationEvents = function (container) {
+      if (!container) return;
+      container.querySelectorAll('.search-page-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var targetPage = parseInt(btn.getAttribute('data-page'), 10);
+          if (targetPage && targetPage >= 1 && targetPage <= totalPages && targetPage !== searchState.page) {
+            searchState.page = targetPage;
+            renderSearchResults();
+            window.scrollTo({ top: el.searchStatsCard ? el.searchStatsCard.offsetTop - 60 : 0, behavior: 'smooth' });
+          }
+        });
+      });
+    };
+
+    attachPaginationEvents(el.searchPaginationControlsTop);
+    attachPaginationEvents(el.searchPaginationControlsBottom);
   }
 
   function escapeHtml(str) {
@@ -4500,5 +4898,5 @@ var BIBLIA = (function () {
 
   return { books: books, receive: receive, searchIndex: searchIndex,
            strongDict: strongDict, showPlan: showPlan, showStart: showStart, showRef: showRef,
-           showReader: showReader, jumpToVerse: jumpToVerse };
+           showSearch: showSearch, showReader: showReader, jumpToVerse: jumpToVerse };
 })();

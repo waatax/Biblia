@@ -1442,137 +1442,540 @@ body.appearance-open .pager-aa-btn {
   color: var(--fg-mute);
 }
 
-/* ===================== 11. 搜尋彈窗 ===================== */
-.search-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.search-modal[hidden] { display: none; }
-
-.search-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 16, 12, .5);
-  backdrop-filter: blur(3px);
-}
-
-.search-dialog {
-  position: relative;
-  z-index: 101;
-  width: 100%;
-  max-width: 760px;
-  max-height: min(86dvh, 900px);
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  box-shadow: var(--sh-4);
+/* ===================== 11. 獨立經文與 Strong 原文搜尋頁面 ===================== */
+.search-view {
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+}
+
+.search-main {
+  max-width: var(--maxw-plan, 960px);
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 34px) var(--pad-x) 80px;
+  padding-left: max(var(--pad-x), env(safe-area-inset-left));
+  padding-right: max(var(--pad-x), env(safe-area-inset-right));
+  flex: 1;
   font-family: var(--font-ui);
 }
 
-.search-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--line);
-  background: var(--bar);
+.search-hero {
+  margin-bottom: 24px;
 }
 
-.search-input-group { display: flex; flex: 1; gap: 8px; min-width: 0; }
+.search-main-title {
+  font-size: clamp(1.375rem, 1.1rem + 1.4vw, 2rem);
+  font-weight: 800;
+  color: var(--accent);
+  margin: 0 0 6px;
+  letter-spacing: -.02em;
+}
 
-.search-input {
+.search-subtitle {
+  font-size: .9375rem;
+  color: var(--fg-dim);
+  margin: 0 0 20px;
+  font-weight: 500;
+}
+
+.search-hero-box {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  box-shadow: var(--sh-2);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.search-box-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.search-input-wrap {
+  position: relative;
   flex: 1;
+  display: flex;
+  align-items: center;
   min-width: 0;
+}
+
+.search-input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--fg-dim);
+  pointer-events: none;
+  font-size: 1rem;
+}
+
+.search-input-main {
+  width: 100%;
+  padding: 12px 38px 12px 40px;
+  font-size: 1.0625rem;
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  outline: none;
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.search-input-main:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--fg-dim);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-clear-btn:hover {
+  color: var(--fg);
+  background: var(--bg-soft);
+}
+
+.search-exec-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.search-filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+}
+
+.search-filter-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .875rem;
+  color: var(--fg-dim);
+}
+
+.search-filter-label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.search-select {
   background: var(--bg);
   color: var(--fg);
   border: 1px solid var(--line);
   border-radius: var(--r-sm);
-  padding: 9px 14px;
+  padding: 6px 10px;
+  font-size: .875rem;
   font-family: var(--font-ui);
-  font-size: 1rem;
+  cursor: pointer;
   outline: none;
 }
-.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-
-.search-exec-btn { flex: 0 0 auto; padding: 9px 18px; }
-
-.search-close-btn {
-  flex: 0 0 auto;
-  background: none;
-  border: none;
-  color: var(--fg-dim);
-  font-size: 1.5rem;
-  line-height: 1;
-  min-width: var(--tap);
+.search-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
 }
-.search-close-btn:hover { color: var(--fg); background: var(--bg-soft); border-radius: var(--r-sm); }
 
-.search-controls {
+.search-preset-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
-  padding: 10px 16px;
-  background: var(--bg-alt);
-  border-bottom: 1px solid var(--line);
+  align-items: center;
+  gap: 8px;
   font-size: .8125rem;
-  color: var(--fg-dim);
-}
-.search-ctl { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
-.search-ctl select { font-size: .8125rem; padding: 5px 8px; }
-
-.search-summary {
-  padding: 8px 16px;
-  font-size: .8125rem;
-  color: var(--fg-dim);
-  border-bottom: 1px solid var(--line);
-  background: var(--bg);
 }
 
-.search-results {
-  flex: 1;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 12px 16px;
+.search-preset-label {
+  font-weight: 700;
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+
+.search-preset-list {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.search-tag-chip {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: .8125rem;
+  cursor: pointer;
+  transition: all var(--t-fast) ease;
+}
+
+.search-tag-chip:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* 搜尋統計卡片與書卷快篩 */
+.search-stats-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  box-shadow: var(--sh-1);
+}
+
+.search-stats-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
-.search-item {
-  background: var(--bar);
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  padding: 11px 14px;
-  cursor: pointer;
-  transition: border-color var(--t-fast) ease, background var(--t-fast) ease;
+.search-summary {
+  font-size: .9375rem;
+  font-weight: 600;
+  color: var(--fg);
 }
-.search-item:hover { border-color: var(--accent); background: var(--accent-soft); }
 
-.search-ref { font-weight: 700; font-size: .875rem; color: var(--accent); margin-bottom: 4px; }
-.search-snippet { font-size: .875rem; color: var(--fg); line-height: 1.6; }
-.search-snippet mark {
+.search-summary mark {
   background: var(--hit);
   color: inherit;
-  padding: 1px 3px;
-  border-radius: 2px;
-  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 700;
 }
 
-.search-foot {
-  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
-  border-top: 1px solid var(--line);
-  text-align: center;
-  background: var(--bar);
+.search-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 200px;
+  max-width: 300px;
 }
-.search-more-btn { padding: 7px 16px; font-size: .8125rem; }
+
+.search-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.search-progress-fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width .2s ease;
+}
+
+.search-progress-text {
+  font-size: .75rem;
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+
+.search-book-filter-row {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.search-book-filter-label {
+  font-size: .8125rem;
+  font-weight: 700;
+  color: var(--fg-dim);
+  white-space: nowrap;
+  padding-top: 4px;
+}
+
+.search-book-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.search-book-pill {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  font-size: .8125rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--t-fast) ease;
+  white-space: nowrap;
+}
+
+.search-book-pill:hover {
+  background: var(--bg-soft);
+  border-color: var(--accent);
+}
+
+.search-book-pill.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+/* 分頁導航列 */
+.search-pagination-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0 16px;
+}
+
+.search-page-info {
+  font-size: .875rem;
+  color: var(--fg-dim);
+}
+
+.search-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.search-page-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: var(--r-sm);
+  font-size: .875rem;
+  font-family: var(--font-ui);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--t-fast) ease;
+}
+
+.search-page-btn:hover:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.search-page-btn.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.search-page-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.search-page-ellipsis {
+  padding: 0 6px;
+  color: var(--fg-dim);
+}
+
+/* 搜尋結果清單與卡片 */
+.search-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.search-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  box-shadow: var(--sh-1);
+  transition: transform var(--t-fast) ease, border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.search-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--sh-2);
+  transform: translateY(-1px);
+}
+
+.search-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.search-card-ref-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-card-ref {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.search-card-version-tag {
+  font-size: .75rem;
+  font-weight: 700;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+}
+
+.search-card-testament-badge {
+  font-size: .6875rem;
+  font-weight: 600;
+  background: var(--bg-soft);
+  color: var(--fg-dim);
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+}
+
+.search-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-action-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--fg-dim);
+  font-size: .8125rem;
+  padding: 5px 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--t-fast) ease;
+}
+
+.search-action-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.search-action-btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+.search-action-btn.primary:hover {
+  opacity: .9;
+}
+
+.search-card-body {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--fg);
+  font-family: var(--font-serif);
+}
+
+.search-card-body mark {
+  background: var(--hit);
+  color: inherit;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.08);
+}
+
+/* 空狀態與載入狀態 */
+.search-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--bg-alt);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-lg);
+}
+
+.search-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  opacity: .8;
+}
+
+.search-empty-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 8px;
+}
+
+.search-empty-desc {
+  font-size: .9375rem;
+  color: var(--fg-dim);
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+/* 懸浮回到頂端按鈕 */
+.search-scroll-top-btn {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: none;
+  box-shadow: var(--sh-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  z-index: 90;
+  transition: transform var(--t-fast) ease, opacity var(--t-fast) ease;
+}
+
+.search-scroll-top-btn:hover {
+  transform: translateY(-3px);
+}
 
 /* ===================== 12. 讀經計畫頁 ===================== */
 .plan-view {
@@ -2153,19 +2556,17 @@ body.appearance-open .pager-aa-btn {
   .aa-preset-btn { padding: 5px 2px; }
   .aa-themes { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 
-  /* 搜尋在手機直式全螢幕 */
-  .search-modal { padding: 0; }
-  .search-dialog {
-    max-width: none;
-    max-height: none;
-    height: 100dvh;
-    border-radius: 0;
-    border: none;
-  }
-  .search-header { padding-top: calc(14px + env(safe-area-inset-top)); }
-  .search-controls { gap: 8px 12px; }
-  .search-ctl { flex: 1 1 45%; }
-  .search-ctl select { flex: 1 1 auto; min-width: 0; }
+  /* 搜尋頁面手機適配 */
+  .search-hero-box { padding: 14px 14px; gap: 12px; }
+  .search-box-row { gap: 8px; }
+  .search-input-main { font-size: .9375rem; padding: 10px 32px 10px 34px; }
+  .search-exec-btn { padding: 10px 16px; font-size: .9375rem; }
+  .search-filters-bar { gap: 8px 12px; }
+  .search-filter-item { flex: 1 1 45%; }
+  .search-filter-item select { flex: 1 1 auto; min-width: 0; }
+  .search-card { padding: 12px 14px; }
+  .search-card-header { gap: 6px; }
+  .search-card-actions { width: 100%; justify-content: flex-end; }
 
   .foot { font-size: .625rem; }
 }

@@ -274,6 +274,7 @@
           <span class="switch-track" aria-hidden="true"></span>
           <span class="switch-text">逐字對照</span>
         </label>
+        <span class="versions orig-versions" id="origVersionBox"></span>
 
         <button id="openAaModalBtn" type="button" class="btn btn-sm btn-aa-quick" title="開啟字級與外觀面板">
           <span class="aa-badge" aria-hidden="true">Aa</span> 外觀排版
@@ -721,6 +722,9 @@
       <button id="planReaderBtn" type="button" class="btn" title="前往經文閱讀器">
         <span aria-hidden="true">📖</span><span class="btn-text">閱讀經文</span>
       </button>
+      <button id="planSearchNavBtn" type="button" class="btn" title="前往經文搜尋">
+        <span aria-hidden="true">🔍</span><span class="btn-text">經文搜尋</span>
+      </button>
       <button id="planRefBtn" type="button" class="btn" title="前往讀經會補充資料庫">
         <span aria-hidden="true">📚</span><span class="btn-text">補充資料</span>
       </button>
@@ -798,6 +802,9 @@
       <button id="refReaderBtn" type="button" class="btn" title="前往經文閱讀器">
         <span aria-hidden="true">📖</span><span class="btn-text">閱讀經文</span>
       </button>
+      <button id="refSearchNavBtn" type="button" class="btn" title="前往經文搜尋">
+        <span aria-hidden="true">🔍</span><span class="btn-text">經文搜尋</span>
+      </button>
       <button id="refPlanBtn" type="button" class="btn" title="前往讀經計畫">
         <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
       </button>
@@ -842,57 +849,163 @@
   </main>
 </section>
 
-<!-- ===================== 搜尋彈窗 ===================== -->
-<div id="searchModal" class="search-modal" hidden role="dialog" aria-modal="true" aria-label="搜尋經文">
-  <div class="search-overlay" id="searchOverlay"></div>
-  <div class="search-dialog">
-    <header class="search-header">
-      <div class="search-input-group">
-        <input type="search" id="searchInput" class="search-input"
-               placeholder="關鍵字（如 愛 忍耐）或 Strong 號碼（如 H7225）" autocomplete="off">
-        <button id="searchExecBtn" type="button" class="btn btn-primary search-exec-btn">搜尋</button>
+<!-- ===================== 獨立經文與 Strong 原文搜尋頁面 ===================== -->
+<section id="searchView" class="view search-view" hidden>
+  <header class="bar" id="searchBar">
+    <div class="bar-row bar-main">
+      <button id="searchHomeBtn" type="button" class="btn btn-ghost btn-home" title="回首頁">
+        <span aria-hidden="true">⌂</span><span class="btn-text">首頁</span>
+      </button>
+      <button id="searchReaderBtn" type="button" class="btn" title="前往經文閱讀器">
+        <span aria-hidden="true">📖</span><span class="btn-text">閱讀經文</span>
+      </button>
+      <button id="searchPlanBtn" type="button" class="btn" title="前往讀經計畫">
+        <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
+      </button>
+      <button id="searchRefBtn" type="button" class="btn" title="前往讀經會補充資料庫">
+        <span aria-hidden="true">📚</span><span class="btn-text">補充資料</span>
+      </button>
+
+      <span class="bar-title">經文檢索中心</span>
+
+      <span class="bar-spacer"></span>
+
+      <button id="searchThemeBtn" type="button" class="btn btn-icon" title="切換深淺色" aria-label="切換深淺色">◐</button>
+    </div>
+  </header>
+
+  <main class="search-main">
+    <div class="search-hero">
+      <div class="search-hero-content">
+        <h1 class="search-main-title">全域經文與 Strong 原文搜尋</h1>
+        <p class="search-subtitle">支援多關鍵字、多語譯本、全書卷與 Strong 編號極速檢索</p>
       </div>
-      <button id="searchCloseBtn" type="button" class="search-close-btn" title="關閉" aria-label="關閉搜尋">×</button>
-    </header>
 
-    <div class="search-controls">
-      <label class="search-ctl">
-        <span>版本</span>
-        <select id="searchVersionSelect">
-          <option value="all">所有版本</option>
-          <option value="zh_unv" selected>和合本 (中文)</option>
-          <option value="es_rvr1909">RVR1909 (西班牙文)</option>
-          <option value="es_rvc">RVC (西班牙文 Contemporánea)</option>
-          <option value="fr_nbs">NBS (法文 Nouvelle Bible Segond)</option>
-          <option value="ja_jp">日語聖經 (Japanese 口語訳)</option>
-          <option value="ko_kor">韓語聖經 (Korean 개역한글)</option>
-          <option value="vi_vie">越南聖經 (Vietnamese)</option>
-          <option value="en_kjv">KJV (英文)</option>
-          <option value="en_web">WEB (英文)</option>
-          <option value="strong">Strong 號碼</option>
-        </select>
-      </label>
+      <!-- 主搜尋輸入列 -->
+      <div class="search-hero-box">
+        <div class="search-box-row">
+          <div class="search-input-wrap">
+            <span class="search-input-icon" aria-hidden="true">🔍</span>
+            <input type="search" id="searchInput" class="search-input-main"
+                   placeholder="請輸入關鍵字（如「愛 忍耐」）或 Strong 號碼（如 H7225、G26）..."
+                   autocomplete="off" aria-label="搜尋關鍵字或 Strong 號碼">
+            <button id="searchClearBtn" type="button" class="search-clear-btn" title="清除關鍵字" aria-label="清除關鍵字" hidden>×</button>
+          </div>
+          <button id="searchExecBtn" type="button" class="btn btn-primary search-exec-btn">
+            <span aria-hidden="true">🔍</span> 搜尋
+          </button>
+        </div>
 
-      <label class="search-ctl">
-        <span>範圍</span>
-        <select id="searchScopeSelect">
-          <option value="all" selected>全本 (66卷)</option>
-          <option value="ot">舊約 (39卷)</option>
-          <option value="nt">新約 (27卷)</option>
-          <option value="current">當前書卷</option>
-        </select>
-      </label>
+        <!-- 篩選選項工具列 -->
+        <div class="search-filters-bar">
+          <div class="search-filter-item">
+            <label for="searchVersionSelect" class="search-filter-label">譯本：</label>
+            <select id="searchVersionSelect" class="search-select">
+              <option value="all">所有譯本 (全部)</option>
+              <option value="zh_unv" selected>和合本 (中文)</option>
+              <option value="en_kjv">KJV (英文)</option>
+              <option value="en_web">WEB (英文)</option>
+              <option value="es_rvr1909">RVR1909 (西班牙文)</option>
+              <option value="es_rvc">RVC (西班牙文)</option>
+              <option value="fr_nbs">NBS (法文 Segond)</option>
+              <option value="ja_jp">口語訳 (日語)</option>
+              <option value="ko_kor">개역한글 (韓語)</option>
+              <option value="vi_vie">Vietnamese (越南語)</option>
+              <option value="strong">Strong 原文字典號碼</option>
+            </select>
+          </div>
+
+          <div class="search-filter-item">
+            <label for="searchScopeSelect" class="search-filter-label">範圍：</label>
+            <select id="searchScopeSelect" class="search-select">
+              <option value="all" selected>全本聖經 (66 卷)</option>
+              <option value="ot">舊約聖經 (39 卷)</option>
+              <option value="nt">新約聖經 (27 卷)</option>
+              <option value="law">摩西五經 (創~申)</option>
+              <option value="history_ot">舊約歷史書 (書~斯)</option>
+              <option value="poetry">詩歌智慧書 (約~歌)</option>
+              <option value="prophets_major">大先知書 (賽~但)</option>
+              <option value="prophets_minor">小先知書 (何~瑪)</option>
+              <option value="gospels">四福音與使徒行傳 (太~徒)</option>
+              <option value="pauline">保羅書信 (羅~門)</option>
+              <option value="general">一般書信與啟示錄 (來~啟)</option>
+              <option value="current">當前閱讀書卷</option>
+            </select>
+          </div>
+
+          <div class="search-filter-item">
+            <label for="searchPageSizeSelect" class="search-filter-label">每頁：</label>
+            <select id="searchPageSizeSelect" class="search-select">
+              <option value="20" selected>20 筆</option>
+              <option value="50">50 筆</option>
+              <option value="100">100 筆</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 常用/推薦熱門搜尋標籤快捷鍵 -->
+        <div class="search-preset-tags">
+          <span class="search-preset-label">熱門推薦：</span>
+          <div class="search-preset-list" id="searchPresetTags">
+            <button type="button" class="search-tag-chip" data-q="愛">愛</button>
+            <button type="button" class="search-tag-chip" data-q="信心">信心</button>
+            <button type="button" class="search-tag-chip" data-q="平安">平安</button>
+            <button type="button" class="search-tag-chip" data-q="恩典">恩典</button>
+            <button type="button" class="search-tag-chip" data-q="真理">真理</button>
+            <button type="button" class="search-tag-chip" data-q="十字架">十字架</button>
+            <button type="button" class="search-tag-chip" data-q="救恩">救恩</button>
+            <button type="button" class="search-tag-chip" data-q="應許">應許</button>
+            <button type="button" class="search-tag-chip" data-q="H7225">H7225(起初)</button>
+            <button type="button" class="search-tag-chip" data-q="G26">G26(愛)</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="search-summary" id="searchSummary" aria-live="polite">輸入關鍵字開始搜尋</div>
+    <!-- 搜尋狀態與統計列 -->
+    <div class="search-stats-card" id="searchStatsCard">
+      <div class="search-stats-main">
+        <div class="search-summary" id="searchSummary" aria-live="polite">請輸入關鍵字或 Strong 號碼進行搜尋</div>
+        <div class="search-progress-wrap" id="searchProgressWrap" hidden>
+          <div class="search-progress-bar"><div class="search-progress-fill" id="searchProgressFill"></div></div>
+          <span class="search-progress-text" id="searchProgressText">正在檢索中...</span>
+        </div>
+      </div>
 
-    <div class="search-results" id="searchResults"></div>
-
-    <div class="search-foot" id="searchFoot" hidden>
-      <button id="searchMoreBtn" type="button" class="btn search-more-btn">載入更多結果</button>
+      <!-- 即時書卷快篩標籤列 -->
+      <div class="search-book-filter-row" id="searchBookFilterRow" hidden>
+        <span class="search-book-filter-label">書卷快篩：</span>
+        <div class="search-book-pills" id="searchBookPills"></div>
+      </div>
     </div>
-  </div>
-</div>
+
+    <!-- 頂部分頁導航列 -->
+    <div class="search-pagination-bar" id="searchPaginationTop" hidden>
+      <div class="search-page-info" id="searchPageInfoTop"></div>
+      <div class="search-pagination-controls" id="searchPaginationControlsTop"></div>
+    </div>
+
+    <!-- 搜尋結果清單 -->
+    <div class="search-results-list" id="searchResults">
+      <div class="search-empty-state">
+        <div class="search-empty-icon">📖</div>
+        <h3 class="search-empty-title">探索聖經經文與原文寶庫</h3>
+        <p class="search-empty-desc">在上方輸入字詞（支援多詞空白隔開，如「信 望 愛」），或點選推薦關鍵字開始檢索。</p>
+      </div>
+    </div>
+
+    <!-- 底部分頁導航列 -->
+    <div class="search-pagination-bar" id="searchPaginationBottom" hidden>
+      <div class="search-page-info" id="searchPageInfoBottom"></div>
+      <div class="search-pagination-controls" id="searchPaginationControlsBottom"></div>
+    </div>
+  </main>
+
+  <!-- 懸浮回頂部按鈕 -->
+  <button id="searchScrollTopBtn" type="button" class="search-scroll-top-btn" title="回頂部" aria-label="回到頁面頂端" hidden>
+    <span aria-hidden="true">⬆</span>
+  </button>
+</section>
 
 <!-- ===================== 閱讀排版與字級外觀設定 (Aa) ===================== -->
 <div id="appearanceModal" class="appearance-modal" hidden role="dialog" aria-modal="true" aria-label="閱讀排版與外觀設定">

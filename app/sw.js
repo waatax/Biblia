@@ -1,7 +1,7 @@
 /* Biblia — PWA Service Worker (離線快取引擎)
  * 提供靜態資產快取與動態經文資料離線存取支援
  */
-const CACHE_NAME = 'biblia-cache-v4';
+const CACHE_NAME = 'biblia-cache-v6';
 
 const CORE_ASSETS = [
   './',
