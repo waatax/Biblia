@@ -112,6 +112,29 @@
           </div>
         </div>
 
+        <div class="pick pick-block start-theme-row">
+          <span class="pick-label">主題</span>
+          <div class="start-theme-chips" id="startThemeGroup" role="radiogroup" aria-label="首頁主題選擇">
+            <button type="button" class="start-chip-btn active" data-theme="light" title="和紙白練 (明亮柔和)">☀️ 和紙白</button>
+            <button type="button" class="start-chip-btn" data-theme="sepia" title="枯茶琥珀 (暖色護眼)">📜 枯茶</button>
+            <button type="button" class="start-chip-btn" data-theme="matcha" title="若竹抹茶 (舒緩睫狀肌)">🍵 若竹</button>
+            <button type="button" class="start-chip-btn" data-theme="dark" title="藍鼠夜讀 (低眩光深灰)">🌙 藍鼠</button>
+            <button type="button" class="start-chip-btn" data-theme="oled" title="漆黑墨玄 (純黑省電沉浸)">🖤 墨玄</button>
+          </div>
+        </div>
+
+        <div class="pick pick-block start-size-row">
+          <span class="pick-label">字級</span>
+          <div class="start-size-chips" id="startSizeGroup" role="group" aria-label="首頁字級選擇">
+            <button type="button" class="start-chip-btn" data-size="14">14px</button>
+            <button type="button" class="start-chip-btn" data-size="16">16px</button>
+            <button type="button" class="start-chip-btn active" data-size="18">18px</button>
+            <button type="button" class="start-chip-btn" data-size="22">22px</button>
+            <button type="button" class="start-chip-btn" data-size="26">26px</button>
+            <button type="button" class="start-chip-btn" data-size="32">32px</button>
+          </div>
+        </div>
+
         <div class="start-btn-group">
           <button id="startSearchBtn" type="button" class="btn btn-primary go-search">
             <span aria-hidden="true">🔍</span> 搜尋經文 / Strong 號碼
@@ -711,6 +734,9 @@
       <button id="mobAaBtn" type="button" class="btn btn-block mobile-menu-item">
         <span class="aa-badge" aria-hidden="true">Aa</span> 外觀排版
       </button>
+      <button id="mobThemeBtn" type="button" class="btn btn-block mobile-menu-item" title="切換護眼主題">
+        <span class="mob-theme-icon" aria-hidden="true">◐</span> <span id="mobThemeText">切換護眼主題</span>
+      </button>
       <button id="mobHomeBtn" type="button" class="btn btn-block mobile-menu-item">
         <span aria-hidden="true">⌂</span> 回首頁
       </button>
@@ -1077,14 +1103,16 @@
         <div class="aa-slider-row">
           <button id="aaFontDown" type="button" class="btn btn-icon aa-step-btn" title="縮小字級" aria-label="縮小字級">A－</button>
           <div class="aa-slider-wrap">
-            <input type="range" id="aaFontSlider" class="aa-range-slider" min="13" max="34" step="1" value="18" aria-label="字體大小滑桿">
+            <input type="range" id="aaFontSlider" class="aa-range-slider" min="12" max="40" step="1" value="18" aria-label="字體大小滑桿">
             <div class="aa-slider-ticks">
-              <span>14</span>
-              <span>18</span>
-              <span>22</span>
-              <span>26</span>
-              <span>30</span>
-              <span>34</span>
+              <span>12</span>
+              <span>16</span>
+              <span>20</span>
+              <span>24</span>
+              <span>28</span>
+              <span>32</span>
+              <span>36</span>
+              <span>40</span>
             </div>
           </div>
           <button id="aaFontUp" type="button" class="btn btn-icon aa-step-btn" title="放大字級" aria-label="放大字級">A＋</button>
@@ -1092,11 +1120,12 @@
 
         <!-- 常用字級一鍵切換 -->
         <div class="aa-presets" role="group" aria-label="常用字級預設">
-          <button type="button" class="aa-preset-btn" data-size="15">小<span class="aa-preset-sub">15px</span></button>
-          <button type="button" class="aa-preset-btn active" data-size="18">標準<span class="aa-preset-sub">18px</span></button>
-          <button type="button" class="aa-preset-btn" data-size="21">大<span class="aa-preset-sub">21px</span></button>
-          <button type="button" class="aa-preset-btn" data-size="25">特大<span class="aa-preset-sub">25px</span></button>
-          <button type="button" class="aa-preset-btn" data-size="30">長輩<span class="aa-preset-sub">30px</span></button>
+          <button type="button" class="aa-preset-btn" data-size="14">精簡<span class="aa-preset-sub">14px</span></button>
+          <button type="button" class="aa-preset-btn" data-size="16">標準<span class="aa-preset-sub">16px</span></button>
+          <button type="button" class="aa-preset-btn active" data-size="18">舒適<span class="aa-preset-sub">18px</span></button>
+          <button type="button" class="aa-preset-btn" data-size="22">清晰<span class="aa-preset-sub">22px</span></button>
+          <button type="button" class="aa-preset-btn" data-size="26">大字<span class="aa-preset-sub">26px</span></button>
+          <button type="button" class="aa-preset-btn" data-size="32">長輩<span class="aa-preset-sub">32px</span></button>
         </div>
       </section>
 
@@ -1110,6 +1139,7 @@
               <button type="button" class="aa-seg-btn" data-lh="compact" role="radio" aria-checked="false">緊湊</button>
               <button type="button" class="aa-seg-btn active" data-lh="normal" role="radio" aria-checked="true">標準</button>
               <button type="button" class="aa-seg-btn" data-lh="relaxed" role="radio" aria-checked="false">寬鬆</button>
+              <button type="button" class="aa-seg-btn" data-lh="generous" role="radio" aria-checked="false">舒視</button>
             </div>
           </div>
 

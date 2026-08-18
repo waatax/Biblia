@@ -12,23 +12,23 @@
  * 常用字級一鍵切換、無段平滑滑桿、自訂行距與字型、章節滑動手勢。
  */
 
-/* ===================== 1. 設計 Token 與和風五大主題 ===================== */
+/* ===================== 1. 設計 Token 與和風五大護眼主題 ===================== */
 :root {
   color-scheme: light dark;
 
-  /* 1. 和紙白練 (Washi White) 主題 */
+  /* 1. 和紙白練 (Washi White) 主題 —— 柔和溫潤，防炫光長時閱讀 */
   --bg: #fbf9f5;
   --bg-alt: #ffffff;
-  --bg-soft: #f4efe6;
-  --bg-glass: rgba(251, 249, 245, 0.88);
+  --bg-soft: #f4efe5;
+  --bg-glass: rgba(251, 249, 245, 0.92);
   --bar: #ffffff;
   --fg: #1c1916;
-  --fg-dim: #5c554b;
-  --fg-mute: #857c70;
-  --line: #e4ddcf;
-  --line-soft: #f0eae0;
+  --fg-dim: #554e44;
+  --fg-mute: #7c7264;
+  --line: #e3dccf;
+  --line-soft: #efe9de;
   --accent: #8b5523;
-  --accent-hi: #aa6b31;
+  --accent-hi: #a7682d;
   --accent-soft: #f5ebe0;
   --accent-ink: #ffffff;
   --ok: #2e6b49;
@@ -36,7 +36,7 @@
   --hit: #ffe8a3;
   --hit-line: #d49b38;
   --strong: #967442;
-  --ring: rgba(139, 85, 35, .45);
+  --ring: rgba(139, 85, 35, .38);
 
   /* 靈修四色螢光 */
   --hl-yellow: #fff3c4;
@@ -71,7 +71,7 @@
   --maxw-narrow: 1080px;
   --maxw-plan: 1180px;
   --bar-h: 54px;
-  --tap: 34px;
+  --tap: 38px;
   --col-min: 300px;
 
   /* 字體族群 */
@@ -94,22 +94,28 @@
   --t-mid: .24s;
 }
 
-/* --- 2. 枯茶琥珀主題 (Sepia / Kuricha) --- */
+/* --- 行距動態響應類別 --- */
+body.lh-compact { --reading-lh: 1.55; }
+body.lh-normal { --reading-lh: 1.85; }
+body.lh-relaxed { --reading-lh: 2.15; }
+body.lh-generous { --reading-lh: 2.45; }
+
+/* --- 2. 枯茶琥珀主題 (Sepia / Kuricha) —— 暖光羊皮紙，防藍光護眼 --- */
 html.sepia, body.sepia {
   color-scheme: light;
-  --bg: #f6f0e2;
-  --bg-alt: #fffdf7;
-  --bg-soft: #ede3ce;
-  --bg-glass: rgba(246, 240, 226, 0.9);
-  --bar: #fcf8f0;
-  --fg: #2b231a;
-  --fg-dim: #6e5e4e;
-  --fg-mute: #92806e;
-  --line: #dfd3bd;
-  --line-soft: #eae0cd;
+  --bg: #f5eedc;
+  --bg-alt: #fcf8ee;
+  --bg-soft: #eae0cb;
+  --bg-glass: rgba(245, 238, 220, 0.92);
+  --bar: #fcf8ee;
+  --fg: #2c2219;
+  --fg-dim: #6a5a4a;
+  --fg-mute: #8e7d6b;
+  --line: #ded2bb;
+  --line-soft: #e9dfcb;
   --accent: #8e511b;
-  --accent-hi: #ae6625;
-  --accent-soft: #eddcc6;
+  --accent-hi: #af6625;
+  --accent-soft: #edddc6;
   --accent-ink: #ffffff;
   --ok: #2d774d;
   --seal: #ba3826;
@@ -133,22 +139,22 @@ html.sepia, body.sepia {
   --sh-4: 0 20px 60px rgba(43, 35, 26, .2);
 }
 
-/* --- 3. 若竹抹茶主題 (Matcha / Wakatake) --- */
+/* --- 3. 若竹抹茶主題 (Matcha / Wakatake) —— 綠意舒緩睫狀肌 --- */
 html.matcha, body.matcha {
   color-scheme: light;
-  --bg: #eff4ef;
-  --bg-alt: #f8faf8;
-  --bg-soft: #e2ede2;
-  --bg-glass: rgba(239, 244, 239, 0.9);
-  --bar: #f5f9f5;
+  --bg: #edf3ed;
+  --bg-alt: #f7faf7;
+  --bg-soft: #dfebdf;
+  --bg-glass: rgba(237, 243, 237, 0.92);
+  --bar: #f4f8f4;
   --fg: #17241b;
-  --fg-dim: #4a6150;
-  --fg-mute: #6e8474;
-  --line: #cddccd;
-  --line-soft: #dce7dc;
+  --fg-dim: #445c4b;
+  --fg-mute: #67806f;
+  --line: #cadaca;
+  --line-soft: #d8e6d8;
   --accent: #2e6b49;
   --accent-hi: #3b845c;
-  --accent-soft: #d8eadc;
+  --accent-soft: #d6e8da;
   --accent-ink: #ffffff;
   --ok: #2a7c49;
   --seal: #bf4335;
@@ -172,23 +178,23 @@ html.matcha, body.matcha {
   --sh-4: 0 20px 60px rgba(23, 36, 27, .2);
 }
 
-/* --- 4. 藍鼠夜讀主題 (Dark / Aonezu Dusk) --- */
+/* --- 4. 藍鼠夜讀主題 (Dark / Aonezu Dusk) —— 低眩光深灰夜讀 --- */
 html.dark, body.dark {
   color-scheme: dark;
-  --bg: #14171d;
-  --bg-alt: #1a1f27;
-  --bg-soft: #202732;
-  --bg-glass: rgba(20, 23, 29, 0.9);
-  --bar: #1a1f27;
-  --fg: #e5e8ee;
-  --fg-dim: #949eb0;
-  --fg-mute: #6f7a8d;
-  --line: #293241;
-  --line-soft: #222a37;
+  --bg: #13161c;
+  --bg-alt: #191e27;
+  --bg-soft: #202733;
+  --bg-glass: rgba(19, 22, 28, 0.92);
+  --bar: #181d26;
+  --fg: #e2e6ed;
+  --fg-dim: #9aa4b7;
+  --fg-mute: #6f7a8f;
+  --line: #27303f;
+  --line-soft: #1f2734;
   --accent: #cfa169;
   --accent-hi: #dfb37e;
-  --accent-soft: #2d261e;
-  --accent-ink: #14171d;
+  --accent-soft: #2e261d;
+  --accent-ink: #13161c;
   --ok: #5ec489;
   --seal: #e55353;
   --hit: #4a3a12;
@@ -211,19 +217,19 @@ html.dark, body.dark {
   --sh-4: 0 20px 64px rgba(0, 0, 0, .75);
 }
 
-/* --- 5. 漆黑墨玄 OLED 主題 (OLED / Shikkoku) --- */
+/* --- 5. 漆黑墨玄 OLED 主題 (OLED / Shikkoku) —— 純黑極致節電與夜間沉浸 --- */
 html.oled, body.oled {
   color-scheme: dark;
   --bg: #000000;
-  --bg-alt: #0a0c10;
-  --bg-soft: #12161e;
-  --bg-glass: rgba(0, 0, 0, 0.92);
-  --bar: #080a0e;
-  --fg: #edeae4;
-  --fg-dim: #9b958c;
-  --fg-mute: #6f6a62;
-  --line: #20242c;
-  --line-soft: #161920;
+  --bg-alt: #0d0f14;
+  --bg-soft: #141820;
+  --bg-glass: rgba(0, 0, 0, 0.94);
+  --bar: #0a0c10;
+  --fg: #ded9d0;
+  --fg-dim: #99938a;
+  --fg-mute: #6d675e;
+  --line: #22262e;
+  --line-soft: #171a20;
   --accent: #dfa76f;
   --accent-hi: #ecb985;
   --accent-soft: #2e2316;
@@ -497,6 +503,37 @@ body.appearance-open .btn-aa-top {
 
 .pick-versions { display: flex; flex-wrap: wrap; gap: 6px 14px; }
 .pick-opts { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+
+/* 首頁主題與字級快捷晶片 */
+.start-theme-chips, .start-size-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.start-chip-btn {
+  font-family: var(--font-ui);
+  font-size: .8125rem;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+  min-height: 32px;
+  transition: all var(--t-fast) ease;
+}
+.start-chip-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+.start-chip-btn.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  box-shadow: var(--sh-1);
+}
 
 .pick-opt {
   display: inline-flex;
@@ -1279,7 +1316,7 @@ body.appearance-open .pager-aa-btn {
 /* 主題預覽卡片 (Theme Swatches) */
 .aa-themes {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
 }
 .aa-theme-card {
@@ -1292,12 +1329,13 @@ body.appearance-open .pager-aa-btn {
   border-radius: var(--r-md);
   background: var(--bg-alt);
   cursor: pointer;
-  transition: transform var(--t-fast) ease, border-color var(--t-fast) ease;
+  transition: transform var(--t-fast) ease, border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
 }
-.aa-theme-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.aa-theme-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: var(--sh-1); }
 .aa-theme-card.active {
   border-color: var(--accent);
   background: var(--accent-soft);
+  box-shadow: 0 0 0 2px var(--ring);
 }
 .aa-theme-preview {
   width: 100%;
@@ -1311,12 +1349,13 @@ body.appearance-open .pager-aa-btn {
   font-family: var(--font-serif);
   font-size: .75rem;
   font-weight: 700;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .05);
 }
-.aa-prev-light  { background: #fbf9f5; color: #1c1916; }
-.aa-prev-sepia  { background: #f6f0e2; color: #2b231a; }
-.aa-prev-matcha { background: #eff4ef; color: #17241b; border-color: #cddccd; }
-.aa-prev-dark   { background: #14171d; color: #e5e8ee; border-color: #293241; }
-.aa-prev-oled   { background: #000000; color: #edeae4; border-color: #20242c; }
+.aa-prev-light  { background: #fbf9f5; color: #1c1916; border-color: #e3dccf; }
+.aa-prev-sepia  { background: #f5eedc; color: #2c2219; border-color: #ded2bb; }
+.aa-prev-matcha { background: #edf3ed; color: #17241b; border-color: #cadaca; }
+.aa-prev-dark   { background: #13161c; color: #e2e6ed; border-color: #27303f; }
+.aa-prev-oled   { background: #000000; color: #ded9d0; border-color: #22262e; }
 
 .aa-theme-name {
   font-size: .6875rem;
@@ -2535,8 +2574,8 @@ body.appearance-open .pager-aa-btn {
 
   .bar-main { gap: 6px; }
   .ctl-label { display: none; }
-  .ctl-book select { max-width: 8.2em; font-size: .8125rem; }
-  .ctl-chap select { max-width: 4.4em; font-size: .8125rem; }
+  .ctl-book select { max-width: 8.4em; font-size: .8125rem; }
+  .ctl-chap select { max-width: 4.6em; font-size: .8125rem; }
   .bar-chapter-nav { display: none; } /* 手機直式主要使用底部 Pager 翻章，節省頂部空間 */
 
   .mobile-menu-btn { display: inline-flex; }
@@ -2548,9 +2587,13 @@ body.appearance-open .pager-aa-btn {
   .bar-main .search-btn,
   .bar-main .plan-nav-btn,
   .bar-main .ref-nav-btn,
-  .bar-main .btn-aa-top,
   .bar-main .shortcuts-btn,
   .bar-main .tools-btn { display: none; }
+  
+  /* 在手機頂部保留 Aa 與主題切換按鈕，提升快捷度 */
+  .bar-main .btn-aa-top { display: inline-flex; min-width: 36px; padding: 4px 8px; }
+  .bar-main .theme-btn { display: inline-flex; min-width: 36px; padding: 4px 8px; }
+
   .pick-book, .pick-chap { max-width: none; width: auto; flex: 1 1 40%; }
   .pick .go { flex: 0 0 auto; }
 
@@ -2569,7 +2612,7 @@ body.appearance-open .pager-aa-btn {
   }
   .appearance-dialog {
     max-width: none;
-    max-height: min(84dvh, 680px);
+    max-height: min(86dvh, 700px);
     border-radius: var(--r-xl) var(--r-xl) 0 0;
     border-left: none;
     border-right: none;
@@ -2585,17 +2628,21 @@ body.appearance-open .pager-aa-btn {
     background: var(--line);
   }
   .aa-two-col { grid-template-columns: 1fr; gap: 14px; }
-  .aa-presets { grid-template-columns: repeat(5, 1fr); gap: 4px; }
-  .aa-preset-btn { padding: 5px 2px; }
-  .aa-themes { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .aa-presets { grid-template-columns: repeat(6, 1fr); gap: 4px; }
+  .aa-preset-btn { padding: 5px 2px; font-size: .75rem; }
+  .aa-preset-sub { font-size: .5625rem; }
+  .aa-themes { grid-template-columns: repeat(5, 1fr); gap: 5px; }
+  .aa-theme-card { padding: 6px 2px; }
+  .aa-theme-preview { height: 32px; font-size: .6875rem; }
+  .aa-theme-name { font-size: .625rem; }
 
   /* 手機版語音播放器優化 (Mini Player / Bottom Sheet) */
   .audio-control-bar {
     position: fixed;
     top: auto;
     bottom: 20px;
-    left: 16px;
-    right: 16px;
+    left: 14px;
+    right: 14px;
     border-radius: var(--r-xl);
     padding: 10px 14px;
     box-shadow: var(--sh-3);
@@ -2604,7 +2651,7 @@ body.appearance-open .pager-aa-btn {
   }
   .audio-bar-inner {
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
   }
   .audio-info { flex: 1 1 auto; }
   .audio-controls { gap: 4px; }
@@ -2624,17 +2671,17 @@ body.appearance-open .pager-aa-btn {
     left: 0;
     right: 0;
     border-radius: var(--r-xl) var(--r-xl) 0 0;
-    padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+    padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
     cursor: default;
   }
   .audio-control-bar.audio-expanded .audio-bar-inner {
     flex-direction: column;
     align-items: stretch;
-    gap: 20px;
+    gap: 16px;
   }
   .audio-control-bar.audio-expanded .audio-controls {
     justify-content: center;
-    margin: 10px 0;
+    margin: 6px 0;
   }
   .audio-control-bar.audio-expanded .audio-controls .btn-icon {
     min-width: 44px;
@@ -2644,6 +2691,7 @@ body.appearance-open .pager-aa-btn {
   .audio-control-bar.audio-expanded .audio-settings {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
   .audio-control-bar.audio-expanded .audio-setting-item {
     justify-content: space-between;
@@ -2679,14 +2727,16 @@ body.appearance-open .pager-aa-btn {
   .foot { font-size: .625rem; }
 }
 
-/* --- 極矮視窗（手機橫式） --- */
-@media (max-height: 500px) and (orientation: landscape) {
+/* --- 手機橫式與矮視窗專屬優化 (Landscape Low Viewport UX) --- */
+@media (max-height: 520px) and (orientation: landscape) {
+  :root { --bar-h: 42px; }
+  .bar-main { padding-top: 2px; padding-bottom: 2px; min-height: 40px; }
   .pager { display: none; }
-  .reader { padding-bottom: 40px; }
-  .foot { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
-  .strong-panel { max-height: 82dvh; }
+  .reader { padding-top: 10px; padding-bottom: 36px; }
+  .foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .strong-panel { max-height: 84dvh; }
 
-  .bar-tools { flex-wrap: nowrap; gap: 12px; max-height: none; overflow: visible; }
+  .bar-tools { flex-wrap: nowrap; gap: 10px; max-height: none; overflow: visible; padding: 6px var(--pad-x); }
   .bar-tools .tool-group { width: auto; }
   .tool-versions { flex: 1 1 auto; min-width: 0; }
   .tool-display { flex: 0 0 auto; }
@@ -2699,6 +2749,29 @@ body.appearance-open .pager-aa-btn {
     mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
   }
   .versions::-webkit-scrollbar { display: none; }
+
+  /* 橫屏彈窗自適應雙欄與滾動防溢出 */
+  .appearance-dialog {
+    max-height: 94dvh;
+    max-width: 640px;
+  }
+  .appearance-body {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .aa-section { padding-bottom: 10px; gap: 8px; }
+  .aa-two-col { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .quick-nav-dialog { max-height: 94dvh; max-width: 720px; }
+  .compare-dialog { max-height: 94dvh; max-width: 720px; }
+  .note-dialog { max-height: 94dvh; max-width: 620px; }
+
+  /* 橫屏有聲播放器緊湊條 */
+  .audio-control-bar {
+    padding: 6px 14px;
+    bottom: 10px;
+  }
+  .audio-bar-inner { gap: 10px; }
 }
 
 /* ===================== 14. 動畫效果 ===================== */

@@ -228,6 +228,14 @@ var BIBLIA = (function () {
     document.head.appendChild(s);
   }
 
+  var THEMES = {
+    light:  { name: '和紙白練', icon: '☀️', color: '#fbf9f5', next: 'sepia' },
+    sepia:  { name: '枯茶琥珀', icon: '📜', color: '#f5eedc', next: 'matcha' },
+    matcha: { name: '若竹抹茶', icon: '🍵', color: '#edf3ed', next: 'dark' },
+    dark:   { name: '藍鼠夜讀', icon: '🌙', color: '#13161c', next: 'oled' },
+    oled:   { name: '漆黑墨玄', icon: '🖤', color: '#000000', next: 'light' }
+  };
+
   function applyTheme(themeName) {
     state.theme = themeName || 'light';
     ['light', 'sepia', 'matcha', 'dark', 'oled'].forEach(function (t) {
@@ -241,8 +249,44 @@ var BIBLIA = (function () {
       meta.setAttribute('name', 'theme-color');
       document.head.appendChild(meta);
     }
-    var colors = { light: '#fbf9f5', sepia: '#f6f0e2', matcha: '#eff4ef', dark: '#14171d', oled: '#000000' };
-    meta.setAttribute('content', colors[state.theme] || '#fbf9f5');
+    var tInfo = THEMES[state.theme] || THEMES.light;
+    meta.setAttribute('content', tInfo.color);
+
+    var nextInfo = THEMES[tInfo.next];
+
+    // 更新全域主題切換按鈕文字、圖示與 tooltip
+    var themeButtons = [el.themeBtn, el.planThemeBtn, el.refThemeBtn, el.searchThemeBtn].filter(Boolean);
+    themeButtons.forEach(function (btn) {
+      btn.setAttribute('title', '目前主題：' + tInfo.name + '（點擊切換為 ' + nextInfo.name + '）');
+      btn.setAttribute('aria-label', '切換色彩主題（目前：' + tInfo.name + '）');
+      btn.textContent = tInfo.icon;
+    });
+
+    if (el.mobThemeBtn) {
+      el.mobThemeBtn.setAttribute('title', '目前主題：' + tInfo.name + '（點擊切換為 ' + nextInfo.name + '）');
+      var mobIcon = el.mobThemeBtn.querySelector('.mob-theme-icon');
+      if (mobIcon) mobIcon.textContent = tInfo.icon;
+      var mobText = document.getElementById('mobThemeText');
+      if (mobText) mobText.textContent = '主題：' + tInfo.name;
+    }
+
+    if (el.startDark) {
+      el.startDark.checked = state.theme === 'dark' || state.theme === 'oled';
+    }
+
+    if (el.startThemeGroup) {
+      Array.prototype.forEach.call(el.startThemeGroup.querySelectorAll('.start-chip-btn'), function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-theme') === state.theme);
+      });
+    }
+
+    if (el.aaThemeControls) {
+      Array.prototype.forEach.call(el.aaThemeControls.querySelectorAll('.aa-theme-card'), function (card) {
+        var isAct = card.getAttribute('data-theme') === state.theme;
+        card.classList.toggle('active', isAct);
+        card.setAttribute('aria-checked', isAct ? 'true' : 'false');
+      });
+    }
   }
 
   function prefersDark() {
@@ -361,7 +405,8 @@ var BIBLIA = (function () {
       'appearanceCloseBtn', 'aaSizeText', 'aaFontSlider', 'aaFontDown', 'aaFontUp',
       'aaLhControls', 'aaFontControls', 'aaThemeControls', 'aaInterlinearSwitch', 'aaLargeVnSwitch',
       'mobileMenuBtn', 'mobileMenuModal', 'mobileMenuOverlay', 'mobileMenuCloseBtn',
-      'mobSearchBtn', 'mobStudyBtn', 'mobPlanBtn', 'mobRefBtn', 'mobAudioBtn', 'mobZenBtn', 'mobAaBtn', 'mobHomeBtn'
+      'mobSearchBtn', 'mobStudyBtn', 'mobPlanBtn', 'mobRefBtn', 'mobAudioBtn', 'mobZenBtn', 'mobAaBtn', 'mobThemeBtn', 'mobHomeBtn',
+      'startThemeGroup', 'startSizeGroup', 'themeBtn'
     ].forEach(function (id) { el[id] = document.getElementById(id); });
   }
 
@@ -501,6 +546,35 @@ var BIBLIA = (function () {
       save();
     });
 
+    if (el.startThemeGroup) {
+      Array.prototype.forEach.call(el.startThemeGroup.querySelectorAll('.start-chip-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          var t = btn.getAttribute('data-theme');
+          if (t) {
+            applyTheme(t);
+            syncVersions();
+            save();
+            showToast('已切換主題：' + (THEMES[t] ? THEMES[t].name : t));
+          }
+        });
+      });
+    }
+
+    if (el.startSizeGroup) {
+      Array.prototype.forEach.call(el.startSizeGroup.querySelectorAll('.start-chip-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          var sz = parseInt(btn.getAttribute('data-size'), 10);
+          if (sz) {
+            state.size = sz;
+            updateAaUI();
+            applyAppearance();
+            save();
+            showToast('字體大小：' + sz + 'px');
+          }
+        });
+      });
+    }
+
     if (el.startQuickNavBtn) el.startQuickNavBtn.addEventListener('click', openQuickNav);
     if (el.startStudyCenterBtn) el.startStudyCenterBtn.addEventListener('click', openStudyCenter);
   }
@@ -525,6 +599,18 @@ var BIBLIA = (function () {
     if (el.interlinearChk) el.interlinearChk.checked = state.inter;
     if (el.aaInterlinearSwitch) el.aaInterlinearSwitch.checked = state.inter;
     if (el.startDark) el.startDark.checked = state.theme === 'dark' || state.theme === 'oled';
+
+    if (el.startThemeGroup) {
+      Array.prototype.forEach.call(el.startThemeGroup.querySelectorAll('.start-chip-btn'), function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-theme') === state.theme);
+      });
+    }
+    if (el.startSizeGroup) {
+      Array.prototype.forEach.call(el.startSizeGroup.querySelectorAll('.start-chip-btn'), function (btn) {
+        var sz = parseInt(btn.getAttribute('data-size'), 10);
+        btn.classList.toggle('active', sz === state.size);
+      });
+    }
   }
 
   /* ---------- 每日精選金句卡片邏輯 ---------- */
@@ -2044,6 +2130,13 @@ var BIBLIA = (function () {
     if (el.mobAudioBtn) el.mobAudioBtn.addEventListener('click', function() { closeMobileMenu(); openAudioPlayer(); });
     if (el.mobZenBtn) el.mobZenBtn.addEventListener('click', function() { closeMobileMenu(); toggleZenMode(); });
     if (el.mobAaBtn) el.mobAaBtn.addEventListener('click', function() { closeMobileMenu(); openAppearanceModal(); });
+    if (el.mobThemeBtn) el.mobThemeBtn.addEventListener('click', function() {
+      var tInfo = THEMES[state.theme] || THEMES.light;
+      applyTheme(tInfo.next);
+      syncVersions();
+      save();
+      showToast('已切換主題：' + (THEMES[state.theme] ? THEMES[state.theme].name : state.theme));
+    });
     if (el.mobHomeBtn) el.mobHomeBtn.addEventListener('click', function() { closeMobileMenu(); goHome(); });
   }
 
@@ -2338,9 +2431,10 @@ var BIBLIA = (function () {
 
     if (el.planThemeBtn) {
       el.planThemeBtn.addEventListener('click', function () {
-        var next = { light: 'sepia', sepia: 'dark', dark: 'oled', oled: 'light' }[state.theme] || 'light';
-        applyTheme(next);
+        var tInfo = THEMES[state.theme] || THEMES.light;
+        applyTheme(tInfo.next);
         save();
+        showToast('已切換主題：' + (THEMES[state.theme] ? THEMES[state.theme].name : state.theme));
       });
     }
 
@@ -2877,9 +2971,10 @@ var BIBLIA = (function () {
     if (el.refReaderBtn) el.refReaderBtn.addEventListener('click', function () { showReader(state.bookNo, state.chap); });
     if (el.refPlanBtn) el.refPlanBtn.addEventListener('click', function () { showPlan(); });
     if (el.refThemeBtn) el.refThemeBtn.addEventListener('click', function () {
-      var next = { light: 'sepia', sepia: 'dark', dark: 'oled', oled: 'light' }[state.theme] || 'light';
-      applyTheme(next);
+      var tInfo = THEMES[state.theme] || THEMES.light;
+      applyTheme(tInfo.next);
       save();
+      showToast('已切換主題：' + (THEMES[state.theme] ? THEMES[state.theme].name : state.theme));
     });
 
     if (el.refNavTabs) {
@@ -3588,6 +3683,13 @@ var BIBLIA = (function () {
 
     if (el.aaInterlinearSwitch) el.aaInterlinearSwitch.checked = state.inter;
     if (el.aaLargeVnSwitch) el.aaLargeVnSwitch.checked = !!state.largeVn;
+
+    if (el.startSizeGroup) {
+      Array.prototype.forEach.call(el.startSizeGroup.querySelectorAll('.start-chip-btn'), function (btn) {
+        var sz = parseInt(btn.getAttribute('data-size'), 10);
+        btn.classList.toggle('active', sz === state.size);
+      });
+    }
   }
 
   function applyAppearance() {
@@ -3599,7 +3701,7 @@ var BIBLIA = (function () {
     });
     document.body.classList.add('font-' + (state.font || 'serif'));
 
-    ['lh-compact', 'lh-normal', 'lh-relaxed'].forEach(function (cls) {
+    ['lh-compact', 'lh-normal', 'lh-relaxed', 'lh-generous'].forEach(function (cls) {
       document.body.classList.remove(cls);
     });
     document.body.classList.add('lh-' + (state.lh || 'normal'));
@@ -3790,10 +3892,11 @@ var BIBLIA = (function () {
     if (el.pagerZenBtn) el.pagerZenBtn.addEventListener('click', function () { toggleZen(); });
 
     document.getElementById('themeBtn').addEventListener('click', function () {
-      var nextTheme = { light: 'sepia', sepia: 'matcha', matcha: 'dark', dark: 'oled', oled: 'light' }[state.theme] || 'light';
-      applyTheme(nextTheme);
+      var tInfo = THEMES[state.theme] || THEMES.light;
+      applyTheme(tInfo.next);
       syncVersions();
       save();
+      showToast('已切換主題：' + (THEMES[state.theme] ? THEMES[state.theme].name : state.theme));
     });
     document.getElementById('strongClose').addEventListener('click', clearStrong);
     if (el.strongOverlay) el.strongOverlay.addEventListener('click', clearStrong);
@@ -3899,10 +4002,11 @@ var BIBLIA = (function () {
 
       if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();
-        var nextTheme = { light: 'sepia', sepia: 'matcha', matcha: 'dark', dark: 'oled', oled: 'light' }[state.theme] || 'light';
-        applyTheme(nextTheme);
+        var tInfo = THEMES[state.theme] || THEMES.light;
+        applyTheme(tInfo.next);
+        syncVersions();
         save();
-        showToast('切換主題：' + state.theme);
+        showToast('已切換主題：' + (THEMES[state.theme] ? THEMES[state.theme].name : state.theme));
         return;
       }
 
@@ -3943,10 +4047,11 @@ var BIBLIA = (function () {
   }
 
   function bump(dir) {
-    state.size = Math.max(13, Math.min(34, state.size + dir));
+    state.size = Math.max(12, Math.min(40, state.size + dir));
     updateAaUI();
     applyAppearance();
     save();
+    showToast('字級大小：' + state.size + 'px');
   }
 
   /* ---------- 導覽 ---------- */
@@ -4380,10 +4485,10 @@ var BIBLIA = (function () {
     if (el.searchPlanBtn) el.searchPlanBtn.addEventListener('click', showPlan);
     if (el.searchRefBtn) el.searchRefBtn.addEventListener('click', function () { showRef(); });
     if (el.searchThemeBtn) el.searchThemeBtn.addEventListener('click', function () {
-      var nextTheme = { light: 'sepia', sepia: 'matcha', matcha: 'dark', dark: 'oled', oled: 'light' }[state.theme] || 'light';
-      applyTheme(nextTheme);
+      var tInfo = THEMES[state.theme] || THEMES.light;
+      applyTheme(tInfo.next);
       save();
-      showToast('切換主題：' + state.theme);
+      showToast('已切換主題：' + (THEMES[state.theme] ? THEMES[state.theme].name : state.theme));
     });
 
     if (el.searchExecBtn) el.searchExecBtn.addEventListener('click', function () { runSearch(); });
