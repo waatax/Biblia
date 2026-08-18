@@ -249,8 +249,14 @@
       </button>
 
       <!-- 語音朗讀按鈕 -->
-      <button id="audioPlayBtn" type="button" class="btn audio-nav-btn" title="有聲聖經朗讀與播放 (真人原聲 / AI 朗讀)">
-        <span aria-hidden="true">🔊</span><span class="btn-text">朗讀</span>
+      <button id="audioPlayBtn" type="button" class="btn audio-nav-btn" title="有聲聖經朗讀與播放 (真人原聲 / AI 朗讀)" aria-label="有聲聖經朗讀">
+        <span aria-hidden="true" class="audio-nav-icon">🔊</span><span class="btn-text">朗讀</span>
+      </button>
+
+      <!-- 譯本選擇按鈕 (版本選擇 隱藏式選單) -->
+      <button id="versionModalBtn" type="button" class="btn version-nav-btn" title="選擇聖經譯本與逐字對照 (V)" aria-label="聖經譯本與對照選單">
+        <span aria-hidden="true" class="version-nav-icon">📖</span><span class="btn-text">版本</span>
+        <span class="version-badge-count" id="versionBadgeCount">3</span>
       </button>
 
       <!-- 研經筆記與書籤中心按鈕 -->
@@ -726,7 +732,10 @@
       </button>
       <hr class="mobile-menu-sep">
       <button id="mobAudioBtn" type="button" class="btn btn-block mobile-menu-item">
-        <span aria-hidden="true">🔊</span> 語音朗讀
+        <span aria-hidden="true">🔊</span> 語音朗讀與播放
+      </button>
+      <button id="mobVersionBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">📖</span> 聖經譯本與對照選單
       </button>
       <button id="mobZenBtn" type="button" class="btn btn-block mobile-menu-item">
         <span aria-hidden="true">🍵</span> 專注模式
@@ -769,6 +778,7 @@
 
       <div class="shortcut-group">
         <h3 class="shortcut-group-title">功能與外觀</h3>
+        <div class="shortcut-row"><span class="shortcut-keys"><kbd>V</kbd></span><span class="shortcut-desc">開啟聖經譯本選擇與對照選單（隱藏式抽屜）</span></div>
         <div class="shortcut-row"><span class="shortcut-keys"><kbd>B</kbd></span><span class="shortcut-desc">開啟靈修研經中心（書籤/筆記/歷史）</span></div>
         <div class="shortcut-row"><span class="shortcut-keys"><kbd>M</kbd></span><span class="shortcut-desc">快速將當前章節加入書籤</span></div>
         <div class="shortcut-row"><span class="shortcut-keys"><kbd>T</kbd></span><span class="shortcut-desc">切換五大和風色彩主題（和紙白/枯茶/若竹/藍鼠/墨玄）</span></div>
@@ -1230,6 +1240,95 @@
         </div>
       </section>
     </div>
+  </div>
+</div>
+
+<!-- ===================== 聖經譯本選擇隱藏式選單 (Version Selection Modal / Drawer) ===================== -->
+<div id="versionModal" class="version-modal" hidden role="dialog" aria-modal="true" aria-label="聖經譯本與對照選擇">
+  <div class="version-overlay" id="versionOverlay"></div>
+  <div class="version-dialog" id="versionDialog">
+    <div class="version-grip" aria-hidden="true"></div>
+    <header class="version-header">
+      <div class="version-heading">
+        <span class="version-badge">📖</span>
+        <div>
+          <h2 class="version-title">聖經譯本與對照</h2>
+          <span class="version-subtitle">自由勾選多版本並排閱讀，或套用一鍵快選組合</span>
+        </div>
+      </div>
+      <button id="versionCloseBtn" type="button" class="version-close-btn" title="關閉" aria-label="關閉譯本選單">×</button>
+    </header>
+
+    <div class="version-body">
+      <!-- 快速組合預設 (Quick Presets) -->
+      <section class="version-section">
+        <span class="version-section-title">⚡ 快速對照組合</span>
+        <div class="version-presets-grid" id="versionPresetGrid">
+          <button type="button" class="version-preset-chip" data-preset="unv">
+            <span class="preset-name">和合本</span>
+            <span class="preset-desc">單一中文</span>
+          </button>
+          <button type="button" class="version-preset-chip" data-preset="zh_en">
+            <span class="preset-name">中英對照</span>
+            <span class="preset-desc">和合本 + KJV</span>
+          </button>
+          <button type="button" class="version-preset-chip" data-preset="zh_orig">
+            <span class="preset-name">中原對照</span>
+            <span class="preset-desc">和合本 + 原文</span>
+          </button>
+          <button type="button" class="version-preset-chip" data-preset="zh_en_orig">
+            <span class="preset-name">中英原文</span>
+            <span class="preset-desc">三語並排</span>
+          </button>
+          <button type="button" class="version-preset-chip" data-preset="all">
+            <span class="preset-name">多語全開</span>
+            <span class="preset-desc">11 款全譯本</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 逐字對照功能開關 -->
+      <section class="version-section">
+        <label class="version-toggle-row">
+          <div class="vtoggle-info">
+            <span class="vtoggle-title">逐字對照模式（含 Strong 號碼）</span>
+            <span class="vtoggle-desc">顯示原文編號標籤，點擊可查閱字根、形態學分析與字典釋義</span>
+          </div>
+          <span class="switch">
+            <input type="checkbox" id="modalInterlinearChk">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+      </section>
+
+      <!-- 各語言譯本分類列表 -->
+      <section class="version-section">
+        <span class="version-section-title">🇨🇳 中文譯本</span>
+        <div class="version-cards-list" id="versionGroupZh"></div>
+      </section>
+
+      <section class="version-section">
+        <span class="version-section-title">🇬🇧 英文譯本</span>
+        <div class="version-cards-list" id="versionGroupEn"></div>
+      </section>
+
+      <section class="version-section">
+        <span class="version-section-title">🌍 國際多語譯本</span>
+        <div class="version-cards-list" id="versionGroupWorld"></div>
+      </section>
+
+      <section class="version-section">
+        <span class="version-section-title">📜 聖經原文（希伯來文 / 希臘文）</span>
+        <div class="version-cards-list" id="versionGroupOrig"></div>
+      </section>
+    </div>
+
+    <footer class="version-footer">
+      <div class="version-footer-info">
+        <span class="version-count-summary" id="versionCountSummary">已選取 3 款譯本</span>
+      </div>
+      <button id="versionConfirmBtn" type="button" class="btn btn-primary version-confirm-btn">完成設定</button>
+    </footer>
   </div>
 </div>
 

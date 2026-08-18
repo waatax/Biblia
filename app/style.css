@@ -1379,6 +1379,347 @@ body.appearance-open .pager-aa-btn {
 .aa-toggle-main { font-size: .8125rem; font-weight: 700; color: var(--fg); }
 .aa-toggle-sub { font-size: .6875rem; color: var(--fg-dim); }
 
+/* ===================== 8.5 聖經譯本選擇隱藏式選單 / 抽屜 (Version Selection Modal) ===================== */
+.version-nav-btn {
+  position: relative;
+  font-family: var(--font-ui);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.version-badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: .6875rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.audio-nav-btn.active {
+  background: var(--accent) !important;
+  color: var(--accent-ink) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px var(--accent-soft);
+  animation: pulse-subtle 2s infinite;
+}
+
+.version-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.version-modal[hidden] { display: none; }
+
+.version-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 13, 10, .48);
+  backdrop-filter: blur(4px);
+  animation: fade-in .18s ease;
+}
+
+.version-dialog {
+  position: relative;
+  z-index: 91;
+  width: 100%;
+  max-width: 520px;
+  max-height: min(88dvh, 780px);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-ui);
+  animation: dialog-pop .22s var(--ease);
+}
+
+.version-grip { display: none; }
+
+.version-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bar);
+}
+
+.version-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.version-badge {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.version-title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
+.version-subtitle {
+  font-size: .75rem;
+  color: var(--fg-dim);
+}
+
+.version-close-btn {
+  background: none;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 1.4rem;
+  line-height: 1;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  cursor: pointer;
+}
+.version-close-btn:hover { color: var(--fg); background: var(--bg-soft); border-radius: var(--r-sm); }
+
+.version-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1 1 auto;
+}
+
+.version-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.version-section-title {
+  font-size: .8125rem;
+  font-weight: 800;
+  color: var(--fg-dim);
+  letter-spacing: .03em;
+}
+
+.version-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+  gap: 6px;
+}
+
+.version-preset-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 6px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  color: var(--fg);
+  cursor: pointer;
+  transition: all .16s var(--ease);
+  text-align: center;
+}
+.version-preset-chip:hover {
+  border-color: var(--accent);
+  background: var(--bg-soft);
+}
+.version-preset-chip.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+.preset-name {
+  font-size: .8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.preset-desc {
+  font-size: .625rem;
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+.version-preset-chip.active .preset-desc {
+  color: var(--accent);
+  opacity: .85;
+}
+
+.version-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+.vtoggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vtoggle-title {
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.vtoggle-desc {
+  font-size: .6875rem;
+  color: var(--fg-dim);
+}
+
+.version-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.version-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all .15s var(--ease);
+  user-select: none;
+}
+.version-card:hover {
+  background: var(--bg-soft);
+  border-color: var(--line-hard);
+}
+.version-card.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.version-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1 1 auto;
+}
+
+.version-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.version-card-name {
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.version-card.active .version-card-name {
+  color: var(--accent);
+}
+
+.version-tag {
+  font-size: .625rem;
+  padding: 1px 6px;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.tag-strong {
+  background: rgba(184, 115, 51, 0.15);
+  color: #b87333;
+  border: 1px solid rgba(184, 115, 51, 0.3);
+}
+.tag-orig {
+  background: rgba(46, 117, 89, 0.15);
+  color: #2e7559;
+  border: 1px solid rgba(46, 117, 89, 0.3);
+}
+
+.version-card-desc {
+  font-size: .75rem;
+  color: var(--fg-dim);
+}
+
+.version-card-right {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+.version-card-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.version-custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--line-hard);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .16s var(--ease);
+}
+.version-card:hover .version-custom-checkbox {
+  border-color: var(--accent);
+}
+.version-card.active .version-custom-checkbox {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.version-card.active .version-custom-checkbox::after {
+  content: '✓';
+  color: var(--accent-ink);
+  font-size: .75rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.version-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: var(--bar);
+}
+
+.version-count-summary {
+  font-size: .8125rem;
+  color: var(--fg-dim);
+  font-weight: 600;
+}
+
+.version-confirm-btn {
+  padding: 8px 18px;
+  font-size: .875rem;
+}
+
 /* ===================== 9. Strong 原文字典面板與遮罩 ===================== */
 .strong-overlay {
   position: fixed;
@@ -2572,27 +2913,57 @@ body.appearance-open .pager-aa-btn {
 @media (max-width: 599px) {
   :root { --pad-x: 14px; --gap: 8px; }
 
-  .bar-main { gap: 6px; }
+  .bar-main {
+    gap: 5px;
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
   .ctl-label { display: none; }
-  .ctl-book select { max-width: 8.4em; font-size: .8125rem; }
-  .ctl-chap select { max-width: 4.6em; font-size: .8125rem; }
+  .ctl-book select { max-width: 7.8em; font-size: .8125rem; padding: 5px 6px; }
+  .ctl-chap select { max-width: 4.4em; font-size: .8125rem; padding: 5px 6px; }
   .bar-chapter-nav { display: none; } /* 手機直式主要使用底部 Pager 翻章，節省頂部空間 */
 
-  .mobile-menu-btn { display: inline-flex; }
+  .mobile-menu-btn { display: inline-flex; min-width: 32px; padding: 4px 7px; }
+  
+  /* 手機直式頂部常駐：朗讀按鈕 & 版本選擇按鈕 & Aa 外觀按鈕 */
+  .bar-main .audio-nav-btn {
+    display: inline-flex !important;
+    min-width: 32px;
+    padding: 4px 7px;
+    font-size: .8125rem;
+    gap: 3px;
+  }
+  .bar-main .version-nav-btn {
+    display: inline-flex !important;
+    min-width: 32px;
+    padding: 4px 7px;
+    font-size: .8125rem;
+    gap: 3px;
+  }
+  .bar-main .btn-aa-top {
+    display: inline-flex;
+    min-width: 32px;
+    padding: 4px 7px;
+  }
+
+  /* 在極窄螢幕 (<375px) 下，朗讀與版本按鈕僅保留圖示與徽章，保持不溢出 */
+  @media (max-width: 375px) {
+    .bar-main .audio-nav-btn .btn-text,
+    .bar-main .version-nav-btn .btn-text {
+      display: none;
+    }
+  }
+
   .bar-main .btn-home,
   .bar-main .btn-quick-nav,
   .bar-main .zen-nav-btn,
-  .bar-main .audio-nav-btn,
   .bar-main .study-nav-btn,
   .bar-main .search-btn,
   .bar-main .plan-nav-btn,
   .bar-main .ref-nav-btn,
   .bar-main .shortcuts-btn,
+  .bar-main .theme-btn,
   .bar-main .tools-btn { display: none; }
-  
-  /* 在手機頂部保留 Aa 與主題切換按鈕，提升快捷度 */
-  .bar-main .btn-aa-top { display: inline-flex; min-width: 36px; padding: 4px 8px; }
-  .bar-main .theme-btn { display: inline-flex; min-width: 36px; padding: 4px 8px; }
 
   .pick-book, .pick-chap { max-width: none; width: auto; flex: 1 1 40%; }
   .pick .go { flex: 0 0 auto; }
@@ -2635,6 +3006,36 @@ body.appearance-open .pager-aa-btn {
   .aa-theme-card { padding: 6px 2px; }
   .aa-theme-preview { height: 32px; font-size: .6875rem; }
   .aa-theme-name { font-size: .625rem; }
+
+  /* 手機直式下的 聖經譯本設定面板改為自底部滑出抽屜 */
+  .version-modal {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .version-dialog {
+    max-width: none;
+    max-height: min(88dvh, 720px);
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    animation: sheet-up .25s var(--ease);
+  }
+  .version-grip {
+    display: block;
+    width: 44px;
+    height: 4px;
+    margin: 6px auto 0;
+    border-radius: var(--r-pill);
+    background: var(--line);
+  }
+  .version-presets-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
+  .version-card {
+    padding: 9px 12px;
+  }
 
   /* 手機版語音播放器優化 (Mini Player / Bottom Sheet) */
   .audio-control-bar {

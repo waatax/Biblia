@@ -339,6 +339,7 @@ var BIBLIA = (function () {
     buildMobileMenu();
     buildReaderControls();
     buildAppearanceControls();
+    buildVersionModal();
     buildSearchControls();
     buildPlanUI();
     buildRefUI();
@@ -401,11 +402,14 @@ var BIBLIA = (function () {
       'shortcutsModal', 'shortcutsOverlay', 'shortcutsCloseBtn', 'shortcutsBtn',
       'toolsBtn', 'barTools', 'sizeVal', 'pager', 'pagerPrev', 'pagerNext', 'pagerLoc',
       'readerAaBtn', 'openAaModalBtn', 'pagerAaBtn', 'zenBtn', 'pagerZenBtn', 'readingProgressBar', 'readingProgressFill',
+      'versionModalBtn', 'versionBadgeCount', 'versionModal', 'versionOverlay', 'versionCloseBtn',
+      'versionConfirmBtn', 'versionCountSummary', 'modalInterlinearChk', 'versionPresetGrid',
+      'versionGroupZh', 'versionGroupEn', 'versionGroupWorld', 'versionGroupOrig',
       'appearanceModal', 'appearanceOverlay',
       'appearanceCloseBtn', 'aaSizeText', 'aaFontSlider', 'aaFontDown', 'aaFontUp',
       'aaLhControls', 'aaFontControls', 'aaThemeControls', 'aaInterlinearSwitch', 'aaLargeVnSwitch',
       'mobileMenuBtn', 'mobileMenuModal', 'mobileMenuOverlay', 'mobileMenuCloseBtn',
-      'mobSearchBtn', 'mobStudyBtn', 'mobPlanBtn', 'mobRefBtn', 'mobAudioBtn', 'mobZenBtn', 'mobAaBtn', 'mobThemeBtn', 'mobHomeBtn',
+      'mobSearchBtn', 'mobStudyBtn', 'mobPlanBtn', 'mobRefBtn', 'mobAudioBtn', 'mobVersionBtn', 'mobZenBtn', 'mobAaBtn', 'mobThemeBtn', 'mobHomeBtn',
       'startThemeGroup', 'startSizeGroup', 'themeBtn'
     ].forEach(function (id) { el[id] = document.getElementById(id); });
   }
@@ -598,6 +602,7 @@ var BIBLIA = (function () {
     if (el.startInter) el.startInter.checked = state.inter;
     if (el.interlinearChk) el.interlinearChk.checked = state.inter;
     if (el.aaInterlinearSwitch) el.aaInterlinearSwitch.checked = state.inter;
+    if (el.modalInterlinearChk) el.modalInterlinearChk.checked = state.inter;
     if (el.startDark) el.startDark.checked = state.theme === 'dark' || state.theme === 'oled';
 
     if (el.startThemeGroup) {
@@ -610,6 +615,45 @@ var BIBLIA = (function () {
         var sz = parseInt(btn.getAttribute('data-size'), 10);
         btn.classList.toggle('active', sz === state.size);
       });
+    }
+
+    // 同步版本抽屜 (Version Modal)
+    if (el.versionModal) {
+      var modalCards = el.versionModal.querySelectorAll('.version-card');
+      Array.prototype.forEach.call(modalCards, function (card) {
+        var k = card.getAttribute('data-v');
+        var input = card.querySelector('input');
+        if (input) input.checked = !!state.on[k];
+        card.classList.toggle('active', !!state.on[k]);
+      });
+
+      var activeCount = activeVersions().length;
+      if (el.versionCountSummary) {
+        el.versionCountSummary.textContent = '已選取 ' + activeCount + ' 款譯本並排閱讀';
+      }
+      if (el.versionBadgeCount) {
+        el.versionBadgeCount.textContent = activeCount;
+      }
+
+      // 同步預設按鈕 active 樣式
+      if (el.versionPresetGrid) {
+        var isOnlyUnv = state.on.zh_unv && !VERSIONS.some(function (v) { return v.key !== 'zh_unv' && state.on[v.key]; });
+        var isZhEn = state.on.zh_unv && state.on.en_kjv && !VERSIONS.some(function (v) { return v.key !== 'zh_unv' && v.key !== 'en_kjv' && state.on[v.key]; });
+        var isZhOrig = state.on.zh_unv && state.on.he_wlc && state.on.gr_wh && !VERSIONS.some(function (v) { return v.key !== 'zh_unv' && !v.orig && state.on[v.key]; });
+        var isZhEnOrig = state.on.zh_unv && state.on.en_kjv && state.on.he_wlc && state.on.gr_wh && !VERSIONS.some(function (v) { return v.key !== 'zh_unv' && v.key !== 'en_kjv' && !v.orig && state.on[v.key]; });
+        var isAll = VERSIONS.every(function (v) { return !!state.on[v.key]; });
+
+        Array.prototype.forEach.call(el.versionPresetGrid.querySelectorAll('.version-preset-chip'), function (btn) {
+          var p = btn.getAttribute('data-preset');
+          btn.classList.toggle('active',
+            (p === 'unv' && isOnlyUnv) ||
+            (p === 'zh_en' && isZhEn) ||
+            (p === 'zh_orig' && isZhOrig) ||
+            (p === 'zh_en_orig' && isZhEnOrig) ||
+            (p === 'all' && isAll)
+          );
+        });
+      }
     }
   }
 
@@ -1337,10 +1381,28 @@ var BIBLIA = (function () {
 
     if (el.audioPlayBtn) {
       el.audioPlayBtn.addEventListener('click', function () {
-        if (audioState.isPlaying) {
-          toggleAudioPlayPause();
-        } else {
+        if (!audioState.isPlaying) {
           startAudio(state.bookNo, state.chap, 1);
+          if (el.audioControlBar) {
+            el.audioControlBar.hidden = false;
+            if (window.matchMedia && window.matchMedia('(max-width: 599px)').matches) {
+              el.audioControlBar.classList.add('audio-expanded');
+            }
+          }
+          showToast('已開啟有聲聖經朗讀 🎧');
+        } else {
+          if (window.matchMedia && window.matchMedia('(max-width: 599px)').matches && el.audioControlBar) {
+            if (el.audioControlBar.hidden) {
+              el.audioControlBar.hidden = false;
+              el.audioControlBar.classList.add('audio-expanded');
+            } else if (!el.audioControlBar.classList.contains('audio-expanded')) {
+              el.audioControlBar.classList.add('audio-expanded');
+            } else {
+              toggleAudioPlayPause();
+            }
+          } else {
+            toggleAudioPlayPause();
+          }
         }
       });
     }
@@ -2127,8 +2189,24 @@ var BIBLIA = (function () {
     if (el.mobStudyBtn) el.mobStudyBtn.addEventListener('click', function() { closeMobileMenu(); openStudyCenter(); });
     if (el.mobPlanBtn) el.mobPlanBtn.addEventListener('click', function() { closeMobileMenu(); goPlan(); });
     if (el.mobRefBtn) el.mobRefBtn.addEventListener('click', function() { closeMobileMenu(); goRef(); });
-    if (el.mobAudioBtn) el.mobAudioBtn.addEventListener('click', function() { closeMobileMenu(); openAudioPlayer(); });
-    if (el.mobZenBtn) el.mobZenBtn.addEventListener('click', function() { closeMobileMenu(); toggleZenMode(); });
+    if (el.mobAudioBtn) el.mobAudioBtn.addEventListener('click', function() {
+      closeMobileMenu();
+      if (el.audioControlBar) {
+        el.audioControlBar.hidden = false;
+        if (window.matchMedia && window.matchMedia('(max-width: 599px)').matches) {
+          el.audioControlBar.classList.add('audio-expanded');
+        }
+      }
+      if (!audioState.isPlaying) {
+        startAudio(state.bookNo, state.chap, 1);
+      }
+      showToast('已開啟語音朗讀 🎧');
+    });
+    if (el.mobVersionBtn) el.mobVersionBtn.addEventListener('click', function() {
+      closeMobileMenu();
+      openVersionModal();
+    });
+    if (el.mobZenBtn) el.mobZenBtn.addEventListener('click', function() { closeMobileMenu(); toggleZen(); });
     if (el.mobAaBtn) el.mobAaBtn.addEventListener('click', function() { closeMobileMenu(); openAppearanceModal(); });
     if (el.mobThemeBtn) el.mobThemeBtn.addEventListener('click', function() {
       var tInfo = THEMES[state.theme] || THEMES.light;
@@ -3713,6 +3791,168 @@ var BIBLIA = (function () {
     measureLayout();
   }
 
+  /* ===================== 聖經譯本選擇隱藏式選單 (Version Selection Modal / Drawer) ===================== */
+  var versionOpener = null;
+
+  function buildVersionModal() {
+    if (el.versionModalBtn) el.versionModalBtn.addEventListener('click', openVersionModal);
+    if (el.versionCloseBtn) el.versionCloseBtn.addEventListener('click', closeVersionModal);
+    if (el.versionOverlay) el.versionOverlay.addEventListener('click', closeVersionModal);
+    if (el.versionConfirmBtn) el.versionConfirmBtn.addEventListener('click', closeVersionModal);
+
+    // 逐字對照開關
+    if (el.modalInterlinearChk) {
+      el.modalInterlinearChk.addEventListener('change', function () {
+        state.inter = el.modalInterlinearChk.checked;
+        syncVersions();
+        save();
+        if (!el.readerView.hidden) render();
+        showToast(state.inter ? '逐字對照模式：開啟 🔤' : '逐字對照模式：關閉');
+      });
+    }
+
+    // 一鍵快速組合預設
+    if (el.versionPresetGrid) {
+      Array.prototype.forEach.call(el.versionPresetGrid.querySelectorAll('.version-preset-chip'), function (btn) {
+        btn.addEventListener('click', function () {
+          var preset = btn.getAttribute('data-preset');
+          applyVersionPreset(preset);
+        });
+      });
+    }
+
+    // 渲染各語言譯本卡片
+    renderVersionCards();
+  }
+
+  function renderVersionCards() {
+    var groups = {
+      zh: el.versionGroupZh,
+      en: el.versionGroupEn,
+      world: el.versionGroupWorld,
+      orig: el.versionGroupOrig
+    };
+
+    // 清空現有容器
+    Object.keys(groups).forEach(function (k) {
+      if (groups[k]) groups[k].innerHTML = '';
+    });
+
+    VERSIONS.forEach(function (v) {
+      var targetGroup = groups.world;
+      if (v.key === 'zh_unv') targetGroup = groups.zh;
+      else if (v.key === 'en_kjv' || v.key === 'en_web') targetGroup = groups.en;
+      else if (v.orig) targetGroup = groups.orig;
+
+      if (!targetGroup) return;
+
+      var card = document.createElement('label');
+      card.className = 'version-card' + (state.on[v.key] ? ' active' : '');
+      card.setAttribute('data-v', v.key);
+
+      var left = document.createElement('div');
+      left.className = 'version-card-main';
+
+      var header = document.createElement('div');
+      header.className = 'version-card-header';
+
+      var name = document.createElement('span');
+      name.className = 'version-card-name';
+      name.textContent = v.label;
+      header.appendChild(name);
+
+      if (v.strong) {
+        var strongTag = document.createElement('span');
+        strongTag.className = 'version-tag tag-strong';
+        strongTag.textContent = 'Strong 字典';
+        header.appendChild(strongTag);
+      }
+
+      if (v.orig) {
+        var origTag = document.createElement('span');
+        origTag.className = 'version-tag tag-orig';
+        origTag.textContent = v.otonly ? '舊約原文' : '新約原文';
+        header.appendChild(origTag);
+      }
+
+      left.appendChild(header);
+
+      var full = document.createElement('div');
+      full.className = 'version-card-desc';
+      full.textContent = v.full;
+      left.appendChild(full);
+
+      var right = document.createElement('div');
+      right.className = 'version-card-right';
+
+      var chk = document.createElement('input');
+      chk.type = 'checkbox';
+      chk.className = 'version-card-input';
+      chk.setAttribute('data-v', v.key);
+      chk.checked = !!state.on[v.key];
+      chk.setAttribute('aria-label', v.full);
+
+      chk.addEventListener('change', function () {
+        state.on[v.key] = chk.checked;
+        card.classList.toggle('active', chk.checked);
+        syncVersions();
+        save();
+        if (!el.readerView.hidden) render();
+      });
+
+      var customChk = document.createElement('span');
+      customChk.className = 'version-custom-checkbox';
+      customChk.setAttribute('aria-hidden', 'true');
+
+      right.appendChild(chk);
+      right.appendChild(customChk);
+
+      card.appendChild(left);
+      card.appendChild(right);
+      targetGroup.appendChild(card);
+    });
+  }
+
+  function applyVersionPreset(preset) {
+    if (preset === 'unv') {
+      VERSIONS.forEach(function (v) { state.on[v.key] = (v.key === 'zh_unv'); });
+      showToast('已切換為「和合本 (繁體中文)」單一譯本 📖');
+    } else if (preset === 'zh_en') {
+      VERSIONS.forEach(function (v) { state.on[v.key] = (v.key === 'zh_unv' || v.key === 'en_kjv'); });
+      showToast('已切換為「中英對照 (和合本 + KJV)」 🌐');
+    } else if (preset === 'zh_orig') {
+      VERSIONS.forEach(function (v) { state.on[v.key] = (v.key === 'zh_unv' || v.orig); });
+      showToast('已切換為「中原對照 (和合本 + 原文)」 📜');
+    } else if (preset === 'zh_en_orig') {
+      VERSIONS.forEach(function (v) { state.on[v.key] = (v.key === 'zh_unv' || v.key === 'en_kjv' || v.orig); });
+      showToast('已切換為「中英原文三語並排」 🏛️');
+    } else if (preset === 'all') {
+      VERSIONS.forEach(function (v) { state.on[v.key] = true; });
+      showToast('已開啟所有 11 款全譯本對照 ✨');
+    }
+    syncVersions();
+    save();
+    if (!el.readerView.hidden) render();
+  }
+
+  function openVersionModal() {
+    versionOpener = document.activeElement;
+    if (el.versionModal) {
+      el.versionModal.hidden = false;
+      document.body.classList.add('version-modal-open');
+    }
+    syncVersions();
+  }
+
+  function closeVersionModal() {
+    if (el.versionModal) {
+      el.versionModal.hidden = true;
+      document.body.classList.remove('version-modal-open');
+    }
+    if (versionOpener && versionOpener.focus) versionOpener.focus();
+    versionOpener = null;
+  }
+
   /* ---------- 手機直式章節滑動手勢引擎 (Swipe Gesture) ---------- */
   function initSwipeGesture() {
     var readerEl = el.reader;
@@ -3934,6 +4174,8 @@ var BIBLIA = (function () {
       });
     }
 
+    if (el.versionModalBtn) el.versionModalBtn.addEventListener('click', openVersionModal);
+
     if (el.pagerPrev) el.pagerPrev.addEventListener('click', function () { step(-1); });
     if (el.pagerNext) el.pagerNext.addEventListener('click', function () { step(1); });
 
@@ -3945,6 +4187,7 @@ var BIBLIA = (function () {
         if (e.key === 'Escape') {
           if (el.quickNavModal && !el.quickNavModal.hidden) closeQuickNav();
           if (el.appearanceModal && !el.appearanceModal.hidden) closeAppearanceModal();
+          if (el.versionModal && !el.versionModal.hidden) closeVersionModal();
           if (el.compareVerseModal && !el.compareVerseModal.hidden) closeCompareVerseModal();
           if (el.studyCenterModal && !el.studyCenterModal.hidden) closeStudyCenter();
           if (el.shortcutsModal && !el.shortcutsModal.hidden) closeShortcutsGuide();
@@ -3956,11 +4199,22 @@ var BIBLIA = (function () {
         if (document.body.classList.contains('zen-mode')) { toggleZen(false); return; }
         if (el.quickNavModal && !el.quickNavModal.hidden) { closeQuickNav(); return; }
         if (el.appearanceModal && !el.appearanceModal.hidden) { closeAppearanceModal(); return; }
+        if (el.versionModal && !el.versionModal.hidden) { closeVersionModal(); return; }
         if (el.compareVerseModal && !el.compareVerseModal.hidden) { closeCompareVerseModal(); return; }
         if (el.studyCenterModal && !el.studyCenterModal.hidden) { closeStudyCenter(); return; }
         if (el.shortcutsModal && !el.shortcutsModal.hidden) { closeShortcutsGuide(); return; }
         if (el.verseActionMenu && !el.verseActionMenu.hidden) { closeVerseActionMenu(); return; }
         clearStrong();
+        return;
+      }
+
+      if ((e.key === 'v' || e.key === 'V') && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        if (el.versionModal && !el.versionModal.hidden) {
+          closeVersionModal();
+        } else {
+          openVersionModal();
+        }
         return;
       }
 
