@@ -164,27 +164,28 @@
         </button>
       </div>
 
-      <!-- ===================== 讀經會補充資料庫入口卡片 ===================== -->
+      <!-- ===================== 聖經補充資料入口卡片 ===================== -->
       <div class="start-card start-ref-card">
         <div class="start-plan-header">
           <div class="start-plan-icon" aria-hidden="true">📚</div>
           <div class="start-plan-heading">
-            <h2 class="start-plan-title">讀經會補充資料庫</h2>
-            <span class="start-plan-subtitle">66卷簡介 · 歷史時間表 · 每日研經釋義資料庫</span>
+            <h2 class="start-plan-title">聖經補充資料</h2>
+            <span class="start-plan-subtitle">66卷深度導讀 · 舊約與新約總覽 · 歷史時間表 · 每日研經釋義</span>
           </div>
         </div>
 
         <div class="start-plan-body start-ref-body">
           <ul class="start-ref-features">
+            <li><span class="ref-feat-icon">📖</span> <strong>66 卷深度導讀與大綱：</strong>神學主題、基督預表、原文釋經與註釋</li>
+            <li><span class="ref-feat-icon">📜</span> <strong>舊約與新約聖經總覽：</strong>救贖歷史進程、聖約架構與正典神學</li>
             <li><span class="ref-feat-icon">📑</span> <strong>每日研經釋義參考庫：</strong>逐季匯整各書卷註釋、影音與結構圖</li>
-            <li><span class="ref-feat-icon">📖</span> <strong>66 卷書簡介與大綱：</strong>全書背景、核心主題、鑰節與結構</li>
             <li><span class="ref-feat-icon">⏳</span> <strong>聖經歷史年代時間表：</strong>大歷史年表、先知分期與猶太曆法</li>
             <li><span class="ref-feat-icon">🎧</span> <strong>全書卷有聲聖經庫：</strong>國語、粵語、英文 KJV 真人原聲與連續倍速播放</li>
           </ul>
         </div>
 
         <button id="startRefBtn" type="button" class="btn btn-primary btn-block go-ref">
-          <span aria-hidden="true">📚</span> 開啟讀經會補充資料庫
+          <span aria-hidden="true">📚</span> 開啟聖經補充資料
         </button>
       </div>
 
@@ -272,7 +273,7 @@
         <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
       </button>
 
-      <button id="readerRefBtn" type="button" class="btn ref-nav-btn" title="查看讀經會補充資料庫">
+      <button id="readerRefBtn" type="button" class="btn ref-nav-btn" title="查看聖經補充資料">
         <span aria-hidden="true">📚</span><span class="btn-text">補充資料</span>
       </button>
 
@@ -804,7 +805,7 @@
       <button id="planSearchNavBtn" type="button" class="btn" title="前往經文搜尋">
         <span aria-hidden="true">🔍</span><span class="btn-text">經文搜尋</span>
       </button>
-      <button id="planRefBtn" type="button" class="btn" title="前往讀經會補充資料庫">
+      <button id="planRefBtn" type="button" class="btn" title="前往聖經補充資料">
         <span aria-hidden="true">📚</span><span class="btn-text">補充資料</span>
       </button>
 
@@ -871,7 +872,7 @@
   </main>
 </section>
 
-<!-- ===================== 讀經會補充資料庫頁面 ===================== -->
+<!-- ===================== 聖經補充資料頁面 ===================== -->
 <section id="refView" class="view ref-view" hidden>
   <header class="bar">
     <div class="bar-row bar-main">
@@ -888,7 +889,7 @@
         <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
       </button>
 
-      <span class="bar-title">讀經會補充資料庫</span>
+      <span class="bar-title">聖經補充資料</span>
 
       <span class="bar-spacer"></span>
 
@@ -899,17 +900,13 @@
   <main class="ref-main">
     <div class="ref-hero">
       <div class="ref-hero-content">
-        <h1 class="ref-main-title">讀經會補充資料庫</h1>
-        <p class="ref-subtitle">國際讀經會台灣總會《每日研經釋義》參考資料庫 · 66 卷聖經簡介 · 歷史時間表</p>
+        <h1 class="ref-main-title">聖經補充資料</h1>
       </div>
     </div>
 
     <!-- 頁籤導覽 (Tab Switcher) -->
     <div class="ref-nav-tabs" id="refNavTabs" role="tablist" aria-label="資料庫分頁選擇">
-      <button type="button" class="ref-tab-btn active" data-reftab="su101" role="tab" aria-selected="true">
-        <span aria-hidden="true">📑</span> 每日研經釋義參考庫
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="intros" role="tab" aria-selected="false">
+      <button type="button" class="ref-tab-btn active" data-reftab="intros" role="tab" aria-selected="true">
         <span aria-hidden="true">📖</span> 66 卷聖經書卷簡介
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="ot_survey" role="tab" aria-selected="false">
@@ -917,6 +914,9 @@
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="nt_survey" role="tab" aria-selected="false">
         <span aria-hidden="true">✝️</span> 新約聖經總覽
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="su101" role="tab" aria-selected="false">
+        <span aria-hidden="true">📑</span> 每日研經釋義參考庫
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="rev_study" role="tab" aria-selected="false">
         <span aria-hidden="true">👑</span> 啟示錄深度導論
@@ -930,11 +930,11 @@
     </div>
 
     <!-- Tab Content Panels -->
-    <div id="refPanelSu101" class="ref-panel active"></div>
-    <div id="refPanelIntros" class="ref-panel" hidden></div>
-    <div id="refPanelBookStudy" class="ref-panel" hidden></div>
+    <div id="refPanelIntros" class="ref-panel active"></div>
     <div id="refPanelOtSurvey" class="ref-panel" hidden></div>
     <div id="refPanelNtSurvey" class="ref-panel" hidden></div>
+    <div id="refPanelSu101" class="ref-panel" hidden></div>
+    <div id="refPanelBookStudy" class="ref-panel" hidden></div>
     <div id="refPanelRevStudy" class="ref-panel" hidden></div>
     <div id="refPanelTimeline" class="ref-panel" hidden></div>
     <div id="refPanelAudio" class="ref-panel" hidden></div>
@@ -954,7 +954,7 @@
       <button id="searchPlanBtn" type="button" class="btn" title="前往讀經計畫">
         <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
       </button>
-      <button id="searchRefBtn" type="button" class="btn" title="前往讀經會補充資料庫">
+      <button id="searchRefBtn" type="button" class="btn" title="前往聖經補充資料">
         <span aria-hidden="true">📚</span><span class="btn-text">補充資料</span>
       </button>
 

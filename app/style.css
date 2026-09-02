@@ -3236,7 +3236,7 @@ body.appearance-open .pager-aa-btn {
   font-size: 1.85rem;
   font-weight: 800;
   color: var(--fg);
-  margin: 0 0 8px 0;
+  margin: 0;
   letter-spacing: -0.02em;
 }
 

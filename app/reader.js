@@ -2260,7 +2260,7 @@ var BIBLIA = (function () {
     }
     if (hash.indexOf('#ref') === 0) {
       var parts = hash.split('/');
-      var refTab = parts[1] || 'su101';
+      var refTab = parts[1] || 'intros';
       if (refTab === 'book_study' && parts[2]) {
         refState.currentBookStudyNo = parseInt(parts[2], 10) || 1;
       }
@@ -3040,9 +3040,9 @@ var BIBLIA = (function () {
     return wrap;
   }
 
-  /* ===================== 讀經會補充資料庫邏輯 ===================== */
+  /* ===================== 聖經補充資料邏輯 ===================== */
   var refState = {
-    activeTab: 'su101',       // 'su101' | 'intros' | 'ot_survey' | 'nt_survey' | 'book_study' | 'rev_study' | 'timeline' | 'audio'
+    activeTab: 'intros',      // 'intros' | 'ot_survey' | 'nt_survey' | 'su101' | 'book_study' | 'rev_study' | 'timeline' | 'audio'
     currentBookStudyNo: 1,
     su101Quarter: 'all',
     su101Search: '',
