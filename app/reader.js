@@ -2227,92 +2227,150 @@ var BIBLIA = (function () {
     if (el.mobileMenuModal) el.mobileMenuModal.hidden = true;
   }
 
-  /* ---------- URL Hash 路由與同步 ---------- */
-  function updateHash() {
+  /* ---------- URL Hash 路由與瀏覽器歷史堆疊 (Navigation & History) ---------- */
+  var isNavigatingFromHistory = false;
+
+  function updateHash(options) {
+    options = options || {};
+    var targetHash = '';
+    var stateObj = { view: 'start' };
+
     if (!el.startView || el.startView.hidden === false) {
-      if (window.location.hash) {
-        try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch (e) {}
-      }
+      targetHash = '';
+      stateObj = { view: 'start' };
     } else if (el.planView && !el.planView.hidden) {
-      try { history.replaceState(null, '', '#plan'); } catch (e) {}
+      targetHash = '#plan';
+      stateObj = { view: 'plan' };
     } else if (el.refView && !el.refView.hidden) {
       var refHash = '#ref' + (refState && refState.activeTab ? '/' + refState.activeTab : '');
       if (refState && refState.activeTab === 'book_study' && refState.currentBookStudyNo) {
         refHash += '/' + refState.currentBookStudyNo;
       }
-      try { history.replaceState(null, '', refHash); } catch (e) {}
+      targetHash = refHash;
+      stateObj = { view: 'ref', tab: refState.activeTab, bookNo: refState.currentBookStudyNo };
     } else if (el.searchView && !el.searchView.hidden) {
       var q = searchState.query ? '?q=' + encodeURIComponent(searchState.query) : '';
-      try { history.replaceState(null, '', '#search' + q); } catch (e) {}
+      targetHash = '#search' + q;
+      stateObj = { view: 'search', query: searchState.query };
     } else if (el.readerView && !el.readerView.hidden) {
       var bMeta = state.byNo[state.bookNo];
       var bKey = bMeta ? bMeta.abbr : state.bookNo;
-      try { history.replaceState(null, '', '#read/' + bKey + '/' + state.chap); } catch (e) {}
+      targetHash = '#read/' + bKey + '/' + state.chap;
+      stateObj = { view: 'reader', bookNo: state.bookNo, chap: state.chap };
+    }
+
+    if (isNavigatingFromHistory || options.fromHash) {
+      // 由 popstate 或 hashchange 驅動，不產生重複堆疊
+      return;
+    }
+
+    var currentHash = window.location.hash || '';
+    if (!targetHash) {
+      if (currentHash && currentHash !== '#') {
+        try {
+          if (options.replace) {
+            history.replaceState(stateObj, '', window.location.pathname + window.location.search);
+          } else {
+            history.pushState(stateObj, '', window.location.pathname + window.location.search);
+          }
+        } catch (e) {
+          window.location.hash = '';
+        }
+      }
+    } else if (currentHash === targetHash) {
+      try {
+        history.replaceState(stateObj, '', targetHash);
+      } catch (e) {}
+    } else {
+      try {
+        if (options.replace) {
+          history.replaceState(stateObj, '', targetHash);
+        } else {
+          history.pushState(stateObj, '', targetHash);
+        }
+      } catch (e) {
+        window.location.hash = targetHash;
+      }
     }
   }
 
   function handleHash() {
-    var hash = window.location.hash || '';
-    if (!hash || hash === '#' || hash === '#/') return;
-    if (hash === '#plan') {
-      showPlan();
-      return;
-    }
-    if (hash.indexOf('#ref') === 0) {
-      var parts = hash.split('/');
-      var refTab = parts[1] || 'intros';
-      if (refTab === 'book_study' && parts[2]) {
-        refState.currentBookStudyNo = parseInt(parts[2], 10) || 1;
+    isNavigatingFromHistory = true;
+    try {
+      var hash = window.location.hash || '';
+      if (!hash || hash === '#' || hash === '#/' || hash === '#start') {
+        showStart({ fromHash: true });
+        return;
       }
-      showRef(refTab);
-      return;
-    }
-    if (hash.indexOf('#search') === 0) {
-      var q = '';
-      if (hash.indexOf('?q=') !== -1) {
-        q = decodeURIComponent(hash.split('?q=')[1].split('&')[0]);
-      } else if (hash.indexOf('#search/') === 0) {
-        q = decodeURIComponent(hash.slice(8));
+      if (hash === '#plan') {
+        showPlan({ fromHash: true });
+        return;
       }
-      showSearch(q);
-      return;
-    }
-    if (hash === '#study') {
-      openStudyCenter();
-      return;
-    }
-    var m = hash.match(/^#read\/([^\/]+)(?:\/(\d+))?(?:\/(\d+))?$/);
-    if (m) {
-      var bkKey = decodeURIComponent(m[1]).toLowerCase();
-      var chap = m[2] ? parseInt(m[2], 10) : 1;
-      var sec = m[3] ? parseInt(m[3], 10) : null;
-      var targetBookNo = null;
-      var num = parseInt(bkKey, 10);
-      if (!isNaN(num) && state.byNo[num]) {
-        targetBookNo = num;
-      } else {
-        for (var i = 0; i < state.index.length; i++) {
-          var b = state.index[i];
-          if ((b.abbr && b.abbr.toLowerCase() === bkKey) ||
-              (b.zh && b.zh.toLowerCase() === bkKey) ||
-              (b.en && b.en.toLowerCase() === bkKey)) {
-            targetBookNo = b.no;
-            break;
+      if (hash.indexOf('#ref') === 0) {
+        var parts = hash.split('/');
+        var refTab = parts[1] || 'intros';
+        if (refTab === 'book_study' && parts[2]) {
+          refState.currentBookStudyNo = parseInt(parts[2], 10) || 1;
+        }
+        showRef(refTab, { fromHash: true });
+        return;
+      }
+      if (hash.indexOf('#search') === 0) {
+        var q = '';
+        if (hash.indexOf('?q=') !== -1) {
+          q = decodeURIComponent(hash.split('?q=')[1].split('&')[0]);
+        } else if (hash.indexOf('#search/') === 0) {
+          q = decodeURIComponent(hash.slice(8));
+        }
+        showSearch(q, { fromHash: true });
+        return;
+      }
+      if (hash === '#study') {
+        openStudyCenter();
+        return;
+      }
+      var m = hash.match(/^#read\/([^\/]+)(?:\/(\d+))?(?:\/(\d+))?$/);
+      if (m) {
+        var bkKey = decodeURIComponent(m[1]).toLowerCase();
+        var chap = m[2] ? parseInt(m[2], 10) : 1;
+        var sec = m[3] ? parseInt(m[3], 10) : null;
+        var targetBookNo = null;
+        var num = parseInt(bkKey, 10);
+        if (!isNaN(num) && state.byNo[num]) {
+          targetBookNo = num;
+        } else {
+          for (var i = 0; i < state.index.length; i++) {
+            var b = state.index[i];
+            if ((b.abbr && b.abbr.toLowerCase() === bkKey) ||
+                (b.zh && b.zh.toLowerCase() === bkKey) ||
+                (b.en && b.en.toLowerCase() === bkKey)) {
+              targetBookNo = b.no;
+              break;
+            }
           }
         }
-      }
-      if (targetBookNo) {
-        if (sec) {
-          jumpToVerse(targetBookNo, chap, sec);
-        } else {
-          showReader(targetBookNo, chap);
+        if (targetBookNo) {
+          if (sec) {
+            jumpToVerse(targetBookNo, chap, sec, { fromHash: true });
+          } else {
+            showReader(targetBookNo, chap, null, { fromHash: true });
+          }
+          return;
         }
       }
+
+      // 未知 hash 則回到首頁
+      showStart({ fromHash: true });
+    } finally {
+      setTimeout(function () {
+        isNavigatingFromHistory = false;
+      }, 50);
     }
   }
 
   /* ---------- 檢視切換 ---------- */
-  function showStart() {
+  function showStart(options) {
+    options = options || {};
     el.readerView.hidden = true;
     if (el.planView) el.planView.hidden = true;
     if (el.refView) el.refView.hidden = true;
@@ -2334,10 +2392,15 @@ var BIBLIA = (function () {
     renderStartPlanCard();
     renderDailyVerseWidget();
     window.scrollTo(0, 0);
-    updateHash();
+    updateHash(options);
   }
 
-  function showReader(no, chap, cb) {
+  function showReader(no, chap, cb, options) {
+    if (typeof cb === 'object' && !options) {
+      options = cb;
+      cb = null;
+    }
+    options = options || {};
     no = parseInt(no, 10) || state.bookNo || 1;
     chap = parseInt(chap, 10) || state.chap || 1;
     el.startView.hidden = true;
@@ -2346,11 +2409,11 @@ var BIBLIA = (function () {
     if (el.searchView) el.searchView.hidden = true;
     el.readerView.hidden = false;
     measureLayout();
-    go(no, chap, cb);
-    updateHash();
+    go(no, chap, cb, options);
   }
 
-  function showPlan() {
+  function showPlan(options) {
+    options = options || {};
     el.startView.hidden = true;
     el.readerView.hidden = true;
     if (el.refView) el.refView.hidden = true;
@@ -2358,7 +2421,7 @@ var BIBLIA = (function () {
     if (el.planView) el.planView.hidden = false;
     renderPlan();
     window.scrollTo(0, 0);
-    updateHash();
+    updateHash(options);
   }
 
   /* ===================== 讀經計畫資料與邏輯 ===================== */
@@ -3077,7 +3140,12 @@ var BIBLIA = (function () {
     }
   }
 
-  function showRef(tabName) {
+  function showRef(tabName, options) {
+    if (typeof tabName === 'object' && !options) {
+      options = tabName;
+      tabName = null;
+    }
+    options = options || {};
     if (tabName) refState.activeTab = tabName;
     el.startView.hidden = true;
     el.readerView.hidden = true;
@@ -3086,7 +3154,7 @@ var BIBLIA = (function () {
     if (el.refView) el.refView.hidden = false;
     renderRefView();
     window.scrollTo(0, 0);
-    updateHash();
+    updateHash(options);
   }
 
   function renderRefView() {
@@ -4202,7 +4270,10 @@ var BIBLIA = (function () {
       var dy = touch.clientY - startY;
       var duration = Date.now() - startTime;
 
-      if (duration >= 50 && duration <= 600 && Math.abs(dx) >= 55 && Math.abs(dx) > Math.abs(dy) * 1.8) {
+      if (duration >= 50 && duration <= 600 && Math.abs(dx) >= 50 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+        if (navigator.vibrate) {
+          try { navigator.vibrate(12); } catch (e) {}
+        }
         if (dx < 0) {
           step(1);  // 向左滑 -> 下一章
         } else {
@@ -4254,10 +4325,17 @@ var BIBLIA = (function () {
     lastScrollTop = st <= 0 ? 0 : st;
 
     var fill = document.getElementById('readingProgressFill');
-    if (!fill) return;
-    var sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    var pct = sh > 0 ? Math.min(100, Math.max(0, (st / sh) * 100)) : 0;
-    fill.style.width = pct + '%';
+    if (fill) {
+      var sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var pct = sh > 0 ? Math.min(100, Math.max(0, (st / sh) * 100)) : 0;
+      fill.style.width = pct + '%';
+    }
+
+    // 浮動回到頂部按鈕顯隱控制
+    var readerScrollTop = document.getElementById('readerScrollTopBtn');
+    if (readerScrollTop) {
+      readerScrollTop.hidden = st < 280;
+    }
   }
 
   function quickBookmarkCurrentChapter() {
@@ -4391,6 +4469,18 @@ var BIBLIA = (function () {
     if (el.pagerPrev) el.pagerPrev.addEventListener('click', function () { step(-1); });
     if (el.pagerNext) el.pagerNext.addEventListener('click', function () { step(1); });
 
+    var sidePrev = document.getElementById('sidePrevBtn');
+    if (sidePrev) sidePrev.addEventListener('click', function () { step(-1); });
+    var sideNext = document.getElementById('sideNextBtn');
+    if (sideNext) sideNext.addEventListener('click', function () { step(1); });
+
+    var readerScrollTop = document.getElementById('readerScrollTopBtn');
+    if (readerScrollTop) {
+      readerScrollTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
     window.addEventListener('scroll', updateReadingProgress, { passive: true });
 
     // 全域快捷鍵
@@ -4505,10 +4595,20 @@ var BIBLIA = (function () {
       }
 
       if (el.readerView.hidden || (el.searchView && !el.searchView.hidden)) return;
-      if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') step(-1);
-      else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') step(1);
-      else if (e.key === 'j' || e.key === 'J') window.scrollBy({ top: 140, behavior: 'smooth' });
-      else if (e.key === 'k' || e.key === 'K') window.scrollBy({ top: -140, behavior: 'smooth' });
+      if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P' || e.key === '[' || e.key === 'PageUp') {
+        e.preventDefault();
+        step(-1);
+      } else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N' || e.key === ']' || e.key === 'PageDown') {
+        e.preventDefault();
+        step(1);
+      } else if (e.key === 'Home' || ((e.key === 'h' || e.key === 'H') && !e.ctrlKey && !e.metaKey)) {
+        e.preventDefault();
+        showStart();
+      } else if (e.key === 'j' || e.key === 'J') {
+        window.scrollBy({ top: 150, behavior: 'smooth' });
+      } else if (e.key === 'k' || e.key === 'K') {
+        window.scrollBy({ top: -150, behavior: 'smooth' });
+      }
     });
   }
 
@@ -4552,7 +4652,12 @@ var BIBLIA = (function () {
     }
   }
 
-  function go(no, chap, cb) {
+  function go(no, chap, cb, options) {
+    if (typeof cb === 'object' && !options) {
+      options = cb;
+      cb = null;
+    }
+    options = options || {};
     no = parseInt(no, 10) || state.bookNo || 1;
     chap = parseInt(chap, 10) || state.chap || 1;
     var meta = state.byNo[no];
@@ -4573,7 +4678,7 @@ var BIBLIA = (function () {
       var bMeta = state.byNo[no];
       el.quickNavBtnText.textContent = (bMeta ? bMeta.zh : '') + ' 第 ' + chap + ' 章';
     }
-    updateHash();
+    updateHash(options);
 
     // 更新音訊標籤與同步播放
     if (audioState && audioState.isPlaying) {
@@ -4615,8 +4720,43 @@ var BIBLIA = (function () {
     var atEnd = state.chap >= meta.nch && !state.byNo[state.bookNo + 1];
     if (el.pagerPrev) el.pagerPrev.disabled = atStart;
     if (el.pagerNext) el.pagerNext.disabled = atEnd;
-    document.getElementById('prevBtn').disabled = atStart;
-    document.getElementById('nextBtn').disabled = atEnd;
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.disabled = atStart;
+    if (nextBtn) nextBtn.disabled = atEnd;
+
+    // 桌機浮動側邊按鈕更新
+    var sidePrev = document.getElementById('sidePrevBtn');
+    var sideNext = document.getElementById('sideNextBtn');
+    var sidePrevLabel = document.getElementById('sidePrevLabel');
+    var sideNextLabel = document.getElementById('sideNextLabel');
+
+    if (sidePrev) {
+      sidePrev.disabled = atStart;
+      if (sidePrevLabel) {
+        if (state.chap > 1) {
+          sidePrevLabel.textContent = meta.zh + ' ' + (state.chap - 1) + ' 章';
+        } else if (state.byNo[state.bookNo - 1]) {
+          var prevMeta = state.byNo[state.bookNo - 1];
+          sidePrevLabel.textContent = prevMeta.zh + ' ' + prevMeta.nch + ' 章';
+        } else {
+          sidePrevLabel.textContent = '已至卷首';
+        }
+      }
+    }
+    if (sideNext) {
+      sideNext.disabled = atEnd;
+      if (sideNextLabel) {
+        if (state.chap < meta.nch) {
+          sideNextLabel.textContent = meta.zh + ' ' + (state.chap + 1) + ' 章';
+        } else if (state.byNo[state.bookNo + 1]) {
+          var nextMeta = state.byNo[state.bookNo + 1];
+          sideNextLabel.textContent = nextMeta.zh + ' 1 章';
+        } else {
+          sideNextLabel.textContent = '已至卷末';
+        }
+      }
+    }
   }
 
   /* ---------- 繪製 ---------- */
@@ -4647,10 +4787,22 @@ var BIBLIA = (function () {
 
     var head = document.createElement('div');
     head.className = 'chapter-head';
-    head.innerHTML = '<div class="bk"></div><div class="ch"></div>';
-    head.querySelector('.bk').textContent = data.zh + ' 第 ' + state.chap + ' 章';
-    head.querySelector('.ch').textContent = data.en + ' ' + state.chap +
-      '　·　' + (data.t === 'NT' ? '新約' : '舊約');
+    var isNT = data.t === 'NT';
+    var tSurvey = isNT ? '#ref/nt_survey' : '#ref/ot_survey';
+    var tLabel = isNT ? '✝️ 新約聖經' : '📜 舊約聖經';
+    var studyUrl = '#ref/book_study/' + state.bookNo;
+
+    head.innerHTML =
+      '<nav class="reader-breadcrumb" aria-label="經文路徑導覽">' +
+        '<a href="' + tSurvey + '" class="breadcrumb-item breadcrumb-testament" title="前往' + (isNT ? '新約' : '舊約') + '聖經總覽">' + tLabel + '</a>' +
+        '<span class="breadcrumb-sep">›</span>' +
+        '<a href="' + studyUrl + '" class="breadcrumb-item breadcrumb-book" title="查看 ' + data.zh + ' 深度學術導讀">' + data.zh + ' (' + data.en + ')</a>' +
+        '<span class="breadcrumb-sep">›</span>' +
+        '<span class="breadcrumb-item breadcrumb-current">第 ' + state.chap + ' 章</span>' +
+        '<a href="' + studyUrl + '" class="breadcrumb-study-badge" title="進入 ' + data.zh + ' 深度學術研經專頁">👑 深度研經</a>' +
+      '</nav>' +
+      '<div class="bk">' + data.zh + ' 第 ' + state.chap + ' 章</div>' +
+      '<div class="ch">' + data.en + ' ' + state.chap + '</div>';
     el.reader.appendChild(head);
 
     if (!cols.length) { el.reader.appendChild(msg('請至少勾選一個版本。')); return; }
@@ -4904,7 +5056,12 @@ var BIBLIA = (function () {
   }
 
   /* ===================== 全域經文與 Strong 原文搜尋中心 ===================== */
-  function showSearch(initialQuery, targetVersion, targetScope) {
+  function showSearch(initialQuery, targetVersion, targetScope, options) {
+    if (typeof targetVersion === 'object' && !options) {
+      options = targetVersion;
+      targetVersion = null;
+    }
+    options = options || {};
     el.startView.hidden = true;
     el.readerView.hidden = true;
     if (el.planView) el.planView.hidden = true;
@@ -4928,7 +5085,7 @@ var BIBLIA = (function () {
     }
 
     window.scrollTo(0, 0);
-    updateHash();
+    updateHash(options);
   }
 
   function buildSearchControls() {

@@ -407,6 +407,21 @@
     <p class="placeholder">載入中…</p>
   </main>
 
+  <!-- 桌機側邊浮動翻章導覽 (Desktop Floating Side Nav) -->
+  <button id="sidePrevBtn" class="side-nav-btn side-nav-prev" title="上一章（← 或 [）" aria-label="上一章">
+    <span class="side-nav-icon" aria-hidden="true">‹</span>
+    <span class="side-nav-label" id="sidePrevLabel">上一章</span>
+  </button>
+  <button id="sideNextBtn" class="side-nav-btn side-nav-next" title="下一章（→ 或 ]）" aria-label="下一章">
+    <span class="side-nav-label" id="sideNextLabel">下一章</span>
+    <span class="side-nav-icon" aria-hidden="true">›</span>
+  </button>
+
+  <!-- 浮動回到頂部按鈕 (Floating Scroll to Top) -->
+  <button id="readerScrollTopBtn" class="floating-scroll-top-btn" title="回到頂部" aria-label="回到頂部" hidden>
+    <span aria-hidden="true">▲</span>
+  </button>
+
   <!-- 手機／平板直式：拇指可及的專屬翻章操作列 -->
   <nav class="pager" id="pager" aria-label="章節翻頁與排版">
     <button id="pagerPrev" type="button" class="pager-btn pager-prev" aria-label="上一章">◀ 上一章</button>
