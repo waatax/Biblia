@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聖經 66 卷深入研究與聖約導讀 | Biblia</title>
+  <meta name="description" content="正統福音派與歸正聖約神學聖經 66 卷深度導讀研究庫、舊約總覽與新約總覽。">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="book-guide-standalone-body">
+
+  <nav class="guide-top-navbar" id="guideTopNavbar">
+    <div class="navbar-left">
+      <a href="index.html#ref/intros" class="navbar-brand">
+        <span class="brand-icon">📖</span>
+        <span class="brand-text">Biblia 聖經研讀</span>
+      </a>
+      <span class="navbar-divider">/</span>
+      <span class="navbar-subtitle" id="navbarSubtitle">66卷深度研究導讀</span>
+    </div>
+    <div class="navbar-right">
+      <div class="guide-quick-switcher">
+        <select id="bookPickerSelect" aria-label="快速選擇書卷或總覽">
+          <optgroup label="全書總覽">
+            <option value="survey:ot_survey">舊約聖經總覽 (OT Survey)</option>
+            <option value="survey:nt_survey">新約聖經總覽 (NT Survey)</option>
+          </optgroup>
+          <optgroup label="摩西五經 (Books 1-5)">
+            <option value="book:1">1. 創世記 Genesis</option>
+            <option value="book:2">2. 出埃及記 Exodus</option>
+            <option value="book:3">3. 利未記 Leviticus</option>
+            <option value="book:4">4. 民數記 Numbers</option>
+            <option value="book:5">5. 申命記 Deuteronomy</option>
+          </optgroup>
+          <optgroup label="舊約歷史書 (Books 6-17)">
+            <option value="book:6">6. 約書亞記 Joshua</option>
+            <option value="book:7">7. 士師記 Judges</option>
+            <option value="book:8">8. 路得記 Ruth</option>
+            <option value="book:9">9. 撒母耳記上 1 Samuel</option>
+            <option value="book:10">10. 撒母耳記下 2 Samuel</option>
+            <option value="book:11">11. 列王紀上 1 Kings</option>
+            <option value="book:12">12. 列王紀下 2 Kings</option>
+            <option value="book:13">13. 歷代志上 1 Chronicles</option>
+            <option value="book:14">14. 歷代志下 2 Chronicles</option>
+            <option value="book:15">15. 以斯拉記 Ezra</option>
+            <option value="book:16">16. 尼希米記 Nehemiah</option>
+            <option value="book:17">17. 以斯帖記 Esther</option>
+          </optgroup>
+          <optgroup label="詩歌智慧書 (Books 18-22)">
+            <option value="book:18">18. 約伯記 Job</option>
+            <option value="book:19">19. 詩篇 Psalms</option>
+            <option value="book:20">20. 箴言 Proverbs</option>
+            <option value="book:21">21. 傳道書 Ecclesiastes</option>
+            <option value="book:22">22. 雅歌 Song of Songs</option>
+          </optgroup>
+          <optgroup label="大先知書 (Books 23-27)">
+            <option value="book:23">23. 以賽亞書 Isaiah</option>
+            <option value="book:24">24. 耶利米書 Jeremiah</option>
+            <option value="book:25">25. 耶利米哀歌 Lamentations</option>
+            <option value="book:26">26. 以西結書 Ezekiel</option>
+            <option value="book:27">27. 但以理書 Daniel</option>
+          </optgroup>
+          <optgroup label="小先知書 (Books 28-39)">
+            <option value="book:28">28. 何西阿書 Hosea</option>
+            <option value="book:29">29. 約珥書 Joel</option>
+            <option value="book:30">30. 阿摩司書 Amos</option>
+            <option value="book:31">31. 俄巴底亞書 Obadiah</option>
+            <option value="book:32">32. 約拿書 Jonah</option>
+            <option value="book:33">33. 彌迦書 Micah</option>
+            <option value="book:34">34. 那鴻書 Nahum</option>
+            <option value="book:35">35. 哈巴谷書 Habakkuk</option>
+            <option value="book:36">36. 西番雅書 Zephaniah</option>
+            <option value="book:37">37. 哈該書 Haggai</option>
+            <option value="book:38">38. 撒迦利亞書 Zechariah</option>
+            <option value="book:39">39. 瑪拉基書 Malachi</option>
+          </optgroup>
+          <optgroup label="福音書與歷史 (Books 40-44)">
+            <option value="book:40">40. 馬太福音 Matthew</option>
+            <option value="book:41">41. 馬可福音 Mark</option>
+            <option value="book:42">42. 路加福音 Luke</option>
+            <option value="book:43">43. 約翰福音 John</option>
+            <option value="book:44">44. 使徒行傳 Acts</option>
+          </optgroup>
+          <optgroup label="保羅書信 (Books 45-57)">
+            <option value="book:45">45. 羅馬書 Romans</option>
+            <option value="book:46">46. 哥林多前書 1 Corinthians</option>
+            <option value="book:47">47. 哥林多後書 2 Corinthians</option>
+            <option value="book:48">48. 加拉太書 Galatians</option>
+            <option value="book:49">49. 以弗所書 Ephesians</option>
+            <option value="book:50">50. 腓立比書 Philippians</option>
+            <option value="book:51">51. 歌羅西書 Colossians</option>
+            <option value="book:52">52. 帖撒羅尼迦前書 1 Thess</option>
+            <option value="book:53">53. 帖撒羅尼迦後書 2 Thess</option>
+            <option value="book:54">54. 提摩太前書 1 Timothy</option>
+            <option value="book:55">55. 提摩太後書 2 Timothy</option>
+            <option value="book:56">56. 提多書 Titus</option>
+            <option value="book:57">57. 腓利門書 Philemon</option>
+          </optgroup>
+          <optgroup label="普通書信與啟示錄 (Books 58-66)">
+            <option value="book:58">58. 希伯來書 Hebrews</option>
+            <option value="book:59">59. 雅各書 James</option>
+            <option value="book:60">60. 彼得前書 1 Peter</option>
+            <option value="book:61">61. 彼得後書 2 Peter</option>
+            <option value="book:62">62. 約翰一書 1 John</option>
+            <option value="book:63">63. 約翰二書 2 John</option>
+            <option value="book:64">64. 約翰三書 3 John</option>
+            <option value="book:65">65. 猶大書 Jude</option>
+            <option value="book:66">66. 啟示錄 Revelation</option>
+          </optgroup>
+        </select>
+      </div>
+      <button class="nav-icon-btn" id="themeToggleBtn" title="切換深色/淺色主題"><i class="fas fa-moon"></i></button>
+      <button class="nav-icon-btn" id="printBtn" title="列印或匯出 PDF"><i class="fas fa-print"></i></button>
+    </div>
+  </nav>
+
+  <div id="guideAppRoot" class="guide-app-root">
+    <div class="guide-loading-spinner">
+      <i class="fas fa-circle-notch fa-spin"></i>
+      <p>載入聖經研究資料中...</p>
+    </div>
+  </div>
+
+  <!-- Data Scripts -->
+  <script src="data/bible_surveys.js"></script>
+  <script src="data/book_studies_ot.js"></script>
+  <script src="data/book_studies_nt.js"></script>
+  <script src="data/book_guide_renderer.js"></script>
+
+  <script>
+    (function() {
+      'use strict';
+
+      var root = document.getElementById('guideAppRoot');
+      var picker = document.getElementById('bookPickerSelect');
+      var themeBtn = document.getElementById('themeToggleBtn');
+      var printBtn = document.getElementById('printBtn');
+      var subtitle = document.getElementById('navbarSubtitle');
+
+      // Theme sync
+      var currentTheme = localStorage.getItem('biblia_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      updateThemeIcon(currentTheme);
+
+      if (themeBtn) {
+        themeBtn.addEventListener('click', function() {
+          currentTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', currentTheme);
+          localStorage.setItem('biblia_theme', currentTheme);
+          updateThemeIcon(currentTheme);
+        });
+      }
+
+      function updateThemeIcon(t) {
+        if (!themeBtn) return;
+        themeBtn.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      }
+
+      if (printBtn) {
+        printBtn.addEventListener('click', function() {
+          window.print();
+        });
+      }
+
+      function parseUrlParams() {
+        var params = new URLSearchParams(window.location.search);
+        var book = params.get('book');
+        var survey = params.get('survey');
+        if (book) {
+          return { type: 'book', val: parseInt(book, 10) || 1 };
+        }
+        if (survey) {
+          return { type: 'survey', val: survey };
+        }
+        return { type: 'book', val: 1 };
+      }
+
+      function renderCurrentPage() {
+        var target = parseUrlParams();
+        if (target.type === 'book') {
+          var bookNo = target.val;
+          if (bookNo < 1) bookNo = 1;
+          if (bookNo > 66) bookNo = 66;
+          
+          if (picker) {
+            picker.value = 'book:' + bookNo;
+          }
+          if (window.renderBookStudyGuideHtml) {
+            root.innerHTML = window.renderBookStudyGuideHtml(bookNo, { isStandalone: true });
+            var name = (window.BIBLIA_BOOK_STUDIES_OT && window.BIBLIA_BOOK_STUDIES_OT[bookNo]) ? window.BIBLIA_BOOK_STUDIES_OT[bookNo].meta.nameZh :
+                       (window.BIBLIA_BOOK_STUDIES_NT && window.BIBLIA_BOOK_STUDIES_NT[bookNo]) ? window.BIBLIA_BOOK_STUDIES_NT[bookNo].meta.nameZh : ('第 ' + bookNo + ' 卷');
+            document.title = name + ' 深入研究導讀 | Biblia';
+            if (subtitle) subtitle.textContent = name + ' 深入研究';
+          }
+        } else if (target.type === 'survey') {
+          var surveyKey = target.val;
+          if (picker) {
+            picker.value = 'survey:' + surveyKey;
+          }
+          if (window.renderSurveyGuideHtml) {
+            root.innerHTML = window.renderSurveyGuideHtml(surveyKey, { isStandalone: true });
+            var sTitle = (surveyKey === 'nt_survey' || surveyKey === 'ntSurvey') ? '新約聖經總覽' : '舊約聖經總覽';
+            document.title = sTitle + ' | Biblia';
+            if (subtitle) subtitle.textContent = sTitle;
+          }
+        }
+        window.scrollTo(0, 0);
+      }
+
+      if (picker) {
+        picker.addEventListener('change', function() {
+          var parts = this.value.split(':');
+          if (parts[0] === 'book') {
+            window.location.search = '?book=' + parts[1];
+          } else if (parts[0] === 'survey') {
+            window.location.search = '?survey=' + parts[1];
+          }
+        });
+      }
+
+      // Initial render
+      renderCurrentPage();
+
+    })();
+  </script>
+</body>
+</html>

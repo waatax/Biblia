@@ -375,6 +375,7 @@ var BIBLIA = (function () {
       'planSwitch', 'planTitle', 'planSubtitle', 'planSource', 'planHeadTitle',
       'startRefBtn', 'readerRefBtn', 'planRefBtn', 'refHomeBtn', 'refReaderBtn',
       'refPlanBtn', 'refThemeBtn', 'refNavTabs', 'refPanelSu101', 'refPanelIntros',
+      'refPanelBookStudy', 'refPanelOtSurvey', 'refPanelNtSurvey',
       'refPanelRevStudy', 'refPanelTimeline',
       'startDailyVerseCard', 'dailyVerseTheme', 'dailyVerseShuffleBtn', 'dailyVerseText',
       'dailyVerseEn', 'dailyVerseOrig', 'dailyVerseRef', 'dailyVerseCopyBtn', 'dailyVerseShareBtn', 'dailyVerseReadBtn',
@@ -2235,7 +2236,11 @@ var BIBLIA = (function () {
     } else if (el.planView && !el.planView.hidden) {
       try { history.replaceState(null, '', '#plan'); } catch (e) {}
     } else if (el.refView && !el.refView.hidden) {
-      try { history.replaceState(null, '', '#ref' + (refState && refState.activeTab ? '/' + refState.activeTab : '')); } catch (e) {}
+      var refHash = '#ref' + (refState && refState.activeTab ? '/' + refState.activeTab : '');
+      if (refState && refState.activeTab === 'book_study' && refState.currentBookStudyNo) {
+        refHash += '/' + refState.currentBookStudyNo;
+      }
+      try { history.replaceState(null, '', refHash); } catch (e) {}
     } else if (el.searchView && !el.searchView.hidden) {
       var q = searchState.query ? '?q=' + encodeURIComponent(searchState.query) : '';
       try { history.replaceState(null, '', '#search' + q); } catch (e) {}
@@ -2254,7 +2259,11 @@ var BIBLIA = (function () {
       return;
     }
     if (hash.indexOf('#ref') === 0) {
-      var refTab = hash.split('/')[1] || 'su101';
+      var parts = hash.split('/');
+      var refTab = parts[1] || 'su101';
+      if (refTab === 'book_study' && parts[2]) {
+        refState.currentBookStudyNo = parseInt(parts[2], 10) || 1;
+      }
       showRef(refTab);
       return;
     }
@@ -3033,7 +3042,8 @@ var BIBLIA = (function () {
 
   /* ===================== 讀經會補充資料庫邏輯 ===================== */
   var refState = {
-    activeTab: 'su101',       // 'su101' | 'intros' | 'rev_study' | 'timeline' | 'audio'
+    activeTab: 'su101',       // 'su101' | 'intros' | 'ot_survey' | 'nt_survey' | 'book_study' | 'rev_study' | 'timeline' | 'audio'
+    currentBookStudyNo: 1,
     su101Quarter: 'all',
     su101Search: '',
     introsCategory: 'all',
@@ -3090,12 +3100,18 @@ var BIBLIA = (function () {
 
     if (el.refPanelSu101) el.refPanelSu101.hidden = (refState.activeTab !== 'su101');
     if (el.refPanelIntros) el.refPanelIntros.hidden = (refState.activeTab !== 'intros');
+    if (el.refPanelBookStudy) el.refPanelBookStudy.hidden = (refState.activeTab !== 'book_study');
+    if (el.refPanelOtSurvey) el.refPanelOtSurvey.hidden = (refState.activeTab !== 'ot_survey');
+    if (el.refPanelNtSurvey) el.refPanelNtSurvey.hidden = (refState.activeTab !== 'nt_survey');
     if (el.refPanelRevStudy) el.refPanelRevStudy.hidden = (refState.activeTab !== 'rev_study');
     if (el.refPanelTimeline) el.refPanelTimeline.hidden = (refState.activeTab !== 'timeline');
     if (el.refPanelAudio) el.refPanelAudio.hidden = (refState.activeTab !== 'audio');
 
     if (refState.activeTab === 'su101') renderRefPanelSu101();
     else if (refState.activeTab === 'intros') renderRefPanelIntros();
+    else if (refState.activeTab === 'book_study') renderRefPanelBookStudy();
+    else if (refState.activeTab === 'ot_survey') renderRefPanelOtSurvey();
+    else if (refState.activeTab === 'nt_survey') renderRefPanelNtSurvey();
     else if (refState.activeTab === 'rev_study') renderRefPanelRevStudy();
     else if (refState.activeTab === 'timeline') renderRefPanelTimeline();
     else if (refState.activeTab === 'audio') renderRefPanelAudio();
@@ -3284,6 +3300,24 @@ var BIBLIA = (function () {
     });
 
     var htmlStr = '<div class="ref-sub-header">' +
+      '<div class="ref-surveys-feature-banner">' +
+        '<div class="survey-feature-card ot" data-survey="ot_survey">' +
+          '<div class="sf-icon">📜</div>' +
+          '<div class="sf-content">' +
+            '<h3 class="sf-title">舊約聖經總覽 (Old Testament Survey)</h3>' +
+            '<p class="sf-desc">救贖歷史、聖約架構、希伯來正典 (TaNaKh)、近東考古與基督論預表成全。</p>' +
+            '<span class="sf-btn">閱讀舊約總覽 ➔</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="survey-feature-card nt" data-survey="nt_survey">' +
+          '<div class="sf-icon">✝️</div>' +
+          '<div class="sf-content">' +
+            '<h3 class="sf-title">新約聖經總覽 (New Testament Survey)</h3>' +
+            '<p class="sf-desc">基督國度臨在、四福音合參、使徒宣教、因信稱義、正典形成與新天新地。</p>' +
+            '<span class="sf-btn">閱讀新約總覽 ➔</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
       '<div class="ref-search-row">' +
         '<input type="search" class="ref-search-input" id="refIntrosSearchInput" placeholder="🔍 搜尋書卷簡介（如 創世記、大衛、因信稱義...）" value="' + escapeHtml(refState.introsSearch) + '">' +
       '</div>' +
@@ -3339,14 +3373,8 @@ var BIBLIA = (function () {
           htmlStr += '</ol></div>';
         }
 
-        if (b.no === 66) {
-          htmlStr += '<div class="book-intro-box rev-highlight-box">' +
-            '<strong>👑 正統神學深研專頁：</strong>收錄四大解經派別矩陣、福音派與靈恩派亮光、異端防線辨析、22章逐段深度釋義、千禧年觀點對照與權威註釋書目。' +
-          '</div>';
-        }
-
         htmlStr += '<div class="book-intro-actions">' +
-          (b.no === 66 ? '<button type="button" class="btn btn-primary go-rev-guide-btn" style="background: linear-gradient(135deg, #b8860b, #d4af37); color: #ffffff; font-weight: 700; border: none; flex: 1 1 100%;">👑 進入《啟示錄》深度神學導論與逐段釋義專頁</button>' : '') +
+          '<button type="button" class="btn btn-primary go-book-study-btn" data-bookno="' + b.no + '" style="background: linear-gradient(135deg, var(--accent), #b8860b); color: #ffffff; font-weight: 700; border: none; flex: 1 1 100%;">👑 進入《' + escapeHtml(b.name_zh) + '》深度學術研經專頁</button>' +
           '<button type="button" class="btn btn-primary go-book-reader-btn" data-bookno="' + b.no + '">' +
             '📖 開啟《' + escapeHtml(b.name_zh) + '》經文閱讀器</button>' +
           '<button type="button" class="btn filter-su101-ref-btn" data-bookname="' + escapeHtml(b.name_zh) + '">' +
@@ -3376,6 +3404,29 @@ var BIBLIA = (function () {
       });
     }
 
+    container.querySelectorAll('.survey-feature-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        var sKey = card.getAttribute('data-survey');
+        refState.activeTab = sKey;
+        renderRefView();
+        updateHash();
+        window.scrollTo(0, 0);
+      });
+    });
+
+    container.querySelectorAll('.go-book-study-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var bNo = parseInt(btn.getAttribute('data-bookno'), 10);
+        if (bNo) {
+          refState.currentBookStudyNo = bNo;
+          refState.activeTab = 'book_study';
+          renderRefView();
+          updateHash();
+          window.scrollTo(0, 0);
+        }
+      });
+    });
+
     container.querySelectorAll('.go-rev-guide-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         refState.activeTab = 'rev_study';
@@ -3400,6 +3451,112 @@ var BIBLIA = (function () {
         renderRefView();
       });
     });
+  }
+
+  function renderRefPanelBookStudy() {
+    var container = el.refPanelBookStudy;
+    if (!container) return;
+
+    var bNo = refState.currentBookStudyNo || 1;
+    if (typeof window.renderBookStudyGuideHtml === 'function') {
+      container.innerHTML = window.renderBookStudyGuideHtml(bNo, { isStandalone: false });
+
+      container.querySelectorAll('.guide-btn-back').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          refState.activeTab = 'intros';
+          renderRefView();
+          updateHash();
+          window.scrollTo(0, 0);
+        });
+      });
+
+      container.querySelectorAll('.guide-prev-next-group a, .footer-nav-buttons a').forEach(function (btn) {
+        var href = btn.getAttribute('href') || '';
+        if (href.indexOf('#ref/book_study/') === 0) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            var targetNo = parseInt(href.split('/')[2], 10);
+            if (targetNo) {
+              refState.currentBookStudyNo = targetNo;
+              renderRefPanelBookStudy();
+              updateHash();
+              window.scrollTo(0, 0);
+            }
+          });
+        }
+      });
+    } else {
+      container.innerHTML = '<div class="ref-empty-state">書卷研究資料庫未載入</div>';
+    }
+  }
+
+  function renderRefPanelOtSurvey() {
+    var container = el.refPanelOtSurvey;
+    if (!container) return;
+
+    if (typeof window.renderSurveyGuideHtml === 'function') {
+      container.innerHTML = window.renderSurveyGuideHtml('ot_survey', { isStandalone: false });
+
+      container.querySelectorAll('.guide-btn-back').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          refState.activeTab = 'intros';
+          renderRefView();
+          updateHash();
+          window.scrollTo(0, 0);
+        });
+      });
+
+      container.querySelectorAll('.guide-prev-next-group a, .footer-nav-buttons a').forEach(function (btn) {
+        var href = btn.getAttribute('href') || '';
+        if (href.indexOf('#ref/nt_survey') !== -1) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            refState.activeTab = 'nt_survey';
+            renderRefView();
+            updateHash();
+            window.scrollTo(0, 0);
+          });
+        }
+      });
+    } else {
+      container.innerHTML = '<div class="ref-empty-state">舊約總覽資料庫未載入</div>';
+    }
+  }
+
+  function renderRefPanelNtSurvey() {
+    var container = el.refPanelNtSurvey;
+    if (!container) return;
+
+    if (typeof window.renderSurveyGuideHtml === 'function') {
+      container.innerHTML = window.renderSurveyGuideHtml('nt_survey', { isStandalone: false });
+
+      container.querySelectorAll('.guide-btn-back').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          refState.activeTab = 'intros';
+          renderRefView();
+          updateHash();
+          window.scrollTo(0, 0);
+        });
+      });
+
+      container.querySelectorAll('.guide-prev-next-group a, .footer-nav-buttons a').forEach(function (btn) {
+        var href = btn.getAttribute('href') || '';
+        if (href.indexOf('#ref/ot_survey') !== -1) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            refState.activeTab = 'ot_survey';
+            renderRefView();
+            updateHash();
+            window.scrollTo(0, 0);
+          });
+        }
+      });
+    } else {
+      container.innerHTML = '<div class="ref-empty-state">新約總覽資料庫未載入</div>';
+    }
   }
 
   function renderRefPanelRevStudy() {

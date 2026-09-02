@@ -1,11 +1,12 @@
 /* Biblia — PWA Service Worker (離線快取引擎)
  * 提供靜態資產快取與動態經文資料離線存取支援
  */
-const CACHE_NAME = 'biblia-cache-v10';
+const CACHE_NAME = 'biblia-cache-v11';
 
 const CORE_ASSETS = [
   './',
   './index.html',
+  './book_guide.html',
   './revelation_guide.html',
   './style.css',
   './reader.js',
@@ -19,6 +20,10 @@ const CORE_ASSETS = [
   './data/plan_su101_2026.js',
   './data/su101_references.js',
   './data/book_intros.js',
+  './data/bible_surveys.js',
+  './data/book_studies_ot.js',
+  './data/book_studies_nt.js',
+  './data/book_guide_renderer.js',
   './data/intro_revelation.js',
   './data/timeline_data.js'
 ];
