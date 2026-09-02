@@ -6098,22 +6098,653 @@ body.font-shippori .compare-verse-quote {
   letter-spacing: 0.02em;
 }
 
-/* ===================== 18. 列印優化樣式 ===================== */
-@media print {
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-    font-size: 12pt;
+/* ===================== 19. 啟示錄深度神學導論與逐段釋義專屬樣式 ===================== */
+.rev-highlight-box {
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.12), rgba(212, 175, 55, 0.18));
+  border: 1px solid rgba(184, 134, 11, 0.4);
+  border-left: 4px solid #b8860b;
+  color: var(--fg);
+  font-size: 0.92rem;
+}
+
+.rev-guide-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 0 60px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.rev-guide-hero {
+  background: linear-gradient(135deg, var(--bg-alt) 0%, var(--bg-soft) 100%);
+  border: 1px solid var(--line);
+  border-top: 4px solid #b8860b;
+  border-radius: var(--r-xl);
+  padding: 32px 28px;
+  box-shadow: var(--sh-2);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.rev-hero-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #b8860b;
+  background: rgba(184, 134, 11, 0.12);
+  border: 1px solid rgba(184, 134, 11, 0.3);
+  padding: 4px 14px;
+  border-radius: var(--r-pill);
+  letter-spacing: 0.04em;
+}
+
+.rev-guide-title {
+  font-family: var(--font-ui);
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: var(--fg);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.rev-guide-subtitle {
+  font-size: 1.05rem;
+  color: var(--fg-dim);
+  margin: 0;
+  max-width: 850px;
+  line-height: 1.55;
+}
+
+.rev-meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.rev-meta-chip {
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  color: var(--fg-dim);
+}
+
+.rev-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* 核心金句卡片 */
+.keyverses-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  box-shadow: var(--sh-1);
+}
+
+.rev-card-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rev-keyverses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.rev-keyverse-item {
+  background: var(--bg-soft);
+  border-left: 3px solid #b8860b;
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rev-kv-ref {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #b8860b;
+}
+
+.rev-kv-text {
+  font-size: 0.95rem;
+  font-family: var(--font-serif);
+  line-height: 1.6;
+  color: var(--fg);
+  font-style: italic;
+}
+
+/* 次級導航選單 (Sticky Pill Bar) */
+.rev-subnav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-1);
+  position: sticky;
+  top: 60px;
+  z-index: 10;
+}
+
+.rev-nav-pill {
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+
+.rev-nav-pill:hover {
+  background: var(--bg-soft);
+  color: var(--fg);
+  border-color: var(--accent);
+}
+
+.rev-nav-pill.active {
+  background: #b8860b;
+  color: #ffffff;
+  border-color: #b8860b;
+  box-shadow: 0 2px 8px rgba(184, 134, 11, 0.3);
+}
+
+/* 區段通用排版 */
+.rev-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rev-sec-heading {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--line);
+}
+
+.rev-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  box-shadow: var(--sh-1);
+}
+
+.rev-inner-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0 0 12px 0;
+}
+
+.rev-prose {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--fg);
+  margin: 0;
+}
+
+/* 文體卡片 */
+.rev-genres-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.genre-box {
+  background: var(--bg-soft);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.genre-badge {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+
+.genre-desc {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+/* 四大解經進路矩陣 */
+.rev-approaches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.rev-approach-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  box-shadow: var(--sh-1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.approach-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0 0 4px 0;
+}
+
+.approach-scholars {
+  font-size: 0.85rem;
+  color: var(--fg-mute);
+}
+
+.approach-block {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.eval-block {
+  background: var(--bg-soft);
+  border-left: 3px solid var(--accent);
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  margin-top: 4px;
+}
+
+/* 福音派與靈恩派亮光 */
+.rev-traditions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 20px;
+}
+
+.rev-trad-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 22px;
+  box-shadow: var(--sh-1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trad-school-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0;
+}
+
+.trad-scholars {
+  font-size: 0.85rem;
+  color: var(--fg-mute);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.trad-points-list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+/* 異端辨析防禦表 */
+.rev-heresy-table-wrap {
+  overflow-x: auto;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-1);
+}
+
+.rev-heresy-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+.rev-heresy-table th {
+  background: var(--bg-soft);
+  padding: 14px 16px;
+  font-weight: 800;
+  color: var(--fg);
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+
+.rev-heresy-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top;
+}
+
+.badge-orthodox {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #2f7d51;
+  background: rgba(47, 125, 81, 0.12);
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  margin-right: 4px;
+}
+
+.badge-heresy {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #c0382b;
+  background: rgba(192, 56, 43, 0.12);
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  margin-right: 4px;
+}
+
+.badge-defense {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #8b5523;
+  background: rgba(139, 85, 35, 0.12);
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  margin-right: 4px;
+}
+
+.td-orthodox {
+  color: var(--fg);
+}
+
+.td-heresy {
+  background: rgba(192, 56, 43, 0.03);
+  color: var(--fg);
+}
+
+.td-defense {
+  background: rgba(47, 125, 81, 0.03);
+  color: var(--fg);
+}
+
+/* 逐段釋義列表 (22章 八大部) */
+.rev-parts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rev-part-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  box-shadow: var(--sh-1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rev-part-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.rev-part-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: #b8860b;
+  color: #ffffff;
+}
+
+.rev-part-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0;
+  flex: 1;
+}
+
+.rev-part-chapters {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.rev-part-summary {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--fg-dim);
+  background: var(--bg-soft);
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+}
+
+.rev-paragraphs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rev-para-item {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rev-para-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rev-para-range {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #b8860b;
+  background: rgba(184, 134, 11, 0.12);
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+}
+
+.rev-para-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0;
+}
+
+.rev-para-content {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--fg);
+  margin: 0;
+}
+
+.rev-para-notes {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+  background: var(--bg-soft);
+  border-left: 3px solid var(--accent);
+  padding: 8px 12px;
+  border-radius: var(--r-xs);
+}
+
+.rev-part-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+/* 四大千禧年觀點 */
+.rev-millennium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 18px;
+}
+
+.rev-mill-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  box-shadow: var(--sh-1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mill-name {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0;
+}
+
+.mill-advocates {
+  font-size: 0.86rem;
+  color: var(--fg-mute);
+}
+
+.mill-timeline {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--fg);
+  background: var(--bg-soft);
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+}
+
+.mill-timeline p {
+  margin: 4px 0 0 0;
+}
+
+.mill-features {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+}
+
+/* 參考註釋書目 */
+.rev-biblio-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rev-biblio-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 22px;
+  box-shadow: var(--sh-1);
+}
+
+.biblio-group-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0 0 14px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.biblio-books-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.biblio-book-item {
+  background: var(--bg-soft);
+  border-left: 3px solid #b8860b;
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bk-author {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.bk-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.bk-desc {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--fg-dim);
+}
+
+@media (max-width: 768px) {
+  .rev-approaches-grid, .rev-traditions-grid, .rev-millennium-grid {
+    grid-template-columns: 1fr;
   }
-  .bar, .pager, .strong-panel, .verse-action-menu, .audio-control-bar,
-  .quick-nav-modal, .search-modal, .appearance-modal, .shortcuts-modal,
-  .study-modal, .note-modal, .compare-modal, .reading-progress-bar, .zen-exit-pill {
-    display: none !important;
-  }
-  .reader {
-    padding: 0 !important;
-  }
-  .verse {
-    page-break-inside: avoid;
+  .rev-guide-title {
+    font-size: 1.65rem;
   }
 }
+

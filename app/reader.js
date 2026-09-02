@@ -375,7 +375,7 @@ var BIBLIA = (function () {
       'planSwitch', 'planTitle', 'planSubtitle', 'planSource', 'planHeadTitle',
       'startRefBtn', 'readerRefBtn', 'planRefBtn', 'refHomeBtn', 'refReaderBtn',
       'refPlanBtn', 'refThemeBtn', 'refNavTabs', 'refPanelSu101', 'refPanelIntros',
-      'refPanelTimeline',
+      'refPanelRevStudy', 'refPanelTimeline',
       'startDailyVerseCard', 'dailyVerseTheme', 'dailyVerseShuffleBtn', 'dailyVerseText',
       'dailyVerseEn', 'dailyVerseOrig', 'dailyVerseRef', 'dailyVerseCopyBtn', 'dailyVerseShareBtn', 'dailyVerseReadBtn',
       'startQuickNavBtn', 'quickNavBtn', 'quickNavBtnText', 'quickNavModal', 'quickNavOverlay',
@@ -3033,11 +3033,12 @@ var BIBLIA = (function () {
 
   /* ===================== 讀經會補充資料庫邏輯 ===================== */
   var refState = {
-    activeTab: 'su101',       // 'su101' | 'intros' | 'timeline'
+    activeTab: 'su101',       // 'su101' | 'intros' | 'rev_study' | 'timeline' | 'audio'
     su101Quarter: 'all',
     su101Search: '',
     introsCategory: 'all',
     introsSearch: '',
+    revStudyTab: 'all',       // 'all' | 'intro' | 'approaches' | 'traditions' | 'heresy' | 'exposition' | 'millennium' | 'biblio'
     timelineTab: 'eras'       // 'eras' | 'prophets' | 'calendar' | 'charts'
   };
 
@@ -3089,11 +3090,13 @@ var BIBLIA = (function () {
 
     if (el.refPanelSu101) el.refPanelSu101.hidden = (refState.activeTab !== 'su101');
     if (el.refPanelIntros) el.refPanelIntros.hidden = (refState.activeTab !== 'intros');
+    if (el.refPanelRevStudy) el.refPanelRevStudy.hidden = (refState.activeTab !== 'rev_study');
     if (el.refPanelTimeline) el.refPanelTimeline.hidden = (refState.activeTab !== 'timeline');
     if (el.refPanelAudio) el.refPanelAudio.hidden = (refState.activeTab !== 'audio');
 
     if (refState.activeTab === 'su101') renderRefPanelSu101();
     else if (refState.activeTab === 'intros') renderRefPanelIntros();
+    else if (refState.activeTab === 'rev_study') renderRefPanelRevStudy();
     else if (refState.activeTab === 'timeline') renderRefPanelTimeline();
     else if (refState.activeTab === 'audio') renderRefPanelAudio();
   }
@@ -3336,7 +3339,14 @@ var BIBLIA = (function () {
           htmlStr += '</ol></div>';
         }
 
+        if (b.no === 66) {
+          htmlStr += '<div class="book-intro-box rev-highlight-box">' +
+            '<strong>👑 正統神學深研專頁：</strong>收錄四大解經派別矩陣、福音派與靈恩派亮光、異端防線辨析、22章逐段深度釋義、千禧年觀點對照與權威註釋書目。' +
+          '</div>';
+        }
+
         htmlStr += '<div class="book-intro-actions">' +
+          (b.no === 66 ? '<button type="button" class="btn btn-primary go-rev-guide-btn" style="background: linear-gradient(135deg, #b8860b, #d4af37); color: #ffffff; font-weight: 700; border: none; flex: 1 1 100%;">👑 進入《啟示錄》深度神學導論與逐段釋義專頁</button>' : '') +
           '<button type="button" class="btn btn-primary go-book-reader-btn" data-bookno="' + b.no + '">' +
             '📖 開啟《' + escapeHtml(b.name_zh) + '》經文閱讀器</button>' +
           '<button type="button" class="btn filter-su101-ref-btn" data-bookname="' + escapeHtml(b.name_zh) + '">' +
@@ -3366,6 +3376,14 @@ var BIBLIA = (function () {
       });
     }
 
+    container.querySelectorAll('.go-rev-guide-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        refState.activeTab = 'rev_study';
+        renderRefView();
+        window.scrollTo(0, 0);
+      });
+    });
+
     container.querySelectorAll('.go-book-reader-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var bNo = parseInt(btn.getAttribute('data-bookno'), 10);
@@ -3382,6 +3400,43 @@ var BIBLIA = (function () {
         renderRefView();
       });
     });
+  }
+
+  function renderRefPanelRevStudy() {
+    var container = el.refPanelRevStudy;
+    if (!container) return;
+
+    if (typeof window.renderRevelationStudyGuideHtml === 'function') {
+      container.innerHTML = window.renderRevelationStudyGuideHtml(refState.revStudyTab);
+
+      var navPills = container.querySelector('#revGuideNavPills');
+      if (navPills) {
+        navPills.querySelectorAll('.rev-nav-pill').forEach(function (pill) {
+          pill.addEventListener('click', function () {
+            refState.revStudyTab = pill.getAttribute('data-revtab');
+            renderRefPanelRevStudy();
+          });
+        });
+      }
+
+      container.querySelectorAll('.back-to-intros-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          refState.activeTab = 'intros';
+          renderRefView();
+          window.scrollTo(0, 0);
+        });
+      });
+
+      container.querySelectorAll('.go-book-reader-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var bNo = parseInt(btn.getAttribute('data-bookno'), 10) || 66;
+          var chap = parseInt(btn.getAttribute('data-chap'), 10) || 1;
+          showReader(bNo, chap);
+        });
+      });
+    } else {
+      container.innerHTML = '<div class="ref-empty-state">啟示錄導論資料庫未載入</div>';
+    }
   }
 
   function renderRefPanelTimeline() {

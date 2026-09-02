@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181c" media="(prefers-color-scheme: dark)">
+<meta name="description" content="《啟示錄》深度神學導論與全書逐段釋義：正統基督新教、福音派、靈恩派、正統神學院非異端學術成果彙整，含四大解經進路、異端防禦、22章逐段深度研經。">
+<title>《啟示錄》深度神學導論與全書逐段釋義 — Biblia 66卷聖經導論</title>
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .standalone-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+  .standalone-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--fg);
+    font-weight: 800;
+    font-size: 1.2rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="standalone-wrap">
+  <header class="standalone-nav">
+    <a href="./#ref/intros" class="brand-link" title="返回 Biblia 66卷聖經導論">
+      <img src="icons/icon.svg" alt="Biblia" width="32" height="32">
+      <span>Biblia · 66 卷聖經導論</span>
+    </a>
+    <div style="display:flex; gap:10px;">
+      <a href="./#66/1" class="btn btn-primary" style="text-decoration:none;">
+        📖 進入啟示錄逐字對照
+      </a>
+      <a href="./#ref/intros" class="btn" style="text-decoration:none;">
+        📚 全部 66 卷導論
+      </a>
+    </div>
+  </header>
+
+  <main id="revGuideContentMount"></main>
+</div>
+
+<script src="data/intro_revelation.js"></script>
+<script>
+  (function () {
+    var mount = document.getElementById('revGuideContentMount');
+    var curTab = 'all';
+
+    function render() {
+      if (typeof window.renderRevelationStudyGuideHtml === 'function') {
+        mount.innerHTML = window.renderRevelationStudyGuideHtml(curTab);
+        
+        var pills = mount.querySelector('#revGuideNavPills');
+        if (pills) {
+          pills.querySelectorAll('.rev-nav-pill').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              curTab = btn.getAttribute('data-revtab');
+              render();
+            });
+          });
+        }
+
+        mount.querySelectorAll('.back-to-intros-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            window.location.href = './#ref/intros';
+          });
+        });
+
+        mount.querySelectorAll('.go-book-reader-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var chap = btn.getAttribute('data-chap') || '1';
+            window.location.href = './#66/' + chap;
+          });
+        });
+      }
+    }
+
+    render();
+  })();
+</script>
+</body>
+</html>
