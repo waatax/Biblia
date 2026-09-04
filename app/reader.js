@@ -2436,7 +2436,7 @@ var BIBLIA = (function () {
     {
       id: 'su101_2026',
       name: '每日研經釋義',
-      sub: '2026 逐季累積',
+      sub: '2026 全年',
       get: function () { return window.BIBLIA_PLAN_SU101_2026; },
       note: ''
     }
@@ -2505,7 +2505,17 @@ var BIBLIA = (function () {
     var savedId = null;
     try { savedId = localStorage.getItem('biblia_plan_id'); } catch (e) {}
     planIdx = 0;
-    plans.forEach(function (p, i) { if (p.id === savedId) planIdx = i; });
+    if (savedId) {
+      plans.forEach(function (p, i) { if (p.id === savedId) planIdx = i; });
+    } else {
+      var iso = todayIso();
+      for (var i = 0; i < plans.length; i++) {
+        if (plans[i].items.some(function (it) { return it.isoDate === iso; })) {
+          planIdx = i;
+          break;
+        }
+      }
+    }
   }
 
   function currentPlan() { return plans[planIdx] || null; }
@@ -2637,8 +2647,8 @@ var BIBLIA = (function () {
       btn.className = 'plan-switch-btn' + (i === planIdx ? ' active' : '');
       btn.setAttribute('role', 'tab');
       btn.setAttribute('aria-selected', i === planIdx ? 'true' : 'false');
-      btn.innerHTML = '<span class="plan-switch-main">' + escapeHtml(p.name) + '</span>' +
-                      '<span class="plan-switch-sub">' + escapeHtml(p.sub) + '</span>';
+      btn.innerHTML = '<span class="plan-switch-main sw-name">' + escapeHtml(p.name) + '</span>' +
+                      '<span class="plan-switch-sub sw-sub">' + escapeHtml(p.sub) + '</span>';
       btn.addEventListener('click', function () {
         if (planIdx === i) return;
         planIdx = i;
@@ -2670,6 +2680,9 @@ var BIBLIA = (function () {
 
     plans.forEach(function (plan) {
       var it = todayItemOf(plan);
+      var firstIso = plan.items.length ? plan.items[0].isoDate : '';
+      var lastIso = plan.items.length ? plan.items[plan.items.length - 1].isoDate : '';
+
       var card = document.createElement('div');
       card.className = 'start-plan-subcard';
 
@@ -2731,7 +2744,13 @@ var BIBLIA = (function () {
       } else {
         var nodata = document.createElement('div');
         nodata.className = 'start-plan-nodata';
-        nodata.textContent = '今日非此計畫進度日';
+        if (firstIso && iso < firstIso) {
+          nodata.textContent = '將於 ' + plan.items[0].date + ' 開始';
+        } else if (lastIso && iso > lastIso) {
+          nodata.textContent = '已於 ' + plan.items[plan.items.length - 1].date + ' 結束';
+        } else {
+          nodata.textContent = '今日非此計畫進度日';
+        }
         body.appendChild(nodata);
       }
       card.appendChild(body);
@@ -3117,7 +3136,13 @@ var BIBLIA = (function () {
 
   function buildRefUI() {
     if (el.startRefBtn) el.startRefBtn.addEventListener('click', function () { showRef(); });
-    if (el.readerRefBtn) el.readerRefBtn.addEventListener('click', function () { showRef(); });
+    if (el.readerRefBtn) el.readerRefBtn.addEventListener('click', function () {
+      if (state.bookNo) {
+        showRefForBook(state.bookNo);
+      } else {
+        showRef();
+      }
+    });
     if (el.planRefBtn) el.planRefBtn.addEventListener('click', function () { showRef(); });
     if (el.refHomeBtn) el.refHomeBtn.addEventListener('click', function () { showStart(); });
     if (el.refReaderBtn) el.refReaderBtn.addEventListener('click', function () { showReader(state.bookNo, state.chap); });
@@ -3138,6 +3163,22 @@ var BIBLIA = (function () {
         });
       });
     }
+  }
+
+  function showRefForBook(bookNo) {
+    bookNo = parseInt(bookNo, 10);
+    refState.activeTab = 'intros';
+    refState.introsCategory = 'all';
+    refState.introsSearch = '';
+    showRef('intros');
+    setTimeout(function () {
+      var target = document.querySelector('.book-intro-card[data-bookno="' + bookNo + '"]');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.add('ref-card-highlight');
+        setTimeout(function () { target.classList.remove('ref-card-highlight'); }, 2500);
+      }
+    }, 150);
   }
 
   function showRef(tabName, options) {
@@ -3283,6 +3324,23 @@ var BIBLIA = (function () {
           htmlStr += '<div class="ref-raw-preview">' + it.content_html + '</div>';
         }
 
+        if (matchedBookNo && typeof window.renderBookOutlineChartHtml === 'function') {
+          var outlineId = 'su101Outline_' + (it.id || matchedBookNo);
+          htmlStr += '<div class="ref-su101-outline-wrapper">' +
+            '<button type="button" class="btn btn-sm ref-toggle-outline-btn" data-target="' + outlineId + '">' +
+              '📊 查看整卷書大綱圖表 ▾' +
+            '</button>' +
+            '<div class="ref-su101-outline-body" id="' + outlineId + '" hidden>' +
+              window.renderBookOutlineChartHtml(matchedBookNo, {
+                isStandalone: false,
+                compact: true,
+                showHeading: true,
+                title: '📊《' + (it.title ? escapeHtml(it.title.replace(/[《》\s]/g, '').replace('參考資料', '').replace('補充資料', '')) : '') + '》結構大綱圖表'
+              }) +
+            '</div>' +
+          '</div>';
+        }
+
         htmlStr += '</div>' +
           '<div class="ref-card-footer">';
 
@@ -3301,6 +3359,19 @@ var BIBLIA = (function () {
     htmlStr += '</div>';
 
     container.innerHTML = htmlStr;
+
+    container.querySelectorAll('.ref-toggle-outline-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var targetId = btn.getAttribute('data-target');
+        var body = container.querySelector('#' + targetId);
+        if (body) {
+          var isHidden = body.hidden;
+          body.hidden = !isHidden;
+          btn.innerHTML = isHidden ? '📊 收合整卷書大綱圖表 ▴' : '📊 查看整卷書大綱圖表 ▾';
+          btn.classList.toggle('active', isHidden);
+        }
+      });
+    });
 
     var searchInput = container.querySelector('#refSu101SearchInput');
     if (searchInput) {
@@ -3405,7 +3476,7 @@ var BIBLIA = (function () {
       htmlStr += '<div class="ref-empty-state">查無符合關鍵字的聖經書卷</div>';
     } else {
       filtered.forEach(function (b) {
-        htmlStr += '<div class="book-intro-card">' +
+        htmlStr += '<div class="book-intro-card" data-bookno="' + b.no + '" id="refIntroBook_' + b.no + '">' +
           '<div class="book-intro-head">' +
             '<div class="book-intro-title-group">' +
               '<span class="book-no-badge">#' + b.no + '</span>' +
@@ -3431,7 +3502,16 @@ var BIBLIA = (function () {
             '<strong>🔑 核心鑰節：</strong>' + escapeHtml(b.key_verse) +
           '</div>';
 
-        if (b.outline && b.outline.length) {
+        if (typeof window.renderBookOutlineChartHtml === 'function') {
+          htmlStr += '<div class="book-outline-section">' +
+            window.renderBookOutlineChartHtml(b.no, {
+              isStandalone: false,
+              compact: true,
+              showHeading: true,
+              title: '📊 全書結構大綱圖表'
+            }) +
+          '</div>';
+        } else if (b.outline && b.outline.length) {
           htmlStr += '<div class="book-outline-section">' +
             '<strong>📋 全書結構大綱：</strong>' +
             '<ol class="book-outline-list">';
@@ -4799,11 +4879,20 @@ var BIBLIA = (function () {
         '<a href="' + studyUrl + '" class="breadcrumb-item breadcrumb-book" title="查看 ' + data.zh + ' 深度學術導讀">' + data.zh + ' (' + data.en + ')</a>' +
         '<span class="breadcrumb-sep">›</span>' +
         '<span class="breadcrumb-item breadcrumb-current">第 ' + state.chap + ' 章</span>' +
+        '<button type="button" class="breadcrumb-study-badge breadcrumb-outline-btn" title="查看 ' + data.zh + ' 整卷大綱圖表">📊 大綱圖表</button>' +
         '<a href="' + studyUrl + '" class="breadcrumb-study-badge" title="進入 ' + data.zh + ' 深度學術研經專頁">👑 深度研經</a>' +
       '</nav>' +
       '<div class="bk">' + data.zh + ' 第 ' + state.chap + ' 章</div>' +
       '<div class="ch">' + data.en + ' ' + state.chap + '</div>';
     el.reader.appendChild(head);
+
+    var bOutlineBtn = head.querySelector('.breadcrumb-outline-btn');
+    if (bOutlineBtn) {
+      bOutlineBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        showRefForBook(state.bookNo);
+      });
+    }
 
     if (!cols.length) { el.reader.appendChild(msg('請至少勾選一個版本。')); return; }
     if (!chapter || !chapter.v.length) { el.reader.appendChild(msg('本章尚無資料。')); return; }

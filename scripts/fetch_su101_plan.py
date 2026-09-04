@@ -323,11 +323,19 @@ def main():
     common.utf8_stdout()
     books = common.load_books()
 
-    posts = fetch_posts()
-    common.ensure_dir(os.path.dirname(RAW_JSON))
-    with io.open(RAW_JSON, "w", encoding="utf-8", newline="\n") as fh:
-        json.dump(posts, fh, ensure_ascii=False, indent=1)
-    common.log("原始貼文 %d 則 → %s" % (len(posts), RAW_JSON))
+    try:
+        posts = fetch_posts()
+        common.ensure_dir(os.path.dirname(RAW_JSON))
+        with io.open(RAW_JSON, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(posts, fh, ensure_ascii=False, indent=1)
+        common.log("原始貼文 %d 則 → %s" % (len(posts), RAW_JSON))
+    except Exception as exc:
+        if os.path.exists(RAW_JSON):
+            common.log("連線取得貼文失敗（%s），改用既有快取 %s" % (exc, RAW_JSON))
+            with io.open(RAW_JSON, "r", encoding="utf-8") as fh:
+                posts = json.load(fh)
+        else:
+            raise
 
     by_name = book_index(books)
     by_date, unparsed = build_items(posts, by_name)

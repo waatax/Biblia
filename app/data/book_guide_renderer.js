@@ -107,6 +107,149 @@
     return null;
   }
 
+  function getBookIntroData(bookNo) {
+    bookNo = parseInt(bookNo, 10);
+    var intros = window.BIBLIA_BOOK_INTROS || [];
+    for (var i = 0; i < intros.length; i++) {
+      if (intros[i].no === bookNo) return intros[i];
+    }
+    return null;
+  }
+
+  function getStartChapter(rangeStr) {
+    if (!rangeStr) return 1;
+    var m = String(rangeStr).match(/(\d+)/);
+    return m ? parseInt(m[1], 10) : 1;
+  }
+
+  function renderBookOutlineChartHtml(bookNo, options) {
+    options = options || {};
+    bookNo = parseInt(bookNo, 10);
+    var isStandalone = !!options.isStandalone;
+    var isCompact = !!options.compact;
+    var showHeading = options.showHeading !== false;
+    var customTitle = options.title;
+
+    var studyData = getBookStudyData(bookNo);
+    var introData = getBookIntroData(bookNo);
+
+    if (!studyData && !introData) {
+      return '<div class="book-outline-empty">查無此書卷大綱資料</div>';
+    }
+
+    var bookName = (studyData && studyData.meta) ? studyData.meta.nameZh : (introData ? introData.name_zh : ('第 ' + bookNo + ' 卷'));
+    var bookEn = (studyData && studyData.meta) ? studyData.meta.nameEn : (introData ? introData.name_en : '');
+    var chapters = (studyData && studyData.meta) ? studyData.meta.chapters : (introData ? (introData.chapters || '') : '');
+    var genre = (studyData && studyData.literaryStructure) ? studyData.literaryStructure.genre : (introData ? introData.category : '');
+    var structureHighlights = (studyData && studyData.literaryStructure) ? studyData.literaryStructure.structureHighlights : '';
+
+    // Normalize parts
+    var parts = [];
+    if (studyData && studyData.literaryStructure && studyData.literaryStructure.outline && studyData.literaryStructure.outline.length) {
+      parts = studyData.literaryStructure.outline.map(function(item, idx) {
+        return {
+          partNo: item.partNo || (idx + 1),
+          range: item.range || '',
+          title: item.title || '',
+          focus: item.focus || '',
+          theologicalPoint: item.theologicalPoint || '',
+          startChap: getStartChapter(item.range)
+        };
+      });
+    } else if (introData && introData.outline && introData.outline.length) {
+      parts = introData.outline.map(function(item, idx) {
+        var startChap = getStartChapter(item.title);
+        return {
+          partNo: idx + 1,
+          range: item.title,
+          title: item.title,
+          focus: item.desc || '',
+          theologicalPoint: '',
+          startChap: startChap
+        };
+      });
+    }
+
+    if (!parts.length) {
+      return '<div class="book-outline-empty">此書卷暫無結構大綱資料</div>';
+    }
+
+    var html = '<div class="book-outline-chart-box' + (isCompact ? ' compact' : '') + '" data-bookno="' + bookNo + '">';
+
+    if (showHeading) {
+      var headingText = customTitle || ('《' + escapeHtml(bookName) + '》整卷書結構大綱圖表');
+      html += '<div class="outline-chart-header">';
+      html += '  <div class="outline-header-main">';
+      html += '    <span class="outline-header-icon" aria-hidden="true">📊</span>';
+      html += '    <h3 class="outline-header-title">' + headingText + '</h3>';
+      if (chapters) {
+        html += '    <span class="outline-badge-total">共 ' + chapters + ' 章 · ' + parts.length + ' 大段落</span>';
+      }
+      html += '  </div>';
+      if (structureHighlights) {
+        html += '  <div class="outline-header-highlights"><span class="highlight-tag">💡 結構脈絡</span> ' + escapeHtml(structureHighlights) + '</div>';
+      }
+      html += '</div>';
+    }
+
+    // 1. Horizontal Flow Track (橫向分段比例導覽條)
+    html += '<div class="outline-flow-track" role="navigation" aria-label="全書架構導覽軌道">';
+    parts.forEach(function(p) {
+      var readUrl = (isStandalone ? 'index.html#read/' : '#read/') + bookNo + '/' + p.startChap;
+      html += '<a href="' + readUrl + '" class="outline-flow-item" data-part="' + p.partNo + '" title="跳轉閱讀：第 ' + p.startChap + ' 章 (' + escapeHtml(p.range) + ')">';
+      html += '  <div class="flow-item-head">';
+      html += '    <span class="flow-item-num">P' + p.partNo + '</span>';
+      html += '    <span class="flow-item-range">' + escapeHtml(p.range) + '</span>';
+      html += '  </div>';
+      html += '  <div class="flow-item-title">' + escapeHtml(p.title) + '</div>';
+      html += '</a>';
+    });
+    html += '</div>';
+
+    // 2. Structured Diagram Node Cards (大綱架構節點圖解陣列)
+    html += '<div class="outline-diagram-grid">';
+    parts.forEach(function(p) {
+      var readUrl = (isStandalone ? 'index.html#read/' : '#read/') + bookNo + '/' + p.startChap;
+      html += '<div class="outline-diagram-card" data-part="' + p.partNo + '">';
+      html += '  <div class="card-part-header">';
+      html += '    <div class="card-part-badge-group">';
+      html += '      <span class="part-pill">Part ' + p.partNo + '</span>';
+      html += '      <span class="range-pill"><i class="fas fa-bookmark" aria-hidden="true"></i> ' + escapeHtml(p.range) + '</span>';
+      html += '    </div>';
+      html += '    <a href="' + readUrl + '" class="card-quick-read-link" title="開啟第 ' + p.startChap + ' 章經文">';
+      html += '      <span>閱讀經文</span> <i class="fas fa-external-link-alt" aria-hidden="true"></i>';
+      html += '    </a>';
+      html += '  </div>';
+
+      html += '  <h4 class="card-section-title">' + escapeHtml(p.title) + '</h4>';
+
+      if (p.focus) {
+        html += '  <div class="card-info-box focus-box">';
+        html += '    <div class="box-label"><i class="fas fa-compass" aria-hidden="true"></i> <strong>經文焦點與敘事脈絡：</strong></div>';
+        html += '    <div class="box-content">' + escapeHtml(p.focus) + '</div>';
+        html += '  </div>';
+      }
+
+      if (p.theologicalPoint) {
+        html += '  <div class="card-info-box theology-box">';
+        html += '    <div class="box-label"><i class="fas fa-lightbulb" aria-hidden="true"></i> <strong>神學要義與救贖啟示：</strong></div>';
+        html += '    <div class="box-content">' + escapeHtml(p.theologicalPoint) + '</div>';
+        html += '  </div>';
+      }
+
+      html += '  <div class="card-footer-nav">';
+      html += '    <a href="' + readUrl + '" class="btn-card-read-chapter">';
+      html += '      <i class="fas fa-book-open" aria-hidden="true"></i> 進入經文閱讀器（第 ' + p.startChap + ' 章）';
+      html += '    </a>';
+      html += '  </div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    html += '</div>';
+    return html;
+  }
+
   function renderBookStudyGuideHtml(bookNo, options) {
     options = options || {};
     var isStandalone = !!options.isStandalone;
@@ -241,6 +384,8 @@
     html += '        <div class="meta-row"><strong>結構特色：</strong> ' + escapeHtml(l.structureHighlights) + '</div>';
     html += '      </div>';
     
+    html += renderBookOutlineChartHtml(bookNo, { isStandalone: isStandalone, showHeading: true, title: '《' + escapeHtml(m.nameZh) + '》整卷書宏觀架構圖表' });
+
     html += '      <div class="outline-timeline">';
     l.outline.forEach(function(item) {
       html += '        <div class="outline-node">';
@@ -430,6 +575,7 @@
   }
 
   // Export functions to window
+  window.renderBookOutlineChartHtml = renderBookOutlineChartHtml;
   window.renderBookStudyGuideHtml = renderBookStudyGuideHtml;
   window.renderSurveyGuideHtml = renderSurveyGuideHtml;
 
