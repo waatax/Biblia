@@ -2427,18 +2427,11 @@ var BIBLIA = (function () {
   /* ===================== 讀經計畫資料與邏輯 ===================== */
   var PLAN_SOURCES = [
     {
-      id: 'church_q3_2026',
-      name: '教會聖經速讀',
-      sub: '2026 第三季',
-      get: function () { return window.BIBLIA_PLAN_2026_Q3; },
-      note: '教會 2026 年聖經速讀進度表（第三季）'
-    },
-    {
       id: 'su101_2026',
       name: '每日研經釋義',
       sub: '2026 全年',
       get: function () { return window.BIBLIA_PLAN_SU101_2026; },
-      note: ''
+      note: '國際讀經會台灣總會 2026 年讀經進度表（含聖教會第四季進度，全年 365 天）'
     }
   ];
 
@@ -2527,12 +2520,6 @@ var BIBLIA = (function () {
       if (raw) bag = JSON.parse(raw) || {};
     } catch (e) { bag = {}; }
 
-    if (!bag.church_q3_2026) {
-      try {
-        var old = localStorage.getItem('biblia_q3_progress');
-        if (old) bag.church_q3_2026 = JSON.parse(old) || {};
-      } catch (e) { /* 忽略 */ }
-    }
     return bag;
   }
 
@@ -2641,6 +2628,11 @@ var BIBLIA = (function () {
   function buildPlanSwitch() {
     if (!el.planSwitch) return;
     el.planSwitch.innerHTML = '';
+    if (plans.length <= 1) {
+      el.planSwitch.hidden = true;
+      return;
+    }
+    el.planSwitch.hidden = false;
     plans.forEach(function (p, i) {
       var btn = document.createElement('button');
       btn.type = 'button';
