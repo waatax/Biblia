@@ -2429,9 +2429,16 @@ var BIBLIA = (function () {
     {
       id: 'su101_2026',
       name: '每日研經釋義',
-      sub: '2026 全年',
+      sub: '2026 全年 (365天)',
       get: function () { return window.BIBLIA_PLAN_SU101_2026; },
       note: '國際讀經會台灣總會 2026 年讀經進度表（含聖教會第四季進度，全年 365 天）'
+    },
+    {
+      id: 'church_q3_2026',
+      name: 'WOL 教會速讀',
+      sub: '一年讀完聖經 (Q3)',
+      get: function () { return window.BIBLIA_PLAN_2026_Q3; },
+      note: 'WOL 教會 2026 年聖經速讀進度表（第三季，一年讀完聖經進度）'
     }
   ];
 
