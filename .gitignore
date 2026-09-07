@@ -1,3 +1,21 @@
+# 本地私有與內部開發資料夾（永不上傳至 GitHub 或 GitHub Pages）
+Local/
+local/
+LOCAL/
+
+# AI 工具與本機 IDE 設定
+.claude/
+.gemini/
+.idea/
+.vscode/
+
+# 抓取日誌、測試輸出與本機報告
+*.log
+*.out
+report.txt
+completeness.txt
+manifest.csv
+
 # parsed/ 可由 raw/ 用 scripts/parse.py 在數秒內重建，不必進版控；
 # app/data/ 是前端實際要載入的資料，需保留才能 clone 下來直接開。
 parsed/
@@ -9,3 +27,4 @@ __pycache__/
 .DS_Store
 Thumbs.db
 desktop.ini
+

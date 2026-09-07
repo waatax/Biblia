@@ -3,7 +3,7 @@
  * 由 scripts/fetch_su101_plan.py 產生，請勿手動編輯。
  * 涵蓋範圍：2026-01-01 ~ 2026-12-31（共 365 天：貼文 227 天、官方季表 138 天）
  * 站方一天發佈一天的進度；未來日期取自 scripts/data/su101_plan_2026.tsv。
- * 抓取日期：2026-09-04
+ * 抓取日期：2026-09-05
  */
 window.BIBLIA_PLAN_SU101_2026 = {
   "id": "su101_2026",
@@ -86,7 +86,7 @@ window.BIBLIA_PLAN_SU101_2026 = {
   "postDays": 227,
   "planDays": 138,
   "coverageNote": "其中 227 天來自站方每日貼文，138 天來自官方整季經文進度表；站方逐日發佈，重跑 scripts/fetch_su101_plan.py 可補上新進度。",
-  "fetchedAt": "2026-09-04",
+  "fetchedAt": "2026-09-05",
   "items": [
     {"id":"su2026-01-01","isoDate":"2026-01-01","date":"1/1","month":1,"day":1,"week":1,"wd":"週四","rawText":"馬太福音 1:1-17","passages":[{"abbr":"太","bookNo":40,"bookZh":"馬太福音","startChap":1,"startVerse":1,"endChap":1,"endVerse":17,"label":"太 1:1-17","fullLabel":"馬太福音 1章1-17節"}],"link":"https://www.su101.net/archives/104026","src":"post"},
     {"id":"su2026-01-02","isoDate":"2026-01-02","date":"1/2","month":1,"day":2,"week":1,"wd":"週五","rawText":"馬太福音 1:18-25","passages":[{"abbr":"太","bookNo":40,"bookZh":"馬太福音","startChap":1,"startVerse":18,"endChap":1,"endVerse":25,"label":"太 1:18-25","fullLabel":"馬太福音 1章18-25節"}],"link":"https://www.su101.net/archives/104095","src":"post"},

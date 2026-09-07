@@ -21,10 +21,13 @@ RAW_DIR = os.path.join(ROOT, "raw")
 PARSED_DIR = os.path.join(ROOT, "parsed")
 APP_DIR = os.path.join(ROOT, "app")
 APP_DATA_DIR = os.path.join(APP_DIR, "data")
-BOOKS_CSV = os.path.join(CONFIG_DIR, "books.csv")
-MANIFEST_CSV = os.path.join(ROOT, "manifest.csv")
-DOWNLOAD_LOG = os.path.join(ROOT, "download.log")
-REPORT_TXT = os.path.join(ROOT, "report.txt")
+LOCAL_DIR = os.path.join(ROOT, "Local")
+LOGS_DIR = os.path.join(LOCAL_DIR, "logs_and_reports")
+os.makedirs(LOGS_DIR, exist_ok=True)
+
+MANIFEST_CSV = os.path.join(LOGS_DIR, "manifest.csv")
+DOWNLOAD_LOG = os.path.join(LOGS_DIR, "download.log")
+REPORT_TXT = os.path.join(LOGS_DIR, "report.txt")
 
 # --- FHL API ------------------------------------------------------------
 FHL_JSON_BASE = "https://bible.fhl.net/json"

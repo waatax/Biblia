@@ -29,7 +29,7 @@ import urllib.parse
 import common
 
 DICT_DIR = os.path.join(common.RAW_DIR, "strong_dict")
-LOG = os.path.join(common.ROOT, "strong_dict.log")
+LOG = os.path.join(common.LOGS_DIR, "strong_dict.log")
 
 
 # 標準 Strong 編號範圍

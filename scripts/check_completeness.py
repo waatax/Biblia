@@ -26,11 +26,9 @@ import os
 import random
 import re
 import sys
-import time
-
 import common
 
-OUT = os.path.join(common.ROOT, "completeness.txt")
+OUT = os.path.join(common.LOGS_DIR, "completeness.txt")
 LINES = []
 FAILS = [0]
 
