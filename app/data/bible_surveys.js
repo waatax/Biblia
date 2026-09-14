@@ -54,6 +54,11 @@
         "id": "ot_bibliography",
         "title": "八、舊約權威研讀書目與經典資源推薦",
         "content": "為深入研讀舊約聖經，推薦以下正統福音派與歸正學術經典註釋與導論系列：\n\n* **舊約導論經典**：\n  * Gleason L. Archer, *A Survey of Old Testament Introduction* (《舊約概論》)\n  * Tremper Longman III & Raymond B. Dillard, *An Introduction to the Old Testament* (《二十一世紀舊約導論》)\n  * Bruce K. Waltke & Charles Yu, *An Old Testament Theology: An Exegetical, Canonical, and Thematic Approach* (《舊約神學：釋經、正典與主題進路》)\n* **權威學術註釋系列**：\n  * *New International Commentary on the Old Testament (NICOT)* — Eerdmans 頂尖福音派原文釋經旗艦。\n  * *Word Biblical Commentary (WBC)* — 詳盡經文校勘與文學神學結構。\n  * *Tyndale Old Testament Commentaries (TOTC)* — 扎實、精練、適合教牧與信徒的經典系列。\n  * *Reformed Expository Commentary (REC)* — 歸正神學釋經與講道典範。\n  * 約翰·加爾文 (John Calvin)，《加爾文舊約聖經註釋全集》。"
+      },
+      {
+        "id": "ot_expert_council_paradigm",
+        "title": "九、Biblia 專家委員會七大座席與舊約 7x7 研經典範 (The 7-Seat Expert Council & 7x7 Paradigm)",
+        "content": "Biblia 專案專家委員會由七大專業座席協同組成，針對舊約 39 卷書展開跨學科、多維度的深度考證與靈修整合：\n\n1. 🎓 **正統聖約神學座席 (Covenant Theology)**：以恩典之約為中軸，貫通伊甸原始福音、挪亞之約、亞伯拉罕之約、西奈之約、利未祭司之約與大衛之約，定位各卷在救贖歷史宏流中的精確坐標。\n2. 📜 **閃族與希臘語文學座席 (Biblical Philology & Strong Exegesis)**：深研古代希伯來文與亞蘭文字根、詞態、語義場與 Strong 原文微膠囊，提供精準原文釋義。\n3. 🏺 **古代近東考古與歷史地理座席 (ANE Archaeology & Historical Geography)**：結合埃勃拉、馬里、努斯、亞述巴比倫年表、拉吉陶片、死海古卷等客觀考古實證，印證舊約歷史記載的無誤與堅實。\n4. 🏛️ **正典互文與基督論座席 (Canonical Christology & Typology)**：以路加福音 24:27 為準則，在五經、歷史、詩歌與先知書中挖掘基督作為真祭物、真大衛、受苦僕人與亙古君王的預表與應驗。\n5. 🛡️ **正統教義防衛與護教學座席 (Apologetics & Orthodoxy)**：針對十九世紀以來的威爾豪森底本說、晚期偽作假說與世俗神義論質疑，以扎實學術證據構築防衛福音正統的堅固防線。\n6. 🕊️ **教牧釋經與門徒操練座席 (Pastoral Theology & Discipleship)**：銜接威斯敏斯特小要理問答與海德堡要理問答，將歷史教訓轉化為信徒在苦難、誘惑、家庭生活中的成聖操練與心靈慰藉。\n7. 🎨 **文學結構與和風文庫工藝席 (Literary Architecture & Japanese Wabi-Sabi Flow)**：剖析希伯來對偶句法、交錯對稱結構 (Chiasm) 與長篇史詩張力，以日系文庫本排版美學呈現流暢舒適的研讀節奏。"
       }
     ]
   },
@@ -108,6 +113,11 @@
         "id": "nt_bibliography",
         "title": "八、新約權威研讀書目與經典資源推薦",
         "content": "研讀新約聖經推薦以下頂尖福音派與歸正學術註釋與導論系列：\n\n* **新約導論與神學經典**：\n  * D.A. Carson & Douglas J. Moo, *An Introduction to the New Testament* (《二十一世紀新約導論》)\n  * George Eldon Ladd, *A Theology of the New Testament* (《新約神學》)\n  * Herman Ridderbos, *Paul: An Outline of His Theology* (《保羅神學：綱要》)\n  * F.F. Bruce, *New Testament History* (《新約歷史》)\n* **權威學術註釋系列**：\n  * *New International Commentary on the New Testament (NICNT)* — Eerdmans 頂尖福音派註釋系列（Gordon Fee, Douglas Moo, F.F. Bruce 等執筆）。\n  * *Pillar New Testament Commentary (PNTC)* — D.A. Carson 主編，學術與教牧兼備。\n  * *Baker Exegetical Commentary on the New Testament (BECNT)* — 深入原文經文解析與神學反思。\n  * *Tyndale New Testament Commentaries (TNTC)* — 適合個人靈修與小組查經之經典。\n  * 約翰·加爾文 (John Calvin)，《加爾文新約聖經註釋全集》。"
+      },
+      {
+        "id": "nt_expert_council_paradigm",
+        "title": "九、Biblia 專家委員會七大座席在新約 27 卷的研經典範 (The 7-Seat Expert Council in New Testament)",
+        "content": "在新約 27 卷書卷的研討中，專家委員會七大座席以福音與使徒教會為焦點，展開全方位的學術與信仰見證：\n\n1. 🎓 **正統聖約神學座席 (Covenant Fulfillment)**：見證基督以十字架寶血設立之「更美新約」(來 8:6)，終結舊約禮儀影子，實現罪得赦免、聖靈內住與天國公民的新生活。\n2. 📜 **閃族與希臘語文學座席 (Koine Greek & Intertextuality)**：剖析新約通用希臘文精微之語態時態、使徒神學專門術語（Logos, Dikaiosyne, Hilasterion, Parousia）與七十士譯本 (LXX) 引用對照。\n3. 🏺 **古代近東考古與地理座席 (Greco-Roman Archaeology & Epigraphy)**：依據彼拉多石碑、迦流德爾斐銘文、以拉都鋪石銘刻、以弗所大劇院、拔摩島洞穴等豐富考古遺址，實證使徒行傳與書信的歷史真實性。\n4. 🏛️ **正典互文與基督論座席 (High Christology & Apostolic Proclamation)**：聚焦基督本性、降卑、順服至死、身體復活與榮耀升天；確立耶穌基督是萬王之王、萬主之主、教會的唯一元首。\n5. 🛡️ **正統教義防衛與護教學座席 (Anti-Heresy & Orthodoxy Defense)**：粉碎諾斯底主義、幻影論、割禮律法主義與現代世俗化自由派解構；擊退東方閃電、新天地等扭曲啟示錄的現代異端。\n6. 🕊️ **教牧釋經與門徒操練座席 (Sanctification & Ecclesiology)**：指引信徒穿戴神所賜的全副軍裝，結出聖靈仁愛果子，在家庭、職場與受逼迫環境中活出榮神益人的天路客見證。\n7. 🎨 **文學結構與和風文庫工藝席 (Literary Cadence & Epistolary Rhetoric)**：欣賞福音書敘事張力、保羅書信邏輯飛瀑、希伯來書講道詠嘆與啟示錄天體交響，以和風靜謐之排版賦予深度默想心流。"
       }
     ]
   }

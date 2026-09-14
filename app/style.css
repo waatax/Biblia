@@ -8347,5 +8347,331 @@ body.font-shippori .compare-verse-quote {
   }
 }
 
+/* ==========================================================================
+   17. 專家委員會七大座席與 7x7 研經中心視覺美學 (Expert Council & Book Guide)
+   ========================================================================== */
+.section-expert-council {
+  margin: 36px 0;
+  padding: 28px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-2);
+  position: relative;
+  overflow: hidden;
+}
 
+.section-expert-council::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #8b5cf6, #3b82f6, #059669, #d97706, #ef4444);
+}
 
+.expert-council-banner {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.expert-banner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-radius: var(--r-full);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+.expert-title {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.expert-banner-sub {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+  line-height: 1.6;
+}
+
+.expert-seats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.expert-seat-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.expert-seat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-3);
+  border-color: var(--accent);
+}
+
+.expert-seat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.seat-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.seat-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.seat-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.seat-en-title {
+  font-size: 0.75rem;
+  color: var(--fg-subtle);
+  font-family: var(--font-sans);
+}
+
+.expert-seat-body {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--fg-muted);
+  flex: 1;
+}
+
+/* 經文跳轉與 Strong 字典微膠囊 */
+.verse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.verse-jump-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-subtle);
+  border: 1px solid transparent;
+  border-radius: var(--r-full);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.verse-jump-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  transform: translateY(-1px);
+}
+
+.clickable-strong-tag {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-radius: var(--r-full);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  transition: all 0.15s ease;
+}
+
+.clickable-strong-tag:hover {
+  background: var(--accent);
+  color: var(--bg);
+  transform: scale(1.05);
+}
+
+/* Category Filter Bar */
+.guide-category-bar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 8px 16px;
+  position: sticky;
+  top: 56px;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.category-scroll-container {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+  scrollbar-width: thin;
+}
+
+.cat-pill {
+  padding: 6px 14px;
+  border-radius: var(--r-full);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.cat-pill:hover {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+
+.cat-pill.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+/* Strong Dict Modal */
+.guide-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.guide-modal-card {
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-alt);
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-radius: var(--r-full);
+}
+
+.modal-strong-code {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--fg-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--r-md);
+  transition: color 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  color: var(--fg);
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--fg);
+}
+
+.modal-body .dict-orig-box {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-body .dict-orig-word {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: "Noto Serif TC", serif;
+}
+
+.modal-body .dict-zh-section {
+  white-space: pre-wrap;
+  margin-bottom: 16px;
+}
+
+.modal-body .dict-en-section {
+  white-space: pre-wrap;
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+}

@@ -98,7 +98,13 @@ def test_books():
         assert len(b["pastoralApplications"]) >= 1
         assert len(b["bibliography"]) >= 1
 
-        print(f"  [OK] Book #{book_no:02d} [{m['testament']}] {m['nameZh']} ({m['nameEn']}) - 10 Dimensions Fully Verified.")
+        exp = b.get("expertCouncilPerspectives")
+        assert exp, f"Book {book_no} missing expertCouncilPerspectives"
+        seats = ["covenantTheology", "originalLanguages", "archaeology", "christologyTypology", "apologeticsOrthodoxy", "pastoralDiscipleship", "literaryArtistry"]
+        for s_key in seats:
+            assert s_key in exp and len(exp[s_key]) >= 10, f"Book {book_no} missing or invalid expert seat {s_key}"
+
+        print(f"  [OK] Book #{book_no:02d} [{m['testament']}] {m['nameZh']} ({m['nameEn']}) - 10+1 Dimensions & 7 Expert Seats Fully Verified.")
 
 def test_html_files():
     print("Testing HTML integration...")

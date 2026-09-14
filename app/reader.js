@@ -30,10 +30,10 @@ var BIBLIA = (function () {
       strong: true, ntonly: true, greek: true, orig: true, lang: 'el' }
   ];
 
-  var DEFAULTS = { zh_unv: true, en_kjv: true, en_web: false,
-                   es_rvr1909: true, es_rvc: false,
+  var DEFAULTS = { zh_unv: true, en_kjv: false, en_web: false,
+                   es_rvr1909: false, es_rvc: false,
                    fr_nbs: false, ja_jp: false, ko_kor: false, vi_vie: false,
-                   he_wlc: true, gr_wh: true };
+                   he_wlc: false, gr_wh: false };
   var FIRST_NT = 40;
 
   var state = {
@@ -82,6 +82,7 @@ var BIBLIA = (function () {
   function save() {
     try {
       localStorage.setItem('biblia', JSON.stringify({
+        v: 2,
         on: state.on,
         inter: state.inter,
         size: state.size,
@@ -310,7 +311,17 @@ var BIBLIA = (function () {
     list.forEach(function (b) { state.byNo[b.no] = b; });
 
     var saved = load();
-    state.on = (saved && saved.on) || Object.assign({}, DEFAULTS);
+    var isOldDefault = saved && saved.on &&
+      saved.on.zh_unv && saved.on.en_kjv && saved.on.es_rvr1909 &&
+      saved.on.he_wlc && saved.on.gr_wh &&
+      !saved.on.en_web && !saved.on.es_rvc && !saved.on.fr_nbs &&
+      !saved.on.ja_jp && !saved.on.ko_kor && !saved.on.vi_vie;
+
+    if (!saved || !saved.on || saved.v !== 2 || isOldDefault) {
+      state.on = Object.assign({}, DEFAULTS);
+    } else {
+      state.on = saved.on;
+    }
     state.inter = saved ? !!saved.inter : false;
     state.size = (saved && typeof saved.size === 'number') ? saved.size : defaultSize();
     state.lh = (saved && saved.lh) || 'normal';
@@ -3633,6 +3644,16 @@ var BIBLIA = (function () {
           });
         }
       });
+
+      container.querySelectorAll('.clickable-strong-tag').forEach(function (tag) {
+        tag.addEventListener('click', function (e) {
+          e.preventDefault();
+          var sCode = tag.getAttribute('data-strong') || tag.textContent.trim();
+          if (sCode) {
+            showStrong(sCode);
+          }
+        });
+      });
     } else {
       container.innerHTML = '<div class="ref-empty-state">書卷研究資料庫未載入</div>';
     }
@@ -3667,6 +3688,16 @@ var BIBLIA = (function () {
           });
         }
       });
+
+      container.querySelectorAll('.clickable-strong-tag').forEach(function (tag) {
+        tag.addEventListener('click', function (e) {
+          e.preventDefault();
+          var sCode = tag.getAttribute('data-strong') || tag.textContent.trim();
+          if (sCode) {
+            showStrong(sCode);
+          }
+        });
+      });
     } else {
       container.innerHTML = '<div class="ref-empty-state">舊約總覽資料庫未載入</div>';
     }
@@ -3700,6 +3731,16 @@ var BIBLIA = (function () {
             window.scrollTo(0, 0);
           });
         }
+      });
+
+      container.querySelectorAll('.clickable-strong-tag').forEach(function (tag) {
+        tag.addEventListener('click', function (e) {
+          e.preventDefault();
+          var sCode = tag.getAttribute('data-strong') || tag.textContent.trim();
+          if (sCode) {
+            showStrong(sCode);
+          }
+        });
       });
     } else {
       container.innerHTML = '<div class="ref-empty-state">新約總覽資料庫未載入</div>';

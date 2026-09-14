@@ -320,8 +320,15 @@
       html += '      <h2 class="guide-section-title"><i class="fas fa-key"></i> 核心金句與神學鑰節</h2>';
       html += '      <div class="key-verses-list">';
       m.keyVerses.forEach(function(kv) {
+        var jumpMatch = String(kv.ref).match(/(\d+):(\d+)/);
+        var jumpChap = jumpMatch ? jumpMatch[1] : 1;
+        var jumpVerse = jumpMatch ? jumpMatch[2] : 1;
+        var readJumpUrl = (isStandalone ? 'index.html#read/' : '#read/') + m.bookNo + '/' + jumpChap + '/' + jumpVerse;
         html += '        <div class="key-verse-card">';
-        html += '          <div class="verse-header"><span class="verse-ref"><i class="fas fa-bookmark"></i> ' + escapeHtml(kv.ref) + '</span></div>';
+        html += '          <div class="verse-header">';
+        html += '            <span class="verse-ref"><i class="fas fa-bookmark"></i> ' + escapeHtml(kv.ref) + '</span>';
+        html += '            <a href="' + readJumpUrl + '" class="verse-jump-btn" title="在閱讀器中開啟此經節"><i class="fas fa-external-link-alt"></i> 閱讀經文</a>';
+        html += '          </div>';
         html += '          <blockquote class="verse-text">' + escapeHtml(kv.text) + '</blockquote>';
         if (kv.note) {
           html += '          <div class="verse-note"><i class="fas fa-info-circle"></i> ' + escapeHtml(kv.note) + '</div>';
@@ -376,7 +383,47 @@
     html += '      </div>';
     html += '    </section>';
 
-    // 5. Literary Structure & Detailed Outline
+    // 5. 🏛️ Biblia 專家委員會七大座席評註與 7x7 研經典範 (The 7-Seat Expert Council)
+    if (data.expertCouncilPerspectives) {
+      html += '    <section class="guide-section section-expert-council">';
+      html += '      <div class="expert-council-banner">';
+      html += '        <div class="expert-banner-badge"><i class="fas fa-certificate"></i> 專家委員會座席審定 · 7x7 深度研經</div>';
+      html += '        <h2 class="guide-section-title expert-title"><i class="fas fa-landmark"></i> Biblia 專家委員會七席評註與 7x7 研經典範</h2>';
+      html += '        <p class="expert-banner-sub">跨學科、正統神學院級 7 大座席聯合審核 · 聖約神學 · 原文字義 · 近東考古 · 基督論 · 護教學 · 門徒操練 · 文庫美學</p>';
+      html += '      </div>';
+      html += '      <div class="expert-seats-grid">';
+      
+      var seatsInfo = [
+        { id: "covenantTheology", name: "席位 1: 正統聖約神學席", title: "Covenant Theology", icon: "fa-scroll", color: "#8b5cf6" },
+        { id: "originalLanguages", name: "席位 2: 閃族與希臘語文學席", title: "Philology & Strong Exegesis", icon: "fa-language", color: "#3b82f6" },
+        { id: "archaeology", name: "席位 3: 古代近東考古與地理席", title: "Archaeology & Geography", icon: "fa-monument", color: "#d97706" },
+        { id: "christologyTypology", name: "席位 4: 正典互文與基督論席", title: "Canonical Christology", icon: "fa-cross", color: "#ef4444" },
+        { id: "apologeticsOrthodoxy", name: "席位 5: 正統教義防衛與護教學席", title: "Apologetics & Orthodoxy", icon: "fa-shield-halved", color: "#059669" },
+        { id: "pastoralDiscipleship", name: "席位 6: 教牧釋經與信徒門訓席", title: "Pastoral & Discipleship", icon: "fa-hands-holding-child", color: "#0284c7" },
+        { id: "literaryArtistry", name: "席位 7: 文學修辭與和風工藝席", title: "Literary Architecture & Cadence", icon: "fa-feather-pointed", color: "#b45309" }
+      ];
+
+      seatsInfo.forEach(function(st) {
+        var text = data.expertCouncilPerspectives[st.id];
+        if (text) {
+          html += '        <div class="expert-seat-card" data-seat="' + st.id + '">';
+          html += '          <div class="expert-seat-header">';
+          html += '            <span class="seat-icon-box" style="color: ' + st.color + '"><i class="fas ' + st.icon + '"></i></span>';
+          html += '            <div class="seat-title-group">';
+          html += '              <div class="seat-name">' + escapeHtml(st.name) + '</div>';
+          html += '              <div class="seat-en-title">' + escapeHtml(st.title) + '</div>';
+          html += '            </div>';
+          html += '          </div>';
+          html += '          <div class="expert-seat-body">' + escapeHtml(text) + '</div>';
+          html += '        </div>';
+        }
+      });
+
+      html += '      </div>';
+      html += '    </section>';
+    }
+
+    // 6. Literary Structure & Detailed Outline
     html += '    <section class="guide-section section-structure">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-sitemap"></i> 文學體裁、結構特點與逐段深度大綱</h2>';
     html += '      <div class="structure-meta-card">';
@@ -414,7 +461,7 @@
         html += '            <span class="kw-orig">' + escapeHtml(kw.original) + '</span>';
         html += '            <span class="kw-trans">(' + escapeHtml(kw.transliteration) + ')</span>';
         if (kw.strongs) {
-          html += '            <span class="kw-strongs">' + escapeHtml(kw.strongs) + '</span>';
+          html += '            <span class="kw-strongs clickable-strong-tag" data-strong="' + escapeHtml(kw.strongs) + '" title="點擊檢視 Strong 字典釋義"><i class="fas fa-search-plus"></i> ' + escapeHtml(kw.strongs) + '</span>';
         }
         html += '          </div>';
         html += '          <div class="kw-meaning"><strong>字義：</strong> ' + escapeHtml(kw.meaning) + '</div>';

@@ -119,10 +119,41 @@
     </div>
   </nav>
 
+  <div class="guide-category-bar" id="guideCategoryBar">
+    <div class="category-scroll-container">
+      <button class="cat-pill active" data-cat="all">全部 66 卷</button>
+      <button class="cat-pill" data-cat="survey">全書總覽 (2)</button>
+      <button class="cat-pill" data-cat="torah">摩西五經 (1-5)</button>
+      <button class="cat-pill" data-cat="history_ot">舊約歷史書 (6-17)</button>
+      <button class="cat-pill" data-cat="poetry">詩歌智慧書 (18-22)</button>
+      <button class="cat-pill" data-cat="prophet_major">大先知書 (23-27)</button>
+      <button class="cat-pill" data-cat="prophet_minor">小先知書 (28-39)</button>
+      <button class="cat-pill" data-cat="gospel_acts">福音歷史 (40-44)</button>
+      <button class="cat-pill" data-cat="pauline">保羅書信 (45-57)</button>
+      <button class="cat-pill" data-cat="general_rev">普通書信與啟示錄 (58-66)</button>
+    </div>
+  </div>
+
   <div id="guideAppRoot" class="guide-app-root">
     <div class="guide-loading-spinner">
       <i class="fas fa-circle-notch fa-spin"></i>
       <p>載入聖經研究資料中...</p>
+    </div>
+  </div>
+
+  <!-- Strong Dictionary Interactive Modal -->
+  <div id="strongDictModal" class="guide-modal-overlay" style="display: none;" aria-hidden="true">
+    <div class="guide-modal-card" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge"><i class="fas fa-book-medical"></i> Strong 原文字典</span>
+          <h3 id="modalStrongCode" class="modal-strong-code">H1254</h3>
+        </div>
+        <button id="modalCloseBtn" class="modal-close-btn" aria-label="關閉視窗"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="modalBody" class="modal-body">
+        <div class="modal-loading"><i class="fas fa-spinner fa-spin"></i> 正在載入字典釋義...</div>
+      </div>
     </div>
   </div>
 
@@ -136,11 +167,62 @@
     (function() {
       'use strict';
 
+      // Setup BIBLIA global and Strong dictionary engine
+      window.BIBLIA = window.BIBLIA || {};
+      var strongDictData = { H: null, G: null };
+      var strongDictState = { H: 'idle', G: 'idle' }; // idle | loading | ready | failed
+      var strongDictWaiting = { H: [], G: [] };
+
+      BIBLIA.strongDict = function(lang, data) {
+        strongDictData[lang] = data;
+        strongDictState[lang] = 'ready';
+        var waiting = strongDictWaiting[lang];
+        strongDictWaiting[lang] = [];
+        waiting.forEach(function(fn) { fn(data); });
+      };
+
+      function ensureStrongDict(code, cb) {
+        var lang = (code.charAt(0) === 'G' || code.charAt(0) === 'g') ? 'G' : 'H';
+        if (strongDictState[lang] === 'ready') {
+          cb(strongDictData[lang]);
+          return;
+        }
+        strongDictWaiting[lang].push(cb);
+        if (strongDictState[lang] === 'loading') return;
+
+        strongDictState[lang] = 'loading';
+        var s = document.createElement('script');
+        s.src = 'data/strong_dict_' + lang + '.js';
+        s.charset = 'utf-8';
+        s.onerror = function() {
+          strongDictState[lang] = 'failed';
+          var waiting = strongDictWaiting[lang];
+          strongDictWaiting[lang] = [];
+          waiting.forEach(function(fn) { fn(null); });
+        };
+        document.head.appendChild(s);
+      }
+
+      function escapeHtml(s) {
+        if (!s) return '';
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
       var root = document.getElementById('guideAppRoot');
       var picker = document.getElementById('bookPickerSelect');
       var themeBtn = document.getElementById('themeToggleBtn');
       var printBtn = document.getElementById('printBtn');
       var subtitle = document.getElementById('navbarSubtitle');
+      var categoryBar = document.getElementById('guideCategoryBar');
+      var modal = document.getElementById('strongDictModal');
+      var modalStrongCode = document.getElementById('modalStrongCode');
+      var modalBody = document.getElementById('modalBody');
+      var modalCloseBtn = document.getElementById('modalCloseBtn');
 
       // Theme sync
       var currentTheme = localStorage.getItem('biblia_theme') || 'dark';
@@ -180,6 +262,38 @@
         return { type: 'book', val: 1 };
       }
 
+      function updateActiveCategoryPill(target) {
+        if (!categoryBar) return;
+        var pills = categoryBar.querySelectorAll('.cat-pill');
+        var activeCat = 'all';
+
+        if (target.type === 'survey') {
+          activeCat = 'survey';
+        } else if (target.type === 'book') {
+          var b = target.val;
+          if (b >= 1 && b <= 5) activeCat = 'torah';
+          else if (b >= 6 && b <= 17) activeCat = 'history_ot';
+          else if (b >= 18 && b <= 22) activeCat = 'poetry';
+          else if (b >= 23 && b <= 27) activeCat = 'prophet_major';
+          else if (b >= 28 && b <= 39) activeCat = 'prophet_minor';
+          else if (b >= 40 && b <= 44) activeCat = 'gospel_acts';
+          else if (b >= 45 && b <= 57) activeCat = 'pauline';
+          else if (b >= 58 && b <= 66) activeCat = 'general_rev';
+        }
+
+        pills.forEach(function(pill) {
+          var cat = pill.getAttribute('data-cat');
+          if (cat === activeCat) {
+            pill.classList.add('active');
+            try {
+              pill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } catch (err) {}
+          } else {
+            pill.classList.remove('active');
+          }
+        });
+      }
+
       function renderCurrentPage() {
         var target = parseUrlParams();
         if (target.type === 'book') {
@@ -209,6 +323,7 @@
             if (subtitle) subtitle.textContent = sTitle;
           }
         }
+        updateActiveCategoryPill(target);
         window.scrollTo(0, 0);
       }
 
@@ -222,6 +337,99 @@
           }
         });
       }
+
+      // Category Pill Navigation
+      if (categoryBar) {
+        categoryBar.addEventListener('click', function(e) {
+          var pill = e.target.closest('.cat-pill');
+          if (!pill) return;
+          var cat = pill.getAttribute('data-cat');
+          var catTargets = {
+            'all': '?book=1',
+            'survey': '?survey=ot_survey',
+            'torah': '?book=1',
+            'history_ot': '?book=6',
+            'poetry': '?book=18',
+            'prophet_major': '?book=23',
+            'prophet_minor': '?book=28',
+            'gospel_acts': '?book=40',
+            'pauline': '?book=45',
+            'general_rev': '?book=58'
+          };
+          if (catTargets[cat]) {
+            window.location.search = catTargets[cat];
+          }
+        });
+      }
+
+      // Strong Dictionary Interactive Modal
+      function openStrongModal(code) {
+        if (!modal || !modalStrongCode || !modalBody) return;
+        code = (code || '').trim().toUpperCase();
+        if (!code) return;
+
+        modalStrongCode.textContent = code;
+        modalBody.innerHTML = '<div class="modal-loading" style="text-align: center; padding: 30px; color: var(--fg-muted);"><i class="fas fa-spinner fa-spin"></i> 正在載入字典釋義...</div>';
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+
+        ensureStrongDict(code, function(dict) {
+          if (!dict) {
+            modalBody.innerHTML = '<div class="modal-error" style="text-align: center; padding: 24px; color: #e55353;"><i class="fas fa-exclamation-triangle"></i> 無法載入 Strong 原文字典資料檔案。</div>';
+            return;
+          }
+          var entry = dict[code];
+          if (!entry) {
+            modalBody.innerHTML = '<div class="modal-empty" style="text-align: center; padding: 24px; color: var(--fg-muted);"><i class="fas fa-info-circle"></i> 字典中無編號 <strong>' + escapeHtml(code) + '</strong> 之釋義資料。</div>';
+            return;
+          }
+
+          var html = '<div class="strong-entry-detail">';
+          if (entry.o) {
+            html += '<div class="dict-orig-box"><span class="dict-orig-word">' + escapeHtml(entry.o) + '</span></div>';
+          }
+          if (entry.z) {
+            html += '<div class="dict-zh-section">' + escapeHtml(entry.z) + '</div>';
+          }
+          if (entry.e) {
+            html += '<div class="dict-en-section">' + escapeHtml(entry.e) + '</div>';
+          }
+          html += '</div>';
+          modalBody.innerHTML = html;
+        });
+      }
+
+      function closeStrongModal() {
+        if (!modal) return;
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', closeStrongModal);
+      }
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            closeStrongModal();
+          }
+        });
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
+          closeStrongModal();
+        }
+      });
+
+      // Global delegation for Strong tags
+      document.addEventListener('click', function(e) {
+        var strongTag = e.target.closest('.clickable-strong-tag');
+        if (strongTag) {
+          e.preventDefault();
+          var sCode = strongTag.getAttribute('data-strong') || strongTag.textContent;
+          openStrongModal(sCode);
+        }
+      });
 
       // Initial render
       renderCurrentPage();
