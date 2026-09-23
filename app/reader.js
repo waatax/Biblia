@@ -3514,33 +3514,34 @@ var BIBLIA = (function () {
 
         var hasVisual1 = typeof window.renderBookOutlineChartHtml === 'function';
         var hasVisual2 = typeof window.renderBookGeoMapHtml === 'function';
+        var hasVisual3 = typeof window.renderBookTheologyMatrixHtml === 'function';
+        var hasVisual4 = typeof window.renderBookDossierHtml === 'function';
 
-        if (hasVisual1 || hasVisual2) {
-          htmlStr += '<div class="book-intro-visuals-container">';
-          
-          if (hasVisual1) {
-            htmlStr += '<div class="book-outline-section visual-item-1">' +
-              window.renderBookOutlineChartHtml(b.no, {
-                isStandalone: false,
-                compact: true,
-                showHeading: true,
-                title: '📊 全書結構大綱圖表'
-              }) +
-            '</div>';
-          }
-          
-          if (hasVisual2) {
-            htmlStr += '<div class="book-geomap-section visual-item-2">' +
-              window.renderBookGeoMapHtml(b.no, {
-                isStandalone: false,
-                compact: true,
-                showHeading: true,
-                title: '🗺️ 聖經歷史地緣動線圖'
-              }) +
-            '</div>';
-          }
-
-          htmlStr += '</div>';
+        if (hasVisual1 || hasVisual2 || hasVisual3 || hasVisual4) {
+          htmlStr += '<div class="book-intro-visuals-container">' +
+            '<div class="book-intro-tabs-box" data-bookno="' + b.no + '">' +
+              '<div class="intro-tab-nav" role="tablist">' +
+                '<button type="button" class="intro-tab-btn active" data-tab="outline" data-bookno="' + b.no + '">📊 宏觀分期圖表</button>' +
+                '<button type="button" class="intro-tab-btn" data-tab="geomap" data-bookno="' + b.no + '">🗺️ 歷史地理動線圖</button>' +
+                '<button type="button" class="intro-tab-btn" data-tab="theology" data-bookno="' + b.no + '">✝️ 救贖神學矩陣</button>' +
+                '<button type="button" class="intro-tab-btn" data-tab="dossier" data-bookno="' + b.no + '">📑 正典檔案速查</button>' +
+              '</div>' +
+              '<div class="intro-tab-content">' +
+                '<div class="intro-tab-pane pane-outline active" data-tab="outline">' +
+                  (hasVisual1 ? window.renderBookOutlineChartHtml(b.no, { isStandalone: false, compact: true, showHeading: true, title: '📊 全書結構大綱圖表' }) : '') +
+                '</div>' +
+                '<div class="intro-tab-pane pane-geomap" data-tab="geomap" style="display:none;">' +
+                  (hasVisual2 ? window.renderBookGeoMapHtml(b.no, { isStandalone: false, compact: true, showHeading: true, title: '🗺️ 聖經歷史地緣動線圖' }) : '') +
+                '</div>' +
+                '<div class="intro-tab-pane pane-theology" data-tab="theology" style="display:none;">' +
+                  (hasVisual3 ? window.renderBookTheologyMatrixHtml(b.no, { isStandalone: false, compact: true, showHeading: true, title: '✝️ 救贖歷史神學矩陣' }) : '') +
+                '</div>' +
+                '<div class="intro-tab-pane pane-dossier" data-tab="dossier" style="display:none;">' +
+                  (hasVisual4 ? window.renderBookDossierHtml(b.no, { isStandalone: false, compact: true, showHeading: true, title: '📑 正典檔案速查表' }) : '') +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
         } else if (b.outline && b.outline.length) {
           htmlStr += '<div class="book-outline-section">' +
             '<strong>📋 全書結構大綱：</strong>' +
@@ -3627,6 +3628,25 @@ var BIBLIA = (function () {
         refState.su101Quarter = 'all';
         refState.su101Search = bName;
         renderRefView();
+      });
+    });
+
+    container.querySelectorAll('.intro-tab-btn').forEach(function (tabBtn) {
+      tabBtn.addEventListener('click', function () {
+        var parentCard = tabBtn.closest('.book-intro-tabs-box');
+        if (!parentCard) return;
+        var targetTab = tabBtn.getAttribute('data-tab');
+        parentCard.querySelectorAll('.intro-tab-btn').forEach(function (btn) {
+          btn.classList.remove('active');
+        });
+        tabBtn.classList.add('active');
+        parentCard.querySelectorAll('.intro-tab-pane').forEach(function (pane) {
+          if (pane.getAttribute('data-tab') === targetTab) {
+            pane.style.display = 'block';
+          } else {
+            pane.style.display = 'none';
+          }
+        });
       });
     });
   }

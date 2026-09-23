@@ -819,6 +819,136 @@
     return html;
   }
 
+  function renderBookDossierHtml(bookNo, options) {
+    options = options || {};
+    bookNo = parseInt(bookNo, 10);
+    var isStandalone = !!options.isStandalone;
+    var isCompact = !!options.compact;
+    var showHeading = options.showHeading !== false;
+    var customTitle = options.title;
+
+    var studyData = getBookStudyData(bookNo);
+    if (!studyData || !studyData.bookDossier) {
+      return '<div class="book-outline-empty">查無此書卷正典檔案資料</div>';
+    }
+
+    var bd = studyData.bookDossier;
+    var bookName = (studyData.meta) ? studyData.meta.nameZh : ('第 ' + bookNo + ' 卷');
+    var headingText = customTitle || ('📑 《' + escapeHtml(bookName) + '》正典檔案速查表 (Canonical Dossier)');
+
+    var html = '<div class="biblia-book-dossier-box' + (isCompact ? ' compact' : '') + '" data-bookno="' + bookNo + '">';
+
+    if (showHeading) {
+      html += '<div class="dossier-header">';
+      html += '  <div class="dossier-header-main">';
+      html += '    <span class="dossier-header-icon" aria-hidden="true">📑</span>';
+      html += '    <h3 class="dossier-header-title">' + headingText + '</h3>';
+      if (bd.canonicalOrder) {
+        html += '    <span class="dossier-badge-order">' + escapeHtml(bd.canonicalOrder) + '</span>';
+      }
+      html += '  </div>';
+      html += '</div>';
+    }
+
+    html += '<div class="dossier-table-wrap">';
+    html += '<table class="dossier-table">';
+    html += '  <tbody>';
+    html += '    <tr>';
+    html += '      <th class="dossier-th"><i class="fas fa-scroll"></i> 原文書名題注</th>';
+    html += '      <td class="dossier-td dossier-title-orig">' + escapeHtml(bd.hebrewGreekTitle) + '</td>';
+    html += '    </tr>';
+    html += '    <tr>';
+    html += '      <th class="dossier-th"><i class="fas fa-list-ol"></i> 正典地位歸類</th>';
+    html += '      <td class="dossier-td">' + escapeHtml(bd.canonicalOrder) + '</td>';
+    html += '    </tr>';
+    html += '    <tr>';
+    html += '      <th class="dossier-th"><i class="fas fa-hourglass-half"></i> 涵蓋歷史年代</th>';
+    html += '      <td class="dossier-td">' + escapeHtml(bd.historicalEra) + '</td>';
+    html += '    </tr>';
+    html += '    <tr>';
+    html += '      <th class="dossier-th"><i class="fas fa-feather-alt"></i> 成書寫作年代</th>';
+    html += '      <td class="dossier-td">' + escapeHtml(bd.writingPeriod) + '</td>';
+    html += '    </tr>';
+    html += '    <tr>';
+    html += '      <th class="dossier-th"><i class="fas fa-globe"></i> 地緣帝國脈絡</th>';
+    html += '      <td class="dossier-td">' + escapeHtml(bd.geopoliticalContext) + '</td>';
+    html += '    </tr>';
+    html += '    <tr>';
+    html += '      <th class="dossier-th"><i class="fas fa-book-open"></i> 主要文學體裁</th>';
+    html += '      <td class="dossier-td"><span class="dossier-genre-pill">' + escapeHtml(bd.primaryLiteraryGenre) + '</span></td>';
+    html += '    </tr>';
+    html += '    <tr>';
+    html += '      <th class="dossier-th"><i class="fas fa-ring"></i> 救贖聖約樞紐</th>';
+    html += '      <td class="dossier-td dossier-covenant"><strong>' + escapeHtml(bd.covenantAnchor) + '</strong></td>';
+    html += '    </tr>';
+    html += '    <tr>';
+    html += '      <th class="dossier-th"><i class="fas fa-cross"></i> 基督論原型</th>';
+    html += '      <td class="dossier-td dossier-christology">' + escapeHtml(bd.christologicalArchetype) + '</td>';
+    html += '    </tr>';
+    html += '  </tbody>';
+    html += '</table>';
+    html += '</div>';
+
+    html += '</div>';
+    return html;
+  }
+
+  function renderBookIntertextualityHtml(bookNo, options) {
+    options = options || {};
+    bookNo = parseInt(bookNo, 10);
+    var isStandalone = !!options.isStandalone;
+    var isCompact = !!options.compact;
+    var showHeading = options.showHeading !== false;
+    var customTitle = options.title;
+
+    var studyData = getBookStudyData(bookNo);
+    if (!studyData || !studyData.canonicalIntertextuality) {
+      return '<div class="book-outline-empty">查無此書卷正典互文資料</div>';
+    }
+
+    var ci = studyData.canonicalIntertextuality;
+    var bookName = (studyData.meta) ? studyData.meta.nameZh : ('第 ' + bookNo + ' 卷');
+    var headingText = customTitle || ('📖 《' + escapeHtml(bookName) + '》' + escapeHtml(ci.tableTitle));
+
+    var html = '<div class="biblia-intertextuality-box' + (isCompact ? ' compact' : '') + '" data-bookno="' + bookNo + '">';
+
+    if (showHeading) {
+      html += '<div class="intertext-header">';
+      html += '  <div class="intertext-header-main">';
+      html += '    <span class="intertext-header-icon" aria-hidden="true">📖</span>';
+      html += '    <h3 class="intertext-header-title">' + headingText + '</h3>';
+      html += '    <span class="intertext-badge-type">新舊約正典互文與救贖神學回響</span>';
+      html += '  </div>';
+      html += '</div>';
+    }
+
+    if (ci.citations && ci.citations.length) {
+      html += '<div class="intertext-table-wrap">';
+      html += '<table class="intertext-table">';
+      html += '  <thead>';
+      html += '    <tr>';
+      html += '      <th class="th-source"><i class="fas fa-bookmark"></i> 正典原處 / 引證經節</th>';
+      html += '      <th class="th-target"><i class="fas fa-link"></i> 正典互文 / 對應成全經卷</th>';
+      html += '      <th class="th-echo"><i class="fas fa-lightbulb"></i> 救贖歷史神學回響與釋經成全</th>';
+      html += '    </tr>';
+      html += '  </thead>';
+      html += '  <tbody>';
+      ci.citations.forEach(function(c) {
+        html += '    <tr>';
+        html += '      <td class="td-source"><span class="source-ref-pill">' + escapeHtml(c.sourceRef) + '</span></td>';
+        html += '      <td class="td-target"><span class="target-ref-pill">' + escapeHtml(c.targetRef) + '</span></td>';
+        html += '      <td class="td-echo">' + escapeHtml(c.theologicalEcho) + '</td>';
+        html += '    </tr>';
+      });
+      html += '  </tbody>';
+      html += '</table>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
   function renderBookStudyGuideHtml(bookNo, options) {
     options = options || {};
     var isStandalone = !!options.isStandalone;
@@ -898,6 +1028,13 @@
 
     // Main Content Sections
     html += '  <main class="book-guide-main">';
+
+    // 00. Canonical Book Dossier (正典檔案速查表)
+    if (data.bookDossier) {
+      html += '    <section class="guide-section section-book-dossier">';
+      html += renderBookDossierHtml(bookNo, { isStandalone: isStandalone, showHeading: true });
+      html += '    </section>';
+    }
 
     // 0. Youth & Beginner Field Guide (青少年與初信者平易近人導讀)
     if (data.youthGuide) {
@@ -1054,6 +1191,9 @@
     html += '      </div>';
 
     html += renderBookTheologyMatrixHtml(bookNo, { isStandalone: isStandalone, showHeading: true, title: '✝️ 《' + escapeHtml(m.nameZh) + '》聖約神學與基督成全矩陣' });
+    if (data.canonicalIntertextuality) {
+      html += renderBookIntertextualityHtml(bookNo, { isStandalone: isStandalone, showHeading: true });
+    }
 
     html += '      <div class="christology-card">';
     html += '        <div class="christology-header"><i class="fas fa-sun"></i> 基督論與彌賽亞預表 (Christology & Typology)</div>';
@@ -1304,6 +1444,8 @@
   window.renderBookOutlineChartHtml = renderBookOutlineChartHtml;
   window.renderBookGeoMapHtml = renderBookGeoMapHtml;
   window.renderBookTheologyMatrixHtml = renderBookTheologyMatrixHtml;
+  window.renderBookDossierHtml = renderBookDossierHtml;
+  window.renderBookIntertextualityHtml = renderBookIntertextualityHtml;
   window.renderBookStudyGuideHtml = renderBookStudyGuideHtml;
   window.renderSurveyGuideHtml = renderSurveyGuideHtml;
   window.ALL_BOOKS_META = ALL_BOOKS_META;

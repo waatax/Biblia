@@ -326,6 +326,36 @@
         }
       ],
       "christologicalCenter": "馬太福音啟示耶穌基督是舊約指望的集大成者——大衛之子、萬王之王。祂不是藉地上武力爭勝，而是以十架順服完成救贖，並差遣門徒使萬民作祂門徒。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Κατὰ Μαθθαῖον (Kata Maththaion) / Evangelium secundum Matthaeum",
+      "canonicalOrder": "新約四福音書首卷 (Gospels #1) / 兩約銜接基石彌賽亞君王傳記",
+      "historicalEra": "耶穌生平事奉受難復活至早期教會 (主前 4 年至主後 30/33 年)",
+      "writingPeriod": "早期使徒世代，耶路撒冷陷落前夕 (約主後 60–65 年)",
+      "geopoliticalContext": "羅馬帝國統治下猶太行省（希律王朝、彼拉多總督巡撫）與加利利分封王轄區",
+      "primaryLiteraryGenre": "古代希臘羅馬傳記 (Bioi)、五大天國講論對偶結構（對應摩西五經）、應驗公式引用神諭",
+      "covenantAnchor": "亞伯拉罕之約與大衛王約之成全：「亞伯拉罕的後裔，大衛的子孫，耶穌基督的家譜」 (太 1:1)",
+      "christologicalArchetype": "大衛子孫真彌賽亞君王、登山寶訓頒布天國憲章之大摩西、承擔萬民罪孽之受苦君王、頒布普世大使命的天地之主 (28:18-20)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "馬太福音正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "太 1:22-23",
+          "targetRef": "賽 7:14",
+          "theologicalEcho": "【應驗以馬內利童女懷孕】：這一切的事成就是要應驗主藉先知所說的話「必有童女懷孕生子，人要稱祂的名為以馬內利」"
+        },
+        {
+          "sourceRef": "太 2:15",
+          "targetRef": "何 11:1, 出 4:22",
+          "theologicalEcho": "【從埃及召出真神子】：耶穌避難埃及再回迦南，應驗「我從埃及召出我的兒子來」，基督親自代表並成全真以色列"
+        },
+        {
+          "sourceRef": "太 26:28",
+          "targetRef": "出 24:8, 耶 31:31-34",
+          "theologicalEcho": "【設立新約救贖寶血】：「這是我立約的血，為多人流出來，使罪得赦」；結合西奈立約之血與耶利米新約赦罪應許"
+        }
+      ]
     }
   },
   "41": {
@@ -623,6 +653,36 @@
         }
       ],
       "christologicalCenter": "馬可福音展現無懈可擊的行動力：基督是神的受苦僕人，以完全的降卑與甘心捨命，打破了人間追求名利的權力體系，彰顯真正的神子尊貴。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Κατὰ Μᾶρκον (Kata Markon) / Evangelium secundum Marcum",
+      "canonicalOrder": "新約四福音書第 2 卷 (Gospels #2) / 最早成書行動福音與受苦僕人傳",
+      "historicalEra": "耶穌在世服事、受難週與十字架受死 (約主後 26–30/33 年)",
+      "writingPeriod": "彼得殉道前後由約翰馬可於羅馬城寫就 (約主後 64–68 年)",
+      "geopoliticalContext": "羅馬帝國尼祿皇帝火燒羅馬、血腥迫害基督徒之危機黑夜",
+      "primaryLiteraryGenre": "緊湊行動傳記（40多次「立時」）、十字架導向敘事（受難史詩篇幅佔全書三分之一）、羅馬百夫長認信峰頂",
+      "covenantAnchor": "捨命作萬人贖價之受苦義僕聖約 (可 10:45, 賽 53:10-12)",
+      "christologicalArchetype": "神的受苦僕人、捨命作多人的贖價、粉碎污鬼狂風死權的神子基督 (1:1, 15:39)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "馬可福音正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "可 1:2-3",
+          "targetRef": "瑪 3:1, 賽 40:3",
+          "theologicalEcho": "【曠野呼喊者之聲與預備主道】：開卷融合瑪拉基與以賽亞書，宣告施洗約翰曠野開路先鋒角色，引介神子基督降臨"
+        },
+        {
+          "sourceRef": "可 10:45",
+          "targetRef": "賽 53:10-12, 但 7:13",
+          "theologicalEcho": "【人子來捨命作多人贖價】：將但以理書榮耀「人子」與以賽亞書「受苦義僕捨命作贖價」融鑄為基督十字架核心使命"
+        },
+        {
+          "sourceRef": "可 15:38",
+          "targetRef": "出 26:31-33, 利 16:2",
+          "theologicalEcho": "【聖殿幔子從上到下裂為兩半】：基督斷氣之時，隔絕人與神至聖所的幔子徹底撕裂，神聖救贖通天之路豁然洞開"
+        }
+      ]
     }
   },
   "42": {
@@ -936,6 +996,36 @@
         }
       ],
       "christologicalCenter": "路加福音呈現最溫暖、最具人性關懷的救主耶穌：祂是全然聖潔的末後亞當，也是為普世受壓制者帶來禧年釋放的和平君王。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Κατὰ Λουκᾶν (Kata Loukan) / Evangelium secundum Lucam",
+      "canonicalOrder": "新約四福音書第 3 卷 (Gospels #3) / 最詳實嚴謹史家傳記與完美人子福音",
+      "historicalEra": "施洗約翰降生至基督升天 (約主前 5 年至主後 30/33 年)",
+      "writingPeriod": "醫生路加陪同保羅被囚於凱撒利亞或羅馬期間 (約主後 60–62 年)",
+      "geopoliticalContext": "羅馬奧古斯都帝國大普查、提庇留統治、希律安提帕管轄加利利，外邦與猶太交匯大時代",
+      "primaryLiteraryGenre": "古典希臘史學序言 (1:1-4)、精密按著次序編年敘事、宏大旅行長征 (9:51-19:27)、讚美詩歌（尊主頌、撒迦利亞頌、西面頌）",
+      "covenantAnchor": "禧年恩典聖約（報告被擄的得釋放、瞎眼的得看見）(路 4:18-19, 利 25:10)",
+      "christologicalArchetype": "家譜溯至亞當的「末後亞當真人類」、憐憫罪人外邦婦女貧寒者的救主、尋找拯救失喪之人的好牧人 (19:10)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "路加福音正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "路 4:18-19",
+          "targetRef": "賽 61:1-2, 利 25:10",
+          "theologicalEcho": "【禧年釋放神聖使命宣告】：主耶穌在拿撒勒會堂宣讀以賽亞書，報告神悅納人的禧年，開啟向一切邊緣受壓制者施恩之時代"
+        },
+        {
+          "sourceRef": "路 24:27, 44-45",
+          "targetRef": "創世記至瑪拉基書全舊約正典",
+          "theologicalEcho": "【以馬忤斯路上全舊約基督論解經】：基督從摩西、眾先知和詩篇起，凡經上指著自己的話都給門徒講解明白，確立全舊約指向基督受害復活"
+        },
+        {
+          "sourceRef": "路 1:54-55, 72-73",
+          "targetRef": "創 12:3, 17:7, 22:16-18",
+          "theologicalEcho": "【記念亞伯拉罕與列祖之聖約】：馬利亞與撒迦利亞頌歌皆頌讚神眷顧以色列，記念向亞伯拉罕所起之神聖恩約"
+        }
+      ]
     }
   },
   "43": {
@@ -1251,6 +1341,36 @@
         }
       ],
       "christologicalCenter": "約翰福音將神學思想推至頂峰：太初有道，道與神同在，道就是神。祂道成肉身並非抽象哲理，而是以肉體親歷苦難、流出血與水，賜給信祂之人作神兒女的無上權柄。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Κατὰ Ἰωάννην (Kata Ioannen) / Evangelium secundum Ioannem",
+      "canonicalOrder": "新約四福音書壓軸終卷 (Gospels #4) / 道成肉身至高神學與永生神子啟示",
+      "historicalEra": "太初有道跨越時空至基督受死復活與提比哩亞海顯現",
+      "writingPeriod": "使徒約翰晚年於小亞細亞以弗所完成 (約主後 85–95 年)",
+      "geopoliticalContext": "第一世紀末葉羅馬帝國多神泛靈崇拜、初期諾斯底主義與希臘哲學邏各斯思潮交鋒",
+      "primaryLiteraryGenre": "崇高序幕神學長詩 (1:1-18)、七大標記神蹟 (Sign Miracles)、七重「我是 (Ego Eimi)」神聖啟示講論、高祭司禱詞 (17章)",
+      "covenantAnchor": "新誡命彼此相愛之約與生命之道盟約 (約 13:34-35, 15:1-12)",
+      "christologicalArchetype": "太初與神同在的道、神的羔羊 (1:29)、新會幕聖所 (1:14)、摩西曠野銅蛇 (3:14)、天降生命之糧 (6:35)、好牧人與真葡萄樹"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "約翰福音正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "約 1:1, 14",
+          "targetRef": "創 1:1, 出 40:34",
+          "theologicalEcho": "【太初有道與道成肉身搭棚】：太初有道遙對創世記起初，道成肉身住在（tabernacled）我們中間，將舊約曠野會幕榮光推至終極肉身實體"
+        },
+        {
+          "sourceRef": "約 8:58",
+          "targetRef": "出 3:14",
+          "theologicalEcho": "【神聖自有永有「我是」宣言】：「還沒有亞伯拉罕就有了我（I AM）」；基督直接宣告自己擁有荊棘火焰中神向摩西啟示的神聖自有永有名號"
+        },
+        {
+          "sourceRef": "約 19:36-37",
+          "targetRef": "出 12:46, 詩 34:20, 亞 12:10",
+          "theologicalEcho": "【骨頭不折與仰望所扎的】：十字架斷氣時兵丁不打斷祂的腿，反扎祂肋旁流出血水，同時應驗逾越節羊羔規條與撒迦利亞被刺預言"
+        }
+      ]
     }
   },
   "44": {
@@ -1566,6 +1686,36 @@
         }
       ],
       "christologicalCenter": "使徒行傳是復活升天的耶穌藉聖靈繼續在地上工作的行傳：祂從天上的寶座差遣保惠師，將軟弱膽怯的門徒轉化為無所畏懼的十架精兵，使神國直闖羅馬帝國心臟。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πράξεις Ἀποστόλων (Praxeis Apostolon) / Actus Apostolorum",
+      "canonicalOrder": "新約歷史書唯一卷 (History #1) / 聖靈行傳與教會自耶路撒冷至地極大開拓",
+      "historicalEra": "耶穌升天五旬節至保羅在羅馬租屋傳道兩年 (主後 30–62 年，歷時逾三十年)",
+      "writingPeriod": "醫生路加於保羅首次羅馬獲釋前完成 (約主後 62–63 年)",
+      "geopoliticalContext": "羅馬帝國地中海世界全境（巴勒斯坦、敘利亞、小亞細亞、馬其頓、希臘、羅馬首都）",
+      "primaryLiteraryGenre": "神聖救贖歷史敘事、早期使徒護教宣道演講辭集（彼得、司提反、保羅共24篇講章）、航海冒險與法庭紀實",
+      "covenantAnchor": "聖靈大能差派大使命：「但聖靈降臨在你們身上，你們就必得著能力...直到地極作我的見證」 (徒 1:8)",
+      "christologicalArchetype": "復活升天坐在寶座發施號令的主耶穌、從天降下聖靈的主、站在神右邊迎接司提放的榮耀人子 (7:56)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "使徒行傳正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "徒 2:16-21, 25-31",
+          "targetRef": "珥 2:28-32, 詩 16:8-11",
+          "theologicalEcho": "【五旬節聖靈澆灌與大衛預言主復活】：彼得講道直接引用約珥書應驗末世聖靈澆灌，引用詩篇證實大衛肉身見朽壞，基督卻從死裡復活不見朽壞"
+        },
+        {
+          "sourceRef": "徒 13:33-34",
+          "targetRef": "詩 2:7, 賽 55:3",
+          "theologicalEcho": "【你是我的兒子與大衛聖潔可靠的恩典】：保羅在彼息底安提阿會堂解經，指明神叫耶穌復活正是應驗詩篇「你是我的兒子我今日生你」和大衛聖約"
+        },
+        {
+          "sourceRef": "徒 15:15-18",
+          "targetRef": "摩 9:11-12",
+          "theologicalEcho": "【耶路撒冷大會外邦歸主依據】：使徒雅各引用阿摩司書重建大衛倒塌帳幕神諭，確立萬國求告主名乃是神創世以來早已定規的旨意"
+        }
+      ]
     }
   },
   "45": {
@@ -1904,6 +2054,36 @@
         }
       ],
       "christologicalCenter": "羅馬書是基督教神學的珠穆朗瑪峰：基督是全人類唯一的公義與挽回祭。律法顯出死路，唯有在基督裡的因信稱義，賦予人勝過罪惡與死亡的聖靈新生命。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Ῥωμαίους (Pros Romaious) / Epistula ad Romanos",
+      "canonicalOrder": "新約保羅書信首卷 (Pauline Epistles #1) / 基督教神學珠穆朗瑪峰與救贖大憲章",
+      "historicalEra": "保羅第三次宣教旅程尾聲 (約主後 57 年初冬)",
+      "writingPeriod": "哥林多堅革哩港客居該猶家中時寫就 (約主後 57 年)",
+      "geopoliticalContext": "帝國權力中樞羅馬城，克勞第皇帝驅逐令後猶太信徒與外邦信徒混合群體之張力",
+      "primaryLiteraryGenre": "古典辯論法教義論文 (Diatribe)、救贖法律學論證、神聖頌讚 doxology、普世宣教願景信函",
+      "covenantAnchor": "【因信稱義與亞伯拉罕之約】：本於信以致於信，恩典藉著義在基督裡作王 (羅 1:17, 4:1-12, 5:21)",
+      "christologicalArchetype": "末後的亞當扭轉墮落死咒 (5:12-21)、神所設立的挽回祭 (3:25)、使信徒在聖靈中脫離罪與死之律的基督耶穌 (8:1-2)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "羅馬書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "羅 1:17",
+          "targetRef": "哈 2:4",
+          "theologicalEcho": "【因信得生之全書題旨】：神的義在福音上顯明出來，這義是本於信以致於信，如經上所記「義人必因信得生」"
+        },
+        {
+          "sourceRef": "羅 4:3, 7-8",
+          "targetRef": "創 15:6, 詩 32:1-2",
+          "theologicalEcho": "【亞伯拉罕與大衛雙重見證稱義】：亞伯拉罕信神就算為義（未受割禮前稱義典範）；大衛稱那不算為有罪、罪蒙赦免的人為有福"
+        },
+        {
+          "sourceRef": "羅 9:25-29, 10:13",
+          "targetRef": "何 1:10, 賽 10:22, 珥 2:32",
+          "theologicalEcho": "【外邦蒙召與以色列餘民得救】：引用何西阿、以賽亞與約珥書，證明外邦信徒被收納為神兒女，凡求告主名的就必得救"
+        }
+      ]
     }
   },
   "46": {
@@ -2205,6 +2385,36 @@
         }
       ],
       "christologicalCenter": "哥林多前書直面教會生活的一切現實挑戰，其核心答案永遠是：釘十字架又榮耀復活的耶穌基督。沒有愛的恩賜是鳴的鑼響的鈸，唯有基督的愛與復活盼望能醫治撕裂與驕傲。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Κορινθίους Αʹ (Pros Korinthious I) / Epistula I ad Corinthios",
+      "canonicalOrder": "新約保羅書信第 2 卷 (Pauline Epistles #2) / 十字架智慧重塑世俗文化生活指南",
+      "historicalEra": "保羅第三次宣教旅程駐紮以弗所推喇奴學房三年期間 (約主後 55 年春)",
+      "writingPeriod": "小亞細亞以弗所城 (約主後 55 年)",
+      "geopoliticalContext": "希臘亞該亞商貿十字路口哥林多，希臘哲學思潮、繁華海港、道德淫亂與偶像崇拜交融大都市",
+      "primaryLiteraryGenre": "使徒牧養書信、古典修辭答辯（針對分門結黨、訴訟、道德淫亂逐一破題）、愛篇崇高讚歌 (13章)、復活論神學專論 (15章)",
+      "covenantAnchor": "十字架愚拙救恩聖約與初熟的果子復活盟約 (林前 1:18-25, 15:20-23)",
+      "christologicalArchetype": "釘十字架的神聖大能與智慧、我們逾越節的羔羊 (5:7)、曠野隨行的靈磐石 (10:4)、叫人活的末後亞當 (15:45)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "哥林多前書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "林前 1:19, 31",
+          "targetRef": "賽 29:14, 耶 9:24",
+          "theologicalEcho": "【滅絕智慧人的智慧與指主誇口】：神要滅絕智慧人的智慧；誇口的當指著主誇口，十字架徹底顛覆人間自傲"
+        },
+        {
+          "sourceRef": "林前 5:7-8",
+          "targetRef": "出 12:15-20",
+          "theologicalEcho": "【除淨舊酵守逾越節】：基督是我們逾越節的羔羊已被殺獻祭，信徒當除淨惡毒邪惡的舊酵，用純全真實的無酵餅過節"
+        },
+        {
+          "sourceRef": "林前 15:54-55",
+          "targetRef": "賽 25:8, 何 13:14",
+          "theologicalEcho": "【死被得勝吞滅凱歌】：死被得勝吞滅的話就應驗了；死啊你的得勝在哪裡？基督復活打破一切死亡終局"
+        }
+      ]
     }
   },
   "47": {
@@ -2499,6 +2709,36 @@
         }
       ],
       "christologicalCenter": "哥林多後書彰顯十字架悖論的神學巔峰：神的榮耀不是彰顯在人世的權柄威風，而是透過脆弱瓦器般的生命，讓復活基督的馨香之氣與莫大恩典全然流露。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Κορινθίους Βʹ (Pros Korinthious II) / Epistula II ad Corinthios",
+      "canonicalOrder": "新約保羅書信第 3 卷 (Pauline Epistles #3) / 最深情使徒自白與瓦器寶貝十架凱歌",
+      "historicalEra": "第三次宣教旅程離開以弗所經特羅亞抵達馬其頓 (約主後 55/56 年秋)",
+      "writingPeriod": "馬其頓腓立比或帖撒羅尼迦 (約主後 55/56 年)",
+      "geopoliticalContext": "哥林多教會假使徒侵入攻擊保羅使徒職分、傳另一個耶穌、自詡異象背景下的生死爭戰",
+      "primaryLiteraryGenre": "深情辯護性自白書信 (Apologia)、使徒職分神學論文（新約執事榮耀）、慈惠奉獻神學章程 (8-9章)、屬靈愚妄自誇",
+      "covenantAnchor": "【新約聖靈執事榮光】：字句是叫人死，精意（聖靈）是叫人活 (林後 3:6)",
+      "christologicalArchetype": "無罪替我們成為罪的代贖主 (5:21)、本來富足為我們成貧窮的恩主 (8:9)、在人軟弱上顯得完全的基督恩典 (12:9)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "哥林多後書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "林後 3:7-18",
+          "targetRef": "出 34:29-35",
+          "theologicalEcho": "【摩西褪色面皮榮光與敞著臉返照主榮】：刻在石版屬死的律法尚有榮光，何況刻在心版屬靈的執事！敞著臉得見主的榮光榮上加榮"
+        },
+        {
+          "sourceRef": "林後 5:21",
+          "targetRef": "賽 53:6, 9-11",
+          "theologicalEcho": "【神使無罪的替我們成為罪】：神使那無罪的替我們成為罪，好叫我們在祂裡面成為神的義；精準呼應以賽亞受苦義僕擔當眾人罪孽"
+        },
+        {
+          "sourceRef": "林後 6:16-18",
+          "targetRef": "利 26:12, 結 37:27, 賽 52:11",
+          "theologicalEcho": "【永生神的殿與從他們中間出來】：你們是永生神的殿，神要與他們同住同往來；從他們中間出來不可沾不潔之物，作全能主的兒女"
+        }
+      ]
     }
   },
   "48": {
@@ -2772,6 +3012,36 @@
         }
       ],
       "christologicalCenter": "加拉太書是基督教信仰的自由大憲章：十字架粉碎一切宗教律法主義捆綁。「我斷不以別的誇口，只誇我們主耶穌基督的十字架；因這十字架，就我而論，世界已經釘在十字架上；就世界而論，我已經釘在十字架上。」"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Γαλάτας (Pros Galatas) / Epistula ad Galatas",
+      "canonicalOrder": "新約保羅書信第 4 卷 (Pauline Epistles #4) / 基督徒信仰自由大憲章與抗擊律法主義利劍",
+      "historicalEra": "第一次宣教旅程結束後不久或耶路撒冷大會前夕 (約主後 48/49 年，或 55 年)",
+      "writingPeriod": "敘利亞安提阿 (若為早期論主後 48 年，為保羅最早成文書信之一)",
+      "geopoliticalContext": "南加拉太四城（彼息底安提阿、以哥念、路司得、特庇），猶太律法割禮派滲透要求外邦人守摩西律法",
+      "primaryLiteraryGenre": "激烈辯駁法庭抗辯信函（略去問安感激語）、自傳式福音源流論證、兩位婦人（夏甲與撒拉）寓意神學解經",
+      "covenantAnchor": "應許恩典之約 vs 律法為奴之約 (加 3:15-18, 4:21-31)",
+      "christologicalArchetype": "為我們受咒詛贖出我們的基督 (3:13)、由女子所生生在律法以下贖出我們的神子 (4:4-5)、與信徒同釘十架內住的生命之主 (2:20)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "加拉太書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "加 3:6, 8",
+          "targetRef": "創 15:6, 12:3",
+          "theologicalEcho": "【亞伯拉罕因信稱義與萬國蒙福】：亞伯拉罕信神就算為他的義；聖經早已預先看明神要叫外邦人因信稱義，就向亞伯拉罕傳福音"
+        },
+        {
+          "sourceRef": "加 3:10, 13",
+          "targetRef": "申 27:26, 21:23",
+          "theologicalEcho": "【凡掛在木頭上的都受咒詛】：凡不常照律法書所記去行的都被咒詛；基督既為我們受了咒詛，就贖出我們脫離律法的咒詛"
+        },
+        {
+          "sourceRef": "加 4:22-31",
+          "targetRef": "創 16:15, 21:2, 賽 54:1",
+          "theologicalEcho": "【使女夏甲與自主婦人撒拉兩約比喻】：西奈山屬地耶路撒冷生子為奴，天上自由耶路撒冷生子承受應許，信徒乃是憑應許生的兒女"
+        }
+      ]
     }
   },
   "49": {
@@ -3073,6 +3343,41 @@
         }
       ],
       "christologicalCenter": "以弗所書宣告至高無上的教會論：教會不是人間社交俱樂部，而是「基督的身體，是那充滿萬有者所充滿的」。全宇宙都在基督裡歸於一統。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Ἐφεσίους (Pros Ephesious) / Epistula ad Ephesios",
+      "canonicalOrder": "新約監獄書信首卷 (Prison Epistles #1) / 教會論最高峰與天上屬靈奧秘通函",
+      "historicalEra": "保羅第一次羅馬軟禁監獄期間 (主後 60–62 年)",
+      "writingPeriod": "帝國首都羅馬獄中 (約主後 60–62 年)",
+      "geopoliticalContext": "小亞細亞西岸愛琴海大都會以弗所及周邊各亞西亞教會，亞底米異教女神崇拜與泛靈邪術環境",
+      "primaryLiteraryGenre": "巡迴公函 (Encyclical Letter)、三位一體創世救贖頌歌 (1:3-14)、代求長禱、新人合一憲章、神所賜全副軍裝戰備手冊",
+      "covenantAnchor": "神在基督裡將天上地上一切所有的都在基督裡同歸於一 (弗 1:9-10, 2:12-16)",
+      "christologicalArchetype": "宇宙教會的元首 (1:22)、拆毀猶太與外邦隔斷的牆造成一個新人的和平主宰 (2:14-15)、深愛新婦為教會捨命的新郎 (5:25-32)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "以弗所書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "弗 2:13-17",
+          "targetRef": "賽 57:19, 9:6",
+          "theologicalEcho": "【傳和平給遠處的人與近處的人】：基督在十字架廢掉冤仇成就和平，向猶太人與外邦人傳和平福音，將兩下造成一個新人"
+        },
+        {
+          "sourceRef": "弗 4:8",
+          "targetRef": "詩 68:18",
+          "theologicalEcho": "【祂升上高天擄掠仇敵賞賜恩賜】：引用詩篇得勝神諭，指出基督降下到地底下又升上遠超諸天之上，擄掠仇敵並將恩賜賞給人建立教會"
+        },
+        {
+          "sourceRef": "弗 5:31-32",
+          "targetRef": "創 2:24",
+          "theologicalEcho": "【二人成為一體的極大奧秘】：人要離開父母與妻子連合二人成為一體；保羅啟示這極大奧秘是指著基督和教會說的"
+        },
+        {
+          "sourceRef": "弗 6:14-17",
+          "targetRef": "賽 11:5, 59:17",
+          "theologicalEcho": "【穿戴神的全副軍裝】：公義當作護心鏡、救恩當作頭盔、真理束腰，直接承繼以賽亞書耶和華神聖戰士披戴之盔甲武裝"
+        }
+      ]
     }
   },
   "50": {
@@ -3359,6 +3664,31 @@
         }
       ],
       "christologicalCenter": "腓立比書的核心是基督教最著名的基督頌歌（Carmen Christi, 2:5-11）：神將祂升為至高，賜給祂那超乎萬名之上的名，叫一切因耶穌的名無不屈膝、無不口稱耶穌基督為主！"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Φιλιππησίους (Pros Philippesious) / Epistula ad Philippenses",
+      "canonicalOrder": "新約監獄書信第 2 卷 (Prison Epistles #2) / 喜樂書信與基督虛己頌歌瑰寶",
+      "historicalEra": "保羅第一次羅馬囚禁即將聽候凱撒判決之際 (約主後 61–62 年)",
+      "writingPeriod": "羅馬禁衛軍監獄中 (約主後 61–62 年)",
+      "geopoliticalContext": "馬其頓行省羅馬特權殖民城邦腓立比，公民權引以為豪，歐洲第一座教會基地",
+      "primaryLiteraryGenre": "使徒友誼感激信函 (Letter of Friendship)、初代教會著名基督頌歌 (Carmen Christi 2:5-11)、屬天公民標竿賽跑隱喻",
+      "covenantAnchor": "天國屬天公民權與認識基督為至寶的恩約 (腓 3:8, 20-21)",
+      "christologicalArchetype": "本有神形像倒空虛己順服至死且死在十架上的僕人基督 (2:6-8)、被神升為至高賜超乎萬名之上之名的大君王 (2:9-11)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "腓立比書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "腓 2:9-11",
+          "targetRef": "賽 45:23",
+          "theologicalEcho": "【萬膝屈膝萬口承認基督為主】：以賽亞書神宣告「萬膝必向我跪拜萬口必憑我起誓」，此處神聖主權位格全然賦予升為至高的主耶穌基督"
+        },
+        {
+          "sourceRef": "腓 3:4-9",
+          "targetRef": "耶 9:23-24, 哈 3:17-18",
+          "theologicalEcho": "【將世俗肉體資本看作糞土以基督為至寶】：割禮家譜宗派資歷皆為有損，只為得著因信基督而來的義"
+        }
+      ]
     }
   },
   "51": {
@@ -3622,6 +3952,36 @@
         }
       ],
       "christologicalCenter": "歌羅西書宣告基督是不可挑戰的宇宙中心：祂是創造的主、維繫萬有的主、教會的元首、從死裡首先復生的。基督之外毫無救贖，基督之內有一切豐盛！"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Κολοσσαεῖς (Pros Kolossaeis) / Epistula ad Colossenses",
+      "canonicalOrder": "新約監獄書信第 3 卷 (Prison Epistles #3) / 基督在萬有中居首位之至尊讚歌",
+      "historicalEra": "保羅首次羅馬被囚期間 (主後 60–62 年)",
+      "writingPeriod": "羅馬獄中與以巴弗相見後寫就 (約主後 60–62 年)",
+      "geopoliticalContext": "弗呂家南部呂家谷三城之一歌羅西，面臨東方諾斯底神智異端、拜天使與猶太律法割禮禁慾混合主義威脅",
+      "primaryLiteraryGenre": "崇高基督論詩歌 (Christ Hymn 1:15-20)、反駁異端護教論證、家庭倫理行事準則 (Haustafeln)",
+      "covenantAnchor": "在愛子裡脫離黑暗遷入愛子光明國度之約 (西 1:13-14)",
+      "christologicalArchetype": "不能看見之神的像、首生的在萬有之先 (1:15)、神本性一切豐盛都有形有體居住在祂裡面的宇宙主宰 (2:9)、撤銷定罪字據的十字架勝者 (2:14-15)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "歌羅西書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "西 1:15-17",
+          "targetRef": "創 1:1, 箴 8:22-30",
+          "theologicalEcho": "【基督超越萬有居首位】：萬有靠祂造藉祂造為祂造，在萬有之先萬有靠祂而立；創世記創造與箴言智慧在基督身上集大成"
+        },
+        {
+          "sourceRef": "西 2:14-15",
+          "targetRef": "創 3:15, 詩 68:18",
+          "theologicalEcho": "【十字架撤銷字據擄掠執政掌權者】：基督將律法欠債字據撤去釘在十字架上，公開擄掠幽暗魔鬼權勢，仗著十字架誇勝"
+        },
+        {
+          "sourceRef": "西 2:16-17",
+          "targetRef": "利 23章全, 民 28-29章",
+          "theologicalEcho": "【飲食節期月朔安息日原是影兒本體是基督】：舊約祭儀節期只是將來之事的影子，那形體的本體乃是基督"
+        }
+      ]
     }
   },
   "52": {
@@ -3901,6 +4261,31 @@
         }
       ],
       "christologicalCenter": "帖撒羅尼迦前書每一章末尾（1:10, 2:19, 3:13, 4:16-17, 5:23）都指向同一個燦爛終點：耶穌基督的榮耀再臨。信徒的聖潔生活與無懼患難，全係於這末世榮耀盼望。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Θεσσαλονικεῖς Αʹ (Pros Thessalonikeis I) / Epistula I ad Thessalonicenses",
+      "canonicalOrder": "新約保羅書信第 5 卷 (Pauline Epistles #5) / 末世主降臨盼望與聖潔生活模範",
+      "historicalEra": "第二次宣教旅程抵達哥林多不久 (主後 50/51 年)",
+      "writingPeriod": "希臘亞該亞哥林多城 (約主後 50/51 年，為保羅現存最早書信之一)",
+      "geopoliticalContext": "馬其頓行省首府首要海港帖撒羅尼迦，扼守厄納齊雅大道，初信群體在逼迫患難中堅守真道",
+      "primaryLiteraryGenre": "初代宣教親情書信、牧者慈母奶母心腸自白 (2:7-8)、死人復活與主從天降臨末世論啟示專章 (4:13-5:11)",
+      "covenantAnchor": "主必親自從天降臨之再臨聖約 (帖前 4:16-17, 5:23)",
+      "christologicalArchetype": "救我們脫離將來忿怒的耶穌 (1:10)、在呼叫天使長與神的號筒吹響中親自從天降臨的再臨救主 (4:16)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "帖撒羅尼迦前書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "帖前 4:16-17",
+          "targetRef": "出 19:16-19, 賽 27:13, 但 7:13",
+          "theologicalEcho": "【號筒吹響與主自天而降被提】：西奈山神降臨時的角聲與以賽亞大號筒，在主耶穌再臨聖徒空中相會時得著終極歷史實現"
+        },
+        {
+          "sourceRef": "帖前 5:8",
+          "targetRef": "賽 59:17",
+          "theologicalEcho": "【信望愛之屬天軍裝】：把信和愛當作護心鏡遮胸，把得救的盼望當作頭盔戴上，直接化用以賽亞書耶和華戰士披戴之救恩盔甲"
+        }
+      ]
     }
   },
   "53": {
@@ -4168,6 +4553,36 @@
         }
       ],
       "christologicalCenter": "帖撒羅尼迦後書以鋼鐵般的基督權柄抵禦末世恐慌：耶穌基督是掌管歷史日程的萬王之王。邪惡有其被神命定的限期，任何假基督在真正基督的榮耀降臨面前都將瞬間如灰燼瓦解。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Θεσσαλονικεῖς Βʹ (Pros Thessalonikeis II) / Epistula II ad Thessalonicenses",
+      "canonicalOrder": "新約保羅書信第 6 卷 (Pauline Epistles #6) / 大罪人沉淪之子顯露與基督烈火降臨審判",
+      "historicalEra": "前書寄出後數月 (約主後 51 年)",
+      "writingPeriod": "哥林多城 (約主後 51 年)",
+      "geopoliticalContext": "帖城信徒因假冒書信謠傳「主的日子已經到了」引起恐慌與遊手好閒混亂",
+      "primaryLiteraryGenre": "先知性末世啟示書信 (Apocalyptic Epistle)、敵基督神學解析、嚴正勞動生活教規 (「不肯做工就不可吃飯」)",
+      "covenantAnchor": "公義審判聖約：使受患難者同得平安，使逼迫者受永遠沉淪 (帖後 1:6-9)",
+      "christologicalArchetype": "同祂有能力的天使在烈火中從天顯現的審判之主、用口中的氣滅絕大罪人沉淪之子的得勝基督 (2:8)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "帖撒羅尼迦後書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "帖後 2:3-4",
+          "targetRef": "但 7:25, 11:36, 賽 14:13-14",
+          "theologicalEcho": "【大罪人自高自大自稱為神】：末世沉淪之子坐在殿裡自稱是神，直接應驗但以理書狂傲小角與褻瀆君王之預言"
+        },
+        {
+          "sourceRef": "帖後 2:8",
+          "targetRef": "賽 11:4",
+          "theologicalEcho": "【主用口中的氣滅絕沉淪之子】：主耶穌要用口中的氣滅絕他，用降臨的榮光廢掉他；完全成全以賽亞書大衛苗裔以口中之杖擊打全地之神諭"
+        },
+        {
+          "sourceRef": "帖後 1:7-9",
+          "targetRef": "賽 66:15, 詩 96:13",
+          "theologicalEcho": "【在烈火中顯現公義審判】：耶和華必在火中降臨施行公義審判，基督顯現徹底清算一切罪孽"
+        }
+      ]
     }
   },
   "54": {
@@ -4466,6 +4881,31 @@
         }
       ],
       "christologicalCenter": "提摩太前書宣唱基督教最輝煌的「敬虔奧秘頌」（3:16）：耶穌基督是唯一的救贖中保與敬虔源頭，祂的道成肉身、受難復活與榮耀升天，是地上教會屹立不搖的真理磐石。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Τιμόθεον Αʹ (Pros Timotheon I) / Epistula I ad Timotheum",
+      "canonicalOrder": "新約教牧書信首卷 (Pastoral Epistles #1) / 神家體制真理柱石與敬虔生活綱領",
+      "historicalEra": "保羅第一次羅馬獲釋後第四次宣教巡牧期間 (約主後 62–64 年)",
+      "writingPeriod": "馬其頓省 (約主後 63–64 年)",
+      "geopoliticalContext": "小亞細亞以弗所教會，面臨荒渺神話家譜、禁婚禁食諾斯底禁慾主義滲透",
+      "primaryLiteraryGenre": "教牧指導公函、神家章程法規（長老執事選拔標準）、敬虔奧秘神聖頌歌 (3:16)",
+      "covenantAnchor": "神與人之間唯一中保之約 (提前 2:5-6)",
+      "christologicalArchetype": "在神和人中間唯一的中保基督耶穌 (2:5)、大哉敬虔的奧秘在肉身顯現 (3:16)、萬王之王萬主之主 (6:15)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "提摩太前書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "提前 2:5-6",
+          "targetRef": "利 16:15, 伯 9:33",
+          "theologicalEcho": "【唯一神聖中保與代贖】：舊約祭司體系與約伯所渴求之仲裁者，在降世為人的基督耶穌身上完滿成全，祂捨自己作萬人的贖價"
+        },
+        {
+          "sourceRef": "提前 5:18",
+          "targetRef": "申 25:4, 太 10:10",
+          "theologicalEcho": "【牛在場上踹穀不可籠住牠的嘴】：保羅結合申命記律法與主耶穌福音訓言（工人得工價是應當的），並稱之為「經上說」"
+        }
+      ]
     }
   },
   "55": {
@@ -4753,6 +5193,31 @@
         }
       ],
       "christologicalCenter": "提摩太後書以主耶穌基督的信實為終極錨地：「我們縱然失信，祂仍是可信的，因為祂不能背乎自己！」在一切人的背叛離棄中，基督親自站在保羅身旁加給他力量。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Τιμόθεον Βʹ (Pros Timotheon II) / Epistula II ad Timotheum",
+      "canonicalOrder": "新約保羅書信終卷 (Pauline Epistles 終卷) / 使徒遺囑與殉道前夕公義冠冕凱歌",
+      "historicalEra": "尼祿迫害基督教高峰期，保羅再度被捕重囚 (約主後 66–67 年)",
+      "writingPeriod": "羅馬馬梅爾定陰暗死牢 (約主後 67 年殉道前夕)",
+      "geopoliticalContext": "尼祿皇帝暴虐血腥統治下羅馬死囚刑場，亞西亞眾人離棄保羅，同工分散",
+      "primaryLiteraryGenre": "使徒臨別遺言 (Testamentary Letter)、受苦精兵訓勉手冊、聖經神聖默示憲章 (3:16-17)",
+      "covenantAnchor": "神信實聖約：「我們縱然失信，祂仍是可信的，因為祂不能背乎自己」 (提後 2:13)",
+      "christologicalArchetype": "破除死亡將不能壞的生命彰顯出來的救主 (1:10)、大衛後裔從死裡復活的基督 (2:8)、公義審判的賞賜者 (4:8)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "提摩太後書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "提後 3:15-17",
+          "targetRef": "詩 119:105, 撒下 23:2",
+          "theologicalEcho": "【聖經都是神所默示的】：聖經能使人因信基督有得救的智慧，是神所默示的（Theopneustos，神吹氣所出），裝備屬神之人行各樣善事"
+        },
+        {
+          "sourceRef": "提後 4:6-8",
+          "targetRef": "民 28:7, 創 35:14",
+          "theologicalEcho": "【我現在被澆奠奠祭獻上】：保羅將自己即將殉道受死定性為利未記祭壇上馨香的奠祭之酒，欣然交帳迎候公義冠冕"
+        }
+      ]
     }
   },
   "56": {
@@ -5008,6 +5473,31 @@
         }
       ],
       "christologicalCenter": "提多書清楚定性主耶穌基督的至尊神格——稱祂為「至大的神和我們救主耶穌基督」（2:13）。祂賜下重生的洗與聖靈更新，使罪人轉化為熱心行善的屬天子民。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Τίτον (Pros Titon) / Epistula ad Titum",
+      "canonicalOrder": "新約教牧書信第 3 卷 (Pastoral Epistles #3) / 克里特海島拓荒與熱心為善之聖徒生活",
+      "historicalEra": "保羅第一次羅馬獲釋後巡視地中海島嶼期間 (約主後 63–65 年)",
+      "writingPeriod": "馬其頓或前往尼哥波立途中 (約主後 63–65 年)",
+      "geopoliticalContext": "地中海克里特島各城，居民以說謊、懶惰成性聞名，教會缺乏長老建制",
+      "primaryLiteraryGenre": "拓荒教牧指南、長老資格品行章程、全群各階層純全教訓、救恩論核心摘要 (3:4-7)",
+      "covenantAnchor": "神救眾人的恩典顯明與重生的洗之約 (多 2:11-14, 3:5-7)",
+      "christologicalArchetype": "至大的神和我們救主耶穌基督 (2:13)、為我們捨己特作熱心為善子民的救贖主 (2:14)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "提多書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "多 2:14",
+          "targetRef": "出 19:5, 結 37:23",
+          "theologicalEcho": "【特作神自己的子民熱心為善】：基督捨己贖我們脫離一切罪孽，潔淨我們特作屬自己的子民；完全成全西奈山立約特作屬神子民的理想"
+        },
+        {
+          "sourceRef": "多 3:5",
+          "targetRef": "結 36:25-27",
+          "theologicalEcho": "【重生的洗和聖靈的更新】：不是因我們所行的義，乃是照祂的憐憫藉著重生的洗與聖靈更新；以西結以清水潔淨賜新心的救贖成全"
+        }
+      ]
     }
   },
   "57": {
@@ -5251,6 +5741,31 @@
         }
       ],
       "christologicalCenter": "腓利門書是福音和好大能的微型縮影：保羅為阿尼西母代求代償的姿態，精準輝映了主耶穌基督站在天父與罪人中間擔當全數罪債的十字架大愛。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Φιλήμονα (Pros Philemona) / Epistula ad Philemonem",
+      "canonicalOrder": "新約保羅書信最短私人手函 (僅25節) / 福音和好大能熔解羅馬奴隸制傑作",
+      "historicalEra": "保羅第一次羅馬軟禁監獄期間 (主後 60–62 年)",
+      "writingPeriod": "羅馬監獄寓所 (約主後 60–62 年)",
+      "geopoliticalContext": "弗呂家歌羅西城富有信徒腓利門家庭教會，逃奴阿尼西母面臨嚴酷羅馬刑法",
+      "primaryLiteraryGenre": "使徒親筆代求私人信函、古代修辭勸告法 (Persuasive Deliberative)、和好恩典契約",
+      "covenantAnchor": "在基督裡弟兄相愛新盟約（「不再是奴僕，乃是高過奴僕，是親愛的弟兄」）(門 1:16)",
+      "christologicalArchetype": "保羅代償一切欠債（「都歸在我的賬上，我必償還」）精準彰顯基督替罪代贖承擔 (1:18-19)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "腓利門書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "門 1:18-19",
+          "targetRef": "賽 53:6, 西 2:14",
+          "theologicalEcho": "【欠債歸在我的賬上我必償還】：保羅為逃奴代求並親筆簽名代償債務，完全活畫出基督在十字架上為我們擔當一切罪債之救贖"
+        },
+        {
+          "sourceRef": "門 1:16",
+          "targetRef": "加 3:28, 申 15:12-15",
+          "theologicalEcho": "【在主裡跨越階級同為親愛弟兄】：舊約安息年釋放奴僕條例，在基督裡昇華為不分自主的為奴的，同為神家至親弟兄"
+        }
+      ]
     }
   },
   "58": {
@@ -5550,6 +6065,41 @@
         }
       ],
       "christologicalCenter": "希伯來書是新約聖經中最深奧的基督論神學專論：耶穌基督是神榮耀所發的光輝、神本體的真像。祂跨越幔子開闢一條又新又活的道路，使我們可以坦然無懼來到施恩寶座前。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πρὸς Ἑβραίους (Pros Hebraious) / Epistula ad Hebraeos",
+      "canonicalOrder": "新約大公書信之冠 (General Epistles #1) / 兩約神學立約大殿與基督超越一切專論",
+      "historicalEra": "第二聖殿被毀前夕，猶太基督徒遭受羅馬與猶太雙重逼迫 (約主後 64–69 年)",
+      "writingPeriod": "義大利或羅馬境外，聖殿祭祀仍在進行之時 (約主前 68 年前後)",
+      "geopoliticalContext": "尼祿迫害風暴與猶太第一次起義前夕，信徒面臨退縮回猶太教祭儀陰影中之危險",
+      "primaryLiteraryGenre": "希臘文最優美高超的先知性講道勸勉辭 (Word of Exhortation)、五大嚴肅背道警告、信心偉人英雄史詩 (11章)",
+      "covenantAnchor": "【更美的新約 Better Covenant】：照麥基洗德等次永遠大祭司 (來 7:22, 8:6)",
+      "christologicalArchetype": "神榮耀的光輝真像 (1:3)、超越天使、超越摩西、照麥基洗德等次永遠大祭司 (7章)、獻上自己為永恆祭物 (9-10章)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "希伯來書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "來 1:5, 5:5",
+          "targetRef": "詩 2:7, 撒下 7:14",
+          "theologicalEcho": "【你是我的兒子我今日生你】：結合大衛王詩與大衛之約，證明基督神聖兒子名分遠超一切受造天使"
+        },
+        {
+          "sourceRef": "來 7:17, 21",
+          "targetRef": "詩 110:4, 創 14:18-20",
+          "theologicalEcho": "【照麥基洗德等次永遠大祭司】：全書核心王牌經文，宣告基督祭司職分非本於亞倫肉體條例，乃本於無窮之生命的大能"
+        },
+        {
+          "sourceRef": "來 8:8-12, 10:16-17",
+          "targetRef": "耶 31:31-34",
+          "theologicalEcho": "【更美之約中保成全耶利米新約】：全數引錄舊約最長引用經文，宣告舊約漸舊快歸無有，新約赦免一切罪愆永不再記念"
+        },
+        {
+          "sourceRef": "來 10:5-7",
+          "targetRef": "詩 40:6-8",
+          "theologicalEcho": "【神啊我來了為要照你的旨意行】：祭物和禮物你不願意，你曾給我預備了身體；基督藉肉身順服獻上一道永遠完全的贖罪祭"
+        }
+      ]
     }
   },
   "59": {
@@ -5836,6 +6386,36 @@
         }
       ],
       "christologicalCenter": "雅各書是實踐神學的試金石：信心與行為不是對立，而是樹根與果子。主耶穌基督是「榮耀的主」（2:1），屬祂的人必在生活中活出祂仁慈、正直、顧念窮乏人的聖潔樣式。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Ἰάκωβος (Iakobos) / Epistula Iacobi",
+      "canonicalOrder": "新約大公書信第 2 卷 (General Epistles #2) / 新約箴言智慧與信心真實行為試金石",
+      "historicalEra": "耶路撒冷母會初期至公義雅各殉道前 (主後 45–62 年，約主後 48 年)",
+      "writingPeriod": "耶路撒冷教會中樞由主的弟兄雅各執筆 (約主後 48 年，為新約最早成文書卷之一)",
+      "geopoliticalContext": "散住羅馬帝國地中海各地的十二支派猶太基督徒社群，面對貧富欺壓與世俗化妥協",
+      "primaryLiteraryGenre": "猶太基督徒智慧格言手冊 (Wisdom Lore)、先知性強烈責備斥責 (如同阿摩司重現)、日常生活品行檢驗",
+      "covenantAnchor": "全備使人自由之律法與信心相稱行為聖約 (雅 1:25, 2:14-26)",
+      "christologicalArchetype": "榮耀的主耶穌基督 (2:1)、站在門前的審判主 (5:9)、賜下各樣美善全備賞賜的眾光之父"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "雅各書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "雅 2:21-24",
+          "targetRef": "創 22:9-12, 15:6",
+          "theologicalEcho": "【亞伯拉罕獻以撒行為成全信心】：我們的祖宗亞伯拉罕把兒子以撒獻在壇上豈不是因行為稱義嗎？可見信心是與他的行為並行，信心因著行為才得成全"
+        },
+        {
+          "sourceRef": "雅 2:25",
+          "targetRef": "書 2:1-21, 6:25",
+          "theologicalEcho": "【妓女喇合接待使者稱義】：妓女喇合接待使者又放他們從別的路上出去豈不也是因行為稱義嗎？信心沒有行為是死的"
+        },
+        {
+          "sourceRef": "雅 4:6",
+          "targetRef": "箴 3:34",
+          "theologicalEcho": "【神阻擋驕傲的人賜恩給謙卑的人】：直接引用箴言七十士譯本，確立天國反世俗自我誇耀的謙卑順服倫理"
+        }
+      ]
     }
   },
   "60": {
@@ -6114,6 +6694,36 @@
         }
       ],
       "christologicalCenter": "彼得前書是受苦聖徒的至高安慰書：基督的十字架受苦不是意外悲劇，而是救贖藍圖的核心。信徒與基督一同受苦，也必在祂榮耀顯現時大大歡喜、同得永恆榮耀。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πέτρου Αʹ (Petrou I) / Epistula I Petri",
+      "canonicalOrder": "新約大公書信第 3 卷 (General Epistles #3) / 受苦聖徒活潑盼望與君尊祭司聖諭",
+      "historicalEra": "尼祿迫害初起羅馬大火爆發前夕 (約主後 63–64 年)",
+      "writingPeriod": "使徒彼得與西拉在「巴比倫」（羅馬城代號）寫就 (約主後 63–64 年)",
+      "geopoliticalContext": "小亞細亞北部五省（本都、加拉太、加帕多家、亞西亞、庇推尼），散居信徒面臨火般試煉與社會排擠",
+      "primaryLiteraryGenre": "使徒安慰與勸勉通函、受浸宣信誓詞神學、君尊祭司社群憲章、受苦榜樣論述",
+      "covenantAnchor": "【君尊的祭司聖潔的國度】：出黑暗入奇妙光明者的立約神聖美德 (彼前 2:9-10)",
+      "christologicalArchetype": "無瑕疵無玷污的寶血羊羔 (1:19)、受苦留下榜樣的義僕基督 (2:21-25)、靈魂的大牧人與監督 (2:25)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "彼得前書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "彼前 2:9-10",
+          "targetRef": "出 19:5-6, 賽 61:6, 何 1:10",
+          "theologicalEcho": "【被揀選的族類君尊的祭司】：融鑄出埃及記西奈聖約、以賽亞書與何西阿書，將舊約以色列的祭司身分賦予全體基督信徒"
+        },
+        {
+          "sourceRef": "彼前 2:22-25",
+          "targetRef": "賽 53:4-9",
+          "theologicalEcho": "【受苦義僕受鞭傷擔罪榜樣】：祂並沒有犯罪口裡也沒有詭詐；祂被掛在木頭上親身擔當了我們的罪，因祂受的鞭傷你們便得了醫治"
+        },
+        {
+          "sourceRef": "彼前 1:16",
+          "targetRef": "利 11:44, 19:2",
+          "theologicalEcho": "【你們要聖潔因為我是聖潔的】：直接引錄利未記聖潔法典總綱，要求基督徒在世俗污穢風俗中過全然分別為聖的生活"
+        }
+      ]
     }
   },
   "61": {
@@ -6373,6 +6983,36 @@
         }
       ],
       "christologicalCenter": "彼得後書堅固信徒對基督再臨的信心：主的耽延不是耽延，乃是寬容，不願有一人沉淪乃願人人都悔改。在救主耶穌基督的恩典和知識上有長進，榮耀歸給祂直到永遠！"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Πέτρου Βʹ (Petrou II) / Epistula II Petri",
+      "canonicalOrder": "新約大公書信第 4 卷 (General Epistles #4) / 迎抗內部假師傅與末世新天新地盼望",
+      "historicalEra": "使徒彼得殉道前夕 (約主後 67–68 年)",
+      "writingPeriod": "羅馬城帳棚離世前 (約主後 67–68 年)",
+      "geopoliticalContext": "初期教會面臨放蕩主義、嘲笑主再臨應許之假師傅內部侵蝕毒害",
+      "primaryLiteraryGenre": "使徒告別遺言 (Farewell Discourse)、末世啟示烈火銷化預言、基督榮光親歷證言 (1:16-18)",
+      "covenantAnchor": "與神的性情有份之寶貴應許 (彼後 1:4, 3:13)",
+      "christologicalArchetype": "在聖山顯出威榮的神愛子 (1:17)、買贖教會的主宰 (2:1)、照應許造新天新地的掌權基督"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "彼得後書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "彼後 3:10-13",
+          "targetRef": "賽 65:17, 66:22",
+          "theologicalEcho": "【照祂應許盼望新天新地】：天地都要被烈火銷化，我們照祂的應許盼望新天新地有義居在其中；直接承繼以賽亞書末世新創造"
+        },
+        {
+          "sourceRef": "彼後 2:5-9",
+          "targetRef": "創 7:1, 19:24",
+          "theologicalEcho": "【挪亞洪水與所多瑪焚毀鑑戒】：神叫古代世界受洪水審判救了挪亞，叫所多瑪蛾摩拉焚為灰燼救了義人羅得，作為後世不敬虔人的鑑戒"
+        },
+        {
+          "sourceRef": "彼後 1:17-18",
+          "targetRef": "詩 2:7, 賽 42:1",
+          "theologicalEcho": "【變像山天父親證榮耀神子】：「這是我的愛子，我所喜悅的」；詩篇第二篇君王詩與以賽亞僕人歌在基督登山變像中親自印證"
+        }
+      ]
     }
   },
   "62": {
@@ -6644,6 +7284,31 @@
         }
       ],
       "christologicalCenter": "約翰一書的核心是生命與愛的泉源——耶穌基督。祂是我們的中保，也是我們罪的挽回祭；凡認耶穌為神兒子的，神就住在他裡面，他也住在神裡面。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Ἰωάννου Αʹ (Ioannou I) / Epistula I Ioannis",
+      "canonicalOrder": "新約約翰書信首卷 (Johannine Epistles #1) / 神就是愛、光明相交與道成肉身實證",
+      "historicalEra": "第一世紀末葉使徒老約翰晚年 (約主後 85–95 年)",
+      "writingPeriod": "小亞細亞以弗所城 (約主後 85–95 年)",
+      "geopoliticalContext": "亞西亞眾家庭教會，面臨幻影說（Docetism）與早期塞林則（Cerinthus）割裂基督神人二性的致命異端",
+      "primaryLiteraryGenre": "使徒團契勸勉通函、雙重對比二元修辭（光與暗、神兒女與魔鬼兒女、愛與恨）、得救確據手冊",
+      "covenantAnchor": "【新舊相參之彼此相愛聖約】：主為我們捨命，我們從此就知道何為愛 (約壹 3:16, 4:7-12)",
+      "christologicalArchetype": "親手摸過親眼看過的生命之道 (1:1)、在父那裡的公義中保耶穌基督 (2:1)、為全人類罪孽作的挽回祭 (2:2, 4:10)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "約翰一書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "約壹 3:11-12",
+          "targetRef": "創 4:8",
+          "theologicalEcho": "【不可像該隱殺害親弟】：不可像該隱屬惡者殺了他的兄弟；該隱的仇恨成為一切世俗屬魔鬼之人的鑑戒，基督徒則當彼此相愛出死入生"
+        },
+        {
+          "sourceRef": "約壹 2:2, 4:10",
+          "targetRef": "利 16:15-16",
+          "theologicalEcho": "【基督為我們罪作了挽回祭】：神差祂兒子為我們的罪作了挽回祭（Hilaskomai，施恩座遮罪）；利未記贖罪日贖罪血在十字架上完全成全"
+        }
+      ]
     }
   },
   "63": {
@@ -6892,6 +7557,31 @@
         }
       ],
       "christologicalCenter": "約翰二書宣告真理與愛心不可分割：真正的愛必然建立在「承認耶穌基督成了肉身來」的基督論基石上，越過基督教訓便喪失了一切。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Ἰωάννου Βʹ (Ioannou II) / Epistula II Ioannis",
+      "canonicalOrder": "新約約翰書信第 2 卷 (Johannine Epistles #2) / 真理防線與拒絕異端進門守則",
+      "historicalEra": "第一世紀末葉 (約主後 85–95 年)",
+      "writingPeriod": "小亞細亞以弗所長老寓所 (約主後 85–95 年)",
+      "geopoliticalContext": "巡迴傳道者周遊各地方家庭教會，異端教師利用教會愛心款待傳播否定基督肉身顯現謬論",
+      "primaryLiteraryGenre": "簡短家庭教會便函、真理界限規範手冊、使徒牧者溫馨關懷",
+      "covenantAnchor": "在真理中的彼此相愛聖約 (約貳 1:5-6)",
+      "christologicalArchetype": "成了肉身來的耶穌基督 (1:7)、常守基督之教訓得享父與子 (1:9)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "約翰二書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "約貳 1:5-6",
+          "targetRef": "利 19:18, 申 6:5",
+          "theologicalEcho": "【從起初所受古舊常新之愛神愛人命令】：不是寫新條例，乃是我們從起初所受的；照神的誡命行就是愛，堅守舊約道德律總綱"
+        },
+        {
+          "sourceRef": "約貳 1:7",
+          "targetRef": "詩 2:1-3, 賽 7:14",
+          "theologicalEcho": "【防堵敵基督否定基督成了肉身來】：凡不認耶穌基督是成了肉身來的這就是敵基督，捍衛先知以馬內利神人二性救贖歷史實體"
+        }
+      ]
     }
   },
   "64": {
@@ -7134,6 +7824,31 @@
         }
       ],
       "christologicalCenter": "約翰三書指出一切教會接待與宣教合作的終極動機是「為主的名出外」（verse 7）。基督的名字是唯一的旌旗，配得一切尊崇與全心擺上。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Ἰωάννου Γʹ (Ioannou III) / Epistula III Ioannis",
+      "canonicalOrder": "新約約翰書信第 3 卷 (Johannine Epistles #3) / 款待客旅宣教士與痛斥丟特腓專權對決",
+      "historicalEra": "第一世紀末葉 (約主後 85–95 年)",
+      "writingPeriod": "以弗所城 (約主後 85–95 年)",
+      "geopoliticalContext": "地方堂會好為首者丟特腓霸佔講台、排擠使徒與宣教士，該猶忠心愛心接待",
+      "primaryLiteraryGenre": "個人鼓勵薦信 (Letter of Recommendation)、地方教會領導力交鋒紀實、宣教神學行動準則",
+      "covenantAnchor": "為真理同工聖約（凡向客旅弟兄所行都是忠心）(約參 1:5-8)",
+      "christologicalArchetype": "「為主的名出外」的宣教主宰耶穌基督 (1:7)、凡行善的屬乎神"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "約翰三書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "約參 1:7-8",
+          "targetRef": "利 19:34, 太 10:40-42",
+          "theologicalEcho": "【為主的名出外與接待客旅同工】：宣教士為主名出外對外邦人一無所取，接待他們就是與真理同工；接待主的使者就是接待主"
+        },
+        {
+          "sourceRef": "約參 1:11",
+          "targetRef": "詩 34:14, 37:27",
+          "theologicalEcho": "【不要效法惡只要效法善】：不要效法惡只要效法善，行善的屬乎神；直接承繼舊約智慧詩篇離惡行善蒙福之道"
+        }
+      ]
     }
   },
   "65": {
@@ -7408,6 +8123,36 @@
         }
       ],
       "christologicalCenter": "猶大書在全書最末爆發出全聖經最震撼的頌讚（Doxology, 24-25節）：耶穌基督是能保守信徒在險惡末世中絕不失腳的唯一救主，一切榮耀威嚴歸於祂！"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Ἰούδας (Ioudas) / Epistula Iudae",
+      "canonicalOrder": "新約大公書信壓軸卷 (General Epistles 終卷) / 為從前一次交付聖徒的真道竭力爭辯戰歌",
+      "historicalEra": "初期教會末世背道危機爆發期 (約主後 65–70 年)",
+      "writingPeriod": "巴勒斯坦或敘利亞 (約主後 67–70 年)",
+      "geopoliticalContext": "偷著進入教會的不敬虔者，將神的恩典當作放蕩情慾機會，否定獨一主宰基督",
+      "primaryLiteraryGenre": "戰鬥檄文 (Polemical Epistle)、古代猶太典籍互文 (次經以諾一書、摩西升天記)、震撼終局頌讚詞 (Doxology 24-25節)",
+      "covenantAnchor": "保守自己常在神的愛中仰望永生之約 (猶 1:21)",
+      "christologicalArchetype": "獨一的主宰我們主耶穌基督 (1:4)、攜千萬聖者降臨公義審判的主 (1:14)、能保守信徒不失腳的救主神 (1:24)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "猶大書正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "猶 1:11",
+          "targetRef": "創 4:5, 民 22-24章, 民 16章",
+          "theologicalEcho": "【該隱之路、巴蘭錯謬、可拉背叛】：一口氣串聯創世記該隱殺弟、民數記巴蘭貪財咒詛與可拉狂妄叛亂，嚴厲定罪背道假師傅"
+        },
+        {
+          "sourceRef": "猶 1:14-15",
+          "targetRef": "創 5:24, 申 33:2, 亞 14:5",
+          "theologicalEcho": "【以諾預言主攜千萬聖者降臨】：亞當七世孫以諾預言主帶著千萬聖者降臨行審判；與申命記、撒迦利亞書主同聖者降臨一脈相承"
+        },
+        {
+          "sourceRef": "猶 1:24-25",
+          "targetRef": "詩 121:3, 亞 3:1-5",
+          "theologicalEcho": "【保守不失腳無瑕歡喜站立】：全本聖經最輝煌的頌讚，唯有基督能保守我們在罪惡世代絕不失腳，使我們無瑕無疵站在榮耀寶座前"
+        }
+      ]
     }
   },
   "66": {
@@ -7753,6 +8498,36 @@
         }
       ],
       "christologicalCenter": "啟示錄是耶穌基督全備啟示的最高潮：祂是阿拉法、俄梅戛，是首先的、末後的，是初、也是終。被殺的羔羊登上了全宇宙至尊的寶座，祂必快來！「主耶穌啊，我願你來！」"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "Ἀποκάλυψις Ἰωάννου (Apokalypsis Ioannou) / Apocalypsis Ioannis",
+      "canonicalOrder": "新約全書與全本聖經壓軸終卷 / 萬王之王基督終極得勝啟示錄",
+      "historicalEra": "羅馬皇帝圖密善（Domitian）殘酷迫害基督教晚期 (主後 95–96 年)",
+      "writingPeriod": "愛琴海拔摩海島採石場流放監獄 (約主後 95–96 年)",
+      "geopoliticalContext": "羅馬帝國強迫萬民崇拜皇帝為神（Dominus et Deus），小亞細亞七教會在妥協與殉道邊緣",
+      "primaryLiteraryGenre": "啟示文學 (Apocalyptic)、先知神諭 (Prophecy)、使徒巡迴公函 (Epistle) 三合一宏偉巨著、宇宙終末大交響詩",
+      "covenantAnchor": "【新耶路撒冷神人永居聖約】：「看哪神的帳幕在人間，祂要與人同住，他們要作祂的子民」 (啟 21:3)",
+      "christologicalArchetype": "阿拉法和俄梅戛 (1:8)、行走在金燈台中的榮耀人子 (1:13)、猶大支派獅子被殺的羔羊 (5:5-6)、騎白馬萬王之王萬主之主 (19:16)、明亮的晨星 (22:16)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "啟示錄正典互文與舊約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "啟 1:7",
+          "targetRef": "但 7:13, 亞 12:10",
+          "theologicalEcho": "【看哪祂駕雲降臨眾目要看見祂】：融合但以理書人子駕雲降臨與撒迦利亞書仰望被刺者扎心痛哭，宣告歷史終局基督得勝凱旋"
+        },
+        {
+          "sourceRef": "啟 5:5-6",
+          "targetRef": "創 49:9-10, 賽 53:7, 出 12:5",
+          "theologicalEcho": "【猶大支派獅子也是被殺羔羊】：創世記大衛王室之獅竟以被殺羔羊形象站立在寶座中央！以受難代贖徹底贏得揭開歷史七印之全權"
+        },
+        {
+          "sourceRef": "啟 21:1-4, 22:1-5",
+          "targetRef": "創 1-3章, 賽 65:17, 結 47:1-12",
+          "theologicalEcho": "【新天新地新聖城徹底逆轉伊甸墮落】：伊甸園失去的生命樹重開、創世記的咒詛永遠消除、沒有死亡眼淚、神與人同住作王直到永永遠遠"
+        }
+      ]
     }
   }
 };

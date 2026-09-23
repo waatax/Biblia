@@ -360,6 +360,36 @@
         }
       ],
       "christologicalCenter": "基督是創世記貫穿始終的活水之源：自女人的後裔、亞伯拉罕蒙福的子孫，到猶大支派手握權杖之細羅 (Shiloh, 創 49:10)，神在混沌深淵中預備了終極救贖君王。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "בְּרֵאשִׁית (B'reshit,「起初」) / Γένεσις (Genesis) / Liber Genesis",
+      "canonicalOrder": "妥拉摩西五經第 1 卷 (Torah / Pentateuch #1) / 希伯來正典律法書首卷",
+      "historicalEra": "太古起初至族長時代 (創世至約主前 1805 年約瑟逝世)",
+      "writingPeriod": "出埃及與西奈曠野時期 (約主前 1446–1406 年)",
+      "geopoliticalContext": "古代近東美索不達米亞（吾珥、哈蘭）、迦南應許地與埃及中王國",
+      "primaryLiteraryGenre": "原始歷史敘事、族長傳記、族譜條約、詩歌祝福",
+      "covenantAnchor": "創世恩典、挪亞之約、亞伯拉罕之約 (創 12:1-3, 15:1-21, 17:1-8)",
+      "christologicalArchetype": "女人的後裔 (3:15)、麥基洗德祭司王 (14:18)、亞伯拉罕獨生子摩利亞山獻祭 (22:2)、猶大圭杖彌賽亞 (49:10)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "創世記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "創 3:15",
+          "targetRef": "羅 16:20, 加 4:4, 來 2:14, 啟 12:9",
+          "theologicalEcho": "【原始福音 Protoevangelium】：女人的後裔將傷蛇的頭，預表基督由女子所生，藉十架受死粉碎魔鬼死權"
+        },
+        {
+          "sourceRef": "創 15:6",
+          "targetRef": "羅 4:3, 加 3:6, 雅 2:23",
+          "theologicalEcho": "【因信稱義】：亞伯拉罕信神就被算為他的義，奠定保羅福音神學的核心基石與信徒屬靈血統"
+        },
+        {
+          "sourceRef": "創 22:18",
+          "targetRef": "徒 3:25, 加 3:16",
+          "theologicalEcho": "【萬國蒙福之後裔】：神應許萬族必因亞伯拉罕的後裔得福，使徒闡明那單數的「後裔」正是耶穌基督"
+        }
+      ]
     }
   },
   "2": {
@@ -699,6 +729,36 @@
         }
       ],
       "christologicalCenter": "出埃及記是救贖論的原型：基督既是替罪的逾越節羔羊，又是引領我們出黑暗入奇妙光明的真摩西，更是以神聖血肉親自成為神人相會真會幕的中保。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "וְאֵלֶּה שְׁמוֹת (Ve'elleh Shemot,「這些是名字」) / Ἔξοδος (Exodos) / Liber Exodus",
+      "canonicalOrder": "妥拉摩西五經第 2 卷 (Torah / Pentateuch #2) / 立約救贖經典",
+      "historicalEra": "埃及寄居與出埃及建國時期 (約主前 1526–1446 年)",
+      "writingPeriod": "西奈曠野頒布律法時期 (約主前 1446–1445 年)",
+      "geopoliticalContext": "埃及第十八王朝帝國盛世（圖特摩斯三世/阿蒙霍特普二世時期）與西奈半島荒漠",
+      "primaryLiteraryGenre": "神聖拯救史詩、宗主附庸盟約憲章、神聖居所建築規範藍圖",
+      "covenantAnchor": "西奈之約（立約之血、十誡十言、摩西中保）(出 19-24章)",
+      "christologicalArchetype": "無瑕疵逾越節羔羊 (12:5-13)、曠野活水磐石 (17:6)、大祭司中保代求 (28:1)、會幕同住榮光 (40:34)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "出埃及記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "出 12:46",
+          "targetRef": "約 19:36, 林前 5:7",
+          "theologicalEcho": "【逾越節真羔羊】：羔羊一根骨頭也不折斷，基督作我們逾越節的羔羊被殺獻祭，免去審判烈怒"
+        },
+        {
+          "sourceRef": "出 17:6",
+          "targetRef": "林前 10:4, 約 7:37-38",
+          "theologicalEcho": "【擊打磐石出活水】：曠野隨行的屬靈磐石就是基督，被擊打捨命流出活水聖靈，解渴萬人"
+        },
+        {
+          "sourceRef": "出 24:8",
+          "targetRef": "太 26:28, 來 9:19-22",
+          "theologicalEcho": "【立約之血】：摩西灑立約之血確立西奈之約，主耶穌在最後晚餐宣告「這是我立新約的血為多人流出來」"
+        }
+      ]
     }
   },
   "3": {
@@ -1041,6 +1101,36 @@
         }
       ],
       "christologicalCenter": "「若不流血，罪就不得赦免」(利 17:11)；利未記每滴灑在壇上的祭牲鮮血，皆為耶穌基督在十字架上所流純潔神聖寶血之預告回響。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "וַיִּקְרָא (Vayikra,「他呼叫」) / Λευιτικόν (Levitikon) / Liber Leviticus",
+      "canonicalOrder": "妥拉摩西五經第 3 卷 (Torah / Pentateuch #3) / 聖幕心臟聖潔法典",
+      "historicalEra": "出埃及第二年第一個月會幕落成後一個月內 (主前 1445 年)",
+      "writingPeriod": "西奈山腳聖幕帳房內 (主前 1445 年)",
+      "geopoliticalContext": "西奈曠野摩西會幕陣營中樞，與世俗埃及淫風、迦南可憎風俗徹底分別",
+      "primaryLiteraryGenre": "祭儀律例、獻祭規條、潔淨禮儀條例、聖潔法典 (Holiness Code)",
+      "covenantAnchor": "聖潔聖約（「你們要聖潔，因為我耶和華你們的神是聖潔的」）(利 11:44, 19:2)",
+      "christologicalArchetype": "五大祭物（燔祭、素祭、平安祭、贖罪祭、贖愆祭）、大祭司、贖罪日替罪羊阿撒瀉勒 (16:21)、七大節期基督成全"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "利未記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "利 16:15-16",
+          "targetRef": "來 9:11-14, 10:19-22",
+          "theologicalEcho": "【大祭司入至聖所贖罪】：舊約大祭司年年帶牛羊血入幔，基督用自己的血只一次進入天上聖所成全永遠贖罪"
+        },
+        {
+          "sourceRef": "利 17:11",
+          "targetRef": "來 9:22, 羅 3:25",
+          "theologicalEcho": "【血中有生命能贖罪】：若不流血罪就不得赦免，基督寶血在神面前作永遠平息神忿怒的挽回祭"
+        },
+        {
+          "sourceRef": "利 19:18",
+          "targetRef": "太 22:39, 羅 13:9, 加 5:14",
+          "theologicalEcho": "【愛人如己之最大誡命】：主耶穌將「愛鄰如己」定性為律法兩大總綱之一，愛就完全了律法"
+        }
+      ]
     }
   },
   "4": {
@@ -1368,6 +1458,36 @@
         }
       ],
       "christologicalCenter": "民數記在漫天黃沙與骨骸纍纍中見證神恩不廢：被舉起的銅蛇、雅各升起之晨星，以及大祭司之死換來逃城釋放，皆精準指向基督完全的代贖與掌權。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "בְּמִדְבַּר (Bemidbar,「在曠野」) / Ἀριθμοί (Arithmoi) / Liber Numeri",
+      "canonicalOrder": "妥拉摩西五經第 4 卷 (Torah / Pentateuch #4) / 行軍點兵天路歷程",
+      "historicalEra": "出埃及第二年二月至第四十年十一月 (約主前 1445–1406 年，歷時近四十年)",
+      "writingPeriod": "約旦河東摩押平原行將渡河前夕 (主前 1406 年)",
+      "geopoliticalContext": "西奈半島沙漠、巴蘭曠野、加低斯巴尼亞、以東摩押境界至約旦河谷",
+      "primaryLiteraryGenre": "兩次軍事人口普查人口冊、行軍陣營法規、歷史敘事、先知巴蘭神諭神話詩歌",
+      "covenantAnchor": "曠野立約管教與新生代繼承應許 (民 14:26-35, 26:63-65)",
+      "christologicalArchetype": "木竿上舉起的銅蛇 (21:8-9)、巴蘭神諭「雅各之星、以色列之圭」 (24:17)、嗎哪磐石引路雲柱火柱"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "民數記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "民 21:8-9",
+          "targetRef": "約 3:14-15",
+          "theologicalEcho": "【摩西舉銅蛇】：摩西在曠野怎樣舉蛇，人子也必照樣被舉在十字架上，叫凡信祂的不致滅亡反得永生"
+        },
+        {
+          "sourceRef": "民 24:17",
+          "targetRef": "太 2:2, 啟 22:16",
+          "theologicalEcho": "【雅各之星與猶大之圭】：有星要出於雅各，有圭要興於以色列，東方博士尋訪朝拜，基督宣告「我是明亮的晨星」"
+        },
+        {
+          "sourceRef": "民 14:29-35",
+          "targetRef": "林前 10:5-10, 來 3:16-19",
+          "theologicalEcho": "【曠野倒斃之不信鑑戒】：舊世代因不信不得進入安息，成為新約教會務要竭力進入屬天永遠安息的警鐘"
+        }
+      ]
     }
   },
   "5": {
@@ -1700,6 +1820,41 @@
         }
       ],
       "christologicalCenter": "申命記是主耶穌最熱愛的聖經書卷之一；基督以自身全然的聖潔順服，承擔了律法全部咒詛，為一切立約子民贏得了申命記中永恆生命與安息的完全祝福。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "דְּבָרִים (Devarim,「話語」) / Δευτερονόμιον (Deuteronomion) / Liber Deuteronomii",
+      "canonicalOrder": "妥拉摩西五經第 5 卷 (Torah / Pentateuch #5) / 舊約神學心臟重申聖約",
+      "historicalEra": "出埃及第四十年第十一月摩西離世前一個月 (主前 1406 年)",
+      "writingPeriod": "約旦河東摩押平原尼波山腳 (主前 1406 年)",
+      "geopoliticalContext": "迦南地門戶約旦河東高地，面對強悍迦南七族與異教偶像誘惑前線",
+      "primaryLiteraryGenre": "古代近東宗主附庸條約（序言、歷史引言、條款、祝福與咒詛、見證）、告別演說三講、摩西之歌",
+      "covenantAnchor": "摩押重申之約與示瑪「聽啊以色列」一神信條 (申 6:4-9, 29:1)",
+      "christologicalArchetype": "「像摩西的先知」(18:15-19)、被掛在木頭上的咒詛 (21:23)、心靈受割禮的恩典 (30:6)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "申命記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "申 6:4-5",
+          "targetRef": "可 12:29-30, 羅 3:30",
+          "theologicalEcho": "【示瑪 Shema 一神宣言】：以色列啊你要聽，主我們神是獨一的主；你要盡心盡性盡意盡力愛主你的神，基督親證為第一要緊誡命"
+        },
+        {
+          "sourceRef": "申 8:3, 6:16, 6:13",
+          "targetRef": "太 4:4, 7, 10, 路 4:4, 8, 12",
+          "theologicalEcho": "【曠野擊退撒但的三大金句】：基督在曠野禁食四十天受試探，三次皆引用申命記神的話擊潰魔鬼詭計"
+        },
+        {
+          "sourceRef": "申 18:15-18",
+          "targetRef": "徒 3:22-23, 約 1:21, 6:14",
+          "theologicalEcho": "【興起一位像摩西的先知】：神要興起一位像摩西的中保先知，你們要聽祂；彼得證實那位大先知就是降世成肉身的耶穌基督"
+        },
+        {
+          "sourceRef": "申 21:23",
+          "targetRef": "加 3:13",
+          "theologicalEcho": "【被掛在木頭上受咒詛】：凡掛在木頭上都是被咒詛的；基督為我們受了咒詛，就贖出我們脫離律法的咒詛"
+        }
+      ]
     }
   },
   "6": {
@@ -1991,6 +2146,36 @@
         }
       ],
       "christologicalCenter": "約書亞記是一部信心的得勝凱歌：基督是那拔出寶刀的真正元帥，祂在十架上為我們粉碎空中掌權者，引領凡信靠祂的人承受不能朽壞、不能玷污、不能衰殘之天國基業。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "יְהוֹשֻׁעַ (Yehoshua,「耶和華是拯救」) / Ἰησοῦς (Iesous) / Liber Iosue",
+      "canonicalOrder": "舊約前先知書第 1 卷 (Former Prophets #1) / 歷史書開篇爭戰得地紀實",
+      "historicalEra": "征服迦南地與分地時期 (約主前 1406–1375 年)",
+      "writingPeriod": "士師時代早期約書亞晚年由約書亞及同工完成 (約主前 1390–1370 年)",
+      "geopoliticalContext": "迦南各城邦割據（耶利哥、艾城、基遍、南部亞摩利五王聯盟、北部夏瑣萬邦之首）",
+      "primaryLiteraryGenre": "神聖征戰軍事紀實、土地分配地契文獻、示劍立約守約大會演說",
+      "covenantAnchor": "亞伯拉罕土地應許歷史成全與示劍立約 (書 21:43-45, 24:14-28)",
+      "christologicalArchetype": "「耶和華軍隊的元帥」拔刀顯現 (5:13-15)、約書亞名字同「耶穌」、六座逃城庇護救贖 (20:1-9)、朱紅線繩喇合之信"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "約書亞記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "書 1:5",
+          "targetRef": "來 13:5",
+          "theologicalEcho": "【主必同在永不撇棄】：神對約書亞的應許「我必不撇下你也不丟棄你」，成為新約信徒無畏世俗貪婪的堅定確據"
+        },
+        {
+          "sourceRef": "書 2:1-21, 6:25",
+          "targetRef": "太 1:5, 來 11:31, 雅 2:25",
+          "theologicalEcho": "【喇合信心的朱紅線繩】：迦南妓女喇合因信接待探子全家得救，列入基督家譜，成為信心與行為相稱的典範"
+        },
+        {
+          "sourceRef": "書 21:43-45",
+          "targetRef": "來 4:8-9",
+          "theologicalEcho": "【屬天永遠安息的預表】：若是約書亞已叫他們享了安息，後來就不會再題別的日子；為神的子民另有一安息日的安息保留在基督裡"
+        }
+      ]
     }
   },
   "7": {
@@ -2286,6 +2471,31 @@
         }
       ],
       "christologicalCenter": "士師記是一本「呼求真王降臨」的深沉嘆息：人間士師因人性殘缺皆無法帶來永恆平安，唯有那位降卑受死卻徹底摧毀撒但權勢的真正救主耶穌基督，才能永遠作王統治萬民。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "שֹׁפְטִים (Shoftim,「士師/士師判官」) / Κριταί (Kritai) / Liber Iudicum",
+      "canonicalOrder": "舊約前先知書第 2 卷 (Former Prophets #2) / 螺旋下墜黑暗歷史",
+      "historicalEra": "約書亞死後至撒母耳崛起前 (約主前 1375–1050 年，近三百五十年混亂)",
+      "writingPeriod": "掃羅王末期至大衛統治初期，傳統認為由撒母耳整理 (約主前 1050–1000 年)",
+      "geopoliticalContext": "迦南殘存異教部落（非利士人、米甸人、亞捫人、摩押人）周邊四面包圍壓迫",
+      "primaryLiteraryGenre": "神學歷史敘事、英雄傳奇、螺旋倒退循環架構（罪惡—壓迫—哀求—拯救—平靜—再犯罪）",
+      "covenantAnchor": "立約子民背約受罰與神憐憫之不毀恩約 (士 2:11-23)",
+      "christologicalArchetype": "無完美士師渴求永遠公義王（基甸、參孫、耶弗他之有限）、神親自作拯救者、拔除「各人任意而行」的彌賽亞君王 (21:25)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "士師記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "士 21:25",
+          "targetRef": "太 2:2, 啟 19:16",
+          "theologicalEcho": "【那時以色列中沒有王】：全書以「那時國中沒有王，各人任意而行」作結，尖銳呼召唯有基督萬王之王能帶來終極秩序"
+        },
+        {
+          "sourceRef": "士 6-8, 13-16章",
+          "targetRef": "來 11:32-34",
+          "theologicalEcho": "【信心英雄榜上的不完全士師】：基甸、巴拉、參孫、耶弗他因信制服了敵國，行了公義，軟弱變為剛強，指向成全信心的主耶穌"
+        }
+      ]
     }
   },
   "8": {
@@ -2565,6 +2775,31 @@
         }
       ],
       "christologicalCenter": "路得記是整本聖經最精緻的福音縮影：波阿斯是我們至親贖買人基督的完美預表，基督以不渝之立約慈愛 (Hesed) 眷顧卑微貧寒的罪人，將我們從絕望苦境中救拔進入榮耀永恆家庭。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "רוּת (Rut,「友誼/伴侶」) / Ῥούθ (Rhouth) / Liber Ruth",
+      "canonicalOrder": "舊約聖卷五小卷之二 (Megilloth #2) / 五旬節收割慶典誦讀書卷",
+      "historicalEra": "士師秉政凶荒黑暗年代 (約主前 1100 年左右)",
+      "writingPeriod": "大衛王朝興起之時 (約主前 1010–970 年)",
+      "geopoliticalContext": "摩押高原逃荒之地與猶大伯利恆（糧食之倉）麥田收割社區",
+      "primaryLiteraryGenre": "田園文學短篇傑作、救贖歷史插曲、家譜正典銜接",
+      "covenantAnchor": "至親至愛救贖之約（Goel 贖業買贖條例、利未婚俗、外邦恩惠）(得 3:9, 4:1-12)",
+      "christologicalArchetype": "波阿斯作至親救贖者（Kinsman-Redeemer）、外邦摩押女子路得蒙恩融入彌賽亞家譜 (4:18-22)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "路得記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "得 4:14, 18-22",
+          "targetRef": "太 1:5-6, 路 3:32",
+          "theologicalEcho": "【外邦女子入大衛基督家譜】：波阿斯從路得生俄備得，俄備得生耶西，耶西生大衛；基督救恩打破種族界限臨到普世"
+        },
+        {
+          "sourceRef": "得 3:9, 4:9-10",
+          "targetRef": "弗 1:7, 多 2:14, 啟 5:9",
+          "theologicalEcho": "【至親救贖者 Goel】：波阿斯甘心出代價贖回拿俄米家業與迎娶路得，完美預表基督用自己寶血將我們買贖歸神作新婦"
+        }
+      ]
     }
   },
   "9": {
@@ -2854,6 +3089,36 @@
         }
       ],
       "christologicalCenter": "哈拿之歌宣告了全書的神學核心：「耶和華使人死，也使人活；使人下陰間，也使人往上升」(撒上 2:6)；大衛由牧童受膏、受苦流亡、最終高升為王，是耶穌基督「經苦難進榮耀」最鮮明之彌賽亞預表。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "שְׁמוּאֵל א (Shemuel Alef) / Βασιλειῶν Αʹ (Kingdoms I) / Liber I Samuelis",
+      "canonicalOrder": "舊約前先知書第 3 卷 (Former Prophets #3) / 神權向王權過渡開篇",
+      "historicalEra": "士師末期撒母耳興起至掃羅戰死基利波山 (約主前 1100–1010 年)",
+      "writingPeriod": "王國分裂初期整合官方史冊與先知紀錄 (約主前 930–900 年)",
+      "geopoliticalContext": "非利士人鐵器時代軍事威脅壓境與迦南中央山地以色列部落同盟",
+      "primaryLiteraryGenre": "先知神學歷史傳記、受膏者史詩、哈拿讚美詩歌、宮廷與曠野逃亡敘事",
+      "covenantAnchor": "神治主權與王權律例（「聽命勝於獻祭」）(撒上 10:25, 15:22)",
+      "christologicalArchetype": "哈拿之歌首次提「受膏者彌賽亞」(2:10)、大衛以信心牧石擊殺巨人歌利亞 (17:45-47)、大衛忍耐逃亡受膏者受苦模式"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "撒母耳記上正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "撒上 2:1-10",
+          "targetRef": "路 1:46-55",
+          "theologicalEcho": "【哈拿之歌與馬利亞尊主頌】：哈拿讚頌神使高傲降卑、使貧寒升高的救恩逆轉，成為馬利亞尊主頌的神聖底本，並首次預言彌賽亞角被高舉"
+        },
+        {
+          "sourceRef": "撒上 15:22",
+          "targetRef": "何 6:6, 太 9:13, 12:7",
+          "theologicalEcho": "【聽命勝於獻祭】：聽命勝於獻祭，順從勝於公羊的脂油；耶穌引伸申斥法利賽人只知宗教外表卻無憐憫之心"
+        },
+        {
+          "sourceRef": "撒上 21:1-6",
+          "targetRef": "太 12:3-4, 可 2:25-26",
+          "theologicalEcho": "【大衛吃陳設餅與安息日之主】：大衛在飢餓逃亡中吃了唯獨祭司可吃的陳設餅，耶穌用以證明安息日為人設立，人子更是安息日的主"
+        }
+      ]
     }
   },
   "10": {
@@ -3147,6 +3412,31 @@
         }
       ],
       "christologicalCenter": "撒母耳記下確立了舊約國度神學的最巔峰基石——「大衛之約」(Davidic Covenant)。一切先知預言、詩篇頌讚與新約福音書皆以大衛的後裔基督為終極成全者與永恆萬王之王。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "שְׁמוּאֵל ב (Shemuel Bet) / Βασιλειῶν Βʹ (Kingdoms II) / Liber II Samuelis",
+      "canonicalOrder": "舊約前先知書第 3 卷下部 (Former Prophets #3b) / 大衛王朝統治巔峰與聖約核心",
+      "historicalEra": "大衛四十年王權統治全期 (主前 1010–970 年)",
+      "writingPeriod": "所羅門登基後不久整合先知拿單、迦得史料 (約主前 970–930 年)",
+      "geopoliticalContext": "定都耶路撒冷、平定周邊四鄰（非利士、摩押、亞蘭、以東、亞捫）建立統一帝國版圖",
+      "primaryLiteraryGenre": "皇家正史敘事、大衛之約神聖文獻、大衛哀歌與懺悔詩篇背景、宮廷政變記實",
+      "covenantAnchor": "【大衛之約 Davidic Covenant】：國位、寶座、後裔永存直到永遠 (撒下 7:8-16)",
+      "christologicalArchetype": "大衛之約所應許的永遠彌賽亞王位、在亞勞拿禾場買地建壇獻祭止住瘟疫（摩利亞山聖殿根基）(24:18-25)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "撒母耳記下正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "撒下 7:12-16",
+          "targetRef": "路 1:32-33, 徒 2:30, 來 1:5",
+          "theologicalEcho": "【大衛之約的永遠王位】：神應許大衛的後裔要建造殿宇，其國位必堅定到永遠；天使向馬利亞宣告主神要將祂祖大衛的位給耶穌，作王直到永遠"
+        },
+        {
+          "sourceRef": "撒下 7:14",
+          "targetRef": "來 1:5, 啟 21:7",
+          "theologicalEcho": "【父子關係的救贖真諦】：「我要作他的父，他要作我的子」；希伯來書開篇宣告唯有耶穌基督是超越一切天使的永遠真神子"
+        }
+      ]
     }
   },
   "11": {
@@ -3439,6 +3729,31 @@
         }
       ],
       "christologicalCenter": "列王紀上顯明世上最尊榮、最富智慧的君王若離棄真神亦必走向愚昧分裂；唯有耶穌基督是永不偏離聖約的和平真君王，祂以自身為殿，將破裂的百姓重新招聚為一體。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "מְלָכִים א (Melakhim Alef) / Βασιλειῶν Γʹ (Kingdoms III) / Liber I Regum",
+      "canonicalOrder": "舊約前先知書第 4 卷上部 (Former Prophets #4a) / 榮耀聖殿與分裂衰微史",
+      "historicalEra": "所羅門登基黃金盛世至亞哈王戰死 (主前 970–853 年)",
+      "writingPeriod": "被擄巴比倫時期先知性修史 (約主前 560–538 年)",
+      "geopoliticalContext": "所羅門地中海與紅海貿易盛世；南北分裂後北國以色列（暗利、亞哈）與南國猶大，面對亞蘭與新亞述崛起",
+      "primaryLiteraryGenre": "皇家正史年表、聖殿建造銘刻文獻、先知以利亞傳奇奇蹟敘事",
+      "covenantAnchor": "大衛王約的試煉與聖殿獻殿之約 (王上 8:22-53, 9:1-9)",
+      "christologicalArchetype": "所羅門超越的屬天智慧 (比所羅門更大)、以利亞先知事奉（施洗約翰來臨之影）、榮美聖殿真本體"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "列王紀上記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "王上 10:1-9",
+          "targetRef": "太 12:42, 路 11:31",
+          "theologicalEcho": "【示巴女王朝見所羅門】：南方的女王要起來定這世代的罪，因為她從地極來要聽所羅門的智慧話；看哪，在這裡有一人比所羅門更大！"
+        },
+        {
+          "sourceRef": "王上 19:10-18",
+          "targetRef": "羅 11:2-5",
+          "theologicalEcho": "【神留下七千未拜巴力之餘民】：保羅以此印證神未曾棄絕祂預先知道的百姓，在任何黑暗背道世代神都按著恩典保留屬天餘民"
+        }
+      ]
     }
   },
   "12": {
@@ -3723,6 +4038,31 @@
         }
       ],
       "christologicalCenter": "列王紀下以大衛子孫約雅斤在被擄異邦受恩寵出監抬頭作結，是黑夜中閃爍的晨星：證明即使國破家亡，神的約絕不廢棄，必在歷史盡頭藉基督帶來全然復興。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "מְלָכִים ב (Melakhim Bet) / Βασιλειῶν Δʹ (Kingdoms IV) / Liber II Regum",
+      "canonicalOrder": "舊約前先知書第 4 卷下部 (Former Prophets #4b) / 亡國被擄與神聖公義審判史",
+      "historicalEra": "亞哈謝登基至猶大亡國聖殿被焚（主前 853–586 年，歷時近三百年）",
+      "writingPeriod": "被擄巴比倫初期由耶利米或先知學派編撰 (約主前 560–538 年)",
+      "geopoliticalContext": "亞述帝國滅北國撒瑪利亞 (主前 722 年)；新巴比倫帝國尼布甲尼撒三破耶路撒冷滅南國 (主前 586 年)",
+      "primaryLiteraryGenre": "先知以利沙神蹟敘事、王室評鑑編年體、聖殿毀滅哀歌歷史",
+      "covenantAnchor": "背約受詛與大衛燈光不滅恩約 (王下 8:19, 17:7-23, 25:27-30)",
+      "christologicalArchetype": "以利沙憐憫救贖神蹟（使死人復活、乃縵麻風得潔、麵餅吃飽）、約雅斤在巴比倫抬頭得恩待（大衛苗裔不斷）"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "列王紀下記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "王下 5:1-14",
+          "targetRef": "路 4:27",
+          "theologicalEcho": "【敘利亞乃縵麻風潔淨】：先知以利沙的時候以色列有許多長大麻風的，只有敘利亞的乃縵得潔淨，耶穌用以啟示恩典臨及外邦"
+        },
+        {
+          "sourceRef": "王下 2:9-12",
+          "targetRef": "太 17:3, 可 9:4, 路 9:30",
+          "theologicalEcho": "【以利亞乘旋風升天與變像山顯現】：以利亞未經死亡被接升天，黑門山上與摩西一同向顯露榮光之基督顯現談論祂受難受死之事"
+        }
+      ]
     }
   },
   "13": {
@@ -4007,6 +4347,31 @@
         }
       ],
       "christologicalCenter": "歷代志上呈現了一位「專注於神殿敬拜」的理想大衛模型：基督是那真正的神治君王，祂親自建立新約教會作為屬靈聖殿，並在天上設立永恆不息的讚美敬拜。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "דִּבְרֵי הַיָּמִים א (Divrei HaYamim Alef,「歷代大事記上」) / Παραλειπομένων Αʹ / Liber I Paralipomenon",
+      "canonicalOrder": "希伯來正典聖卷第 11 卷 (Ketuvim #11) / 歸回群體大衛正統家譜聖殿敬拜史",
+      "historicalEra": "始祖亞當家譜跨越千年至大衛離世 (創世至主前 970 年)",
+      "writingPeriod": "波斯統治回歸重建時期，傳統認為文士以斯拉執筆 (約主前 450–400 年)",
+      "geopoliticalContext": "波斯帝國耶胡德省（Yehud）貧弱歸回省民，身處列邦環伺與身分認同危機中",
+      "primaryLiteraryGenre": "神聖普世正典家譜、祭司視角大衛正史、利未利器聖樂敬拜禮儀紀實",
+      "covenantAnchor": "永遠大衛王約與利未敬拜條約 (代上 17:11-15, 23-26章)",
+      "christologicalArchetype": "家譜終極後裔基督、大衛帳幕敬拜之復興（阿摩司與使徒行傳呼應）、買禾場預備至聖殿堂"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "歷代志上記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "代上 1-3章",
+          "targetRef": "太 1:1-16, 路 3:23-38",
+          "theologicalEcho": "【基督神聖家譜之骨幹】：歷代志開篇九章家譜上溯亞當直貫大衛，為新約馬太與路加福音確立基督彌賽亞之合法正統血統"
+        },
+        {
+          "sourceRef": "代上 17:11-14",
+          "targetRef": "路 1:32-33, 來 1:5",
+          "theologicalEcho": "【大衛王室與神聖國度】：神應許「我卻要將他永遠堅立在我家和我國裡，他的國位也必堅定直到永遠」，直接指向基督天國"
+        }
+      ]
     }
   },
   "14": {
@@ -4297,6 +4662,36 @@
         }
       ],
       "christologicalCenter": "歷代志下以呼召百姓「可以上去，願神與他同在！」作為全本希伯來聖經的大結局：這永恆的起程號角直接指向新約基督道成肉身，引領一切神子民邁向永恆的屬天聖城。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "דִּבְרֵי הַיָּמִים ב (Divrei HaYamim Bet,「歷代大事記下」) / Παραλειπομένων Βʹ / Liber II Paralipomenon",
+      "canonicalOrder": "希伯來正典聖卷最末卷 (Ketuvim 終卷 / 希伯來舊約聖經最後一卷)",
+      "historicalEra": "所羅門建殿至波斯王居魯士下詔歸回 (主前 970–538 年)",
+      "writingPeriod": "波斯統治回歸時期由文士以斯拉完成 (約主前 450–400 年)",
+      "geopoliticalContext": "從所羅門王國榮耀、歷代猶大列王復興與墮落，歷經巴比倫被擄七十年，到波斯帝國居魯士大帝登基",
+      "primaryLiteraryGenre": "神學歷史敘事、聖殿復興記實（希西家、約西亞宗教改革）、居魯士復興敕令",
+      "covenantAnchor": "聖殿禱告應許：「這稱為我名下的子民若自卑、禱告、尋求我的面、轉離他們的惡行」 (代下 7:14)",
+      "christologicalArchetype": "毀壞三日重建的真聖殿基督 (約 2:19)、居魯士下詔救贖者（彌賽亞受膏牧者）、全舊約以「上去建殿」盼望結束"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "歷代志下記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "代下 7:14",
+          "targetRef": "雅 4:8-10, 彼前 5:6",
+          "theologicalEcho": "【自卑禱告蒙神醫治全地】：神向所羅門顯現的認罪悔改金約，成為新約信徒竭力自卑、親近神、蒙神升高救拔的永恆依據"
+        },
+        {
+          "sourceRef": "代下 24:20-22",
+          "targetRef": "太 23:35, 路 11:51",
+          "theologicalEcho": "【從亞伯的血到撒迦利亞的血】：耶穌痛斥猶太宗教領袖流義人血，以創世記「亞伯」至舊約正典終卷歷代志下「祭司撒迦利亞被殺」囊括全舊約受害義人"
+        },
+        {
+          "sourceRef": "代下 36:22-23",
+          "targetRef": "拉 1:1-3, 賽 44:28",
+          "theologicalEcho": "【居魯士下詔返鄉建殿】：全本希伯來正典以居魯士宣告「耶和華以色列的神要他上去」作壓軸句，宣告神掌管外邦帝國成全救恩"
+        }
+      ]
     }
   },
   "15": {
@@ -4574,6 +4969,31 @@
         }
       ],
       "christologicalCenter": "以斯拉記見證了神信守祂在耶利米書所發「七十年為滿必使你們歸回」的應許；基督是終極的歸回領袖，祂將我們從罪惡的巴比倫世界中召拔出來，建立聖潔屬神的群體。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "עֶזְרָא (Ezra,「幫助/耶和華是幫助」) / Ἔσδρας (Esdras) / Liber Esdrae",
+      "canonicalOrder": "舊約歷史書歸回重建第 1 卷 / 聖殿祭壇與律法回歸史",
+      "historicalEra": "波斯居魯士元年至亞達薛西統治年間 (主前 538–458 年)",
+      "writingPeriod": "第二次回歸後由精通摩西律法的文士以斯拉執筆 (約主前 450 年)",
+      "geopoliticalContext": "阿契美尼德波斯帝國統治下猶太行省（居魯士、大利烏一世、亞達薛西一世敕令）",
+      "primaryLiteraryGenre": "官方皇家波斯公文與檔案詔書（亞蘭文記載 4:8-6:18, 7:12-26）、回歸家譜清單、贖罪懺悔禱文",
+      "covenantAnchor": "聖民身分分別為聖與守摩西律法之約 (拉 9:1-15, 10:3)",
+      "christologicalArchetype": "所羅巴伯預表大衛苗裔領袖、以斯拉作大祭司文士中保宣講神言、回歸聖殿迎接未來彌賽亞臨格"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "以斯拉記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "拉 7:10",
+          "targetRef": "提後 2:15, 雅 1:22",
+          "theologicalEcho": "【立志考究遵行教訓律法】：以斯拉立志考究遵行耶和華律法並教導人，奠定初代教會無愧工人、聽道且行道的教牧標準"
+        },
+        {
+          "sourceRef": "拉 3:10-13",
+          "targetRef": "該 2:7-9, 約 2:19",
+          "theologicalEcho": "【第二聖殿奠基喜泣交加】：老年人哭初殿輝煌，少年人大聲歡呼；先知預言這殿後來的榮耀必大過先前的榮耀，基督道成肉身親臨聖殿"
+        }
+      ]
     }
   },
   "16": {
@@ -4856,6 +5276,31 @@
         }
       ],
       "christologicalCenter": "尼希米記展現了神聖國度建造者的卓越典範：耶穌基督是我們靈魂真正的守望修造者，祂親自堵住罪惡破口，建造新耶路撒冷堅不可摧之城邑。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "נְחֶמְיָה (Nechemyah,「耶和華是安慰」) / Νεεμίας (Neemias) / Liber Nehemiae",
+      "canonicalOrder": "舊約歷史書歸回重建第 2 卷 / 城牆建造與社會治理改革史",
+      "historicalEra": "波斯亞達薛西王二十年至三十二年 (主前 445–432 年)",
+      "writingPeriod": "尼希米返回書珊城後寫就之第一人稱回憶錄 (約主前 430 年)",
+      "geopoliticalContext": "波斯帝國書珊王宮酒政要職奉差赴耶路撒冷，面對參巴拉、多比雅等周邊敵對勢力軍事恐嚇",
+      "primaryLiteraryGenre": "第一人稱公僕回憶錄、建築工程工班排程表、同心抵禦軍事防務日誌、全體簽名立約書",
+      "covenantAnchor": "修牆守約防禦異端與安息日聖化之約 (尼 9:38, 10:28-39)",
+      "christologicalArchetype": "尼希米捨己服事不吃省長俸祿（基督降卑僕人樣式）、一手做工一手拿兵器（信徒屬靈爭戰建堂）"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "尼希米記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "尼 8:1-8",
+          "targetRef": "徒 8:30-35, 提後 4:2",
+          "theologicalEcho": "【宣讀律法書清清楚楚講明】：以斯拉清清楚楚念神律法書並講明意思使百姓明白，奠定新約教會講道釋經、使人明白救恩之典範"
+        },
+        {
+          "sourceRef": "尼 4:17-18",
+          "targetRef": "弗 6:10-18",
+          "theologicalEcho": "【一手做工一手拿兵器】：修造城牆者一手做工一手拿兵器，預表基督精兵在地上既要建造教會身體，又要穿戴神所賜全副軍裝抵擋魔鬼"
+        }
+      ]
     }
   },
   "17": {
@@ -5133,6 +5578,31 @@
         }
       ],
       "christologicalCenter": "以斯帖記宣告了亞瑪力人亞甲族（仇敵撒但傀儡）的終極潰敗；基督是那位替祂百姓直面滅命詔書的大能中保，祂在十字架上將必死的判決逆轉為永恆稱義與歡慶大筵席。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "אֶסְתֵּר (Ester,「星」/波斯語語源) / Ἐσθήρ (Esther) / Liber Esther",
+      "canonicalOrder": "舊約聖卷五小卷之五 (Megilloth #5) / 普珥節必讀反轉救贖史詩",
+      "historicalEra": "波斯亞哈隨魯王（薛西斯一世 Xerxes I）在位年間 (主前 486–465 年)",
+      "writingPeriod": "薛西斯統治結束後不久由波斯宮廷猶太史官或末底改記載 (約主前 460–400 年)",
+      "geopoliticalContext": "阿契美尼德波斯帝國極盛全境（從印度至古實跨洲一百二十七行省），冬宮書珊城城堡",
+      "primaryLiteraryGenre": "波斯宮廷敘事小說體裁、文學諷刺喜劇反轉 (Peripeteia)、節期起源憲章 (Aition)",
+      "covenantAnchor": "神隱蔽之天理護理（Providencia Dei）與普珥節反轉慶典 (斯 4:14, 9:20-28)",
+      "christologicalArchetype": "以斯帖冒死代求（基督十架代求中保）、「我若死就死吧」順服、哈曼木架反殺仇敵（十架粉碎魔鬼死權）"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "以斯帖記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "斯 4:14-16",
+          "targetRef": "來 4:16, 7:25",
+          "theologicalEcho": "【冒死進見與坦然進至施恩寶座】：以斯帖冒死違例進見波斯王為民求命；基督親自作完美中保使我們得以坦然無懼來到施恩寶座前得憐恤"
+        },
+        {
+          "sourceRef": "斯 7:9-10",
+          "targetRef": "西 2:14-15, 來 2:14",
+          "theologicalEcho": "【哈曼懸掛自造木架反轉勝仗】：撒但藉十字架欲致基督於死地，神卻在十字架上將執政掌權的擄來仗著十架誇勝，以死廢掉掌死權的"
+        }
+      ]
     }
   },
   "18": {
@@ -5432,6 +5902,36 @@
         }
       ],
       "christologicalCenter": "約伯記打破了世俗功利主義的算計：義人受苦不是詛咒，而是見證「神配得無條件敬拜」的宇宙舞台；基督是那位真正替眾人受苦、使萬物在苦難之後得著雙倍榮耀基業的永恆救主。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "אִיּוֹב (Iyyov,「受仇敵攻擊者」) / Ἰώβ (Iob) / Liber Iob",
+      "canonicalOrder": "希伯來正典聖卷智慧書第 1 卷 (Wisdom Literature #1) / 神義論哲學史詩巔峰",
+      "historicalEra": "族長亞伯拉罕時代或更早 (約主前 2000–1800 年，以壽數與獻祭形式為證)",
+      "writingPeriod": "族長時代口傳，於所羅門智慧盛世由神聖作者筆之於書 (約主前 10 世紀)",
+      "geopoliticalContext": "烏斯地（靠近以東荒漠與阿拉伯北部沙漠綠洲），超越以色列國界之普世智慧舞台",
+      "primaryLiteraryGenre": "散文序幕結尾框架、高超希伯來對偶辯論長詩、神聖旋風神諭大問 (Theophany)",
+      "covenantAnchor": "苦難中的無條件純全信心與救贖主永活之約 (伯 1:9, 19:25-27)",
+      "christologicalArchetype": "無辜受苦義人約伯、天庭神人中保仲裁者 (9:33)、「我知道我的救贖主活著」(19:25)、為控告其三友獻祭代求"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "約伯記正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "伯 19:25-27",
+          "targetRef": "林前 15:20, 帖前 4:16, 約 11:25",
+          "theologicalEcho": "【救贖主永活與肉身復活見主】：約伯在極度病痛中宣告「我知道我的救贖主活著，末了必站立在地上，我這皮肉滅絕之後我必在肉體之外得見神」"
+        },
+        {
+          "sourceRef": "伯 9:33",
+          "targetRef": "提前 2:5, 來 8:6",
+          "theologicalEcho": "【神人間需要聽訟之中保】：約伯痛呼在人與神之間沒有聽訟的仲裁者把手按在兩造身上；新約宣告基督正是那唯一的中保"
+        },
+        {
+          "sourceRef": "伯 42:10",
+          "targetRef": "雅 5:11",
+          "theologicalEcho": "【約伯的忍耐與主給他的結局】：你們聽見過約伯的忍耐，也知道主給他的結局，明顯主是滿心憐憫大有慈悲"
+        }
+      ]
     }
   },
   "19": {
@@ -5756,6 +6256,36 @@
         }
       ],
       "christologicalCenter": "詩篇是全本舊約對主耶穌基督心靈生命、受難受死、復活升天、再臨審判最全備深情的描摹；基督是真正的唱詩者，也是詩篇全部頌讚的永恆焦點。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "תְּהִלִּים (Tehillim,「讚美詩」) / Ψαλμοί (Psalmoi) / Liber Psalmorum",
+      "canonicalOrder": "希伯來正典聖卷首卷 (Ketuvim #1) / 全本聖經崇拜祈禱頌讚心臟",
+      "historicalEra": "摩西時代至被擄歸回時期，橫跨千年的靈魂呼求 (約主前 1440–430 年)",
+      "writingPeriod": "大衛、亞薩、可拉後裔、所羅門等先後創作，被擄歸回時期編輯成五卷",
+      "geopoliticalContext": "猶大山地、耶路撒冷錫安聖殿、隱基底曠野洞穴、巴比倫河畔被擄異鄉",
+      "primaryLiteraryGenre": "希伯來抒情詩歌、平行對偶律、讚美詩、哀歌、朝聖上行詩、懺悔詩、彌賽亞受膏君王詩",
+      "covenantAnchor": "大衛永遠聖約的敬拜頌歌與錫安神權寶座 (詩 89, 132篇)",
+      "christologicalArchetype": "彌賽亞受膏受苦復活登基全景：受苦十架 (22篇)、好牧人 (23篇)、得勝君王 (2篇)、麥基洗德祭司 (110篇)、房角石 (118篇)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "詩篇正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "詩 22:1, 16-18",
+          "targetRef": "太 27:46, 約 19:24, 來 2:12",
+          "theologicalEcho": "【各各他十架受難驚人寫照】：基督在十架上引「我的神我的神為什麼離棄我」，扎手扎腳、分外衣拈鬮細節全數精準成全"
+        },
+        {
+          "sourceRef": "詩 110:1, 4",
+          "targetRef": "太 22:44, 徒 2:34-35, 來 5:6, 7:17",
+          "theologicalEcho": "【全本新約引用次數最多之彌賽亞經文】：「主對我主說你坐在我的右邊」證明基督是大衛之主，「照麥基洗德等次永遠為祭司」奠定大祭司論"
+        },
+        {
+          "sourceRef": "詩 118:22-23",
+          "targetRef": "太 21:42, 徒 4:11, 彼前 2:7",
+          "theologicalEcho": "【匠人所棄的石頭已成房角的頭塊石頭】：耶穌親引此詩宣告自己被猶太宗教領袖棄絕，卻成為神殿宇永恆房角石"
+        }
+      ]
     }
   },
   "20": {
@@ -6060,6 +6590,36 @@
         }
       ],
       "christologicalCenter": "箴言的最高核心是基督：「在基督裡面所積蓄的一切智慧和知識，都在祂裡面藏著」(西 2:3)；敬畏主耶穌基督，是通往真智慧、聖潔生命與永恆冠冕的唯一門徑。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "מִשְׁלֵי (Mishlei,「箴言/比喻」) / Παροιμίαι (Paroimiai) / Liber Proverbiorum",
+      "canonicalOrder": "舊約聖卷智慧書第 2 卷 (Wisdom Literature #2) / 日常敬虔生活實踐大百科",
+      "historicalEra": "所羅門登基盛世至希西家王整理時期 (約主前 970–700 年)",
+      "writingPeriod": "所羅門輯錄主體，希西家王文士抄錄補充雅基兒子亞古珥及利慕伊勒母親言語 (約主前 700 年前成書)",
+      "geopoliticalContext": "古代近東國際宮廷智慧交流繁盛期（埃及阿曼尼摩比箴言等同時代背景對照）",
+      "primaryLiteraryGenre": "短警句格言 (Mashal)、擬人化智慧長詩、兩條道路倫理對比（愚蒙與智慧、淫婦與才德婦人）",
+      "covenantAnchor": "西奈盟約倫理在世俗日常、家庭、職場與言語中的細緻具現化（「敬畏耶和華是智慧的開端」）(箴 1:7, 9:10)",
+      "christologicalArchetype": "創世以前神身旁的擬人化先在「神聖智慧」(8:22-31)、道成肉身成全神的智慧（林前 1:30「神使基督成為我們的智慧」）"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "箴言正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "箴 8:22-30",
+          "targetRef": "約 1:1-3, 西 1:15-17",
+          "theologicalEcho": "【太初創造之神聖智慧與永恆道】：智慧在創造之初與神同在，新約使徒指明這正是太初有道、萬有藉祂而造的基督"
+        },
+        {
+          "sourceRef": "箴 3:11-12",
+          "targetRef": "來 12:5-6, 啟 3:19",
+          "theologicalEcho": "【父對愛子的管教】：不可輕看主的管教，因為主所愛的祂必管教；希伯來書以此安慰在逼迫試煉中受苦的基督徒"
+        },
+        {
+          "sourceRef": "箴 25:21-22",
+          "targetRef": "羅 12:20",
+          "theologicalEcho": "【把炭火堆在仇敵頭上】：仇敵餓了給他吃渴了給他喝，保羅直接引用作為基督徒以善勝惡、活出天國之愛的實踐律"
+        }
+      ]
     }
   },
   "21": {
@@ -6368,6 +6928,31 @@
         }
       ],
       "christologicalCenter": "傳道書不是悲觀厭世的虛無哲學，而是徹底粉碎世俗偶像的「福音犁頭」：它驅使人看透日光之下的無常與幻滅，轉而定睛於那位賜下復活與豐盛永生的日光之上基督。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "קֹהֶלֶת (Qohelet,「傳道者/召集人」) / Ἐκκλησιαστής (Ekklesiastes) / Liber Ecclesiastes",
+      "canonicalOrder": "舊約聖卷五小卷之三 (Megilloth #3) / 住棚節慶典研讀思想人生之書",
+      "historicalEra": "所羅門王晚年極盡富貴榮華反思時期 (約主前 935 年)",
+      "writingPeriod": "所羅門王晚年撰寫 (約主前 935 年)",
+      "geopoliticalContext": "以色列全盛繁華期，世俗財富、知識、享樂與權力達到頂點，卻看透日光之下的極致虛空",
+      "primaryLiteraryGenre": "自傳式哲學反思剖析、批判性智慧散文、哀歌格言、存在主義反轉認信",
+      "covenantAnchor": "終極審判信仰：「敬畏神，謹守祂的誡命，這是人所當盡的本分，因為人所做的事連一切隱藏的事神都必審問」 (傳 12:13-14)",
+      "christologicalArchetype": "打破「日光之下虛空」的唯一日光之上主宰基督、唯一的好牧人 (12:11)、賦予短暫生命永恆重量的復活者"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "傳道書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "傳 1:2, 3:11",
+          "targetRef": "羅 8:20-22, 約 4:14",
+          "theologicalEcho": "【受造之物服在虛妄之下】：保羅指出受造之物服在虛空之下不是自己願意，乃在乎那叫他如此的，盼望脫離敗壞轄制得享基督自由"
+        },
+        {
+          "sourceRef": "傳 12:13-14",
+          "targetRef": "林後 5:10, 羅 14:10-12",
+          "theologicalEcho": "【基督台前的終極審判】：神審問一切隱秘善惡，新約定性為眾人都要在基督台前顯露出來，按所行的受報"
+        }
+      ]
     }
   },
   "22": {
@@ -6655,6 +7240,31 @@
         }
       ],
       "christologicalCenter": "雅歌被歷代聖徒譽為「聖經中的至聖所」：它不僅聖化了一夫一妻神聖純潔的人間婚姻，更深刻揭示了基督（神聖新郎）與祂用寶血贖回的教會（蒙愛新娘）之間永恆相契的神聖婚約。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "שִׁיר הַשִּׁירִים (Shir HaShirim,「歌中的歌/妙歌」) / ᾎσμα ᾈσμάτων (Asma Asmaton) / Canticum Canticorum",
+      "canonicalOrder": "舊約聖卷五小卷之首 (Megilloth #1) / 逾越節必誦讀神聖至聖之歌",
+      "historicalEra": "所羅門王統治早中期 (約主前 960 年前後)",
+      "writingPeriod": "所羅門極盛時期創作 (約主前 960 年)",
+      "geopoliticalContext": "北國書念鄉間純樸葡萄園田野與耶路撒冷奢華大理石王宮象牙樓",
+      "primaryLiteraryGenre": "希伯來婚禮抒情對話詩歌集、愛情頌歌、男女對唱互答、花園葡萄園自然象徵主義",
+      "covenantAnchor": "盟約之愛的專一忠貞：「愛情如死之堅強，嫉恨如陰間之殘忍」 (歌 8:6-7)",
+      "christologicalArchetype": "基督是新郎、教會是純潔新婦；基督為新婦捨命、新婦切切尋求愛良人、羔羊婚娶之永恆筵席 (啟 19:7)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "雅歌正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "歌 2:16, 6:3",
+          "targetRef": "弗 5:25-32, 啟 19:7-9",
+          "theologicalEcho": "【良人屬我我也屬良人之盟約聯合】：丈夫愛妻子正如基督愛教會為教會捨命，二人成為一體的極大奧秘指著基督和教會說的"
+        },
+        {
+          "sourceRef": "歌 8:6-7",
+          "targetRef": "約 15:13, 羅 8:35-39",
+          "theologicalEcho": "【無可隔絕的如死之堅強大愛】：大水不能息滅洪水不能淹沒，預表基督十字架無與倫比的大愛，沒有任何受造之物能使我們與基督的愛隔絕"
+        }
+      ]
     }
   },
   "23": {
@@ -6997,6 +7607,36 @@
         }
       ],
       "christologicalCenter": "以賽亞書是整本聖經基督論的皇冠：基督既是那受膏作榮耀政權的奇妙策士、全能的神、永在的父、和平的君，又是那位在十字架上甘願如羊羔被牽往宰殺之地的受苦僕人。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "יְשַׁעְיָהוּ (Yeshayahu,「耶和華是拯救」) / Ἠσαΐας (Esaias) / Liber Isaiae",
+      "canonicalOrder": "舊約後先知書第 1 卷 (Latter Prophets #1) / 大先知書首卷 /「第五福音」救贖巨著",
+      "historicalEra": "烏西雅、約坦、亞哈斯、希西家年間 (主前 740–680 年，歷時逾半世紀)",
+      "writingPeriod": "先知以賽亞晚年瑪拿西暴政殉道前集成全書 (約主前 680 年)",
+      "geopoliticalContext": "新亞述帝國提格拉特帕拉沙爾三世西侵滅北國、西拿基立圍困耶路撒冷；預言新巴比倫崛起滅猶大與波斯居魯士釋放選民",
+      "primaryLiteraryGenre": "先知神諭審判宣告詩歌、彌賽亞預言頌歌、歷史敘事夾敘 (36-39章)、安慰救贖宏偉史詩 (40-66章)",
+      "covenantAnchor": "大衛永遠慈愛之聖約與新天新地之造化 (賽 55:3, 65:17)",
+      "christologicalArchetype": "以馬內利童女懷孕 (7:14)、和平之子政權降臨 (9:6)、耶西殘幹之苗 (11:1)、受苦義僕被扎代贖 (53章)、受膏傳好信息者 (61:1)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "以賽亞書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "賽 7:14, 9:6",
+          "targetRef": "太 1:22-23, 路 1:31-33",
+          "theologicalEcho": "【以馬內利童女懷孕】：必有童女懷孕生子，人要稱祂的名為以馬內利；神與我們同在，嬰孩降生政權擔在祂肩上"
+        },
+        {
+          "sourceRef": "賽 53:4-6, 12",
+          "targetRef": "太 8:17, 彼前 2:22-25, 徒 8:32-35",
+          "theologicalEcho": "【受苦義僕代贖救恩核心】：祂為我們的過犯受害，為我們的罪孽壓傷；使徒彼得與腓利向太監講道皆以此確立十字架贖罪代受刑罰真理"
+        },
+        {
+          "sourceRef": "賽 61:1-2",
+          "targetRef": "路 4:16-21",
+          "theologicalEcho": "【禧年恩典宣告應驗】：主在拿撒勒會堂宣讀「主的靈在我身上差遣我傳福音給貧窮人」，親口宣告「今天這經應驗在你們耳中了」"
+        }
+      ]
     }
   },
   "24": {
@@ -7312,6 +7952,36 @@
         }
       ],
       "christologicalCenter": "耶利米書是全本舊約首次明確啟示「新約」(New Covenant / B'rit Chadashah) 的神學巔峰；基督以自己受難的無瑕寶血成全了此約，將活潑的聖靈與律法徹底銘刻於每一位信徒心版之上。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "יִרְמְיָהוּ (Yirmeyahu,「耶和華建立/高升」) / Ἱερεμίας (Ieremias) / Liber Ieremiae",
+      "canonicalOrder": "舊約大先知書第 2 卷 / 流淚先知之痛切心腸與新約先聲",
+      "historicalEra": "約西亞十三年直到耶路撒冷被毀流亡埃及 (主前 627–580 年，歷時逾四十年)",
+      "writingPeriod": "耶利米口授、文士巴錄筆錄 (約主前 585–575 年)",
+      "geopoliticalContext": "亞述崩潰、新巴比倫崛起尼布甲尼撒三圍聖城焚殿；猶大親埃及政客幻滅與背約叛神之慘劇",
+      "primaryLiteraryGenre": "先知控訴公文 (Rib)、象徵性行動演劇（打碎瓦瓶、負木軛鐵軛）、個人懺悔獨白 (Confessions)、【新約】神聖預言",
+      "covenantAnchor": "【新約 New Covenant】：律法銘刻心版、罪愆被赦不再記念 (耶 31:31-34)",
+      "christologicalArchetype": "大衛公義苗裔王 (23:5-6)、流淚為民祈禱受迫害先知原型、設立新約寶血的中保基督"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "耶利米書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "耶 31:31-34",
+          "targetRef": "路 22:20, 林前 11:25, 來 8:8-12, 10:16-17",
+          "theologicalEcho": "【新約設立與赦罪恩典】：耶和華宣告要立新約，將律法寫在心版上；希伯來書全章引用，宣告基督是更美新約之中保"
+        },
+        {
+          "sourceRef": "耶 23:5-6, 33:15",
+          "targetRef": "林前 1:30, 羅 3:21-22",
+          "theologicalEcho": "【大衛公義的苗裔】：神要給大衛興起一個公義的苗裔，祂的名必稱為「耶和華我們的義」；新約宣告基督成為我們的公義"
+        },
+        {
+          "sourceRef": "耶 9:23-24",
+          "targetRef": "林前 1:31, 林後 10:17",
+          "theologicalEcho": "【誇口的當指著主誇口】：智慧人不要因智慧誇口，勇士不要因勇力誇口；誇口的當指著認識主誇口，使徒保羅兩度引用"
+        }
+      ]
     }
   },
   "25": {
@@ -7611,6 +8281,31 @@
         }
       ],
       "christologicalCenter": "耶利米哀歌在漫天瓦礫與灰燼中指引出唯一的生命之光：主耶穌基督親自步入這充滿哭泣咒詛的破敗廢墟世界，在十字架上為我們徹底承擔罪罰，帶來每早晨皆是新鮮的浩瀚慈愛。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "אֵיכָה (Eikhah,「何竟！」) / Θρῆνοι (Threnoi) / Lamentationes",
+      "canonicalOrder": "舊約聖卷五小卷之四 (Megilloth #4) / 亞筆月九日聖殿被毀哀悼日誦讀",
+      "historicalEra": "耶路撒冷被巴比倫火焚城破剛陷落之際 (主前 586 年)",
+      "writingPeriod": "聖城陷落浩劫後第一時間由先知耶利米親筆哀悼 (約主前 586–585 年)",
+      "geopoliticalContext": "巴比倫大軍屠城撤離後的耶路撒冷斷壁殘垣、汲淪溪廢墟、民不聊生人相食悲劇",
+      "primaryLiteraryGenre": "希伯來離合字母哀歌（Acrostic Lament, 1, 2, 4, 5章各22節，3章66節）、哀歌節奏 (Qinoth 3:2拍律)",
+      "covenantAnchor": "公義審判深淵中之恩典堅信：「我們不致消滅是出於耶和華諸般的慈愛，每早晨這都是新的」 (哀 3:22-24)",
+      "christologicalArchetype": "客西馬尼與十字架上為耶路撒冷哀哭的基督 (路 19:41)、在神烈怒杖下替罪人承擔極致痛苦的受苦者"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "耶利米哀歌正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "哀 3:22-23",
+          "targetRef": "羅 8:38-39, 來 10:23",
+          "theologicalEcho": "【每早晨都是新的永恆慈愛】：神堅定不移的慈愛（Hesed）永不斷絕，成為歷代聖徒在絕望困苦中仰望神信實的基石"
+        },
+        {
+          "sourceRef": "哀 1:12",
+          "targetRef": "太 27:39-44",
+          "theologicalEcho": "【過路人無動於衷之痛苦深淵】：「你們一切過路的人哪，這事你們不介意嗎？」預表十架上耶穌受過路人譏誚、獨自承擔神忿怒之痛"
+        }
+      ]
     }
   },
   "26": {
@@ -7933,6 +8628,36 @@
         }
       ],
       "christologicalCenter": "以西結書的榮耀中心是基督：祂是那「親自尋找照看祂羊群」的好牧人真大衛王（結 34:11-24），祂更是那位使神榮耀永恆常在的「耶和華的所在」(Yahweh Shammah)。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "יְחֶזְקֵאל (Yekhezqel,「神必賜力量」) / Ἰεζεκιήλ (Iezekiel) / Liber Ezechielis",
+      "canonicalOrder": "舊約大先知書第 3 卷 / 異象啟示大師與榮光歸回祭司先知",
+      "historicalEra": "被擄第二批（約雅斤王被擄第五年）至被擄第二十七年 (主前 593–571 年)",
+      "writingPeriod": "巴比倫迦巴魯河畔提勒亞畢難民營 (約主前 570 年成書)",
+      "geopoliticalContext": "新巴比倫帝國腹地，面向流亡難民，同時遙觀耶路撒冷終局審判與周邊七國列邦命運",
+      "primaryLiteraryGenre": "狂暴啟示異象（四活物戰車、枯骨復生、末世聖殿）、默劇象徵動作、長篇神學寓言故事、祭儀法規",
+      "covenantAnchor": "和平之約與賜予新心新靈之盟約 (結 36:26-27, 37:26-28)",
+      "christologicalArchetype": "好牧人大衛王牧養全羊群 (34:23-24)、賜下肉心與內住聖靈 (36:26)、使枯骨復生的生命之主 (37章)、聖殿生命水湧流萬方 (47章)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "以西結書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "結 34:11-16, 23",
+          "targetRef": "約 10:11-16, 彼前 5:4",
+          "theologicalEcho": "【神親自尋找群羊的大牧人基督】：神斥責以色列假牧人只知牧養自己，宣告神要親自作牧人立僕人大衛作牧人；耶穌親證「我是好牧人」"
+        },
+        {
+          "sourceRef": "結 36:25-27",
+          "targetRef": "約 3:5, 多 3:5, 林後 5:17",
+          "theologicalEcho": "【清水潔淨賜新心與新靈】：除去石心賜肉心，將我的靈放在你們裡面；耶穌對尼哥底母論「從水和聖靈生」正是此處的直接應用"
+        },
+        {
+          "sourceRef": "結 47:1-12",
+          "targetRef": "啟 22:1-2, 約 7:38",
+          "theologicalEcho": "【殿門流出生命水河與生命樹果】：聖殿流出的活水滋潤大地兩岸生命樹每月結果；啟示錄新耶路撒冷寶座生命水河完美成全"
+        }
+      ]
     }
   },
   "27": {
@@ -8275,6 +9000,36 @@
         }
       ],
       "christologicalCenter": "但以理書是啟示錄的舊約雙生鑰匙：基督是那粉碎世俗一切驕傲帝國的天石，也是承受全宇宙萬民敬拜、國度直到永永遠遠的萬王之王基督。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "דָּנִיֵּאל (Daniyel,「神是我的審判官」) / Δανιήλ (Daniel) / Liber Danielis",
+      "canonicalOrder": "希伯來正典聖卷第 9 卷 (Ketuvim #9) / 舊約啟示文學巔峰與帝國全景",
+      "historicalEra": "巴比倫第一次擄掠（約雅敬三年）至波斯居魯士三年 (主前 605–536 年，跨越七十年)",
+      "writingPeriod": "波斯統治初期由宰相但以理親手完成 (約主前 535 年)",
+      "geopoliticalContext": "巴比倫帝國宮廷（尼布甲尼撒、伯沙撒）與瑪代波斯帝國中樞（大利烏、居魯士）",
+      "primaryLiteraryGenre": "希伯來文（1章, 8-12章）與亞蘭文（2:4-7:28國際公文）雙語寫作、法庭傳奇敘事、宏大末世啟示文學、七十個七歷史密碼",
+      "covenantAnchor": "天國永存聖約：「神必另立一國永不敗壞，要打碎滅絕那一切國，這國卻要存到永遠」 (但 2:44, 7:14)",
+      "christologicalArchetype": "非人手鑿出的砸碎巨像房角石 (2:34-35)、火窯中同在面貌如「神子」的第四人 (3:25)、「駕雲而來的人子得永遠權柄」(7:13-14)、七十個七受膏者被剪除 (9:26)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "但以理書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "但 7:13-14",
+          "targetRef": "太 24:30, 26:64, 啟 1:7, 14:14",
+          "theologicalEcho": "【人子駕天雲降臨得國】：耶穌在大祭司公會受審時宣告「你們要看見人子坐在全能者的右邊駕著天上的雲降臨」，大祭司因而撕裂衣服定祂褻瀆"
+        },
+        {
+          "sourceRef": "但 9:24-27",
+          "targetRef": "太 24:15, 可 13:14",
+          "theologicalEcho": "【七十個七與行毀壞可憎的】：受膏者被剪除成全永遠的義，但以理所說那行毀壞可憎的站在聖地，耶穌親引警告聖殿將臨浩劫"
+        },
+        {
+          "sourceRef": "但 12:2",
+          "targetRef": "約 5:28-29, 啟 20:12-13",
+          "theologicalEcho": "【睡在塵土中的終極復活】：睡在塵土中的必有多人復醒，其中有得永生的，有受羞辱永遠被憎惡的；耶穌宣告行善的復活得生行惡的復活定罪"
+        }
+      ]
     }
   },
   "28": {
@@ -8552,6 +9307,41 @@
         }
       ],
       "christologicalCenter": "何西阿書是三一真神對罪人最深沉、心碎的恩典告白：「以法蓮哪，我怎能捨棄你？」(何 11:8)；基督在各各他十字架上承受了神聖心碎的刑罰，徹底成全了不離不棄的永恆聖約之愛。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "הוֹשֵׁעַ (Hoshea,「拯救」) / Ὡσηέ (Hosee) / Liber Osee",
+      "canonicalOrder": "舊約十二小先知書首卷 (The Twelve #1) / 不離不棄盟約之愛史詩",
+      "historicalEra": "北國耶羅波安二世末期至撒瑪利亞陷落前夕 (主前 755–715 年)",
+      "writingPeriod": "北國滅亡前後由何西阿完成 (約主前 715 年)",
+      "geopoliticalContext": "北國以色列軍事政變頻繁（四王遭暗殺）、拜金牛犢巴力偶像、向埃及亞述兩面搖擺",
+      "primaryLiteraryGenre": "先知生活先知性悲劇婚姻象徵行動（娶淫婦歌篾生三子）、法庭訴訟神諭、深情父子慈愛挽歌",
+      "covenantAnchor": "【堅定不移的盟約之愛 Hesed】：「我聘你永遠歸我為妻，以仁義、公平、慈愛、憐憫聘你歸我」 (何 2:19-20)",
+      "christologicalArchetype": "重價買回背叛淫婦的救贖者丈夫基督、第三天叫我們復起生活、神子由埃及召出來"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "何西阿書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "何 11:1",
+          "targetRef": "太 2:15",
+          "theologicalEcho": "【從埃及召出我的兒子來】：馬太福音直接引用，表明神子耶穌避難埃及再回迦南，真實重演並成全了真以色列長子的救贖路程"
+        },
+        {
+          "sourceRef": "何 6:6",
+          "targetRef": "太 9:13, 12:7",
+          "theologicalEcho": "【我喜愛憐恤不喜愛祭祀】：耶穌兩次引用此處嚴斥法利賽人只顧宗教律例規條，卻藐視憐憫與人靈魂的罪咎"
+        },
+        {
+          "sourceRef": "何 1:10, 2:23",
+          "targetRef": "羅 9:25-26, 彼前 2:10",
+          "theologicalEcho": "【非我民變為我民的外邦恩召】：從前算不得子民，現在卻作了神的子民；保羅與彼得引用宣告外邦人藉信進入神國後嗣"
+        },
+        {
+          "sourceRef": "何 13:14",
+          "targetRef": "林前 15:55",
+          "theologicalEcho": "【死啊你的毒鉤在哪裡】：死啊你的毒鉤在哪裡？陰間啊你的得勝在哪裡？保羅宣告基督復活吞滅死亡的終極凱歌"
+        }
+      ]
     }
   },
   "29": {
@@ -8838,6 +9628,31 @@
         }
       ],
       "christologicalCenter": "約珥書是新約「聖靈與宣教時代」的總序曲：基督是那賜下聖靈保惠師的升天君王，祂的名正是「凡求告就必得救」的萬名之上的至聖之名。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "יוֹאֵל (Yo'el,「耶和華是神」) / Ἰωήλ (Ioel) / Liber Ioel",
+      "canonicalOrder": "舊約十二小先知書第 2 卷 (The Twelve #2) / 五旬節聖靈澆灌大憲章",
+      "historicalEra": "蝗災浩劫重創猶大年間，年代多數學者定於早期約阿施或被擄回歸期 (約主前 835 年或 400 年)",
+      "writingPeriod": "猶大耶路撒冷聖殿祭司圈 (約主前 9 世紀或 5 世紀)",
+      "geopoliticalContext": "四重蝗蟲大軍噬啃全境大地荒涼，預兆末世審判大軍由北方而來",
+      "primaryLiteraryGenre": "末世災難啟示預言、祭司披麻哭泣呼籲悔改神諭、聖靈澆灌末世榮景長詩",
+      "covenantAnchor": "撕裂心腸悔改恩約：「你們要撕裂心腸，不撕裂衣服，歸向耶和華你們的神」 (珥 2:13)",
+      "christologicalArchetype": "五旬節從寶座澆灌凡有血氣的真保惠師、約沙法谷公義審判萬民的萬王之王、凡求告主名就必得救的主"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "約珥書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "珥 2:28-32",
+          "targetRef": "徒 2:16-21, 羅 10:13",
+          "theologicalEcho": "【五旬節聖靈如火澆灌凡有血氣的】：彼得在使徒行傳第二章宣告五旬節神蹟正是約珥預言的直接應驗，凡求告主名的就必得救"
+        },
+        {
+          "sourceRef": "珥 3:12-14",
+          "targetRef": "太 25:31-32, 啟 14:14-20",
+          "theologicalEcho": "【約沙法谷踐踏烈怒壓酒池】：萬民湧向斷定谷，鐮刀揮下葡萄壓酒池；啟示錄終末哈米吉多頓大審判直接繼承此審判意象"
+        }
+      ]
     }
   },
   "30": {
@@ -9131,6 +9946,31 @@
         }
       ],
       "christologicalCenter": "阿摩司書以大衛帳幕的全面重建震撼收官：基督以受死復活將那原已倒塌瓦解的屬地大衛王權，在屬天的新約教會中重新立定，招聚各國各族各民同享恩典基業。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "עָמוֹס (Amos,「重擔/背負重擔者」) / Ἀμώς (Amos) / Liber Amos",
+      "canonicalOrder": "舊約十二小先知書第 3 卷 (The Twelve #3) / 公義如江河滾滾社會正義咆哮",
+      "historicalEra": "南國烏西雅與北國耶羅波安二世年間，地震前二年 (約主前 760–750 年)",
+      "writingPeriod": "提哥亞鄉間牧人受差赴北國伯特利傳講後筆錄 (約主前 750 年)",
+      "geopoliticalContext": "北國經濟極度奢靡、貧富嚴重分化、宗教形式主義猖獗，北臨強悍新興亞述帝國",
+      "primaryLiteraryGenre": "列邦審判連環套詩（「三番四次犯罪」）、五大災難異象（蝗蟲、烈火、準繩、夏果、祭壇傾塌）、大衛倒塌帳幕復興歌",
+      "covenantAnchor": "公義正道盟約：「唯願公平如大水滾滾，使公義如江河滔滔」 (摩 5:24)",
+      "christologicalArchetype": "獅子吼叫主掌審判、大衛倒塌帳幕之重新修造立起（耶路撒冷大會外邦歸主樞紐）(9:11-12)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "阿摩司書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "摩 9:11-12",
+          "targetRef": "徒 15:15-18",
+          "theologicalEcho": "【重建大衛倒塌的帳幕收納萬邦】：使徒雅各在耶路撒冷大會引用此處為核心神學定案，證明外邦信徒不需行割禮歸主早已在救贖藍圖中"
+        },
+        {
+          "sourceRef": "摩 5:21-24",
+          "targetRef": "太 23:23, 雅 2:1-4",
+          "theologicalEcho": "【恨惡虛偽宗教筵席只要公平公義】：耶穌痛斥法利賽人獻上薄荷茴香卻廢了律法上更重的事（公義、憐憫、信實），與阿摩司遙相呼應"
+        }
+      ]
     }
   },
   "31": {
@@ -9400,6 +10240,31 @@
         }
       ],
       "christologicalCenter": "俄巴底亞書最後一句話是全本聖經的終極核心——「國度就歸耶和華了！」(The Kingdom Shall Be the LORD's)；這宣告在耶穌基督的受死復活與再臨審判中得著了完全不可撼動的勝利。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "עֹבַדְיָה (Ovadyah,「耶和華的僕人」) / Ὀβδιού (Obdiou) / Liber Abdiae",
+      "canonicalOrder": "舊約十二小先知書第 4 卷 (The Twelve #4) / 全舊約最短書卷（僅21節）/ 以東狂傲覆滅記",
+      "historicalEra": "耶路撒冷被巴比倫攻破城陷之際，以東落井下石 (主前 586 年前後)",
+      "writingPeriod": "主前 586 年聖城被毀後不久寫就 (約主前 586–583 年)",
+      "geopoliticalContext": "死海以南西珥山以東王國（彼特拉高聳岩穴懸崖天險），坐擁商道咽喉狂傲自恃",
+      "primaryLiteraryGenre": "專論外邦毀滅神諭 (Oracles against Foreign Nations)、兄弟背叛復仇哀告詩、錫安國度終極得勝歌",
+      "covenantAnchor": "雅各與以東之約：凡祝福以色列的必蒙福，咒詛以色列的必受咒詛 (創 27:40, 俄 1:15)",
+      "christologicalArchetype": "錫安山拯救者登上王位、國度歸於耶和華基督永遠掌權 (21節)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "俄巴底亞書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "俄 1:21",
+          "targetRef": "啟 11:15, 19:16",
+          "theologicalEcho": "【國度就歸耶和華了】：全書終極宣告「國度就歸耶和華了」，成為啟示錄第七號吹響宣告世上的國成了我主和主基督的國之宏偉先聲"
+        },
+        {
+          "sourceRef": "俄 1:3-4",
+          "targetRef": "雅 4:6, 彼前 5:5",
+          "theologicalEcho": "【狂傲如鷹高飛必被拉下】：你雖如鷹高飛在星宿中搭窩我必拉下你；神阻擋驕傲的人，賜恩給謙卑的人"
+        }
+      ]
     }
   },
   "32": {
@@ -9684,6 +10549,31 @@
         }
       ],
       "christologicalCenter": "約拿書中最重要的基督論宣誓是——「救恩出於耶和華！」(Salvation is of the LORD, 拿 2:9)；耶穌基督藉著十字架三日三夜的受死與復活，成就了全人類超越民族界限的偉大救恩。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "יוֹנָה (Yonah,「鴿子」) / Ἰωνᾶς (Ionas) / Liber Ionae",
+      "canonicalOrder": "舊約十二小先知書第 5 卷 (The Twelve #5) / 贖罪日必讀普世外邦憐憫神劇",
+      "historicalEra": "北國耶羅波安二世年間 (主前 780–750 年)",
+      "writingPeriod": "先知約拿返國後撰寫 (約主前 760 年)",
+      "geopoliticalContext": "地中海西岸約帕港至大帝國亞述首都尼尼微（底格里斯河畔血腥大都會）",
+      "primaryLiteraryGenre": "諷刺傳記敘事文體、深海魚腹詩篇禱告、先知心理反差荒誕神劇、蓖麻樹道德大哉問",
+      "covenantAnchor": "普世恩典跨越國界盟約：「我知道你是有恩典有憐憫的神，不輕易發怒有豐盛的慈愛」 (拿 4:2)",
+      "christologicalArchetype": "「約拿的神蹟」三日三夜在魚腹預表基督死而復活 (太 12:40)、比約拿更大者的救恩臨到外邦"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "約拿書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "拿 1:17, 2:10",
+          "targetRef": "太 12:39-41, 16:4, 路 11:29-32",
+          "theologicalEcho": "【約拿三日三夜神蹟直接預表受死復活】：耶穌向求神蹟的世代宣告除了先知約拿的神蹟再沒有神蹟給他們看；約拿三日三夜在大魚腹中，人子也要三日三夜在地裡頭"
+        },
+        {
+          "sourceRef": "拿 4:11",
+          "targetRef": "約 3:16, 提前 2:4",
+          "theologicalEcho": "【神愛十二萬外邦生命之普世胸懷】：神愛惜尼尼微不能分辨左手右手的人與牲畜，預表神愛世人甚至將獨生子賜給他們，不願一人沉淪"
+        }
+      ]
     }
   },
   "33": {
@@ -9953,6 +10843,36 @@
         }
       ],
       "christologicalCenter": "彌迦書字字句句閃耀著基督的光芒：祂既是那位從亙古就有的伯利恆嬰孩和平之君（彌 5:2, 5「這人必作我們的平安」），又是那位以無比恩典將我們罪孽投於深海的奇妙上帝。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "מִיכָה (Mikhah,「誰能像耶和華？」) / Μιχαίας (Michaias) / Liber Michaeae",
+      "canonicalOrder": "舊約十二小先知書第 6 卷 (The Twelve #6) / 伯利恆彌賽亞降生地標",
+      "historicalEra": "南國約坦、亞哈斯、希西家年間 (主前 735–700 年，與以賽亞同時代)",
+      "writingPeriod": "希西家王宗教改革期間寫成 (約主前 705–700 年)",
+      "geopoliticalContext": "猶大山地非利士平原交界鄉村摩利沙，親歷亞述西拿基立大軍踐踏猶大各城慘狀",
+      "primaryLiteraryGenre": "公義法庭訴訟神諭、地名雙關諷刺哀歌、審判與復興交錯結構、行公義好憐憫金律箴言",
+      "covenantAnchor": "亞伯拉罕與雅各應許之信實：「你向雅各發誠實，向亞伯拉罕施慈愛」 (彌 7:20)",
+      "christologicalArchetype": "彌賽亞降生猶大伯利恆以法他 (5:2)、其根源從亙古從太初就有、掌權牧養群羊的和平君王"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "彌迦書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "彌 5:2",
+          "targetRef": "太 2:5-6, 約 7:42",
+          "theologicalEcho": "【彌賽亞降生伯利恆精準預言】：伯利恆以法他啊你在猶大諸城中為小，將來必有一位從你那裡出來在以色列中作掌權者，其根源從亙古就有；祭司長以此指引東方博士"
+        },
+        {
+          "sourceRef": "彌 6:8",
+          "targetRef": "太 23:23, 雅 1:27",
+          "theologicalEcho": "【行公義好憐憫存謙卑之心】：世人哪耶和華已指示你何為善，祂向你所要的是什麼呢？只要你行公義、好憐憫、存謙卑的心與你的神同行"
+        },
+        {
+          "sourceRef": "彌 7:6",
+          "targetRef": "太 10:35-36, 路 12:53",
+          "theologicalEcho": "【因真理人的仇敵就是自己家裡的人】：兒子藐視父親媳婦與婆婆為仇，耶穌指明跟隨十字架必然面臨人際割捨與價值對決"
+        }
+      ]
     }
   },
   "34": {
@@ -10222,6 +11142,31 @@
         }
       ],
       "christologicalCenter": "那鴻書是一部神聖公義伸冤的頌歌：基督是那踏破仇敵毒蛇頭顱的大能戰士，祂的十字架粉碎了一切壓迫聖徒的黑暗霸權，為信靠祂的人成就永遠的平安之約。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "נַחוּם (Nakhum,「安慰/撫慰」) / Ναούμ (Naoum) / Liber Nahum",
+      "canonicalOrder": "舊約十二小先知書第 7 卷 (The Twelve #7) / 血腥尼尼微覆滅戰歌",
+      "historicalEra": "埃及底比斯（挪亞捫）被毀 (主前 663 年) 與尼尼微陷落 (主前 612 年) 之間 (約主前 650–620 年)",
+      "writingPeriod": "猶大伊勒歌斯先知拿鴻寫就 (約主前 640 年)",
+      "geopoliticalContext": "暴虐殘忍的新亞述帝國（亞述巴尼拔盛極而衰），殘酷剝削列邦",
+      "primaryLiteraryGenre": "神聖戰士神顯威嚴長詩 (Theophany)、軍事攻城陷落現場直擊戰歌、血腥流血之城葬禮諷刺哀歌",
+      "covenantAnchor": "受壓迫選民之安慰恩約：「耶和華本為善，在患難的日子作人的避難所，並且認得那些投靠祂的人」 (鴻 1:7)",
+      "christologicalArchetype": "報佳音傳平安者的腳蹤登山 (1:15)、審判粉碎地上殘暴強權的公義得勝基督"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "那鴻書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "鴻 1:15",
+          "targetRef": "羅 10:15, 弗 6:15",
+          "theologicalEcho": "【報佳音傳平安者登山之美腳】：看哪有報好信傳平安之人的腳登山！使徒保羅引伸為宣講基督和平福音使者之美麗腳蹤"
+        },
+        {
+          "sourceRef": "鴻 1:2-3",
+          "targetRef": "啟 19:11-16, 來 10:30-31",
+          "theologicalEcho": "【神忌邪施報粉碎強權暴虐】：耶和華不輕易發怒大有能力萬不以有罪的為無罪；終極成全於基督騎白馬以口中利劍擊殺列國暴政"
+        }
+      ]
     }
   },
   "35": {
@@ -10504,6 +11449,36 @@
         }
       ],
       "christologicalCenter": "哈巴谷書第 2 章第 4 節「惟義人因信得生」直接孕育了新約羅馬書與宗教改革運動的福音烈火；基督是我們信心的創始成終者，使信祂的人在苦難絕境中「穩行在高處」。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "חֲבַקּוּק (Khavakuk,「擁抱/緊緊攀附」) / Ἀμβακούμ (Ambakoum) / Liber Habacuc",
+      "canonicalOrder": "舊約十二小先知書第 8 卷 (The Twelve #8) / 靈魂深刻質詢與惟義人因信得生",
+      "historicalEra": "迦勒底新巴比倫崛起、猶大約雅敬王叛逆年間 (約主前 608–598 年)",
+      "writingPeriod": "巴比倫首次圍攻耶路撒冷前夕 (約主前 605 年)",
+      "geopoliticalContext": "殘暴殘酷的迦勒底騎兵狂風捲地席捲古代近東，行將滅亡猶大",
+      "primaryLiteraryGenre": "先知與神的兩次雙向靈魂問答辯論、五重「禍哉」諷刺哀歌、提幔紅海西奈神顯壯麗讚美琴歌 (第3章)",
+      "covenantAnchor": "因信稱義信仰憲章：「唯義人因信得生」 (哈 2:4)",
+      "christologicalArchetype": "義人因信得生磐石基督、即便無花果樹不發旺仍因救我的神歡欣喜樂 (3:17-18)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "哈巴谷書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "哈 2:4",
+          "targetRef": "羅 1:17, 加 3:11, 來 10:38",
+          "theologicalEcho": "【唯義人因信得生新約核心三部曲】：新約三大使徒書信皆以此句為最高綱領——羅馬書闡明「稱義」、加拉太書闡明「因信」、希伯來書闡明「得生與活著」"
+        },
+        {
+          "sourceRef": "哈 2:14",
+          "targetRef": "啟 11:15, 賽 11:9",
+          "theologicalEcho": "【認識耶和華榮耀知識充滿全地】：認識耶和華榮耀的知識要充滿遍地，好像水充滿洋海一般；基督國度完全降臨時之燦爛終局"
+        },
+        {
+          "sourceRef": "哈 3:17-19",
+          "targetRef": "腓 4:4, 11-13",
+          "theologicalEcho": "【超脫環境的靠主喜樂】：即使無花果樹不發旺葡萄樹不結果，我仍要因耶和華歡欣；保羅獄中「在主裡常常喜樂」的屬天骨氣"
+        }
+      ]
     }
   },
   "36": {
@@ -10782,6 +11757,31 @@
         }
       ],
       "christologicalCenter": "西番雅書第 3 章第 17 節是整本聖經中最溫柔動人的福音高潮：基督站在我們中間施行拯救，聖潔的上帝不再向我們發怒，反而在蒙救贖的兒女身上得著無比的滿足與歡呼歌唱。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "זְפַנְיָה (Tsefanyah,「耶和華所隱藏/珍藏」) / Σοφονίας (Sophonias) / Liber Sophoniae",
+      "canonicalOrder": "舊約十二小先知書第 9 卷 (The Twelve #9) / 耶和華大日烈火審判與錫安默然之愛",
+      "historicalEra": "猶大賢君約西亞王在位年間改革初期 (主前 640–609 年，約主前 630 年)",
+      "writingPeriod": "約西亞發現律法書大改革前夕寫就 (約主前 630–625 年)",
+      "geopoliticalContext": "瑪拿西五十五年遺毒偶像崇拜瀰漫、西徐亞人（Scythians）蹂躪近東、巴比倫蓄勢待發",
+      "primaryLiteraryGenre": "創世宇宙反向解體審判神諭、震怒之日號角宣告 (Dies Irae)、末世卑微謙卑餘民拯救頌歌",
+      "covenantAnchor": "謙卑餘民盟約與神在愛中默然喜樂 (番 2:3, 3:17)",
+      "christologicalArchetype": "在以色列中間的真正君王 (3:15)、「主在愛中向你默然愛你且為你歡呼」(3:17)、掃除一切仇敵定罪"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "西番雅書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "番 1:14-18",
+          "targetRef": "帖前 5:2-3, 啟 6:15-17",
+          "theologicalEcho": "【耶和華的大日降臨如忿怒之日】：那日是忿怒的日子、是急難困苦的日子；新約啟示錄羔羊烈怒之日與主的日子如賊降臨的直接依據"
+        },
+        {
+          "sourceRef": "番 3:14-17",
+          "targetRef": "太 21:5, 約 12:15, 路 1:30-33",
+          "theologicalEcho": "【錫安女子大聲歡呼主在中間】：錫安的女子應當歌唱，以色列啊應當歡呼！耶和華你的神在你們中間大有能力施行拯救，祂因你喜樂默然愛你"
+        }
+      ]
     }
   },
   "37": {
@@ -11066,6 +12066,31 @@
         }
       ],
       "christologicalCenter": "哈該書見證了神聖優先次序的偉大真理：耶穌基督是「萬國所羨慕的」(Desire of All Nations)，祂更是大衛王室永不墜落的神聖印戒，凡在基督裡同心建造神國者，工程永不動搖。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "חַגַּי (Khaggai,「節期的/節日」) / Ἀγγαῖος (Aggaios) / Liber Aggaei",
+      "canonicalOrder": "舊約十二小先知書第 10 卷 (The Twelve #10) / 被擄歸回重建聖殿先驅",
+      "historicalEra": "波斯大利烏王（大流士一世 Darius I）第二年六至九月，僅四個月 (主前 520 年)",
+      "writingPeriod": "主前 520 年底整理成書",
+      "geopoliticalContext": "波斯帝國統治下耶路撒冷歸回遺民，重建聖殿工程因敵對勢力停工十六年、民心思顧自家天花板住宅",
+      "primaryLiteraryGenre": "先知嚴肅省思勸誡神諭（「你們要省察自己的行為！」四篇信息）、神聖王權應許神諭",
+      "covenantAnchor": "聖靈內住與後殿榮耀大過前殿之約 (該 2:5, 9)",
+      "christologicalArchetype": "萬國所羨慕的必來到 (2:7)、所羅巴伯被立為神手中戴印的印戒（彌賽亞大衛正統印記）(2:23)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "哈該書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "該 2:6-7",
+          "targetRef": "來 12:26-28",
+          "theologicalEcho": "【震動天地海陸與得不能震動的國】：神宣告還要有一點思考我必震動天地滄海旱地；希伯來書指明受造之物都要被震動除去，唯有基督的國不能震動"
+        },
+        {
+          "sourceRef": "該 2:23",
+          "targetRef": "太 1:12-13, 路 3:27",
+          "theologicalEcho": "【所羅巴伯被立為印戒】：神逆轉耶利哥王約雅斤丟棄印戒之咒詛，立所羅巴伯為印戒，基督在家譜中承接大衛正統合法王權"
+        }
+      ]
     }
   },
   "38": {
@@ -11359,6 +12384,41 @@
         }
       ],
       "christologicalCenter": "撒迦利亞書是舊約彌賽亞預言的明珠：基督既是那騎驢入城的和平君王、三十塊銀錢被賣的好牧人，又是那在十字架上被扎肋旁、為全人類開闢洗除一切罪孽污穢永遠活泉的真神羔羊。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "זְכַרְיָה (Zekharyah,「耶和華記念」) / Ζαχαρίας (Zacharias) / Liber Zachariae",
+      "canonicalOrder": "舊約十二小先知書第 11 卷 (The Twelve #11) / 小先知書中最長啟示錄與彌賽亞全書",
+      "historicalEra": "波斯大利烏王第二至四年 (主前 520–518 年) 及晚年 (約主前 480 年)",
+      "writingPeriod": "祭司兼先知撒迦利亞完成 (約主前 480 年成全書)",
+      "geopoliticalContext": "波斯帝國希臘波斯戰爭前夕，聖殿復工奠基至希臘帝國亞歷山大遠征預言",
+      "primaryLiteraryGenre": "夜間八大神秘異象（番石榴樹騎馬者、四角與四匠人、量繩、約書亞換污衣、金燈台橄欖樹、飛卷、量器婦人、四車）、彌賽亞受難受刺長詩",
+      "covenantAnchor": "立約之血釋放被囚者與耶和華作全地唯一的王 (亞 9:11, 14:9)",
+      "christologicalArchetype": "大衛苗裔兼君王祭司兩職 (6:12-13)、謙遜騎驢駒進耶路撒冷的君王 (9:9)、三十塊錢工價被丟給窯戶 (11:12-13)、仰望被刺者扎心痛哭 (12:10)、擊打牧人羊就分散 (13:7)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "撒迦利亞書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "亞 9:9",
+          "targetRef": "太 21:4-5, 約 12:14-15",
+          "theologicalEcho": "【受難週君王騎驢進聖城】：錫安的民應當大大歡喜，看哪你的王來到你這裡！祂是公義的並且施行拯救，謙謙和和地騎著驢駒子"
+        },
+        {
+          "sourceRef": "亞 11:12-13",
+          "targetRef": "太 26:15, 27:3-10",
+          "theologicalEcho": "【三十塊銀錢工價丟給窯戶】：猶大以三十塊銀錢出賣主耶穌，後悔將錢丟在聖殿買窯戶一塊田，分毫不差精準成全先知神諭"
+        },
+        {
+          "sourceRef": "亞 12:10",
+          "targetRef": "約 19:37, 啟 1:7",
+          "theologicalEcho": "【仰望他們所扎的被刺救主】：他們必仰望我，就是他們所扎的，為祂悲哀如喪獨生子；十字架上兵丁扎祂肋旁流出血與水，末日萬族都要看見祂"
+        },
+        {
+          "sourceRef": "亞 13:7",
+          "targetRef": "太 26:31, 可 14:27",
+          "theologicalEcho": "【擊打牧人羊群就分散了】：耶穌在最後晚餐前往客西馬尼路上引此詩宣告門徒將要跌倒潰散，牧人親自承擔十架孤單擊打"
+        }
+      ]
     }
   },
   "39": {
@@ -11679,6 +12739,36 @@
         }
       ],
       "christologicalCenter": "瑪拉基書是全本舊約正典的壯麗休止符：它以先鋒使者施洗約翰的預告收筆，將全體信徒的渴望引向四百年後道成肉身、如公義日頭普照大地的救主耶穌基督。"
+    },
+    "bookDossier": {
+      "hebrewGreekTitle": "מַלְאָכִי (Mal'akhi,「我的使者」) / Μαλαχίας (Malachias) / Liber Malachiae",
+      "canonicalOrder": "舊約聖經第 39 卷 / 舊約全書壓軸終卷 / 銜接四百年兩約沉默期指望",
+      "historicalEra": "波斯統治尼希米返回書珊王宮後猶太社會信仰疲態期 (約主前 433–400 年)",
+      "writingPeriod": "舊約最後一位先知瑪拉基寫就 (約主前 430–420 年)",
+      "geopoliticalContext": "第二聖殿雖已落成，但熱情消退、祭司藐視祭壇獻瞎眼瘸腿祭物、休妻背約、十一奉獻被奪",
+      "primaryLiteraryGenre": "先知辯論體裁 (Disputation Speech, 提問—反駁—證實六重交鋒辯論)、煉金烈火審判神諭、立約使者預言",
+      "covenantAnchor": "利未祭司聖約與立約使者之約 (瑪 2:5, 3:1)",
+      "christologicalArchetype": "立約的使者忽然進入祂的殿 (3:1)、公義的日頭升起光線有醫治之能 (4:2)、以利亞（施洗約翰）在主大日之前先來轉回人心 (4:5-6)"
+    },
+    "canonicalIntertextuality": {
+      "tableTitle": "瑪拉基書正典互文與新約引用成全對照表",
+      "citations": [
+        {
+          "sourceRef": "瑪 3:1",
+          "targetRef": "太 11:10, 可 1:2, 路 7:27",
+          "theologicalEcho": "【差遣使者預備前面的道路】：我要差遣我的使者在我面前預備道路；三卷對觀福音共同指證施洗約翰正是那位開路先鋒"
+        },
+        {
+          "sourceRef": "瑪 4:2",
+          "targetRef": "路 1:78-79, 約 8:12",
+          "theologicalEcho": "【公義的日頭發出醫治光線】：向敬畏神名的人必有公義的日頭出現，其光線有醫治之能；清晨的日光從高天臨到我們，照亮坐在黑暗死蔭中的人"
+        },
+        {
+          "sourceRef": "瑪 4:5-6",
+          "targetRef": "太 11:14, 17:11-13, 路 1:17",
+          "theologicalEcho": "【先知以利亞再來轉回人心】：全本舊約以差遣先知以利亞使為父的心轉向兒女作結；天使與耶穌親證施洗約翰具有以利亞的心志能力，結束舊約開啟新約曙光"
+        }
+      ]
     }
   }
 };

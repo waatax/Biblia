@@ -51,13 +51,13 @@ def load_all_books():
 
 def run_round_1(all_books):
     print("\n" + "="*70)
-    print("▶ ROUND 1: 66-Book Schema & Structural Completeness (15 Core Dimensions)")
+    print("▶ ROUND 1: 66-Book Schema & Structural Completeness (17 Core Dimensions)")
     print("="*70)
     assert len(all_books) == 66, f"Expected 66 books, got {len(all_books)}"
 
     required_dimensions = [
         "meta", "academicPaper", "youthGuide", "macroStructureChart",
-        "geographyMap", "theologyMatrixChart",
+        "geographyMap", "theologyMatrixChart", "bookDossier", "canonicalIntertextuality",
         "historicalContext", "authorshipDebate", "theologyAndChrist",
         "literaryStructure", "keyWordsOriginal", "interpretiveIssues",
         "pastoralApplications", "expertCouncilPerspectives", "bibliography"
@@ -82,7 +82,7 @@ def run_round_1(all_books):
         for s in seats:
             assert s in exp and len(exp[s]) >= 10, f"Book #{book_no} missing or insufficient expert seat '{s}'"
 
-    print(f"  [PASS] All 66 Books (OT 39 + NT 27) successfully validated across all 15 core dimensions and 7 expert council seats.")
+    print(f"  [PASS] All 66 Books (OT 39 + NT 27) successfully validated across all 17 core dimensions and 7 expert council seats.")
 
 def run_round_2(all_books):
     print("\n" + "="*70)
@@ -242,13 +242,39 @@ def run_round_4(all_books):
         total_matrix_rows += len(rows)
         visual_artifacts_count += 1
 
-        # Strict requirement: AT LEAST 2 visual elements per book
-        assert visual_artifacts_count >= 2, f"Book #{book_no} has only {visual_artifacts_count} visual artifacts (< 2 required)"
+        # Visual 4: Canonical Book Dossier Profile Table
+        bd = b.get("bookDossier", {})
+        assert bd.get("hebrewGreekTitle"), f"Book #{book_no} missing hebrewGreekTitle"
+        assert bd.get("canonicalOrder"), f"Book #{book_no} missing canonicalOrder"
+        assert bd.get("historicalEra"), f"Book #{book_no} missing historicalEra"
+        assert bd.get("writingPeriod"), f"Book #{book_no} missing writingPeriod"
+        assert bd.get("geopoliticalContext"), f"Book #{book_no} missing geopoliticalContext"
+        assert bd.get("primaryLiteraryGenre"), f"Book #{book_no} missing primaryLiteraryGenre"
+        assert bd.get("covenantAnchor"), f"Book #{book_no} missing covenantAnchor"
+        assert bd.get("christologicalArchetype"), f"Book #{book_no} missing christologicalArchetype"
+        visual_artifacts_count += 1
 
-    print(f"  [PASS] All 66 Books verified to contain at least 2 (actual: 3) distinct visual artifacts per book.")
+        # Visual 5: Canonical Intertextuality & Quotation Echoes Table
+        ci = b.get("canonicalIntertextuality", {})
+        table_title = ci.get("tableTitle", "").strip()
+        citations = ci.get("citations", [])
+        assert table_title, f"Book #{book_no} missing canonicalIntertextuality tableTitle"
+        assert len(citations) >= 2, f"Book #{book_no} citations count ({len(citations)}) < 2"
+        for c in citations:
+            assert c.get("sourceRef"), f"Book #{book_no} citation missing sourceRef"
+            assert c.get("targetRef"), f"Book #{book_no} citation missing targetRef"
+            assert len(c.get("theologicalEcho", "")) >= 15, f"Book #{book_no} citation theologicalEcho too brief"
+        visual_artifacts_count += 1
+
+        # Strict requirement: AT LEAST 4 visual/tabular elements per book (actual: 5)
+        assert visual_artifacts_count >= 4, f"Book #{book_no} has only {visual_artifacts_count} visual artifacts (< 4 required)"
+
+    print(f"  [PASS] All 66 Books verified to contain at least 4 (actual: 5) distinct visual/tabular artifacts per book.")
     print(f"  [PASS] Visual 1: Total {total_stages} macro structural phases calibrated with chapter ranges, percentages, themes, and theological pivot anchors.")
     print(f"  [PASS] Visual 2: Total {total_geo_stops} biblical geography stops/stages calibrated across ancient Near East, Levant, and Greco-Roman worlds.")
     print(f"  [PASS] Visual 3: Total {total_matrix_rows} redemptive theological matrix contrast rows & 66 Christological fulfillment centers.")
+    print(f"  [PASS] Visual 4: 66 Canonical Dossier Profile Tables verified (original titles, historical eras, covenants, and archetypes).")
+    print(f"  [PASS] Visual 5: 66 Canonical Intertextuality Citation Tables verified (cross-testament links and theological fulfillment echoes).")
 
 def run_round_5(all_books):
     print("\n" + "="*70)
@@ -304,6 +330,8 @@ def run_round_6():
     assert "window.renderBookOutlineChartHtml = renderBookOutlineChartHtml;" in renderer_content
     assert "window.renderBookGeoMapHtml = renderBookGeoMapHtml;" in renderer_content
     assert "window.renderBookTheologyMatrixHtml = renderBookTheologyMatrixHtml;" in renderer_content
+    assert "window.renderBookDossierHtml = renderBookDossierHtml;" in renderer_content
+    assert "window.renderBookIntertextualityHtml = renderBookIntertextualityHtml;" in renderer_content
     assert "window.renderBookStudyGuideHtml = renderBookStudyGuideHtml;" in renderer_content
     assert "window.renderSurveyGuideHtml = renderSurveyGuideHtml;" in renderer_content
     assert "window.ALL_BOOKS_META = ALL_BOOKS_META;" in renderer_content
@@ -316,6 +344,8 @@ def run_round_6():
         "macro-chart-box", "macro-chart-track", "macro-stage-item", "stage-read-btn",
         "biblia-geo-map-box", "geo-map-track", "geo-stop-card", "geo-strategic-note",
         "biblia-theology-matrix-box", "theology-matrix-table", "theology-christ-center-box",
+        "biblia-book-dossier-box", "dossier-table", "section-book-dossier",
+        "biblia-intertextuality-box", "intertext-table",
         "section-expert-council", "expert-seat-card", "section-structure",
         "outline-flow-track", "outline-diagram-grid"
     ]
@@ -330,16 +360,20 @@ def run_round_6():
     for cls in [
         "section-youth-guide", "section-academic-paper", "macro-chart-box", "macro-stage-item",
         "biblia-geo-map-box", "geo-stop-card", "biblia-theology-matrix-box", "theology-matrix-table",
-        "book-intro-visuals-container"
+        "biblia-book-dossier-box", "biblia-intertextuality-box",
+        "book-intro-visuals-container", "book-intro-tabs-box", "intro-tab-btn"
     ]:
         assert f".{cls}" in style_content, f"Missing CSS rule for '.{cls}' in app/style.css"
 
-    # Check reader.js for dual visuals integration
+    # Check reader.js for 4-tab visual switcher integration
     reader_path = os.path.join(APP_DIR, "reader.js")
     with open(reader_path, "r", encoding="utf-8") as f:
         reader_content = f.read()
     assert "renderBookGeoMapHtml" in reader_content, "reader.js missing renderBookGeoMapHtml"
-    assert "book-intro-visuals-container" in reader_content, "reader.js missing book-intro-visuals-container"
+    assert "renderBookTheologyMatrixHtml" in reader_content, "reader.js missing renderBookTheologyMatrixHtml"
+    assert "renderBookDossierHtml" in reader_content, "reader.js missing renderBookDossierHtml"
+    assert "book-intro-tabs-box" in reader_content, "reader.js missing book-intro-tabs-box"
+    assert "intro-tab-btn" in reader_content, "reader.js missing intro-tab-btn"
 
     # Check index.html and book_guide.html script loading order
     index_path = os.path.join(APP_DIR, "index.html")
