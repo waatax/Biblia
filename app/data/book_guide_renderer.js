@@ -6,6 +6,405 @@
 (function(window) {
   'use strict';
 
+  var ALL_BOOKS_META = [
+  {
+    "no": 1,
+    "nameZh": "創世記",
+    "nameEn": "Genesis",
+    "testament": "OT"
+  },
+  {
+    "no": 2,
+    "nameZh": "出埃及記",
+    "nameEn": "Exodus",
+    "testament": "OT"
+  },
+  {
+    "no": 3,
+    "nameZh": "利未記",
+    "nameEn": "Leviticus",
+    "testament": "OT"
+  },
+  {
+    "no": 4,
+    "nameZh": "民數記",
+    "nameEn": "Numbers",
+    "testament": "OT"
+  },
+  {
+    "no": 5,
+    "nameZh": "申命記",
+    "nameEn": "Deuteronomy",
+    "testament": "OT"
+  },
+  {
+    "no": 6,
+    "nameZh": "約書亞記",
+    "nameEn": "Joshua",
+    "testament": "OT"
+  },
+  {
+    "no": 7,
+    "nameZh": "士師記",
+    "nameEn": "Judges",
+    "testament": "OT"
+  },
+  {
+    "no": 8,
+    "nameZh": "路得記",
+    "nameEn": "Ruth",
+    "testament": "OT"
+  },
+  {
+    "no": 9,
+    "nameZh": "撒母耳記上",
+    "nameEn": "1 Samuel",
+    "testament": "OT"
+  },
+  {
+    "no": 10,
+    "nameZh": "撒母耳記下",
+    "nameEn": "2 Samuel",
+    "testament": "OT"
+  },
+  {
+    "no": 11,
+    "nameZh": "列王紀上",
+    "nameEn": "1 Kings",
+    "testament": "OT"
+  },
+  {
+    "no": 12,
+    "nameZh": "列王紀下",
+    "nameEn": "2 Kings",
+    "testament": "OT"
+  },
+  {
+    "no": 13,
+    "nameZh": "歷代志上",
+    "nameEn": "1 Chronicles",
+    "testament": "OT"
+  },
+  {
+    "no": 14,
+    "nameZh": "歷代志下",
+    "nameEn": "2 Chronicles",
+    "testament": "OT"
+  },
+  {
+    "no": 15,
+    "nameZh": "以斯拉記",
+    "nameEn": "Ezra",
+    "testament": "OT"
+  },
+  {
+    "no": 16,
+    "nameZh": "尼希米記",
+    "nameEn": "Nehemiah",
+    "testament": "OT"
+  },
+  {
+    "no": 17,
+    "nameZh": "以斯帖記",
+    "nameEn": "Esther",
+    "testament": "OT"
+  },
+  {
+    "no": 18,
+    "nameZh": "約伯記",
+    "nameEn": "Job",
+    "testament": "OT"
+  },
+  {
+    "no": 19,
+    "nameZh": "詩篇",
+    "nameEn": "Psalms",
+    "testament": "OT"
+  },
+  {
+    "no": 20,
+    "nameZh": "箴言",
+    "nameEn": "Proverbs",
+    "testament": "OT"
+  },
+  {
+    "no": 21,
+    "nameZh": "傳道書",
+    "nameEn": "Ecclesiastes",
+    "testament": "OT"
+  },
+  {
+    "no": 22,
+    "nameZh": "雅歌",
+    "nameEn": "Song of Songs",
+    "testament": "OT"
+  },
+  {
+    "no": 23,
+    "nameZh": "以賽亞書",
+    "nameEn": "Isaiah",
+    "testament": "OT"
+  },
+  {
+    "no": 24,
+    "nameZh": "耶利米書",
+    "nameEn": "Jeremiah",
+    "testament": "OT"
+  },
+  {
+    "no": 25,
+    "nameZh": "耶利米哀歌",
+    "nameEn": "Lamentations",
+    "testament": "OT"
+  },
+  {
+    "no": 26,
+    "nameZh": "以西結書",
+    "nameEn": "Ezekiel",
+    "testament": "OT"
+  },
+  {
+    "no": 27,
+    "nameZh": "但以理書",
+    "nameEn": "Daniel",
+    "testament": "OT"
+  },
+  {
+    "no": 28,
+    "nameZh": "何西阿書",
+    "nameEn": "Hosea",
+    "testament": "OT"
+  },
+  {
+    "no": 29,
+    "nameZh": "約珥書",
+    "nameEn": "Joel",
+    "testament": "OT"
+  },
+  {
+    "no": 30,
+    "nameZh": "阿摩司書",
+    "nameEn": "Amos",
+    "testament": "OT"
+  },
+  {
+    "no": 31,
+    "nameZh": "俄巴底亞書",
+    "nameEn": "Obadiah",
+    "testament": "OT"
+  },
+  {
+    "no": 32,
+    "nameZh": "約拿書",
+    "nameEn": "Jonah",
+    "testament": "OT"
+  },
+  {
+    "no": 33,
+    "nameZh": "彌迦書",
+    "nameEn": "Micah",
+    "testament": "OT"
+  },
+  {
+    "no": 34,
+    "nameZh": "那鴻書",
+    "nameEn": "Nahum",
+    "testament": "OT"
+  },
+  {
+    "no": 35,
+    "nameZh": "哈巴谷書",
+    "nameEn": "Habakkuk",
+    "testament": "OT"
+  },
+  {
+    "no": 36,
+    "nameZh": "西番雅書",
+    "nameEn": "Zephaniah",
+    "testament": "OT"
+  },
+  {
+    "no": 37,
+    "nameZh": "哈該書",
+    "nameEn": "Haggai",
+    "testament": "OT"
+  },
+  {
+    "no": 38,
+    "nameZh": "撒迦利亞書",
+    "nameEn": "Zechariah",
+    "testament": "OT"
+  },
+  {
+    "no": 39,
+    "nameZh": "瑪拉基書",
+    "nameEn": "Malachi",
+    "testament": "OT"
+  },
+  {
+    "no": 40,
+    "nameZh": "馬太福音",
+    "nameEn": "Matthew",
+    "testament": "NT"
+  },
+  {
+    "no": 41,
+    "nameZh": "馬可福音",
+    "nameEn": "Mark",
+    "testament": "NT"
+  },
+  {
+    "no": 42,
+    "nameZh": "路加福音",
+    "nameEn": "Luke",
+    "testament": "NT"
+  },
+  {
+    "no": 43,
+    "nameZh": "約翰福音",
+    "nameEn": "John",
+    "testament": "NT"
+  },
+  {
+    "no": 44,
+    "nameZh": "使徒行傳",
+    "nameEn": "Acts",
+    "testament": "NT"
+  },
+  {
+    "no": 45,
+    "nameZh": "羅馬書",
+    "nameEn": "Romans",
+    "testament": "NT"
+  },
+  {
+    "no": 46,
+    "nameZh": "哥林多前書",
+    "nameEn": "1 Corinthians",
+    "testament": "NT"
+  },
+  {
+    "no": 47,
+    "nameZh": "哥林多後書",
+    "nameEn": "2 Corinthians",
+    "testament": "NT"
+  },
+  {
+    "no": 48,
+    "nameZh": "加拉太書",
+    "nameEn": "Galatians",
+    "testament": "NT"
+  },
+  {
+    "no": 49,
+    "nameZh": "以弗所書",
+    "nameEn": "Ephesians",
+    "testament": "NT"
+  },
+  {
+    "no": 50,
+    "nameZh": "腓立比書",
+    "nameEn": "Philippians",
+    "testament": "NT"
+  },
+  {
+    "no": 51,
+    "nameZh": "歌羅西書",
+    "nameEn": "Colossians",
+    "testament": "NT"
+  },
+  {
+    "no": 52,
+    "nameZh": "帖撒羅尼迦前書",
+    "nameEn": "1 Thessalonians",
+    "testament": "NT"
+  },
+  {
+    "no": 53,
+    "nameZh": "帖撒羅尼迦後書",
+    "nameEn": "2 Thessalonians",
+    "testament": "NT"
+  },
+  {
+    "no": 54,
+    "nameZh": "提摩太前書",
+    "nameEn": "1 Timothy",
+    "testament": "NT"
+  },
+  {
+    "no": 55,
+    "nameZh": "提摩太後書",
+    "nameEn": "2 Timothy",
+    "testament": "NT"
+  },
+  {
+    "no": 56,
+    "nameZh": "提多書",
+    "nameEn": "Titus",
+    "testament": "NT"
+  },
+  {
+    "no": 57,
+    "nameZh": "腓利門書",
+    "nameEn": "Philemon",
+    "testament": "NT"
+  },
+  {
+    "no": 58,
+    "nameZh": "希伯來書",
+    "nameEn": "Hebrews",
+    "testament": "NT"
+  },
+  {
+    "no": 59,
+    "nameZh": "雅各書",
+    "nameEn": "James",
+    "testament": "NT"
+  },
+  {
+    "no": 60,
+    "nameZh": "彼得前書",
+    "nameEn": "1 Peter",
+    "testament": "NT"
+  },
+  {
+    "no": 61,
+    "nameZh": "彼得後書",
+    "nameEn": "2 Peter",
+    "testament": "NT"
+  },
+  {
+    "no": 62,
+    "nameZh": "約翰一書",
+    "nameEn": "1 John",
+    "testament": "NT"
+  },
+  {
+    "no": 63,
+    "nameZh": "約翰二書",
+    "nameEn": "2 John",
+    "testament": "NT"
+  },
+  {
+    "no": 64,
+    "nameZh": "約翰三書",
+    "nameEn": "3 John",
+    "testament": "NT"
+  },
+  {
+    "no": 65,
+    "nameZh": "猶大書",
+    "nameEn": "Jude",
+    "testament": "NT"
+  },
+  {
+    "no": 66,
+    "nameZh": "啟示錄",
+    "nameEn": "Revelation",
+    "testament": "NT"
+  }
+];
+
   function escapeHtml(str) {
     if (!str) return '';
     return String(str)
@@ -192,6 +591,36 @@
       html += '</div>';
     }
 
+    // 0. Macro Structure Stages Visual Chart (巨觀架構分析圖表)
+    if (studyData && studyData.macroStructureChart && studyData.macroStructureChart.stages && studyData.macroStructureChart.stages.length) {
+      var mc = studyData.macroStructureChart;
+      html += '<div class="macro-chart-box">';
+      html += '  <div class="macro-chart-title-bar">';
+      html += '    <span class="macro-badge"><i class="fas fa-project-diagram"></i> 巨觀架構階段圖表</span>';
+      html += '    <h4 class="macro-chart-title">' + escapeHtml(mc.visualTitle || (bookName + ' 巨觀結構進程')) + '</h4>';
+      html += '  </div>';
+      html += '  <div class="macro-chart-track">';
+      mc.stages.forEach(function(st) {
+        var startChap = getStartChapter(st.range);
+        var readUrl = (isStandalone ? 'index.html#read/' : '#read/') + bookNo + '/' + startChap;
+        html += '    <div class="macro-stage-item" style="flex: ' + (st.pct || 20) + ' 1 0;" data-stage="' + st.stageNo + '">';
+        html += '      <div class="stage-top-bar">';
+        html += '        <span class="stage-num-badge">Phase ' + st.stageNo + '</span>';
+        if (st.pct) html += '        <span class="stage-pct-badge">' + st.pct + '%</span>';
+        html += '      </div>';
+        html += '      <div class="stage-range-tag"><i class="fas fa-bookmark"></i> ' + escapeHtml(st.range) + '</div>';
+        html += '      <div class="stage-title">' + escapeHtml(st.title) + '</div>';
+        html += '      <div class="stage-theme">' + escapeHtml(st.theme) + '</div>';
+        if (st.pivot) {
+          html += '      <div class="stage-pivot"><i class="fas fa-anchor"></i> 樞紐：<strong>' + escapeHtml(st.pivot) + '</strong></div>';
+        }
+        html += '      <a href="' + readUrl + '" class="stage-read-btn" title="跳轉閱讀第 ' + startChap + ' 章"><i class="fas fa-book-open"></i> 閱讀第 ' + startChap + ' 章</a>';
+        html += '    </div>';
+      });
+      html += '  </div>';
+      html += '</div>';
+    }
+
     // 1. Horizontal Flow Track (橫向分段比例導覽條)
     html += '<div class="outline-flow-track" role="navigation" aria-label="全書架構導覽軌道">';
     parts.forEach(function(p) {
@@ -271,6 +700,21 @@
     var listLink = isStandalone ? 'index.html#ref/intros' : '#ref/intros';
     var readLink = '#read/' + m.bookNo + '/1';
 
+    // Build quick book jump options
+    var jumpSelectHtml = '<div class="guide-book-jump-wrap">' +
+      '<select class="guide-book-jump-select" data-isstandalone="' + (isStandalone ? '1' : '0') + '" aria-label="切換研讀書卷" onchange="if(this.dataset.isstandalone===\'1\'){location.href=\'book_guide.html?book=\'+this.value;}">' +
+      '<optgroup label="── 舊約聖經 (39卷) ──">';
+    
+    ALL_BOOKS_META.forEach(function(bk) {
+      if (bk.no === 40) {
+        jumpSelectHtml += '</optgroup><optgroup label="── 新約聖經 (27卷) ──">';
+      }
+      var isSel = (bk.no === m.bookNo) ? ' selected' : '';
+      var numStr = bk.no < 10 ? ('0' + bk.no) : ('' + bk.no);
+      jumpSelectHtml += '<option value="' + bk.no + '"' + isSel + '>#' + numStr + ' ' + escapeHtml(bk.nameZh) + ' (' + escapeHtml(bk.nameEn) + ')</option>';
+    });
+    jumpSelectHtml += '</optgroup></select></div>';
+
     var html = '';
     html += '<div class="book-guide-container' + (isStandalone ? ' standalone' : '') + '">';
     
@@ -278,6 +722,7 @@
     html += '  <header class="book-guide-header">';
     html += '    <div class="book-guide-nav-bar">';
     html += '      <a href="' + listLink + '" class="guide-nav-btn guide-btn-back"><i class="fas fa-arrow-left"></i> 返回 66 卷簡介</a>';
+    html += '      ' + jumpSelectHtml;
     html += '      <div class="guide-prev-next-group">';
     if (prevLink) {
       html += '        <a href="' + prevLink + '" class="guide-nav-btn"><i class="fas fa-chevron-left"></i> 上一卷</a>';
@@ -313,6 +758,96 @@
 
     // Main Content Sections
     html += '  <main class="book-guide-main">';
+
+    // 0. Youth & Beginner Field Guide (青少年與初信者平易近人導讀)
+    if (data.youthGuide) {
+      var yg = data.youthGuide;
+      html += '    <section class="guide-section section-youth-guide">';
+      html += '      <div class="youth-guide-banner">';
+      html += '        <div class="youth-banner-badge"><i class="fas fa-compass"></i> 青少年與初信者專屬指南 · 30秒極速讀懂</div>';
+      html += '        <h2 class="guide-section-title youth-title"><i class="fas fa-sparkles"></i> 青年破冰與生命探索視角</h2>';
+      html += '        <p class="youth-banner-sub">為第一次接觸聖經的讀者與青少年量身打造 · 告別枯燥 · 30秒秒懂 · 破案線索 · 痛點共鳴</p>';
+      html += '      </div>';
+      
+      html += '      <div class="youth-cards-grid">';
+      if (yg.hookQuestion) {
+        html += '        <div class="youth-card hook-card">';
+        html += '          <div class="card-tag tag-hook"><i class="fas fa-fire"></i> 🎯 震撼破冰大問句</div>';
+        html += '          <div class="card-body hook-text">' + escapeHtml(yg.hookQuestion) + '</div>';
+        html += '        </div>';
+      }
+      
+      if (yg.elevatorPitch30s) {
+        html += '        <div class="youth-card pitch-card">';
+        html += '          <div class="card-tag tag-pitch"><i class="fas fa-bolt"></i> ⚡ 30秒極速秒懂這卷書</div>';
+        html += '          <div class="card-body pitch-text">' + escapeHtml(yg.elevatorPitch30s) + '</div>';
+        html += '        </div>';
+      }
+      html += '      </div>';
+
+      html += '      <div class="youth-sub-grid">';
+      if (yg.beginnerTips && yg.beginnerTips.length) {
+        html += '        <div class="youth-sub-card tips-card">';
+        html += '          <div class="sub-card-header"><i class="fas fa-lightbulb"></i> 🔍 初學者讀經避坑錦囊</div>';
+        html += '          <ul class="tips-list">';
+        yg.beginnerTips.forEach(function(tip) {
+          html += '            <li><i class="fas fa-check-circle tip-check-icon"></i> ' + escapeHtml(tip) + '</li>';
+        });
+        html += '          </ul>';
+        html += '        </div>';
+      }
+
+      if (yg.youthLifeConnection) {
+        html += '        <div class="youth-sub-card life-card">';
+        html += '          <div class="sub-card-header"><i class="fas fa-heartbeat"></i> 💡 當代青年生活痛點共鳴與實踐</div>';
+        html += '          <div class="life-content">' + escapeHtml(yg.youthLifeConnection) + '</div>';
+        html += '        </div>';
+      }
+      html += '      </div>';
+      html += '    </section>';
+    }
+
+    // 0.1 Academic Paper Research Specification (正統神學院碩博士等級學術論文規格)
+    if (data.academicPaper) {
+      var ap = data.academicPaper;
+      html += '    <section class="guide-section section-academic-paper">';
+      html += '      <div class="academic-paper-card">';
+      html += '        <div class="academic-header-bar">';
+      html += '          <div class="academic-badge-group">';
+      html += '            <span class="academic-badge"><i class="fas fa-graduation-cap"></i> 正統神學院碩博士等級學術論文規格</span>';
+      html += '            <span class="academic-sub-badge">Biblia 研經學術論壇 · 專題論證</span>';
+      html += '          </div>';
+      html += '          <h3 class="academic-paper-title">《' + escapeHtml(m.nameZh) + '》神學命題、正典定位與救贖歷史論辯</h3>';
+      html += '        </div>';
+
+      if (ap.thesis) {
+        html += '        <div class="academic-block thesis-block">';
+        html += '          <div class="block-label"><i class="fas fa-certificate"></i> 【論文核心命題 Thesis Proposition】</div>';
+        html += '          <div class="block-content">' + escapeHtml(ap.thesis) + '</div>';
+        html += '        </div>';
+      }
+
+      if (ap.abstract) {
+        html += '        <div class="academic-block abstract-block">';
+        html += '          <div class="block-label"><i class="fas fa-file-alt"></i> 【學術論文摘要 Scholarly Abstract】</div>';
+        html += '          <div class="block-content">' + escapeHtml(ap.abstract) + '</div>';
+        html += '        </div>';
+      }
+
+      if (ap.keywordsAcademic && ap.keywordsAcademic.length) {
+        html += '        <div class="academic-keywords-row">';
+        html += '          <span class="keywords-title"><i class="fas fa-tags"></i> 【專門學術關鍵詞 Keywords】：</span>';
+        html += '          <div class="keywords-pills">';
+        ap.keywordsAcademic.forEach(function(kw) {
+          html += '            <span class="kw-academic-pill">' + escapeHtml(kw) + '</span>';
+        });
+        html += '          </div>';
+        html += '        </div>';
+      }
+
+      html += '      </div>';
+      html += '    </section>';
+    }
 
     // 1. Key Verses
     if (m.keyVerses && m.keyVerses.length) {
@@ -528,6 +1063,7 @@
       html += '        <a href="' + prevLink + '" class="guide-nav-btn"><i class="fas fa-arrow-left"></i> 前往第 ' + prevBookNo + ' 卷</a>';
     }
     html += '        <a href="' + listLink + '" class="guide-nav-btn guide-btn-back"><i class="fas fa-th"></i> 66 卷聖經簡介總表</a>';
+    html += '        ' + jumpSelectHtml;
     html += '        <a href="' + readLink + '" class="guide-nav-btn guide-btn-read"><i class="fas fa-book-open"></i> 閱讀經文第 1 章</a>';
     if (nextLink) {
       html += '        <a href="' + nextLink + '" class="guide-nav-btn">前往第 ' + nextBookNo + ' 卷 <i class="fas fa-arrow-right"></i></a>';
@@ -625,5 +1161,6 @@
   window.renderBookOutlineChartHtml = renderBookOutlineChartHtml;
   window.renderBookStudyGuideHtml = renderBookStudyGuideHtml;
   window.renderSurveyGuideHtml = renderSurveyGuideHtml;
+  window.ALL_BOOKS_META = ALL_BOOKS_META;
 
 })(typeof window !== 'undefined' ? window : this);

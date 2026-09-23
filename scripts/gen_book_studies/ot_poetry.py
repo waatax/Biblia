@@ -180,7 +180,7 @@ BOOKS_POETRY = [
             "canonicalContext": "舊約實踐智慧文學 (Practical Wisdom)，將西奈山上的十誡律法落實到廚房、市場、職場與臥室中。"
         },
         "authorshipDebate": {
-            "traditionalView": "所羅門王為主要作者與編纂者。",
+            "traditionalView": "正統猶太傳統與早期教父一貫肯定所羅門王為主要作者與格言創製者，後期由希西家王的宮廷文士團隊（箴 25:1）收集謄錄定稿。",
             "criticalTheories": "被擄後希臘化時期世俗道德格言彙編。",
             "evangelicalRebuttal": "書中清晰標明所羅門作者權（1:1, 10:1, 25:1）；希西家王的編謄（25:1）具有無可辯駁的歷史真實性。"
         },
@@ -321,8 +321,8 @@ BOOKS_POETRY = [
             "canonicalContext": "節期五卷 (Megilloth) 之一，猶太人於逾越節（紀念神以愛贖出以色列新婦）誦讀；猶太拉比阿吉巴 (Rabbi Akiba) 名言：「若全本聖經是聖的，雅歌更是至聖所 (Holy of Holies)。」"
         },
         "authorshipDebate": {
-            "traditionalView": "所羅門親自作詩（歌 1:1）。",
-            "criticalTheories": "後代民間婚禮歌集拼湊說。",
+            "traditionalView": "正統猶太傳統與早期教父一貫公認所羅門王為親撰作者（歌 1:1「所羅門的歌中之歌」）。",
+            "criticalTheories": "近代批判學者常主張雅歌並非單一作者之作品，而是被擄後或希臘化時代巴勒斯坦民間在婚俗慶典中所唱之無名情歌與儀式性詩歌片段拼湊輯成的文集。",
             "evangelicalRebuttal": "書中提及 21 種植物、15 種動物、各國香料珍寶與北部名城（得撒、黑門、黎巴嫩），展現所羅門博學格物（王上 4:33）的鮮明特徵。"
         },
         "theologyAndChrist": {

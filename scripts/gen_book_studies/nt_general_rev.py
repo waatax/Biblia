@@ -245,7 +245,7 @@ BOOKS_GENERAL_REV = [
         },
         "historicalContext": {
             "summary": "使徒彼得預知自己脫離地上的帳棚（殉道）的時候快到了（彼後 1:14，呼應約 21:18-19 主耶穌預言彼得年老時伸出手來被人拉去受死）。此時，一種初期的諾斯底主義自由放蕩派假教師（Antinomian False Teachers）正在教會中猖獗：他們否定基督身體再臨與末日審判（嘲笑「主要降臨的應許在哪裡呢？萬物與起初創造一樣」3:4），並藉口「自由」縱容淫亂、私慾、毀謗在尊位的。彼得在殉道前夕寫下這封極其火熱嚴厲的遺囑，堅固信徒在基督的真知識中扎根。",
-            "geopolitical": "羅馬帝國晚期尼祿暴政處境。",
+            "geopolitical": "羅馬皇帝尼祿治下基督徒大逼迫處境，羅馬城帝國心臟地帶對使徒領袖的嚴酷監禁。",
             "archaeology": "古代諾斯底放蕩派文獻與彼得殉道紀念銘文發掘。",
             "canonicalContext": "正典中與猶大書高度互補平行的末世護教名篇，捍衛聖經默示與基督再臨的終極真實性。"
         },
@@ -458,7 +458,7 @@ BOOKS_GENERAL_REV = [
         },
         "authorshipDebate": {
             "traditionalView": "使徒約翰親著（開篇同稱「長老」，文風格式與約二完全一脈相承）。",
-            "criticalTheories": "以弗所地方長老作品。",
+            "criticalTheories": "近代批判學者常將約翰二、三書與約翰一書及啟示錄割裂，推測其出自以弗所教會內部一位名為「長老約翰」(John the Presbyter) 的地方領袖之手。",
             "evangelicalRebuttal": "教父奧古斯丁、耶柔米一致確立其正典使徒著作權；其宣教神學與約翰書信思想高度統一。"
         },
         "theologyAndChrist": {
@@ -525,7 +525,7 @@ BOOKS_GENERAL_REV = [
         },
         "authorshipDebate": {
             "traditionalView": "主的弟兄猶大親著（自稱雅各的弟兄；特土良、亞歷山大克萊門一致引證）。",
-            "criticalTheories": "公元 2 世紀借名偽作。",
+            "criticalTheories": "部分自由派學者常主張猶大書所對抗之諾斯底放蕩異端帶有二世紀特徵，因而推斷其為公元二世紀中葉借主弟兄之名所作的護教偽書。",
             "evangelicalRebuttal": "若為後代偽作，定會偽託名望更高的使徒之名（如彼得、約翰），斷不會偽託地位較低的「猶大」；全書洋溢著濃郁的第一世紀猶太希伯來文學修辭色彩。"
         },
         "theologyAndChrist": {

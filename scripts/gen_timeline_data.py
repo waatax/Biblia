@@ -39,9 +39,9 @@ TIMELINE_DATA = {
             "name": "征服迦南與士師時代 (Conquest & Judges)",
             "period": "約公元前 1406 年 - 1050 年",
             "books": ["約書亞記", "士師記", "路得記"],
-            "summary": "約書亞領百姓過約旦海攻取迦南並分劃地業。約書亞死後進入士師時代，百姓陷於「犯罪-受苦-呼求-拯救」的黑暗循環。",
+            "summary": "約書亞領百姓過約旦河攻取迦南並分劃地業。約書亞死後進入士師時代，百姓陷於「犯罪-受苦-呼求-拯救」的黑暗循環。",
             "events": [
-                {"year": "約 BC 1406", "event": "約書亞率軍過約旦海，攻破耶利哥城，征服迦南"},
+                {"year": "約 BC 1406", "event": "約書亞率軍過約旦河，攻破耶利哥城，征服迦南"},
                 {"year": "約 BC 1390", "event": "十二支派分劃迦南地業，設立逃城"},
                 {"year": "約 BC 1375-1050", "event": "士師治理時期：俄陀涅、底波拉、基甸、耶弗他、參孫等拯救以色列"},
                 {"year": "約 BC 1100", "event": "路得與波阿斯的忠愛故事，大衛王祖先誕生於伯利恆"}
@@ -52,7 +52,7 @@ TIMELINE_DATA = {
             "name": "統一王國時代 (United Kingdom)",
             "period": "公元前 1050 年 - 931 年",
             "books": ["撒母耳記上下", "列王紀上 1-11", "歷代志上", "歷代志下 1-9", "詩篇", "箴言", "傳道書", "雅歌"],
-            "summary": "撒母耳膏立以色列第一位君王掃羅。大衛建立耶路撒冷為首都並蒙上帝賜「大衛之約」。所羅門建榮耀聖殿，晚年離異引致分國。",
+            "summary": "撒母耳膏立以色列第一位君王掃羅。大衛建立耶路撒冷為首都並蒙上帝賜「大衛之約」。所羅門建榮耀聖殿，晚年隨從外邦神祇引致分國。",
             "events": [
                 {"year": "約 BC 1050", "event": "掃羅登基為以色列第一任君王"},
                 {"year": "BC 1010", "event": "大衛於希伯崙登基，後統一全國，定都耶路撒冷，迎約櫃"},
@@ -66,7 +66,7 @@ TIMELINE_DATA = {
             "name": "南北國分裂時代 (Divided Kingdom)",
             "period": "公元前 931 年 - 586 年",
             "books": ["列王紀上下", "歷代志下 10-36", "以賽亞書", "耶利米書", "何西阿書", "約珥書", "阿摩司書", "俄巴底亞書", "彌迦書", "那鴻書", "哈巴谷書", "西番雅書"],
-            "summary": "王國分裂為北國以色列（首都合瑪利亞，19王皆惡，BC 722 亡於亞述）與南國猶大（首都耶路撒冷，大衛後裔，BC 586 亡於巴比倫）。先知興起警告悔改。",
+            "summary": "王國分裂為北國以色列（首都撒瑪利亞，19王皆惡，BC 722 亡於亞述）與南國猶大（首都耶路撒冷，大衛後裔，BC 586 亡於巴比倫）。先知興起警告悔改。",
             "events": [
                 {"year": "BC 931", "event": "北國以色列（耶羅波安，拜金牛犢）與南國猶大（羅波安）分裂"},
                 {"year": "BC 860", "event": "以利亞與以利沙先知在北國行大能神蹟抵抗巴力崇拜"},
@@ -87,12 +87,12 @@ TIMELINE_DATA = {
             "events": [
                 {"year": "BC 586-538", "event": "巴比倫被擄時期：以西結見枯骨復生異象，但以理在巴比倫朝廷立志"},
                 {"year": "BC 539", "event": "波斯帝國波斯王古列（居魯士）滅巴比倫"},
-                {"year": "BC 538", "event": "古列頒布詔書，所羅巴伯率第一批猶太人歸回 Jerusalem"},
+                {"year": "BC 538", "event": "古列頒布詔書，所羅巴伯率第一批猶太人歸回耶路撒冷"},
                 {"year": "BC 520-516", "event": "先知哈該與撒迦利亞鼓勵建殿，第二聖殿於 BC 516 竣工完工"},
-                {"year": "BC 483-473", "event": "以斯帖在波斯王宮拯救猶太人免遭哈曼滅絕，訂立普洱節"},
+                {"year": "BC 483-473", "event": "以斯帖在波斯王宮拯救猶太人免遭哈曼滅絕，訂立普珥節"},
                 {"year": "BC 458", "event": "文士以斯拉率第二批歸回，推動信仰與律法大復興"},
                 {"year": "BC 445", "event": "尼希米率第三批歸回，52 天內重建耶路撒冷城牆"},
-                {"year": "BC 430-400", "event": "瑪拉基先知事工，舊約聖經正典正滿正封，進入兩約中間400年沉默期"}
+                {"year": "BC 430-400", "event": "瑪拉基先知事工，舊約聖經正典告成，進入兩約中間400年沉默期"}
             ]
         },
         {
@@ -161,7 +161,7 @@ TIMELINE_DATA = {
         {
             "era": "波斯帝國 / 歸回重建時期 (Persian / Post-Exilic Period)",
             "time": "公元前 6 世紀末 - 5 世紀",
-            "bg": "波斯王古列許可猶太人歸回 Jerusalem，先知鼓勵百姓克服阻撓、重建聖殿與恢復敬虔。",
+            "bg": "波斯王古列許可猶太人歸回耶路撒冷，先知鼓勵百姓克服阻撓、重建聖殿與恢復敬虔。",
             "prophets": [
                 {"name": "哈該", "target": "歸回餘民", "date": "BC 520", "focus": "省察行為，優先建造上帝的殿，後來的榮耀更大"},
                 {"name": "撒迦利亞", "target": "歸回餘民", "date": "BC 520-480", "focus": "夜間異象、靠聖靈成事、彌賽亞騎驢與被扎預言"},
@@ -173,9 +173,9 @@ TIMELINE_DATA = {
     # 3. 猶太神聖曆與民政曆對照 (Jewish Sacred & Civil Calendar)
     "jewish_calendar": [
         {"month_no": 1, "jewish_name": "尼散月 (Nisan/Abib)", "civil_no": 7, "gregorian": "3月-4月", "feasts": "14日逾越節 (Passover)、15-21日無酵節 (Unleavened Bread)、初熟節", "agri": "大麥收割、春雨降下"},
-        {"month_no": 2, "jewish_name": "基流月/細萬月 (Iyar/Ziv)", "civil_no": 8, "gregorian": "4月-5月", "feasts": "補過逾越節 (民 9:11)", "agri": "小麥收割開始、乾旱季節開始"},
+        {"month_no": 2, "jewish_name": "以珥月 / 西弗月 (Iyar/Ziv)", "civil_no": 8, "gregorian": "4月-5月", "feasts": "補過逾越節 (民 9:11)", "agri": "小麥收割開始、乾旱季節開始"},
         {"month_no": 3, "jewish_name": "西番月 (Sivan)", "civil_no": 9, "gregorian": "5月-6月", "feasts": "6日七七節 / 五旬節 (Pentecost/Feast of Weeks)", "agri": "小麥收割完畢、初熟無花果"},
-        {"month_no": 4, "jewish_name": "他密月 (Tammuz)", "civil_no": 10, "gregorian": "6月-7月", "feasts": "17日禁食日 (記念城牆被攻破)", "agri": "葡萄成熟、盛夏酷熱"},
+        {"month_no": 4, "jewish_name": "搭模斯月 / 他密月 (Tammuz)", "civil_no": 10, "gregorian": "6月-7月", "feasts": "17日禁食日 (記念城牆被攻破)", "agri": "葡萄成熟、盛夏酷熱"},
         {"month_no": 5, "jewish_name": "埃波月 (Ab)", "civil_no": 11, "gregorian": "7月-8月", "feasts": "9日聖殿被毀日禁食 (Tisha B'Av)", "agri": "橄欖與無花果採收"},
         {"month_no": 6, "jewish_name": "以祿月 (Elul)", "civil_no": 12, "gregorian": "8月-9月", "feasts": "吹角節前的預備與悔改月", "agri": "椰棗採收、葡萄釀酒"},
         {"month_no": 7, "jewish_name": "以他尼月/提斯利月 (Ethanim/Tishrei)", "civil_no": 1, "gregorian": "9月-10月", "feasts": "1日吹角節 (Rosh Hashanah)、10日贖罪日 (Yom Kippur)、15-21日住棚節 (Tabernacles)", "agri": "猶太民政新年初一、秋雨降下、耕地播種"},
@@ -183,7 +183,7 @@ TIMELINE_DATA = {
         {"month_no": 9, "jewish_name": "基斯流月 (Chislev)", "civil_no": 3, "gregorian": "11月-12月", "feasts": "25日修殿節 / 光明節 (Hanukkah/Dedication)", "agri": "進入冬季雨季"},
         {"month_no": 10, "jewish_name": "提別月 (Tebeth)", "civil_no": 4, "gregorian": "12月-1月", "feasts": "10日禁食日 (記念耶路撒冷被圍)", "agri": "寒冬降雨"},
         {"month_no": 11, "jewish_name": "細罷特月 (Sebat)", "civil_no": 5, "gregorian": "1月-2月", "feasts": "15日樹木節 (Tu BiShvat)", "agri": "杏樹開花、冬雨"},
-        {"month_no": 12, "jewish_name": "亞達月 (Adar)", "civil_no": 6, "gregorian": "2月-3月", "feasts": "14-15日普洱節 (Purim - 記念以斯帖奇蹟救恩)", "agri": "晚雨降下、大麥成熟"}
+        {"month_no": 12, "jewish_name": "亞達月 (Adar)", "civil_no": 6, "gregorian": "2月-3月", "feasts": "14-15日普珥節 (Purim - 記念以斯帖奇蹟救恩)", "agri": "晚雨降下、大麥成熟"}
     ],
 
     # 4. 結構圖表與圖解 (Special Structural Charts)

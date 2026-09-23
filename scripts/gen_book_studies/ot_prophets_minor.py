@@ -34,8 +34,8 @@ BOOKS_PROPHETS_MINOR = [
             "canonicalContext": "十二先知書 (Book of the Twelve) 之首，奠定先知書「屬靈婚姻與神聖嫉妒」的神學範式。"
         },
         "authorshipDebate": {
-            "traditionalView": "先知何西阿一人親著。",
-            "criticalTheories": "後代猶大編者修訂說。",
+            "traditionalView": "正統猶太傳統與早期教父一貫公認，由北國先知何西阿親身經歷其傷痛婚姻並忠實記錄神諭而成。",
+            "criticalTheories": "十九世紀歷史批判學派常假設何西阿神諭原僅存零散片段，後於南國猶大被擄前夕或被擄期由申命記派編修者大幅增訂猶大視角與修飾詞。",
             "evangelicalRebuttal": "書中充滿純粹的北國方言、地名（基列、示劍、伯亞文）與生動隱喻（如沒有翻過的餅、愚蠢的鴿子、倔強的母牛），具有鮮明的同時代性。"
         },
         "theologyAndChrist": {
@@ -101,7 +101,7 @@ BOOKS_PROPHETS_MINOR = [
             "canonicalContext": "「五旬節的先知」(Prophet of Pentecost)，奠定新約聖靈時代與終末論的核心基石。"
         },
         "authorshipDebate": {
-            "traditionalView": "先知約珥一人撰寫。",
+            "traditionalView": "正統猶太正典與早期教會公認由毗土珥之子先知約珥一人在耶路撒冷受聖靈默示親著。",
             "criticalTheories": "蝗災歷史篇 (1-2:17) 與末世啟示篇 (2:18-3:21) 分屬不同時期作者。",
             "evangelicalRebuttal": "全書以「耶和華的日子」(Day of the LORD) 為單一神學軸心貫穿，文體風格自始至終高度統一。"
         },
@@ -172,7 +172,7 @@ BOOKS_PROPHETS_MINOR = [
             "canonicalContext": "「公義的先知」(Prophet of Social Justice)，開創了寫作先知 (Classical Writing Prophets) 之先河。"
         },
         "authorshipDebate": {
-            "traditionalView": "牧人阿摩司親自記錄宣講神諭。",
+            "traditionalView": "正統猶太傳統與早期教父一貫公認，由提哥亞鄉間牧人阿摩司奉神差遣前往北國宣講並親自筆錄定稿。",
             "criticalTheories": "後代申命記派編者將農夫短語擴寫為神學作品。",
             "evangelicalRebuttal": "書中洋溢著質樸而生動的牧羊農業隱喻（如壓滿禾捆的車、獅子口中搶回兩條羊腿、夏天的熟果、漏眼的篩子），與阿摩司鄉村牧人身分完全吻合。"
         },
@@ -242,7 +242,7 @@ BOOKS_PROPHETS_MINOR = [
             "canonicalContext": "創世記雅各與以掃（雅各是我所愛的，以掃是我所惡的，羅 9:13）在歷史與終末中的終極審判收官。"
         },
         "authorshipDebate": {
-            "traditionalView": "先知俄巴底亞一人親撰。",
+            "traditionalView": "正統猶太公會與初代教會一貫見證由先知俄巴底亞在巴比倫攻陷聖城浩劫期間受默示親自撰寫。",
             "criticalTheories": "與耶利米書 49 章以東神諭同源的民間傳唱短詩。",
             "evangelicalRebuttal": "先知俄巴底亞親身經歷聖城陷落浩劫，神諭語氣如電閃雷鳴，其獨立性與正典權威被歷代教會一致確認。"
         },
@@ -379,8 +379,8 @@ BOOKS_PROPHETS_MINOR = [
             "canonicalContext": "「小以賽亞」，與以賽亞書在多處神諭高度呼應（如彌 4:1-3 與賽 2:2-4「打刀為犁」完全相同）。"
         },
         "authorshipDebate": {
-            "traditionalView": "先知彌迦親著。",
-            "criticalTheories": "後代不同時期的先知碎片彙編。",
+            "traditionalView": "正統猶太傳統與早期教父一貫公認，由摩利沙人先知彌迦親身經歷希西家年間之亞述戰火並親自記錄傳講神諭。",
+            "criticalTheories": "十九世紀歷史批判學派（如 Stade、Wellhausen）主張彌迦書僅前三章為原初真作，4-5章彌賽亞預言與6-7章訴訟禮儀為被擄後編修者雜揉彙編之片段。",
             "evangelicalRebuttal": "耶利米書 26:17-19 明確見證希西家時代「摩利沙人彌迦」的權威宣講；全書三組「審判與盼望」的循環交替展現嚴密統一的文學構思。"
         },
         "theologyAndChrist": {
@@ -585,7 +585,7 @@ BOOKS_PROPHETS_MINOR = [
         },
         "authorshipDebate": {
             "traditionalView": "王室先知西番雅親著（1:1 家譜追溯四代至希西家王）。",
-            "criticalTheories": "被擄後編者擴充作品。",
+            "criticalTheories": "近代批判學者常主張西番雅書中第2章針對列國神諭與第3章末世復興頌歌，乃由被擄後猶太敬虔團體（Anawim 社群）於希臘化時代大幅增補編修之產物。",
             "evangelicalRebuttal": "書中對耶路撒冷宮廷、王室公子穿著外邦服飾（1:8）與各城區（二區、瑪革提許魚門）地形的精確熟悉，完全符合宮廷貴族先知西番雅的身分。"
         },
         "theologyAndChrist": {
@@ -653,7 +653,7 @@ BOOKS_PROPHETS_MINOR = [
         },
         "authorshipDebate": {
             "traditionalView": "先知哈該親筆（全書四篇講論均標註精確到日期的波斯王編年：六月初一、七月二十一、九月二十四）。",
-            "criticalTheories": "後代聖殿祭司編修文獻。",
+            "criticalTheories": "歷史批判學派常推測哈該書的神諭記錄在第二聖殿落成（主前516年）後，由第二聖殿利未祭司階層出於維護聖殿禮儀權益而進行了後續編修與擴展。",
             "evangelicalRebuttal": "全書文風緊湊有力、四篇神諭日期精準嚴絲合縫，與以斯拉記 5:1-2 歷史完全一致。"
         },
         "theologyAndChrist": {

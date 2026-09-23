@@ -34,7 +34,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "en": "God is our refuge and strength, a very present help in trouble.",
     "orig": "לַמְנַצֵּ֥חַ לִבְנֵי ־ קֹ֑רַח עַֽל ־ עֲלָמ֥וֹת שִֽׁיר ׃ אֱלֹהִ֣ים לָ֭נוּ מַחֲסֶ֣ה וָעֹ֑ז עֶזְרָ֥ה בְ֝צָר֗וֹת נִמְצָ֥א מְאֹֽד ׃",
     "theme": "盼望與力量",
-    "strong": "H1121 (後裔的), H5961 (女音), H430 (神), H4268 (避難所)"
+    "strong": "H430 (神), H4268 (避難所), H5797 (力量), H5833 (幫助)"
   },
   {
     "bookNo": 19,
@@ -68,9 +68,9 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "詩篇 121:1-2",
     "zh": "我要向山舉目；我的幫助從何而來？我的幫助從造天地的耶和華而來。",
     "en": "I will lift up mine eyes unto the hills, from whence cometh my help. My help cometh from the LORD, which made heaven and earth.",
-    "orig": "שִׁ֗יר לַֽמַּ֫עֲל֥וֹת אֶשָּׂ֣א עֵ֭ינַי אֶל ־ הֶהָרִ֑ים מֵ֝אַ֗יִן יָבֹ֥א עֶזְרִֽי ׃",
+    "orig": "שִׁ֗יר לַֽמַּ֫עֲל֥וֹת אֶשָּׂ֣א עֵ֭ינַי אֶל ־ הֶהָרִ֑ים מֵ֝אַ֗יִן יָבֹ֥א עֶזְרִֽי ׃ עֶ֭זְרִי מֵעִ֣ם יְהוָ֑ה עֹ֝שֵׂ֗ה שָׁמַ֥יִם וָאָֽרֶץ ׃",
     "theme": "盼望與力量",
-    "strong": "H4609 (上行之), H2022 (山), H5375 (舉), H5869 (目)"
+    "strong": "H2022 (山), H5375 (舉目), H5828 (幫助), H3068 (耶和華), H6213 (造天地)"
   },
   {
     "bookNo": 19,
@@ -79,10 +79,10 @@ window.BIBLIA_GOLDEN_VERSES = [
     "bookZh": "詩篇",
     "ref": "詩篇 18:1-2",
     "zh": "耶和華，我的力量啊，我愛你！耶和華是我的巖石，我的山寨，我的救主，我的神，我的磐石，我所投靠的。他是我的盾牌，是拯救我的角，是我的高臺。",
-    "en": " The LORD is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust; my buckler, and the horn of my salvation, and my high tower.",
-    "orig": "לַמְנַצֵּ֤חַ ׀ לְעֶ֥בֶד יְהוָ֗ה לְדָ֫וִ֥ד אֲשֶׁ֤ר דִּבֶּ֨ר ׀ לַיהוָ֗ה אֶת ־ דִּ֭בְרֵי הַשִּׁירָ֣ה הַזֹּ֑את בְּי֤וֹם הִֽצִּיל ־ יְהוָ֘ה אוֹת֥וֹ מִכַּ֥ף כָּל ־ אֹ֝יְבָ֗יו וּמִיַּ֥ד שָׁאֽוּל ׃ וַיֹּאמַ֡ר אֶרְחָמְךָ֖ יְהוָ֣ה חִזְקִֽי ׃",
+    "en": "To the chief Musician, A Psalm of David, the servant of the LORD, who spake unto the LORD the words of this song in the day that the LORD delivered him from the hand of all his enemies, and from the hand of Saul: And he said, I will love thee, O LORD, my strength. The LORD is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust; my buckler, and the horn of my salvation, and my high tower.",
+    "orig": "לַמְנַצֵּ֤חַ ׀ לְעֶ֥בֶד יְהוָ֗ה לְדָ֫וִ֥ד אֲשֶׁ֤ר דִּבֶּ֨ר ׀ לַיהוָ֗ה אֶת ־ דִּ֭בְרֵי הַשִּׁירָ֣ה הַזֹּ֑את בְּי֤וֹם הִֽצִּיל ־ יְהוָ֘ה אוֹת֥וֹ מִכַּ֥ף כָּל ־ אֹ֝יְבָ֗יו וּמִיַּ֥ד שָׁאֽוּל ׃ וַיֹּאמַ֡ר אֶרְחָמְךָ֖ יְהוָ֣ה חִזְקִֽי ׃ יְהוָ֤ה ׀ סַֽלְעִ֥י וּמְצוּדָתִ֗י וּמְפַ֫לְטִ֥י אֵלִ֣י צ֭וּרִי אֶֽחֱסֶה ־ בּ֑וֹ מָֽגִנִּ֥י וְקֶֽרֶן ־ יִ֝שְׁעִ֗י מִשְׂגַּבִּֽי ׃",
     "theme": "盼望與力量",
-    "strong": "H3068 (耶和華), H5650 (的僕人), H5337 (救), H3709 (脫離)"
+    "strong": "H3068 (耶和華), H2388 (力量), H5553 (巖石), H4686 (山寨), H6697 (磐石), H4043 (盾牌)"
   },
   {
     "bookNo": 19,
@@ -104,9 +104,9 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "詩篇 62:1-2",
     "zh": "我的心默默無聲，專等候神；我的救恩是從他而來。惟獨他是我的磐石，我的拯救；他是我的高臺，我必不很動搖。",
     "en": "Truly my soul waiteth upon God: from him cometh my salvation. He only is my rock and my salvation; he is my defence; I shall not be greatly moved.",
-    "orig": "לַמְנַצֵּ֥חַ עַֽל ־ יְדוּת֗וּן מִזְמ֥וֹר לְדָוִֽד ׃ אַ֣ךְ אֶל ־ אֱ֭לֹהִים דּֽוּמִיָּ֣ה נַפְשִׁ֑י מִ֝מֶּ֗נּוּ יְשׁוּעָתִֽי ׃",
+    "orig": "לַמְנַצֵּ֥חַ עַֽל ־ יְדוּת֗וּן מִזְמ֥וֹר לְדָוִֽד ׃ אַ֣ךְ אֶל ־ אֱ֭לֹהִים דּֽוּמִיָּ֣ה נַפְשִׁ֑י מִ֝מֶּ֗נּוּ יְשׁוּעָתִֽי ׃ אַךְ ־ ה֣וּא צ֭וּרִי וִֽישׁוּעָתִ֑י מִ֝שְׂגַּבִּ֗י לֹא ־ אֶמּ֥וֹט רַבָּֽה ׃",
     "theme": "盼望與力量",
-    "strong": "H3038 (耶杜頓), H5315 (我的心), H1747 (默默無聲), H389 (專)"
+    "strong": "H5315 (我的心), H1747 (默默無聲), H430 (神), H3444 (救恩), H6697 (磐石)"
   },
   {
     "bookNo": 19,
@@ -250,7 +250,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "en": "The LORD is my shepherd; I shall not want.",
     "orig": "מִזְמ֥וֹר לְדָוִ֑ד יְהוָ֥ה רֹ֝עִ֗י לֹ֣א אֶחְסָֽר ׃",
     "theme": "安慰與平安",
-    "strong": "H3068 (耶和華), H7462 (是我的牧者), H2637 (致缺乏)"
+    "strong": "H3068 (耶和華), H7462 (牧者), H2637 (不致缺乏)"
   },
   {
     "bookNo": 19,
@@ -308,7 +308,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "詩篇 91:1-2",
     "zh": "住在至高者隱密處的，必住在全能者的蔭下。我要論到耶和華說：他是我的避難所，是我的山寨，是我的神，是我所倚靠的。",
     "en": "He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty. I will say of the LORD, He is my refuge and my fortress: my God; in him will I trust.",
-    "orig": "יֹ֭שֵׁב בְּסֵ֣תֶר עֶלְי֑וֹן בְּצֵ֥ל שַׁ֝דַּ֗י יִתְלוֹנָֽן ׃",
+    "orig": "יֹ֭שֵׁב בְּסֵ֣תֶר עֶלְי֑וֹן בְּצֵ֥ל שַׁ֝דַּ֗י יִתְלוֹנָֽן ׃ אֹמַ֗ר לַֽ֭יהוָה מַחְסִ֣י וּמְצוּדָתִ֑י אֱ֝לֹהַ֗י אֶבְטַח ־ בּֽוֹ ׃",
     "theme": "安慰與平安",
     "strong": "H3427 (住), H5945 (在至高者), H5643 (隱密處), H3885 (的必住)"
   },
@@ -404,7 +404,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "耶利米哀歌 3:22-23",
     "zh": "我們不致消滅，是出於耶和華諸般的慈愛；是因他的憐憫不致斷絕。每早晨，這都是新的；你的誠實極其廣大！",
     "en": "It is of the LORD'S mercies that we are not consumed, because his compassions fail not. They are new every morning: great is thy faithfulness.",
-    "orig": "חַֽסְדֵ֤י יְהוָה֙ כִּ֣י לֹא ־ תָ֔מְנוּ כִּ֥י לֹא ־ כָל֖וּ רַחֲמָֽיו ׃",
+    "orig": "חַֽסְדֵ֤י יְהוָה֙ כִּ֣י לֹא ־ תָ֔מְנוּ כִּ֥י לֹא ־ כָל֖וּ רַחֲמָֽיו ׃ חֲדָשִׁים֙ לַבְּקָרִ֔ים רַבָּ֖ה אֱמוּנָתֶֽךָ ׃",
     "theme": "安慰與平安",
     "strong": "H8552 (消滅), H3068 (耶和華), H2617 (諸般的慈愛), H7356 (他的憐憫)"
   },
@@ -464,7 +464,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "哥林多後書 1:3-4",
     "zh": "願頌讚歸與我們的主耶穌基督的父神，就是發慈悲的父，賜各樣安慰的神。我們在一切患難中，他就安慰我們，叫我們能用神所賜的安慰去安慰那遭各樣患難的人。",
     "en": "Blessed be God, even the Father of our Lord Jesus Christ, the Father of mercies, and the God of all comfort; Who comforteth us in all our tribulation, that we may be able to comfort them which are in any trouble, by the comfort wherewith we ourselves are comforted of God.",
-    "orig": "Εὐλογητὸς ὁ θεὸς καὶ πατὴρ τοῦ κυρίου ἡμῶν Ἰησοῦ Χριστοῦ, ὁ πατὴρ τῶν οἰκτιρμῶν καὶ θεὸς πάσης παρακλήσεως,",
+    "orig": "Εὐλογητὸς \nὁ θεὸς καὶ πατὴρ τοῦ κυρίου ἡμῶν Ἰησοῦ Χριστοῦ,\nὁ πατὴρ τῶν οἰκτιρμῶν καὶ θεὸς πάσης παρακλήσεως, ὁ παρακαλῶν ἡμᾶς ἐπὶ πάσῃ τῇ θλίψει ἡμῶν \nεἰς τὸ δύνασθαι ἡμᾶς \nπαρακαλεῖν τοὺς ἐν πάσῃ θλίψει\nδιὰ τῆς παρακλήσεως \nἧς παρακαλούμεθα αὐτοὶ ὑπὸ τοῦ θεοῦ.",
     "theme": "安慰與平安",
     "strong": "G2128 (願頌讚), G2962 (主), G2424 (耶穌), G5547 (基督)"
   },
@@ -476,7 +476,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "腓立比書 4:6-7",
     "zh": "應當一無掛慮，只要凡事藉著禱告、祈求，和感謝，將你們所要的告訴神。神所賜、出人意外的平安必在基督耶穌裡保守你們的心懷意念。",
     "en": "Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus.",
-    "orig": "μηδὲν μεριμνᾶτε, ἀλλ᾽ ἐν παντὶ τῇ προσευχῇ καὶ τῇ δεήσει + μετ᾽ + μετὰ + εὐχαριστίας τὰ αἰτήματα ὑμῶν γνωριζέσθω πρὸς τὸν θεόν.",
+    "orig": "μηδὲν μεριμνᾶτε, \r\nἀλλ᾽ ἐν παντὶ τῇ προσευχῇ καὶ τῇ δεήσει \r\n+ μετ᾽ + μετὰ + εὐχαριστίας \r\nτὰ αἰτήματα ὑμῶν γνωριζέσθω πρὸς τὸν θεόν. καὶ ἡ εἰρήνη τοῦ θεοῦ \nἡ ὑπερέχουσα πάντα νοῦν \nφρουρήσει τὰς καρδίας ὑμῶν καὶ τὰ νοήματα ὑμῶν \nἐν Χριστῷ Ἰησοῦ.",
     "theme": "安慰與平安",
     "strong": "G3367 (應當一無), G3309 (掛慮), G235 (只要), G4335 (禱告)"
   },
@@ -524,7 +524,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "詩篇 100:1-2",
     "zh": "普天下當向耶和華歡呼！你們當樂意事奉耶和華，當來向他歌唱！",
     "en": "Make a joyful noise unto the LORD, all ye lands. Serve the LORD with gladness: come before his presence with singing.",
-    "orig": "מִזְמ֥וֹר לְתוֹדָ֑ה הָרִ֥יעוּ לַ֝יהוָ֗ה כָּל ־ הָאָֽרֶץ ׃",
+    "orig": "מִזְמ֥וֹר לְתוֹדָ֑ה הָרִ֥יעוּ לַ֝יהוָ֗ה כָּל ־ הָאָֽרֶץ ׃ עִבְד֣וּ אֶת ־ יְהוָ֣ה בְּשִׂמְחָ֑ה בֹּ֥אוּ לְ֝פָנָ֗יו בִּרְנָנָֽה ׃",
     "theme": "正向與喜樂",
     "strong": "H8426 (稱謝), H3605 (普), H776 (天下), H3068 (當向耶和華)"
   },
@@ -584,7 +584,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "哈巴谷書 3:17-18",
     "zh": "雖然無花果樹不發旺，葡萄樹不結果，橄欖樹也不效力，田地不出糧食，圈中絕了羊，棚內也沒有牛；然而，我要因耶和華歡欣，因救我的神喜樂。",
     "en": "Although the fig tree shall not blossom, neither shall fruit be in the vines; the labour of the olive shall fail, and the fields shall yield no meat; the flock shall be cut off from the fold, and there shall be no herd in the stalls: Yet I will rejoice in the LORD, I will joy in the God of my salvation.",
-    "orig": "כִּֽי ־ תְאֵנָ֣ה לֹֽא ־ תִפְרָ֗ח וְאֵ֤ין יְבוּל֙ בַּגְּפָנִ֔ים כִּחֵשׁ֙ מַעֲשֵׂה ־ זַ֔יִת וּשְׁדֵמ֖וֹת לֹא ־ עָ֣שָׂה אֹ֑כֶל גָּזַ֤ר מִמִּכְלָה֙ צֹ֔אן וְאֵ֥ין בָּקָ֖ר בָּרְפָתִֽים ׃",
+    "orig": "כִּֽי ־ תְאֵנָ֣ה לֹֽא ־ תִפְרָ֗ח וְאֵ֤ין יְבוּל֙ בַּגְּפָנִ֔ים כִּחֵשׁ֙ מַעֲשֵׂה ־ זַ֔יִת וּשְׁדֵמ֖וֹת לֹא ־ עָ֣שָׂה אֹ֑כֶל גָּזַ֤ר מִמִּכְלָה֙ צֹ֔אן וְאֵ֥ין בָּקָ֖ר בָּרְפָתִֽים ׃ וַאֲנִ֖י בַּיהוָ֣ה אֶעְל֑וֹזָה אָגִ֖ילָה בֵּאלֹהֵ֥י יִשְׁעִֽי ׃",
     "theme": "正向與喜樂",
     "strong": "H8384 (無花果樹), H6524 (發旺), H1612 (葡萄樹), H369 (不)"
   },
@@ -656,7 +656,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "帖撒羅尼迦前書 5:16-18",
     "zh": "要常常喜樂，不住地禱告，凡事謝恩；因為這是神在基督耶穌裡向你們所定的旨意。",
     "en": "Rejoice evermore. Pray without ceasing. In every thing give thanks: for this is the will of God in Christ Jesus concerning you.",
-    "orig": "Πάντοτε χαίρετε,",
+    "orig": "Πάντοτε χαίρετε, ἀδιαλείπτως προσεύχεσθε, ἐν παντὶ εὐχαριστεῖτε· \nτοῦτο γὰρ θέλημα θεοῦ ἐν Χριστῷ Ἰησοῦ εἰς ὑμᾶς.",
     "theme": "正向與喜樂",
     "strong": "G3842 (要常常), G5463 (喜樂), G89 (不住地), G4336 (禱告)"
   },
@@ -692,7 +692,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "雅各書 1:2-3",
     "zh": "我的弟兄們，你們落在百般試煉中，都要以為大喜樂；因為知道你們的信心經過試驗，就生忍耐。",
     "en": "My brethren, count it all joy when ye fall into divers temptations; Knowing this , that the trying of your faith worketh patience.",
-    "orig": "Πᾶσαν χαρὰν ἡγήσασθε, ἀδελφοί μου, ὅταν πειρασμοῖς περιπέσητε ποικίλοις,",
+    "orig": "Πᾶσαν χαρὰν ἡγήσασθε, \nἀδελφοί μου, \nὅταν πειρασμοῖς περιπέσητε ποικίλοις, γινώσκοντες ὅτι τὸ δοκίμιον ὑμῶν τῆς πίστεως \nκατεργάζεται ὑπομονήν.",
     "theme": "正向與喜樂",
     "strong": "G80 (弟兄們), G4045 (你們落在), G4164 (百般), G3986 (試煉)"
   },
@@ -740,7 +740,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "箴言 3:5-6",
     "zh": "你要專心仰賴耶和華，不可倚靠自己的聰明，在你一切所行的事上都要認定他，他必指引你的路。",
     "en": "Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.",
-    "orig": "בְּטַ֣ח אֶל ־ יְ֭הוָה בְּכָל ־ לִבֶּ֑ךָ וְאֶל ־ בִּֽ֝ינָתְךָ֗ אַל ־ תִּשָּׁעֵֽן ׃",
+    "orig": "בְּטַ֣ח אֶל ־ יְ֭הוָה בְּכָל ־ לִבֶּ֑ךָ וְאֶל ־ בִּֽ֝ינָתְךָ֗ אַל ־ תִּשָּׁעֵֽן ׃ בְּכָל ־ דְּרָכֶ֥יךָ דָעֵ֑הוּ וְ֝ה֗וּא יְיַשֵּׁ֥ר אֹֽרְחֹתֶֽיךָ ׃",
     "theme": "造就與智慧",
     "strong": "H3605 (你要專), H3820 (心), H3068 (耶和華), H408 (不可)"
   },
@@ -812,7 +812,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "詩篇 1:1-2",
     "zh": "不從惡人的計謀，不站罪人的道路，不坐褻慢人的座位，惟喜愛耶和華的律法，晝夜思想，這人便為有福！",
     "en": "Blessed is the man that walketh not in the counsel of the ungodly, nor standeth in the way of sinners, nor sitteth in the seat of the scornful. But his delight is in the law of the LORD; and in his law doth he meditate day and night.",
-    "orig": "אַ֥שְֽׁרֵי ־ הָאִ֗ישׁ אֲשֶׁ֤ר ׀ לֹ֥א הָלַךְ֮ בַּעֲצַ֪ת רְשָׁ֫עִ֥ים וּבְדֶ֣רֶךְ חַ֭טָּאִים לֹ֥א עָמָ֑ד וּבְמוֹשַׁ֥ב לֵ֝צִ֗ים לֹ֣א יָשָֽׁב ׃",
+    "orig": "אַ֥שְֽׁרֵי ־ הָאִ֗ישׁ אֲשֶׁ֤ר ׀ לֹ֥א הָלַךְ֮ בַּעֲצַ֪ת רְשָׁ֫עִ֥ים וּבְדֶ֣רֶךְ חַ֭טָּאִים לֹ֥א עָמָ֑ד וּבְמוֹשַׁ֥ב לֵ֝צִ֗ים לֹ֣א יָשָֽׁב ׃ כִּ֤י אִ֥ם בְּתוֹרַ֥ת יְהוָ֗ה חֶ֫פְצ֥וֹ וּֽבְתוֹרָת֥וֹ יֶהְגֶּ֗ה יוֹמָ֥ם וָלָֽיְלָה ׃",
     "theme": "造就與智慧",
     "strong": "H1980 (從), H7563 (惡人), H6098 (的計謀), H5975 (站)"
   },
@@ -872,7 +872,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "哥林多前書 10:23-24",
     "zh": "凡事都可行，但不都有益處。凡事都可行，但不都造就人。無論何人，不要求自己的益處，乃要求別人的益處。",
     "en": "All things are lawful for me, but all things are not expedient: all things are lawful for me, but all things edify not. Let no man seek his own, but every man another's wealth .",
-    "orig": "Πάντα ἔξεστιν ἀλλ᾽ οὐ πάντα συμφέρει· πάντα ἔξεστιν ἀλλ᾽ οὐ πάντα οἰκοδομεῖ.",
+    "orig": "Πάντα ἔξεστιν \nἀλλ᾽ οὐ πάντα συμφέρει·\n πάντα ἔξεστιν \nἀλλ᾽ οὐ πάντα οἰκοδομεῖ. μηδεὶς τὸ ἑαυτοῦ ζητείτω \nἀλλὰ τὸ τοῦ ἑτέρου.",
     "theme": "造就與智慧",
     "strong": "G1832 (都可行), G235 (但), G4851 (有益處), G3618 (造就)"
   },
@@ -908,7 +908,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "加拉太書 5:22-23",
     "zh": "聖靈所結的果子，就是仁愛、喜樂、和平、忍耐、恩慈、良善、信實、溫柔、節制。這樣的事沒有律法禁止。",
     "en": "But the fruit of the Spirit is love, joy, peace, longsuffering, gentleness, goodness, faith, Meekness, temperance: against such there is no law.",
-    "orig": "Ὁ δὲ καρπὸς τοῦ πνεύματός ἐστιν ἀγάπη χαρά εἰρήνη, μακροθυμία χρηστότης ἀγαθωσύνη, πίστις",
+    "orig": "Ὁ δὲ καρπὸς τοῦ πνεύματός ἐστιν ἀγάπη χαρά εἰρήνη, \nμακροθυμία χρηστότης ἀγαθωσύνη, πίστις πραΰτης ἐγκράτεια· \nκατὰ τῶν τοιούτων οὐκ ἔστιν νόμος.",
     "theme": "造就與智慧",
     "strong": "G4151 (聖靈), G2590 (所結的果子), G26 (仁愛), G5479 (喜樂)"
   },
@@ -956,7 +956,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "提摩太後書 3:16-17",
     "zh": "聖經都是神所默示的（或譯：凡神所默示的聖經），於教訓、督責、使人歸正、教導人學義都是有益的，叫屬神的人得以完全，預備行各樣的善事。",
     "en": "All scripture is given by inspiration of God, and is profitable for doctrine, for reproof, for correction, for instruction in righteousness: That the man of God may be perfect, throughly furnished unto all good works.",
-    "orig": "πᾶσα γραφὴ θεόπνευστος καὶ ὠφέλιμος πρὸς διδασκαλίαν, πρὸς ἐλεγμόν, πρὸς ἐπανόρθωσιν, πρὸς παιδείαν τὴν ἐν δικαιοσύνῃ,",
+    "orig": "πᾶσα γραφὴ θεόπνευστος καὶ ὠφέλιμος \nπρὸς διδασκαλίαν, πρὸς ἐλεγμόν, πρὸς ἐπανόρθωσιν, \nπρὸς παιδείαν τὴν ἐν δικαιοσύνῃ, ἵνα ἄρτιος ᾖ ὁ τοῦ θεοῦ ἄνθρωπος, \nπρὸς πᾶν ἔργον ἀγαθὸν ἐξηρτισμένος.",
     "theme": "造就與智慧",
     "strong": "G1124 (聖經), G2315 (神所默示的), G1319 (教訓), G1648a (督責)"
   },
@@ -1040,7 +1040,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "馬太福音 22:37-39",
     "zh": "耶穌對他說：「你要盡心、盡性、盡意愛主─你的神。這是誡命中的第一，且是最大的。其次也相倣，就是要愛人如己。",
     "en": "Jesus said unto him, Thou shalt love the Lord thy God with all thy heart, and with all thy soul, and with all thy mind. This is the first and great commandment. And the second is like unto it, Thou shalt love thy neighbour as thyself.",
-    "orig": "ὁ δὲ ἔφη αὐτῷ, Ἀγαπήσεις κύριον τὸν θεόν σου ἐν ὅλῃ + + τῇ + καρδίᾳ σου καὶ ἐν ὅλῃ τῇ ψυχῇ σου καὶ ἐν ὅλῃ τῇ διανοίᾳ σου·",
+    "orig": "ὁ δὲ ἔφη αὐτῷ,\nἈγαπήσεις κύριον τὸν θεόν σου \nἐν ὅλῃ + + τῇ + καρδίᾳ σου\n καὶ ἐν ὅλῃ τῇ ψυχῇ σου \nκαὶ ἐν ὅλῃ τῇ διανοίᾳ σου· αὕτη ἐστὶν ἡ μεγάλη καὶ πρώτη ἐντολή. δευτέρα + + δὲ + ὁμοία αὐτῇ,\nἈγαπήσεις τὸν πλησίον σου ὡς σεαυτόν.",
     "theme": "勸勉與同心",
     "strong": "G5346 (說), G3650 (盡), G2588 (心), G4771 (盡)"
   },
@@ -1052,7 +1052,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "馬太福音 28:19-20",
     "zh": "所以，你們要去，使萬民作我的門徒，奉父、子、聖靈的名給他們施洗（或譯：給他們施洗，歸於父、子、聖靈的名）。凡我所吩咐你們的，都教訓他們遵守，我就常與你們同在，直到世界的末了。",
     "en": "Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost: Teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world. Amen.",
-    "orig": "πορευθέντες οὖν μαθητεύσατε πάντα τὰ ἔθνη, βαπτίζοντες αὐτοὺς εἰς τὸ ὄνομα τοῦ πατρὸς καὶ τοῦ υἱοῦ καὶ τοῦ ἁγίου πνεύματος,",
+    "orig": "πορευθέντες οὖν μαθητεύσατε πάντα τὰ ἔθνη,\n βαπτίζοντες αὐτοὺς \nεἰς τὸ ὄνομα τοῦ πατρὸς καὶ τοῦ υἱοῦ καὶ τοῦ ἁγίου πνεύματος, διδάσκοντες αὐτοὺς τηρεῖν πάντα \nὅσα ἐνετειλάμην ὑμῖν· \nκαὶ ἰδοὺ ἐγὼ μεθ᾽ ὑμῶν εἰμι πάσας τὰς ἡμέρας \nἕως τῆς συντελείας τοῦ αἰῶνος.",
     "theme": "勸勉與同心",
     "strong": "G3767 (所以), G4198 (你們要去), G1484 (民), G3100 (作我的門徒)"
   },
@@ -1064,7 +1064,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "約翰福音 13:34-35",
     "zh": "我賜給你們一條新命令，乃是叫你們彼此相愛；我怎樣愛你們，你們也要怎樣相愛。你們若有彼此相愛的心，眾人因此就認出你們是我的門徒了。",
     "en": "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another. By this shall all men know that ye are my disciples, if ye have love one to another.",
-    "orig": "ἐντολὴν καινὴν δίδωμι ὑμῖν, ἵνα ἀγαπᾶτε ἀλλήλους, καθὼς ἠγάπησα ὑμᾶς ἵνα καὶ ὑμεῖς ἀγαπᾶτε ἀλλήλους.",
+    "orig": "ἐντολὴν καινὴν δίδωμι ὑμῖν,\n ἵνα ἀγαπᾶτε ἀλλήλους,\n καθὼς ἠγάπησα ὑμᾶς \nἵνα καὶ ὑμεῖς ἀγαπᾶτε ἀλλήλους. ἐν τούτῳ γνώσονται πάντες ὅτι \nἐμοὶ μαθηταί ἐστε,\n ἐὰν ἀγάπην ἔχητε ἐν ἀλλήλοις.",
     "theme": "勸勉與同心",
     "strong": "G1325 (我賜給), G4771 (你們), G2537 (一條新), G1785 (命令)"
   },
@@ -1088,7 +1088,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "羅馬書 12:1-2",
     "zh": "所以，弟兄們，我以神的慈悲勸你們，將身體獻上，當作活祭，是聖潔的，是神所喜悅的；你們如此事奉乃是理所當然的。不要效法這個世界，只要心意更新而變化，叫你們察驗何為神的善良、純全、可喜悅的旨意。",
     "en": "I beseech you therefore, brethren, by the mercies of God, that ye present your bodies a living sacrifice, holy, acceptable unto God, which is your reasonable service. And be not conformed to this world: but be ye transformed by the renewing of your mind, that ye may prove what is that good, and acceptable, and perfect, will of God.",
-    "orig": "Παρακαλῶ οὖν ὑμᾶς, ἀδελφοί, διὰ τῶν οἰκτιρμῶν τοῦ θεοῦ παραστῆσαι τὰ σώματα ὑμῶν θυσίαν ζῶσαν ἁγίαν + τῷ θεῷ εὐάρεστον + εὐάρεστον τῷ θεῷ +, τὴν λογικὴν λατρείαν ὑμῶν·",
+    "orig": "Παρακαλῶ οὖν ὑμᾶς,\n ἀδελφοί,\n διὰ τῶν οἰκτιρμῶν τοῦ θεοῦ \nπαραστῆσαι τὰ σώματα ὑμῶν θυσίαν ζῶσαν ἁγίαν \n+ τῷ θεῷ εὐάρεστον + εὐάρεστον τῷ θεῷ +, \nτὴν λογικὴν λατρείαν ὑμῶν· καὶ μὴ συσχηματίζεσθε τῷ αἰῶνι τούτῳ, \nἀλλὰ μεταμορφοῦσθε τῇ ἀνακαινώσει τοῦ νοός \nεἰς τὸ δοκιμάζειν ὑμᾶς \nτί τὸ θέλημα τοῦ θεοῦ,\nτὸ ἀγαθὸν καὶ εὐάρεστον καὶ τέλειον.",
     "theme": "勸勉與同心",
     "strong": "G3767 (所以), G80 (弟兄們), G2316 (神的), G3628 (慈悲)"
   },
@@ -1100,7 +1100,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "羅馬書 12:9-10",
     "zh": "愛人不可虛假。惡，要厭惡；善，要親近。愛弟兄，要彼此親熱；恭敬人，要彼此推讓。",
     "en": "Let love be without dissimulation. Abhor that which is evil; cleave to that which is good. Be kindly affectioned one to another with brotherly love; in honour preferring one another;",
-    "orig": "Ἡ ἀγάπη ἀνυπόκριτος. ἀποστυγοῦντες τὸ πονηρόν, κολλώμενοι τῷ ἀγαθῷ,",
+    "orig": "Ἡ ἀγάπη ἀνυπόκριτος.\n ἀποστυγοῦντες τὸ πονηρόν,\n κολλώμενοι τῷ ἀγαθῷ, τῇ φιλαδελφίᾳ εἰς ἀλλήλους φιλόστοργοι, \nτῇ τιμῇ ἀλλήλους προηγούμενοι,",
     "theme": "勸勉與同心",
     "strong": "G26 (愛), G505 (人不可虛假), G4190 (惡), G655 (要厭惡)"
   },
@@ -1124,7 +1124,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "哥林多前書 13:4-7",
     "zh": "愛是恆久忍耐，又有恩慈；愛是不嫉妒；愛是不自誇，不張狂，不做害羞的事，不求自己的益處，不輕易發怒，不計算人的惡，不喜歡不義，只喜歡真理；凡事包容，凡事相信，凡事盼望，凡事忍耐。",
     "en": "Charity suffereth long, and is kind; charity envieth not; charity vaunteth not itself, is not puffed up, Doth not behave itself unseemly, seeketh not her own, is not easily provoked, thinketh no evil; Rejoiceth not in iniquity, but rejoiceth in the truth; Beareth all things, believeth all things, hopeth all things, endureth all things.",
-    "orig": "Ἡ ἀγάπη μακροθυμεῖ, χρηστεύεται ἡ ἀγάπη, οὐ ζηλοῖ, + + (ἡ ἀγάπη) + οὐ περπερεύεται, οὐ φυσιοῦται,",
+    "orig": "Ἡ ἀγάπη μακροθυμεῖ, \nχρηστεύεται ἡ ἀγάπη, \nοὐ ζηλοῖ, \n+ + (ἡ ἀγάπη) + οὐ περπερεύεται, \nοὐ φυσιοῦται, οὐκ ἀσχημονεῖ, οὐ ζητεῖ τὰ ἑαυτῆς, \nοὐ παροξύνεται, οὐ λογίζεται τὸ κακόν. οὐ χαίρει ἐπὶ τῇ ἀδικίᾳ, \nσυγχαίρει δὲ τῇ ἀληθείᾳ· πάντα στέγει, πάντα πιστεύει, \nπάντα ἐλπίζει, πάντα ὑπομένει.",
     "theme": "勸勉與同心",
     "strong": "G26 (愛), G3114 (是恆久忍耐), G5541 (又有恩慈), G2206 (嫉妒)"
   },
@@ -1184,7 +1184,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "希伯來書 12:1-2",
     "zh": "我們既有這許多的見證人，如同雲彩圍著我們，就當放下各樣的重擔，脫去容易纏累我們的罪，存心忍耐，奔那擺在我們前頭的路程，仰望為我們信心創始成終的耶穌（或譯：仰望那將真道創始成終的耶穌）。他因那擺在前面的喜樂，就輕看羞辱，忍受了十字架的苦難，便坐在神寶座的右邊。",
     "en": "Wherefore seeing we also are compassed about with so great a cloud of witnesses, let us lay aside every weight, and the sin which doth so easily beset us , and let us run with patience the race that is set before us, Looking unto Jesus the author and finisher of our faith; who for the joy that was set before him endured the cross, despising the shame, and is set down at the right hand of the throne of God.",
-    "orig": "Τοιγαροῦν καὶ ἡμεῖς τοσοῦτον ἔχοντες περικείμενον ἡμῖν νέφος μαρτύρων, ὄγκον ἀποθέμενοι πάντα καὶ τὴν εὐπερίστατον ἁμαρτίαν, δι᾽ ὑπομονῆς τρέχωμεν τὸν προκείμενον ἡμῖν ἀγῶνα",
+    "orig": "Τοιγαροῦν καὶ ἡμεῖς τοσοῦτον ἔχοντες \nπερικείμενον ἡμῖν νέφος μαρτύρων, \nὄγκον ἀποθέμενοι πάντα καὶ τὴν εὐπερίστατον ἁμαρτίαν, \nδι᾽ ὑπομονῆς τρέχωμεν τὸν προκείμενον ἡμῖν ἀγῶνα ἀφορῶντες εἰς τὸν τῆς πίστεως ἀρχηγὸν καὶ τελειωτὴν Ἰησοῦν, \nὃς ἀντὶ τῆς προκειμένης αὐτῷ χαρᾶς \nὑπέμεινεν σταυρὸν αἰσχύνης καταφρονήσας \nἐν δεξιᾷ τε τοῦ θρόνου τοῦ θεοῦ κεκάθικεν.",
     "theme": "勸勉與同心",
     "strong": "G5105 (我們既), G2192 (有), G5118 (這許多的), G3144 (見證人)"
   },
@@ -1280,7 +1280,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "詩篇 103:2-3",
     "zh": "我的心哪，你要稱頌耶和華！不可忘記他的一切恩惠！他赦免你的一切罪孽，醫治你的一切疾病。",
     "en": "Bless the LORD, O my soul, and forget not all his benefits: Who forgiveth all thine iniquities; who healeth all thy diseases;",
-    "orig": "בָּרֲכִ֣י נַ֭פְשִׁי אֶת ־ יְהוָ֑ה וְאַל ־ תִּ֝שְׁכְּחִ֗י כָּל ־ גְּמוּלָֽיו ׃",
+    "orig": "בָּרֲכִ֣י נַ֭פְשִׁי אֶת ־ יְהוָ֑ה וְאַל ־ תִּ֝שְׁכְּחִ֗י כָּל ־ גְּמוּלָֽיו ׃ הַסֹּלֵ֥חַ לְכָל ־ עֲוֺנֵ֑כִי הָ֝רֹפֵ֗א לְכָל ־ תַּחֲלֻאָֽיְכִי ׃",
     "theme": "應許與恩典",
     "strong": "H5315 (我的心), H1288 (哪你要稱頌), H3068 (耶和華), H408 (不可)"
   },
@@ -1304,7 +1304,7 @@ window.BIBLIA_GOLDEN_VERSES = [
     "ref": "詩篇 121:7-8",
     "zh": "耶和華要保護你，免受一切的災害；他要保護你的性命。你出你入，耶和華要保護你，從今時直到永遠。",
     "en": "The LORD shall preserve thee from all evil: he shall preserve thy soul. The LORD shall preserve thy going out and thy coming in from this time forth, and even for evermore.",
-    "orig": "יְֽהוָ֗ה יִשְׁמָרְךָ֥ מִכָּל ־ רָ֑ע יִ֝שְׁמֹ֗ר אֶת ־ נַפְשֶֽׁךָ ׃",
+    "orig": "יְֽהוָ֗ה יִשְׁמָרְךָ֥ מִכָּל ־ רָ֑ע יִ֝שְׁמֹ֗ר אֶת ־ נַפְשֶֽׁךָ ׃ יְֽהוָ֗ה יִשְׁמָר ־ צֵאתְךָ֥ וּבוֹאֶ֑ךָ מֵֽ֝עַתָּ֗ה וְעַד ־ עוֹלָֽם ׃",
     "theme": "應許與恩典",
     "strong": "H3068 (耶和華), H8104 (要保護你), H3605 (免受一切的), H7451 (災害)"
   },

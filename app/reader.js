@@ -2340,7 +2340,7 @@ var BIBLIA = (function () {
         openStudyCenter();
         return;
       }
-      var m = hash.match(/^#read\/([^\/]+)(?:\/(\d+))?(?:\/(\d+))?$/);
+      var m = hash.match(/^#(?:read\/)?([^\/]+)(?:\/(\d+))?(?:\/(\d+))?$/);
       if (m) {
         var bkKey = decodeURIComponent(m[1]).toLowerCase();
         var chap = m[2] ? parseInt(m[2], 10) : 1;
@@ -3643,6 +3643,33 @@ var BIBLIA = (function () {
             }
           });
         }
+      });
+
+      container.querySelectorAll('.guide-book-jump-select').forEach(function (sel) {
+        sel.addEventListener('change', function () {
+          var targetNo = parseInt(sel.value, 10);
+          if (targetNo) {
+            refState.currentBookStudyNo = targetNo;
+            renderRefPanelBookStudy();
+            updateHash();
+            window.scrollTo(0, 0);
+          }
+        });
+      });
+
+      container.querySelectorAll('a[href^="#read/"]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          var href = btn.getAttribute('href') || '';
+          var parts = href.replace('#read/', '').split('/');
+          var b = parseInt(parts[0], 10);
+          var c = parseInt(parts[1], 10) || 1;
+          var s = parts[2] ? parseInt(parts[2], 10) : null;
+          if (b) {
+            e.preventDefault();
+            if (s) jumpToVerse(b, c, s);
+            else showReader(b, c);
+          }
+        });
       });
 
       container.querySelectorAll('.clickable-strong-tag').forEach(function (tag) {

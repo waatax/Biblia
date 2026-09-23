@@ -171,8 +171,8 @@ BOOKS_HISTORY = [
             "canonicalContext": "連結士師時代與大衛王朝的璀璨珍珠，節期五卷 (Megilloth) 之一，猶太人於五旬節誦讀。"
         },
         "authorshipDebate": {
-            "traditionalView": "先知撒母耳寫作。",
-            "criticalTheories": "被擄後反對以斯拉尼希米排外政策的自由派創作小說。",
+            "traditionalView": "猶太塔木德傳統（Baba Bathra 14b）確認先知撒母耳為作者，亦有學者認為係大衛王朝初期之宮廷先知文士依據家族口傳與歷史文獻定稿。",
+            "criticalTheories": "十九世紀批判學派常假設此書為被擄歸回時期（約主前5至4世紀）無名作者所創作，旨在反對以斯拉與尼希米嚴厲排斥外族通婚政策的虛構自由派寓言故事。",
             "evangelicalRebuttal": "書中希伯來文法極具古代古典希伯來文特徵；全書家譜止於大衛（4:17-22），若成書於所羅門之後必記載所羅門，證實成書於大衛執政初期。"
         },
         "theologyAndChrist": {
@@ -310,8 +310,8 @@ BOOKS_HISTORY = [
             "canonicalContext": "舊約國度神學的巔峰樞紐，確立救贖歷史中「大衛子孫彌賽亞君王」的終極模型。"
         },
         "authorshipDebate": {
-            "traditionalView": "宮廷先知拿單與迦得記錄大衛全史。",
-            "criticalTheories": "後代宮廷宮鬥秘史編篡說。",
+            "traditionalView": "正統教會與猶太塔木德傳統依據《歷代志上》29:29，確認先知撒母耳、先知拿單與先見迦得記錄了大衛一生的言行與事蹟，由王國分裂初期神受默示的史家彙整定本。",
+            "criticalTheories": "十九世紀歷史批判學派（如 Rost、Wellhausen 等）提出「大衛王位繼承史」(Succession Narrative) 假說，認為撒下9-20章本為獨立之宮廷秘史與政治宣傳編篡。",
             "evangelicalRebuttal": "書中對大衛個人重大罪孽（姦淫、謀殺）與家庭醜聞毫不隱瞞、客觀秉筆直書，完全符合聖經神聖默示的真實性與公正性。"
         },
         "theologyAndChrist": {
@@ -379,8 +379,8 @@ BOOKS_HISTORY = [
             "canonicalContext": "先知神學歷史 (Prophetic History)，以摩西申命記聖約標準審視評估歷代君王的成敗。"
         },
         "authorshipDebate": {
-            "traditionalView": "先知耶利米在被擄期編纂（參考《所羅門記》、《猶大列王記》、《以色列列王記》）。",
-            "criticalTheories": "多次編修的申命記歷史作品。",
+            "traditionalView": "猶太塔木德傳統（Baba Bathra 15a）認定先知耶利米在被擄期彙整官方檔案（《所羅門記》、《猶大列王記》、《以色列列王記》）編纂成書。",
+            "criticalTheories": "馬丁·諾特 (Martin Noth) 等批判學者提出「申命記派歷史」(Deuteronomistic History, Dtr) 假說，主張全書由主前7至6世紀多次層次編修而成。",
             "evangelicalRebuttal": "全書文體、語言風格與耶利米書驚人一致，神學視角完全聚焦於「聖約毀棄必然招致審判」。"
         },
         "theologyAndChrist": {
@@ -449,8 +449,8 @@ BOOKS_HISTORY = [
             "canonicalContext": "舊約神權王國的歷史終結，宣告單靠有罪的屬世君王無法帶來終極拯救。"
         },
         "authorshipDebate": {
-            "traditionalView": "耶利米先知編纂。",
-            "criticalTheories": "被擄期不同史料編年記錄。",
+            "traditionalView": "先知耶利米或與其同時代之被擄期先知文士，在巴比倫帝國統治下彙整官方歷史檔案與先知傳統編纂成書。",
+            "criticalTheories": "歷史批判學派主張全書係被擄時期不同流派史料與先知傳奇（以利亞-以利沙敘事群）在晚期由多位編修者拼湊編年之產物。",
             "evangelicalRebuttal": "列王紀下結尾精確記載約雅斤在巴比倫獲釋（公元前 561 年），證實全書於被擄中期定稿完工。"
         },
         "theologyAndChrist": {
@@ -588,8 +588,8 @@ BOOKS_HISTORY = [
             "canonicalContext": "全本希伯來舊約正典的壯麗收官之作，將全本舊約的眼光定焦在「歸回與重建神殿」的彌賽亞盼望。"
         },
         "authorshipDebate": {
-            "traditionalView": "文士以斯拉寫作。",
-            "criticalTheories": "晚期祭司神職人員的理想化歷史重構。",
+            "traditionalView": "猶太塔木德（Baba Bathra 15a）與早期教父一貫見證，由祭司兼敏捷文士以斯拉在被擄歸回後編撰，上承代上，下啟以斯拉記。",
+            "criticalTheories": "十九世紀歷史批判學派認為是希臘化時期（約主前300年）晚期祭司神職人員為強化聖殿權威而進行的烏托邦式歷史重構與神學修訂。",
             "evangelicalRebuttal": "書中大量引用現已失傳的先知專著檔案（如《先知示瑪雅與先見易多記》、《先見耶戶之書》、《以賽亞書》等），歷史資料極其詳實豐富。"
         },
         "theologyAndChrist": {

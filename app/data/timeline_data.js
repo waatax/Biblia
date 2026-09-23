@@ -67,11 +67,11 @@ window.BIBLIA_TIMELINE_DATA = {
         "士師記",
         "路得記"
       ],
-      "summary": "約書亞領百姓過約旦海攻取迦南並分劃地業。約書亞死後進入士師時代，百姓陷於「犯罪-受苦-呼求-拯救」的黑暗循環。",
+      "summary": "約書亞領百姓過約旦河攻取迦南並分劃地業。約書亞死後進入士師時代，百姓陷於「犯罪-受苦-呼求-拯救」的黑暗循環。",
       "events": [
         {
           "year": "約 BC 1406",
-          "event": "約書亞率軍過約旦海，攻破耶利哥城，征服迦南"
+          "event": "約書亞率軍過約旦河，攻破耶利哥城，征服迦南"
         },
         {
           "year": "約 BC 1390",
@@ -101,7 +101,7 @@ window.BIBLIA_TIMELINE_DATA = {
         "傳道書",
         "雅歌"
       ],
-      "summary": "撒母耳膏立以色列第一位君王掃羅。大衛建立耶路撒冷為首都並蒙上帝賜「大衛之約」。所羅門建榮耀聖殿，晚年離異引致分國。",
+      "summary": "撒母耳膏立以色列第一位君王掃羅。大衛建立耶路撒冷為首都並蒙上帝賜「大衛之約」。所羅門建榮耀聖殿，晚年隨從外邦神祇引致分國。",
       "events": [
         {
           "year": "約 BC 1050",
@@ -143,7 +143,7 @@ window.BIBLIA_TIMELINE_DATA = {
         "哈巴谷書",
         "西番雅書"
       ],
-      "summary": "王國分裂為北國以色列（首都合瑪利亞，19王皆惡，BC 722 亡於亞述）與南國猶大（首都耶路撒冷，大衛後裔，BC 586 亡於巴比倫）。先知興起警告悔改。",
+      "summary": "王國分裂為北國以色列（首都撒瑪利亞，19王皆惡，BC 722 亡於亞述）與南國猶大（首都耶路撒冷，大衛後裔，BC 586 亡於巴比倫）。先知興起警告悔改。",
       "events": [
         {
           "year": "BC 931",
@@ -205,7 +205,7 @@ window.BIBLIA_TIMELINE_DATA = {
         },
         {
           "year": "BC 538",
-          "event": "古列頒布詔書，所羅巴伯率第一批猶太人歸回 Jerusalem"
+          "event": "古列頒布詔書，所羅巴伯率第一批猶太人歸回耶路撒冷"
         },
         {
           "year": "BC 520-516",
@@ -213,7 +213,7 @@ window.BIBLIA_TIMELINE_DATA = {
         },
         {
           "year": "BC 483-473",
-          "event": "以斯帖在波斯王宮拯救猶太人免遭哈曼滅絕，訂立普洱節"
+          "event": "以斯帖在波斯王宮拯救猶太人免遭哈曼滅絕，訂立普珥節"
         },
         {
           "year": "BC 458",
@@ -225,7 +225,7 @@ window.BIBLIA_TIMELINE_DATA = {
         },
         {
           "year": "BC 430-400",
-          "event": "瑪拉基先知事工，舊約聖經正典正滿正封，進入兩約中間400年沉默期"
+          "event": "瑪拉基先知事工，舊約聖經正典告成，進入兩約中間400年沉默期"
         }
       ]
     },
@@ -412,7 +412,7 @@ window.BIBLIA_TIMELINE_DATA = {
     {
       "era": "波斯帝國 / 歸回重建時期 (Persian / Post-Exilic Period)",
       "time": "公元前 6 世紀末 - 5 世紀",
-      "bg": "波斯王古列許可猶太人歸回 Jerusalem，先知鼓勵百姓克服阻撓、重建聖殿與恢復敬虔。",
+      "bg": "波斯王古列許可猶太人歸回耶路撒冷，先知鼓勵百姓克服阻撓、重建聖殿與恢復敬虔。",
       "prophets": [
         {
           "name": "哈該",
@@ -446,7 +446,7 @@ window.BIBLIA_TIMELINE_DATA = {
     },
     {
       "month_no": 2,
-      "jewish_name": "基流月/細萬月 (Iyar/Ziv)",
+      "jewish_name": "以珥月 / 西弗月 (Iyar/Ziv)",
       "civil_no": 8,
       "gregorian": "4月-5月",
       "feasts": "補過逾越節 (民 9:11)",
@@ -462,7 +462,7 @@ window.BIBLIA_TIMELINE_DATA = {
     },
     {
       "month_no": 4,
-      "jewish_name": "他密月 (Tammuz)",
+      "jewish_name": "搭模斯月 / 他密月 (Tammuz)",
       "civil_no": 10,
       "gregorian": "6月-7月",
       "feasts": "17日禁食日 (記念城牆被攻破)",
@@ -529,7 +529,7 @@ window.BIBLIA_TIMELINE_DATA = {
       "jewish_name": "亞達月 (Adar)",
       "civil_no": 6,
       "gregorian": "2月-3月",
-      "feasts": "14-15日普洱節 (Purim - 記念以斯帖奇蹟救恩)",
+      "feasts": "14-15日普珥節 (Purim - 記念以斯帖奇蹟救恩)",
       "agri": "晚雨降下、大麥成熟"
     }
   ],

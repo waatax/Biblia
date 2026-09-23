@@ -114,7 +114,7 @@ BOOKS_PAULINE = [
         },
         "authorshipDebate": {
             "traditionalView": "使徒保羅親著（早期教父羅馬的克萊門 Clement of Rome 主後 95 年第一封書信即直接引用印證）。",
-            "criticalTheories": "保羅多封信件的編輯組合說。",
+            "criticalTheories": "二十世紀部分歷史批判學者（如 J. Weiss、Schmithals）曾提出片段組合說，主張哥林多前書是由保羅在不同時期寫給哥林多的三至四封獨立簡函經後期教會編修者剪接而成。",
             "evangelicalRebuttal": "全書文體雄辯有力、邏輯層層遞進、十字架神學貫穿始終，毫無拼接痕跡，公認為無可辯駁的保羅真確書信。"
         },
         "theologyAndChrist": {
@@ -180,7 +180,7 @@ BOOKS_PAULINE = [
         },
         "historicalContext": {
             "summary": "林前發出後，哥林多教會局勢惡化，受外來猶太假使徒（自詡「超級使徒」Super-apostles）煽動，質疑保羅的使徒資格（笑其氣貌不揚、言語粗俗、無推薦信、不收薪水自卑）。保羅曾進行過一次極度痛苦的「憂傷訪問」(Painful Visit)，隨後流淚寫了「嚴厲的信」(Tearful Letter) 由提多送去。提多在馬其頓與保羅會合，帶來哥林多全教會徹底悔改、痛哭懲戒帶頭鬧事者的好消息。保羅滿懷安慰，寫下這封充滿眼淚、感恩、自白、慈惠勸勉與終極使徒權柄辯護的偉大書信。",
-            "geopolitical": "馬其頓行省與亞該亞哥林多城。",
+            "geopolitical": "羅馬帝國馬其頓行省（腓立比、帖撒羅尼迦）與南部亞該亞行省首府哥林多城及周邊地區。",
             "archaeology": "古代地中海航海路線與羅馬監獄發掘；古代推薦信 (Letters of Commendation) 紙草文獻出土印證林後 3:1。",
             "canonicalContext": "新約聖經中最深情、最真實展現使徒十字架心靈傷痕與事奉血淚的教牧經典。"
         },
@@ -609,7 +609,7 @@ BOOKS_PAULINE = [
         },
         "authorshipDebate": {
             "traditionalView": "使徒保羅親著（書末「我保羅親筆問你們安，我在各樣信上都是這樣記號」3:17，專門用親筆簽名粉碎假冒書信謠言）。",
-            "criticalTheories": "後代作者模仿帖前的作品。",
+            "criticalTheories": "十九世紀末批判學者（如 Wrede）提出模仿偽作假說，認為帖後與帖前詞彙高度雷同但末世論重點看似衝突，乃後代保羅門徒模仿帖前格式書寫之偽作。",
             "evangelicalRebuttal": "書末 3:17 的親筆簽名正是針對當時有人假冒保羅書信（2:2）的直接反制；文風與帖前緊密銜接，教父愛任紐、特土良一致確認其正典地位。"
         },
         "theologyAndChrist": {
@@ -746,7 +746,7 @@ BOOKS_PAULINE = [
         },
         "historicalContext": {
             "summary": "公元 64 年羅馬大火後，尼祿皇帝瘋狂殘殺基督徒。保羅在特羅亞再次被捕（提後 4:13），押解至羅馬陰暗潮濕的地牢中（馬梅爾定地牢）。與初次被囚在租屋軟禁不同，這次保羅被戴上沉重鐵鏈如同罪犯（2:9），眾人離棄他（亞西亞人都離棄我，底馬貪愛現今世界走了，4:10, 16），唯有路加同在。深知自己殉道受死的日子已近（4:6「我現在被澆奠，我離世的時候到了」），在寒冬臨近前，保羅向最愛的屬靈兒子提摩太寫下最後的肺腑遺囑，交託神聖福音火炬，囑咐提摩太在冬天以前趕來相見。",
-            "geopolitical": "尼祿統治末期的血腥羅馬帝國。",
+            "geopolitical": "羅馬皇帝尼祿統治末期的瘋狂迫害處境，帝國全境基督徒面臨血腥搜捕與極刑威脅。",
             "archaeology": "羅馬馬梅爾定地牢 (Carcere Mamertino) 古蹟；羅馬城外奧斯提亞大道三泉保羅殉道處 (Abbazia delle Tre Fontane)。",
             "canonicalContext": "保羅 13 封書信的最後一卷，使徒保羅留給普世教會最後的神聖絕筆。"
         },
@@ -822,7 +822,7 @@ BOOKS_PAULINE = [
         },
         "authorshipDebate": {
             "traditionalView": "使徒保羅親著（穆拉多利殘篇與歷代教父一致見證）。",
-            "criticalTheories": "教牧書信偽託集之一。",
+            "criticalTheories": "十九世紀歷史批判學者（如施萊爾馬赫、鮑爾）將提多書與提摩太前後書歸為二世紀初借保羅之名偽託的教牧集成，認為其教會體制過於成熟。",
             "evangelicalRebuttal": "書中簡潔有力、直擊要害的統帥風格與保羅晚年書信完全一致；書末提及亞提馬、推基古、西納、亞波羅（3:12-13）等具體同工行程安排，具有鮮明歷史真實性。"
         },
         "theologyAndChrist": {

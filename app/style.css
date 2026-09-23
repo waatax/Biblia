@@ -7313,6 +7313,31 @@ body.font-shippori .compare-verse-quote {
   margin-bottom: 24px;
 }
 
+.guide-book-jump-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.guide-book-jump-select {
+  padding: 8px 12px;
+  border-radius: var(--r-md, 8px);
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  max-width: 250px;
+}
+
+.guide-book-jump-select:hover,
+.guide-book-jump-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(139, 85, 35, 0.2);
+}
+
 .guide-prev-next-group {
   display: flex;
   align-items: center;
@@ -8675,3 +8700,430 @@ body.font-shippori .compare-verse-quote {
   border-top: 1px dashed var(--line);
   padding-top: 12px;
 }
+
+/* ==========================================================================
+   Biblia 66 Books: Academic Paper Caliber & Youth/Beginner Guides Styling
+   ========================================================================== */
+
+/* 1. 青少年與初信者專屬導讀指南 (Youth & Beginner Field Guide) */
+.section-youth-guide {
+  background: linear-gradient(135deg, var(--bg-alt) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: var(--r-xl, 16px);
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.youth-guide-banner {
+  margin-bottom: 20px;
+}
+
+.youth-banner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+  padding: 4px 12px;
+  border-radius: var(--r-full, 9999px);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .youth-banner-badge {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.15);
+}
+
+.youth-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.youth-title i {
+  color: #f59e0b;
+}
+
+.youth-banner-sub {
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  margin: 0;
+}
+
+.youth-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.youth-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.youth-card:hover {
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.1);
+}
+
+.card-tag {
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--r-md, 6px);
+  width: fit-content;
+}
+
+.tag-hook {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.tag-pitch {
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.1);
+}
+
+.hook-text {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.pitch-text {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--fg);
+}
+
+.youth-sub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.youth-sub-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  padding: 16px;
+}
+
+.sub-card-header {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tips-list li {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--fg);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.tip-check-icon {
+  color: #10b981;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.life-content {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--fg);
+  background: rgba(245, 158, 11, 0.05);
+  border-left: 3px solid #f59e0b;
+  padding: 10px 14px;
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+}
+
+/* 2. 正統學術論文規格 (Academic Paper Research Specification) */
+.section-academic-paper {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--r-lg, 12px);
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.academic-header-bar {
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+
+.academic-badge-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.academic-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent);
+  background: rgba(184, 134, 11, 0.12);
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+}
+
+.academic-sub-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+
+.academic-paper-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin: 0;
+  line-height: 1.4;
+  font-family: "Noto Serif TC", serif;
+}
+
+.academic-block {
+  margin-bottom: 16px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md, 8px);
+  padding: 14px 16px;
+}
+
+.thesis-block {
+  border-left: 3px solid #8b5cf6;
+}
+
+.abstract-block {
+  border-left: 3px solid #059669;
+}
+
+.block-label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.block-content {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--fg);
+  text-align: justify;
+}
+
+.academic-keywords-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.keywords-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--fg-muted);
+}
+
+.keywords-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.kw-academic-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 2px 10px;
+  border-radius: var(--r-full);
+}
+
+/* 3. 巨觀架構分析圖表 (Macro Structural Flow Chart) */
+.macro-chart-box {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl, 16px);
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.macro-chart-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.macro-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent);
+  background: rgba(184, 134, 11, 0.12);
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+
+.macro-chart-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.macro-chart-track {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+
+.macro-stage-item {
+  min-width: 170px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.macro-stage-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.stage-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+}
+
+.stage-num-badge {
+  font-weight: 800;
+  color: #fff;
+  background: var(--accent);
+  padding: 1px 6px;
+  border-radius: var(--r-md);
+}
+
+.stage-pct-badge {
+  font-weight: 700;
+  color: var(--fg-muted);
+  font-family: var(--font-mono, monospace);
+}
+
+.stage-range-tag {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--fg-muted);
+  font-family: var(--font-mono, monospace);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stage-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--fg);
+  line-height: 1.4;
+}
+
+.stage-theme {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  flex-grow: 1;
+}
+
+.stage-pivot {
+  font-size: 0.75rem;
+  color: var(--fg);
+  background: rgba(184, 134, 11, 0.08);
+  border-left: 2px solid var(--accent);
+  padding: 4px 8px;
+  border-radius: 0 4px 4px 0;
+  margin-top: 4px;
+}
+
+.stage-read-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 5px 8px;
+  text-decoration: none;
+  margin-top: 6px;
+  transition: all 0.15s ease;
+}
+
+.stage-read-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
