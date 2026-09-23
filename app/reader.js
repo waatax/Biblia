@@ -3512,15 +3512,35 @@ var BIBLIA = (function () {
             '<strong>🔑 核心鑰節：</strong>' + escapeHtml(b.key_verse) +
           '</div>';
 
-        if (typeof window.renderBookOutlineChartHtml === 'function') {
-          htmlStr += '<div class="book-outline-section">' +
-            window.renderBookOutlineChartHtml(b.no, {
-              isStandalone: false,
-              compact: true,
-              showHeading: true,
-              title: '📊 全書結構大綱圖表'
-            }) +
-          '</div>';
+        var hasVisual1 = typeof window.renderBookOutlineChartHtml === 'function';
+        var hasVisual2 = typeof window.renderBookGeoMapHtml === 'function';
+
+        if (hasVisual1 || hasVisual2) {
+          htmlStr += '<div class="book-intro-visuals-container">';
+          
+          if (hasVisual1) {
+            htmlStr += '<div class="book-outline-section visual-item-1">' +
+              window.renderBookOutlineChartHtml(b.no, {
+                isStandalone: false,
+                compact: true,
+                showHeading: true,
+                title: '📊 全書結構大綱圖表'
+              }) +
+            '</div>';
+          }
+          
+          if (hasVisual2) {
+            htmlStr += '<div class="book-geomap-section visual-item-2">' +
+              window.renderBookGeoMapHtml(b.no, {
+                isStandalone: false,
+                compact: true,
+                showHeading: true,
+                title: '🗺️ 聖經歷史地緣動線圖'
+              }) +
+            '</div>';
+          }
+
+          htmlStr += '</div>';
         } else if (b.outline && b.outline.length) {
           htmlStr += '<div class="book-outline-section">' +
             '<strong>📋 全書結構大綱：</strong>' +

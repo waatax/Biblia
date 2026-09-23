@@ -679,6 +679,146 @@
     return html;
   }
 
+  function renderBookGeoMapHtml(bookNo, options) {
+    options = options || {};
+    bookNo = parseInt(bookNo, 10);
+    var isStandalone = !!options.isStandalone;
+    var isCompact = !!options.compact;
+    var showHeading = options.showHeading !== false;
+    var customTitle = options.title;
+
+    var studyData = getBookStudyData(bookNo);
+    if (!studyData || !studyData.geographyMap) {
+      return '<div class="book-outline-empty">查無此書卷聖經地理動線圖資料</div>';
+    }
+
+    var gm = studyData.geographyMap;
+    var bookName = (studyData.meta) ? studyData.meta.nameZh : ('第 ' + bookNo + ' 卷');
+    var headingText = customTitle || ('🗺️ 《' + escapeHtml(bookName) + '》' + escapeHtml(gm.mapTitle));
+
+    var html = '<div class="biblia-geo-map-box' + (isCompact ? ' compact' : '') + '" data-bookno="' + bookNo + '">';
+
+    if (showHeading) {
+      html += '<div class="geo-map-header">';
+      html += '  <div class="geo-header-main">';
+      html += '    <span class="geo-header-icon" aria-hidden="true">🗺️</span>';
+      html += '    <h3 class="geo-header-title">' + headingText + '</h3>';
+      if (gm.mapType) {
+        html += '    <span class="geo-badge-type">' + escapeHtml(gm.mapType) + '</span>';
+      }
+      html += '  </div>';
+      if (gm.keyRegions && gm.keyRegions.length) {
+        html += '  <div class="geo-key-regions">';
+        html += '    <span class="regions-label"><i class="fas fa-map-pin"></i> 核心地緣樞紐：</span>';
+        gm.keyRegions.forEach(function(r) {
+          html += '    <span class="geo-region-pill">' + escapeHtml(r) + '</span>';
+        });
+        html += '  </div>';
+      }
+      html += '</div>';
+    }
+
+    // Itinerary flow stages
+    if (gm.routeStages && gm.routeStages.length) {
+      html += '<div class="geo-map-track" role="region" aria-label="聖經歷史地理行進站點">';
+      gm.routeStages.forEach(function(st) {
+        var startChap = getStartChapter(st.ref);
+        var readUrl = (isStandalone ? 'index.html#read/' : '#read/') + bookNo + '/' + startChap;
+        html += '<div class="geo-stop-card" data-stop="' + st.stopNo + '">';
+        html += '  <div class="stop-card-top">';
+        html += '    <span class="stop-num-badge">Stop ' + st.stopNo + '</span>';
+        if (st.ref) {
+          html += '    <span class="stop-ref-tag"><i class="fas fa-bookmark"></i> ' + escapeHtml(st.ref) + '</span>';
+        }
+        html += '  </div>';
+        html += '  <div class="stop-location-name"><i class="fas fa-location-arrow"></i> ' + escapeHtml(st.location) + '</div>';
+        if (st.region) {
+          html += '  <div class="stop-region-meta"><i class="fas fa-mountain-sun"></i> ' + escapeHtml(st.region) + '</div>';
+        }
+        html += '  <div class="stop-event-desc">' + escapeHtml(st.event) + '</div>';
+        html += '  <a href="' + readUrl + '" class="stop-jump-btn" title="閱讀第 ' + startChap + ' 章經文"><i class="fas fa-book-open"></i> 查閱經文</a>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Strategic theological note
+    if (gm.strategicNote) {
+      html += '<div class="geo-strategic-note">';
+      html += '  <span class="note-label"><i class="fas fa-compass"></i> 地理地緣戰略神學意涵：</span>';
+      html += '  <div class="note-text">' + escapeHtml(gm.strategicNote) + '</div>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  function renderBookTheologyMatrixHtml(bookNo, options) {
+    options = options || {};
+    bookNo = parseInt(bookNo, 10);
+    var isStandalone = !!options.isStandalone;
+    var isCompact = !!options.compact;
+    var showHeading = options.showHeading !== false;
+    var customTitle = options.title;
+
+    var studyData = getBookStudyData(bookNo);
+    if (!studyData || !studyData.theologyMatrixChart) {
+      return '<div class="book-outline-empty">查無此書卷救贖歷史神學矩陣資料</div>';
+    }
+
+    var tm = studyData.theologyMatrixChart;
+    var bookName = (studyData.meta) ? studyData.meta.nameZh : ('第 ' + bookNo + ' 卷');
+    var headingText = customTitle || ('✝️ 《' + escapeHtml(bookName) + '》' + escapeHtml(tm.chartTitle));
+
+    var html = '<div class="biblia-theology-matrix-box' + (isCompact ? ' compact' : '') + '" data-bookno="' + bookNo + '">';
+
+    if (showHeading) {
+      html += '<div class="matrix-header">';
+      html += '  <div class="matrix-header-main">';
+      html += '    <span class="matrix-header-icon" aria-hidden="true">✝️</span>';
+      html += '    <h3 class="matrix-header-title">' + headingText + '</h3>';
+      html += '    <span class="matrix-badge-type">預表與基督成全矩陣</span>';
+      html += '  </div>';
+      html += '</div>';
+    }
+
+    if (tm.comparisonRows && tm.comparisonRows.length) {
+      html += '<div class="theology-matrix-table-wrap">';
+      html += '<table class="theology-matrix-table">';
+      html += '  <thead>';
+      html += '    <tr>';
+      html += '      <th class="th-dim"><i class="fas fa-layer-group"></i> 神學維度</th>';
+      html += '      <th class="th-type"><i class="fas fa-moon"></i> 舊約預表 / 律法之影</th>';
+      html += '      <th class="th-antitype"><i class="fas fa-sun"></i> 基督成全 / 新約實體</th>';
+      html += '      <th class="th-ref"><i class="fas fa-bible"></i> 聖經經文印證</th>';
+      html += '    </tr>';
+      html += '  </thead>';
+      html += '  <tbody>';
+      tm.comparisonRows.forEach(function(row) {
+        html += '    <tr>';
+        html += '      <td class="td-dim"><strong>' + escapeHtml(row.dimension) + '</strong></td>';
+        html += '      <td class="td-type">' + escapeHtml(row.typeShadow) + '</td>';
+        html += '      <td class="td-antitype">' + escapeHtml(row.antitypeChrist) + '</td>';
+        html += '      <td class="td-ref"><span class="matrix-ref-pill">' + escapeHtml(row.scriptureSupport) + '</span></td>';
+        html += '    </tr>';
+      });
+      html += '  </tbody>';
+      html += '</table>';
+      html += '</div>';
+    }
+
+    if (tm.christologicalCenter) {
+      html += '<div class="theology-christ-center-box">';
+      html += '  <div class="center-banner-title"><i class="fas fa-cross"></i> 基督論核心歸結 (Christological Focus)</div>';
+      html += '  <div class="center-banner-body">' + escapeHtml(tm.christologicalCenter) + '</div>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
   function renderBookStudyGuideHtml(bookNo, options) {
     options = options || {};
     var isStandalone = !!options.isStandalone;
@@ -883,6 +1023,7 @@
     html += '        <div class="detail-card"><div class="detail-title"><i class="fas fa-archway"></i> 考古學重大實證</div><div class="detail-content">' + escapeHtml(h.archaeology) + '</div></div>';
     html += '        <div class="detail-card full-width"><div class="detail-title"><i class="fas fa-layer-group"></i> 正典位置與救贖進程</div><div class="detail-content">' + escapeHtml(h.canonicalContext) + '</div></div>';
     html += '      </div>';
+    html += renderBookGeoMapHtml(bookNo, { isStandalone: isStandalone, showHeading: true, title: '🗺️ 《' + escapeHtml(m.nameZh) + '》歷史地緣與行進動線全圖' });
     html += '    </section>';
 
     // 3. Authorship & Evangelical Defense
@@ -911,6 +1052,8 @@
     });
     html += '        </div>';
     html += '      </div>';
+
+    html += renderBookTheologyMatrixHtml(bookNo, { isStandalone: isStandalone, showHeading: true, title: '✝️ 《' + escapeHtml(m.nameZh) + '》聖約神學與基督成全矩陣' });
 
     html += '      <div class="christology-card">';
     html += '        <div class="christology-header"><i class="fas fa-sun"></i> 基督論與彌賽亞預表 (Christology & Typology)</div>';
@@ -1159,6 +1302,8 @@
 
   // Export functions to window
   window.renderBookOutlineChartHtml = renderBookOutlineChartHtml;
+  window.renderBookGeoMapHtml = renderBookGeoMapHtml;
+  window.renderBookTheologyMatrixHtml = renderBookTheologyMatrixHtml;
   window.renderBookStudyGuideHtml = renderBookStudyGuideHtml;
   window.renderSurveyGuideHtml = renderSurveyGuideHtml;
   window.ALL_BOOKS_META = ALL_BOOKS_META;

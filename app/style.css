@@ -9127,3 +9127,339 @@ body.font-shippori .compare-verse-quote {
   border-color: var(--accent);
 }
 
+/* 4. 聖經地理動線圖 (Biblical Geography Map & Route Stages) */
+.biblia-geo-map-box {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl, 16px);
+  padding: 20px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.biblia-geo-map-box.compact {
+  padding: 14px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+.geo-map-header {
+  margin-bottom: 14px;
+}
+
+.geo-header-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.geo-header-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.geo-header-title {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.geo-badge-type {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #0284c7;
+  background: rgba(2, 132, 199, 0.12);
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+
+.geo-key-regions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  margin-top: 6px;
+}
+
+.regions-label {
+  font-weight: 700;
+  color: var(--fg-muted);
+}
+
+.geo-region-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  border-radius: var(--r-md);
+}
+
+.geo-map-track {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+}
+
+.geo-stop-card {
+  min-width: 220px;
+  max-width: 280px;
+  flex: 1 0 220px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.geo-stop-card:hover {
+  transform: translateY(-2px);
+  border-color: #0284c7;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.stop-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+}
+
+.stop-num-badge {
+  font-weight: 800;
+  color: #fff;
+  background: #0284c7;
+  padding: 1px 6px;
+  border-radius: var(--r-md);
+}
+
+.stop-ref-tag {
+  font-weight: 700;
+  color: var(--fg-muted);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+}
+
+.stop-location-name {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--fg);
+  line-height: 1.35;
+}
+
+.stop-region-meta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+
+.stop-event-desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  flex-grow: 1;
+}
+
+.stop-jump-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0284c7;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 5px 8px;
+  text-decoration: none;
+  margin-top: 6px;
+  transition: all 0.15s ease;
+}
+
+.stop-jump-btn:hover {
+  background: #0284c7;
+  color: #fff;
+  border-color: #0284c7;
+}
+
+.geo-strategic-note {
+  margin-top: 14px;
+  background: rgba(2, 132, 199, 0.06);
+  border-left: 3px solid #0284c7;
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.note-label {
+  font-weight: 800;
+  color: #0284c7;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* 5. 救贖歷史神學矩陣 (Redemptive History Theological Matrix) */
+.biblia-theology-matrix-box {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl, 16px);
+  padding: 20px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.biblia-theology-matrix-box.compact {
+  padding: 14px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+.matrix-header {
+  margin-bottom: 14px;
+}
+
+.matrix-header-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.matrix-header-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.matrix-header-title {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.matrix-badge-type {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.12);
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+
+.theology-matrix-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 14px;
+  scrollbar-width: thin;
+}
+
+.theology-matrix-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  overflow: hidden;
+}
+
+.theology-matrix-table th {
+  background: var(--bg-alt);
+  color: var(--fg);
+  font-weight: 800;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.theology-matrix-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--fg);
+}
+
+.theology-matrix-table tr:last-child td {
+  border-bottom: none;
+}
+
+.td-dim {
+  color: var(--accent);
+  font-weight: 800;
+  min-width: 140px;
+}
+
+.td-type {
+  color: var(--fg-muted);
+  min-width: 220px;
+}
+
+.td-antitype {
+  color: var(--fg);
+  font-weight: 600;
+  min-width: 240px;
+}
+
+.td-ref {
+  min-width: 130px;
+  white-space: nowrap;
+}
+
+.matrix-ref-pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.1);
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono, monospace);
+}
+
+.theology-christ-center-box {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(184, 134, 11, 0.08));
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: var(--r-lg, 12px);
+  padding: 14px 18px;
+}
+
+.center-banner-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #7c3aed;
+  margin-bottom: 6px;
+}
+
+.center-banner-body {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+/* 6. 書卷簡介卡雙圖表容器 (Dual Visuals in Ref Panel Intros) */
+.book-intro-visuals-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+

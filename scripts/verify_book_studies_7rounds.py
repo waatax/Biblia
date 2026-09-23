@@ -51,12 +51,13 @@ def load_all_books():
 
 def run_round_1(all_books):
     print("\n" + "="*70)
-    print("▶ ROUND 1: 66-Book Schema & Structural Completeness (13 Core Dimensions)")
+    print("▶ ROUND 1: 66-Book Schema & Structural Completeness (15 Core Dimensions)")
     print("="*70)
     assert len(all_books) == 66, f"Expected 66 books, got {len(all_books)}"
 
     required_dimensions = [
         "meta", "academicPaper", "youthGuide", "macroStructureChart",
+        "geographyMap", "theologyMatrixChart",
         "historicalContext", "authorshipDebate", "theologyAndChrist",
         "literaryStructure", "keyWordsOriginal", "interpretiveIssues",
         "pastoralApplications", "expertCouncilPerspectives", "bibliography"
@@ -81,7 +82,7 @@ def run_round_1(all_books):
         for s in seats:
             assert s in exp and len(exp[s]) >= 10, f"Book #{book_no} missing or insufficient expert seat '{s}'"
 
-    print(f"  [PASS] All 66 Books (OT 39 + NT 27) successfully validated across all 13 core dimensions and 7 expert council seats.")
+    print(f"  [PASS] All 66 Books (OT 39 + NT 27) successfully validated across all 15 core dimensions and 7 expert council seats.")
 
 def run_round_2(all_books):
     print("\n" + "="*70)
@@ -167,16 +168,20 @@ def run_round_3(all_books):
 
 def run_round_4(all_books):
     print("\n" + "="*70)
-    print("▶ ROUND 4: Macro Structural Analysis & Visual Progress Chart (架構分析圖表與分期宏觀進程)")
+    print("▶ ROUND 4: Visual Artifacts, Geography Maps & Theological Matrix Charts (多重視覺圖表與每卷至少2個視覺元件)")
     print("="*70)
 
     total_stages = 0
+    total_geo_stops = 0
+    total_matrix_rows = 0
 
     for book_no in range(1, 67):
         b = all_books[book_no]
         m = b["meta"]
-        mc = b.get("macroStructureChart", {})
+        visual_artifacts_count = 0
 
+        # Visual 1: Macro Structure Chart
+        mc = b.get("macroStructureChart", {})
         title = mc.get("visualTitle", "").strip()
         stages = mc.get("stages", [])
 
@@ -195,9 +200,55 @@ def run_round_4(all_books):
             pct_sum += pct
 
         total_stages += len(stages)
+        visual_artifacts_count += 1
 
-    print(f"  [PASS] Macro structural visual charts verified for all 66 books.")
-    print(f"  [PASS] Total {total_stages} structural phases calibrated with chapter ranges, percentages, themes, and theological pivot anchors.")
+        # Visual 2: Biblical Geography Map & Route Stages
+        gm = b.get("geographyMap", {})
+        map_title = gm.get("mapTitle", "").strip()
+        stops = gm.get("routeStages", [])
+        key_regions = gm.get("keyRegions", [])
+        strategic_note = gm.get("strategicNote", "").strip()
+
+        assert map_title, f"Book #{book_no} ({m['nameZh']}) missing geographyMap mapTitle"
+        assert len(stops) >= 3, f"Book #{book_no} ({m['nameZh']}) routeStages count ({len(stops)}) < 3"
+        assert len(key_regions) >= 1, f"Book #{book_no} ({m['nameZh']}) keyRegions empty"
+        assert len(strategic_note) >= 20, f"Book #{book_no} ({m['nameZh']}) strategicNote too brief"
+
+        for st in stops:
+            assert "stopNo" in st, f"Book #{book_no} stop missing stopNo"
+            assert st.get("location"), f"Book #{book_no} stop {st.get('stopNo')} missing location"
+            assert st.get("event"), f"Book #{book_no} stop {st.get('stopNo')} missing event"
+            assert st.get("ref"), f"Book #{book_no} stop {st.get('stopNo')} missing ref"
+
+        total_geo_stops += len(stops)
+        visual_artifacts_count += 1
+
+        # Visual 3: Theological Matrix & Christological Center
+        tm = b.get("theologyMatrixChart", {})
+        chart_title = tm.get("chartTitle", "").strip()
+        rows = tm.get("comparisonRows", [])
+        christ_center = tm.get("christologicalCenter", "").strip()
+
+        assert chart_title, f"Book #{book_no} ({m['nameZh']}) missing theologyMatrixChart chartTitle"
+        assert len(rows) >= 2, f"Book #{book_no} ({m['nameZh']}) comparisonRows count ({len(rows)}) < 2"
+        assert len(christ_center) >= 20, f"Book #{book_no} ({m['nameZh']}) christologicalCenter too brief"
+
+        for row in rows:
+            assert row.get("dimension"), f"Book #{book_no} row missing dimension"
+            assert row.get("typeShadow"), f"Book #{book_no} row missing typeShadow"
+            assert row.get("antitypeChrist"), f"Book #{book_no} row missing antitypeChrist"
+            assert row.get("scriptureSupport"), f"Book #{book_no} row missing scriptureSupport"
+
+        total_matrix_rows += len(rows)
+        visual_artifacts_count += 1
+
+        # Strict requirement: AT LEAST 2 visual elements per book
+        assert visual_artifacts_count >= 2, f"Book #{book_no} has only {visual_artifacts_count} visual artifacts (< 2 required)"
+
+    print(f"  [PASS] All 66 Books verified to contain at least 2 (actual: 3) distinct visual artifacts per book.")
+    print(f"  [PASS] Visual 1: Total {total_stages} macro structural phases calibrated with chapter ranges, percentages, themes, and theological pivot anchors.")
+    print(f"  [PASS] Visual 2: Total {total_geo_stops} biblical geography stops/stages calibrated across ancient Near East, Levant, and Greco-Roman worlds.")
+    print(f"  [PASS] Visual 3: Total {total_matrix_rows} redemptive theological matrix contrast rows & 66 Christological fulfillment centers.")
 
 def run_round_5(all_books):
     print("\n" + "="*70)
@@ -251,6 +302,8 @@ def run_round_6():
 
     # Check function exports
     assert "window.renderBookOutlineChartHtml = renderBookOutlineChartHtml;" in renderer_content
+    assert "window.renderBookGeoMapHtml = renderBookGeoMapHtml;" in renderer_content
+    assert "window.renderBookTheologyMatrixHtml = renderBookTheologyMatrixHtml;" in renderer_content
     assert "window.renderBookStudyGuideHtml = renderBookStudyGuideHtml;" in renderer_content
     assert "window.renderSurveyGuideHtml = renderSurveyGuideHtml;" in renderer_content
     assert "window.ALL_BOOKS_META = ALL_BOOKS_META;" in renderer_content
@@ -261,6 +314,8 @@ def run_round_6():
         "pitch-card", "tips-card", "life-card", "section-academic-paper",
         "academic-paper-card", "thesis-block", "abstract-block", "academic-keywords-row",
         "macro-chart-box", "macro-chart-track", "macro-stage-item", "stage-read-btn",
+        "biblia-geo-map-box", "geo-map-track", "geo-stop-card", "geo-strategic-note",
+        "biblia-theology-matrix-box", "theology-matrix-table", "theology-christ-center-box",
         "section-expert-council", "expert-seat-card", "section-structure",
         "outline-flow-track", "outline-diagram-grid"
     ]
@@ -272,8 +327,19 @@ def run_round_6():
     with open(style_path, "r", encoding="utf-8") as f:
         style_content = f.read()
 
-    for cls in ["section-youth-guide", "section-academic-paper", "macro-chart-box", "macro-stage-item"]:
+    for cls in [
+        "section-youth-guide", "section-academic-paper", "macro-chart-box", "macro-stage-item",
+        "biblia-geo-map-box", "geo-stop-card", "biblia-theology-matrix-box", "theology-matrix-table",
+        "book-intro-visuals-container"
+    ]:
         assert f".{cls}" in style_content, f"Missing CSS rule for '.{cls}' in app/style.css"
+
+    # Check reader.js for dual visuals integration
+    reader_path = os.path.join(APP_DIR, "reader.js")
+    with open(reader_path, "r", encoding="utf-8") as f:
+        reader_content = f.read()
+    assert "renderBookGeoMapHtml" in reader_content, "reader.js missing renderBookGeoMapHtml"
+    assert "book-intro-visuals-container" in reader_content, "reader.js missing book-intro-visuals-container"
 
     # Check index.html and book_guide.html script loading order
     index_path = os.path.join(APP_DIR, "index.html")
