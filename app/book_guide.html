@@ -4,26 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>聖經 66 卷深入研究與聖約導讀 | Biblia</title>
-  <meta name="description" content="正統福音派與歸正聖約神學聖經 66 卷深度導讀研究庫、舊約總覽與新約總覽。">
+  <meta name="description" content="正統福音派與歸正聖約神學聖經 66 卷深度導讀研究庫、舊約總覽與新約總覽。包含巨觀架構分期、歷史地理動線、救贖神學矩陣與正典檔案速查。">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="book-guide-standalone-body">
+<body class="book-guide-standalone-body" data-guide-font-size="md" data-guide-font-family="sans" data-guide-content-width="wide">
 
+  <!-- Top Sticky Navigation Bar -->
   <nav class="guide-top-navbar" id="guideTopNavbar">
     <div class="navbar-left">
-      <a href="index.html#ref/intros" class="navbar-brand">
+      <a href="index.html#ref/intros" class="navbar-brand" title="返回 Biblia 首頁">
         <span class="brand-icon">📖</span>
         <span class="brand-text">Biblia 聖經研讀</span>
       </a>
       <span class="navbar-divider">/</span>
       <span class="navbar-subtitle" id="navbarSubtitle">66卷深度研究導讀</span>
     </div>
+
+    <!-- In-Page Realtime Fulltext Search -->
+    <div class="guide-search-box" id="guideSearchBox">
+      <i class="fas fa-search search-icon" aria-hidden="true"></i>
+      <input id="inPageSearchInput" type="search" placeholder="在本書中搜尋關鍵字 ( / 鍵)..." aria-label="本書內容檢索">
+      <span id="searchMatchCount" class="search-match-count" style="display: none;"></span>
+      <button id="searchPrevBtn" class="search-nav-btn" style="display: none;" title="上一處 (Shift+Enter)"><i class="fas fa-chevron-up"></i></button>
+      <button id="searchNextBtn" class="search-nav-btn" style="display: none;" title="下一處 (Enter)"><i class="fas fa-chevron-down"></i></button>
+      <button id="searchClearBtn" class="search-clear-btn" style="display: none;" title="清除搜尋 (Esc)"><i class="fas fa-times"></i></button>
+    </div>
+
     <div class="navbar-right">
+      <!-- 66-Book Explorer Palette Trigger -->
+      <button class="nav-btn nav-btn-primary" id="openBookPaletteBtn" title="開啟 66 卷書卷探索盤 (快捷鍵: B)">
+        <i class="fas fa-th-large"></i>
+        <span>66卷書卷盤</span>
+        <kbd class="kbd-shortcut">B</kbd>
+      </button>
+
+      <!-- Dropdown Quick Switcher (Accessible fallback) -->
       <div class="guide-quick-switcher">
         <select id="bookPickerSelect" aria-label="快速選擇書卷或總覽">
           <optgroup label="全書總覽">
@@ -114,11 +134,53 @@
           </optgroup>
         </select>
       </div>
+
+      <!-- Reading Preferences Button -->
+      <button class="nav-icon-btn" id="readingPrefsToggleBtn" title="閱讀版面設定"><i class="fas fa-sliders-h"></i></button>
+
+      <!-- Theme Toggle -->
       <button class="nav-icon-btn" id="themeToggleBtn" title="切換深色/淺色主題"><i class="fas fa-moon"></i></button>
+
+      <!-- Print / Export PDF -->
       <button class="nav-icon-btn" id="printBtn" title="列印或匯出 PDF"><i class="fas fa-print"></i></button>
+
+      <!-- Reader Jump Link -->
+      <a class="nav-btn nav-btn-reader" id="openReaderTopBtn" href="index.html#read/1/1" title="在經文閱讀器中查閱原文">
+        <i class="fas fa-bible"></i>
+        <span>閱讀經文</span>
+      </a>
+    </div>
+
+    <!-- Reading Preferences Popover Panel -->
+    <div id="readingPrefsPopover" class="guide-reading-prefs-popover" style="display: none;">
+      <div class="prefs-row">
+        <span class="prefs-row-label">字體大小</span>
+        <div class="prefs-btn-group" id="prefFontSizeGroup">
+          <button class="prefs-choice-btn" data-val="sm">小</button>
+          <button class="prefs-choice-btn active" data-val="md">標準</button>
+          <button class="prefs-choice-btn" data-val="lg">大</button>
+          <button class="prefs-choice-btn" data-val="xl">特大</button>
+        </div>
+      </div>
+      <div class="prefs-row">
+        <span class="prefs-row-label">字體風格</span>
+        <div class="prefs-btn-group" id="prefFontFamilyGroup">
+          <button class="prefs-choice-btn" data-val="serif">典雅明體</button>
+          <button class="prefs-choice-btn active" data-val="sans">現代黑體</button>
+        </div>
+      </div>
+      <div class="prefs-row">
+        <span class="prefs-row-label">閱讀寬度</span>
+        <div class="prefs-btn-group" id="prefContentWidthGroup">
+          <button class="prefs-choice-btn" data-val="normal">標準 (960px)</button>
+          <button class="prefs-choice-btn active" data-val="wide">舒適 (1180px)</button>
+          <button class="prefs-choice-btn" data-val="full">寬版 (1420px)</button>
+        </div>
+      </div>
     </div>
   </nav>
 
+  <!-- Canonical Categories Bar -->
   <div class="guide-category-bar" id="guideCategoryBar">
     <div class="category-scroll-container">
       <button class="cat-pill active" data-cat="all">全部 66 卷</button>
@@ -134,16 +196,56 @@
     </div>
   </div>
 
+  <!-- Sticky Interactive Section Jump Bar (ScrollSpy) -->
+  <div class="guide-sticky-jumpbar" id="guideStickyJumpBar" style="display: none;">
+    <div class="jumpbar-inner" id="jumpbarInner"></div>
+  </div>
+
+  <!-- Main Content App Root -->
   <div id="guideAppRoot" class="guide-app-root">
     <div class="guide-loading-spinner">
       <i class="fas fa-circle-notch fa-spin"></i>
-      <p>載入聖經研究資料中...</p>
+      <p>正在載入聖經 66 卷深度研經導讀資料...</p>
+    </div>
+  </div>
+
+  <!-- Visual 66-Book Explorer Palette Modal -->
+  <div id="bookPaletteModal" class="guide-palette-modal" style="display: none;" aria-hidden="true">
+    <div class="palette-modal-card" role="dialog" aria-modal="true" aria-labelledby="paletteModalTitle">
+      <div class="palette-header">
+        <div class="palette-top-row">
+          <h3 id="paletteModalTitle" class="palette-title">
+            <span>📖 Biblia 聖經 66 卷深度探索盤</span>
+          </h3>
+          <button id="paletteCloseBtn" class="modal-close-btn" aria-label="關閉探索盤"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="palette-search-wrap">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input type="search" id="paletteSearchInput" class="palette-search-input" placeholder="快速搜尋書卷 (如：創、創世記、Gen、羅馬書、以弗所、彼得)..." autocomplete="off">
+        </div>
+        <div class="palette-filter-pills" id="paletteFilterPills">
+          <button class="palette-pill active" data-filter="all">全部 (68)</button>
+          <button class="palette-pill" data-filter="survey">聖經總覽 (2)</button>
+          <button class="palette-pill" data-filter="OT">舊約全書 (39)</button>
+          <button class="palette-pill" data-filter="NT">新約全書 (27)</button>
+          <button class="palette-pill" data-filter="torah">摩西五經 (5)</button>
+          <button class="palette-pill" data-filter="history_ot">歷史書 (12)</button>
+          <button class="palette-pill" data-filter="poetry">詩歌智慧 (5)</button>
+          <button class="palette-pill" data-filter="prophets">先知書 (17)</button>
+          <button class="palette-pill" data-filter="gospels">福音歷史 (5)</button>
+          <button class="palette-pill" data-filter="pauline">保羅書信 (13)</button>
+          <button class="palette-pill" data-filter="general">普通與啟示 (9)</button>
+        </div>
+      </div>
+      <div class="palette-body" id="paletteBody">
+        <div class="palette-books-grid" id="paletteBooksGrid"></div>
+      </div>
     </div>
   </div>
 
   <!-- Strong Dictionary Interactive Modal -->
   <div id="strongDictModal" class="guide-modal-overlay" style="display: none;" aria-hidden="true">
-    <div class="guide-modal-card" role="dialog" aria-modal="true">
+    <div class="guide-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalStrongCode">
       <div class="modal-header">
         <div class="modal-title-group">
           <span class="modal-badge"><i class="fas fa-book-medical"></i> Strong 原文字典</span>
@@ -157,17 +259,36 @@
     </div>
   </div>
 
-  <!-- Data Scripts -->
+  <!-- Floating Toast Notification -->
+  <div class="guide-toast-container" id="guideToastContainer">
+    <div class="guide-toast" id="guideToast" role="status" aria-live="polite"></div>
+  </div>
+
+  <!-- Floating Action Buttons (FAB) -->
+  <div class="guide-fab-container" id="guideFabBar">
+    <button class="guide-fab-btn guide-fab-btn-primary" id="fabPaletteBtn" title="開啟 66 卷書卷盤 (B)">
+      <i class="fas fa-th-large"></i>
+    </button>
+    <button class="guide-fab-btn" id="fabJumpBtn" title="快速瀏覽章節目錄">
+      <i class="fas fa-list-ol"></i>
+    </button>
+    <button class="guide-fab-btn" id="fabTopBtn" title="回頂部" style="display: none;">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+  </div>
+
+  <!-- Data Scripts (strictly maintaining verified dependency order) -->
   <script src="data/bible_surveys.js"></script>
   <script src="data/book_studies_ot.js"></script>
   <script src="data/book_studies_nt.js"></script>
   <script src="data/book_guide_renderer.js"></script>
 
+  <!-- Interactive Application Logic -->
   <script>
     (function() {
       'use strict';
 
-      // Setup BIBLIA global and Strong dictionary engine
+      // 1. Setup BIBLIA global and Strong dictionary engine
       window.BIBLIA = window.BIBLIA || {};
       var strongDictData = { H: null, G: null };
       var strongDictState = { H: 'idle', G: 'idle' }; // idle | loading | ready | failed
@@ -213,18 +334,54 @@
           .replace(/'/g, '&#39;');
       }
 
+      // 2. DOM Elements Cache
       var root = document.getElementById('guideAppRoot');
       var picker = document.getElementById('bookPickerSelect');
       var themeBtn = document.getElementById('themeToggleBtn');
       var printBtn = document.getElementById('printBtn');
       var subtitle = document.getElementById('navbarSubtitle');
       var categoryBar = document.getElementById('guideCategoryBar');
+      var stickyJumpBar = document.getElementById('guideStickyJumpBar');
+      var jumpbarInner = document.getElementById('jumpbarInner');
+      var openReaderTopBtn = document.getElementById('openReaderTopBtn');
+
       var modal = document.getElementById('strongDictModal');
       var modalStrongCode = document.getElementById('modalStrongCode');
       var modalBody = document.getElementById('modalBody');
       var modalCloseBtn = document.getElementById('modalCloseBtn');
 
-      // Theme sync
+      var toast = document.getElementById('guideToast');
+      var toastTimer = null;
+
+      var openBookPaletteBtn = document.getElementById('openBookPaletteBtn');
+      var bookPaletteModal = document.getElementById('bookPaletteModal');
+      var paletteCloseBtn = document.getElementById('paletteCloseBtn');
+      var paletteSearchInput = document.getElementById('paletteSearchInput');
+      var paletteFilterPills = document.getElementById('paletteFilterPills');
+      var paletteBooksGrid = document.getElementById('paletteBooksGrid');
+
+      var readingPrefsToggleBtn = document.getElementById('readingPrefsToggleBtn');
+      var readingPrefsPopover = document.getElementById('readingPrefsPopover');
+      var prefFontSizeGroup = document.getElementById('prefFontSizeGroup');
+      var prefFontFamilyGroup = document.getElementById('prefFontFamilyGroup');
+      var prefContentWidthGroup = document.getElementById('prefContentWidthGroup');
+
+      var inPageSearchInput = document.getElementById('inPageSearchInput');
+      var searchMatchCount = document.getElementById('searchMatchCount');
+      var searchPrevBtn = document.getElementById('searchPrevBtn');
+      var searchNextBtn = document.getElementById('searchNextBtn');
+      var searchClearBtn = document.getElementById('searchClearBtn');
+
+      var fabTopBtn = document.getElementById('fabTopBtn');
+      var fabJumpBtn = document.getElementById('fabJumpBtn');
+      var fabPaletteBtn = document.getElementById('fabPaletteBtn');
+
+      var currentTarget = { type: 'book', val: 1 };
+      var searchMatches = [];
+      var currentSearchIndex = -1;
+      var jumpbarObserver = null;
+
+      // 3. Theme Synchronization
       var currentTheme = localStorage.getItem('biblia_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', currentTheme);
       updateThemeIcon(currentTheme);
@@ -243,12 +400,101 @@
         themeBtn.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
       }
 
+      // 4. Reading Preferences Persistence
+      var defaultPrefs = { fontSize: 'md', fontFamily: 'sans', contentWidth: 'wide' };
+      var savedPrefs = defaultPrefs;
+      try {
+        var p = localStorage.getItem('biblia_guide_prefs');
+        if (p) savedPrefs = Object.assign({}, defaultPrefs, JSON.parse(p));
+      } catch (err) {}
+
+      function applyReadingPrefs(prefs) {
+        document.body.setAttribute('data-guide-font-size', prefs.fontSize || 'md');
+        document.body.setAttribute('data-guide-font-family', prefs.fontFamily || 'sans');
+        document.body.setAttribute('data-guide-content-width', prefs.contentWidth || 'wide');
+
+        // Update active UI buttons in popover
+        if (prefFontSizeGroup) {
+          prefFontSizeGroup.querySelectorAll('.prefs-choice-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-val') === prefs.fontSize);
+          });
+        }
+        if (prefFontFamilyGroup) {
+          prefFontFamilyGroup.querySelectorAll('.prefs-choice-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-val') === prefs.fontFamily);
+          });
+        }
+        if (prefContentWidthGroup) {
+          prefContentWidthGroup.querySelectorAll('.prefs-choice-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-val') === prefs.contentWidth);
+          });
+        }
+
+        try {
+          localStorage.setItem('biblia_guide_prefs', JSON.stringify(prefs));
+        } catch (err) {}
+      }
+
+      applyReadingPrefs(savedPrefs);
+
+      if (readingPrefsToggleBtn && readingPrefsPopover) {
+        readingPrefsToggleBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isHidden = readingPrefsPopover.style.display === 'none';
+          readingPrefsPopover.style.display = isHidden ? 'flex' : 'none';
+        });
+
+        document.addEventListener('click', function(e) {
+          if (readingPrefsPopover && !readingPrefsPopover.contains(e.target) && e.target !== readingPrefsToggleBtn) {
+            readingPrefsPopover.style.display = 'none';
+          }
+        });
+
+        if (prefFontSizeGroup) {
+          prefFontSizeGroup.addEventListener('click', function(e) {
+            var btn = e.target.closest('.prefs-choice-btn');
+            if (!btn) return;
+            savedPrefs.fontSize = btn.getAttribute('data-val');
+            applyReadingPrefs(savedPrefs);
+          });
+        }
+        if (prefFontFamilyGroup) {
+          prefFontFamilyGroup.addEventListener('click', function(e) {
+            var btn = e.target.closest('.prefs-choice-btn');
+            if (!btn) return;
+            savedPrefs.fontFamily = btn.getAttribute('data-val');
+            applyReadingPrefs(savedPrefs);
+          });
+        }
+        if (prefContentWidthGroup) {
+          prefContentWidthGroup.addEventListener('click', function(e) {
+            var btn = e.target.closest('.prefs-choice-btn');
+            if (!btn) return;
+            savedPrefs.contentWidth = btn.getAttribute('data-val');
+            applyReadingPrefs(savedPrefs);
+          });
+        }
+      }
+
       if (printBtn) {
         printBtn.addEventListener('click', function() {
           window.print();
         });
       }
 
+      // 5. Toast Notification System
+      function showToast(msg, icon) {
+        if (!toast) return;
+        icon = icon || 'fa-check';
+        toast.innerHTML = '<i class="fas ' + icon + '" aria-hidden="true"></i> <span>' + escapeHtml(msg) + '</span>';
+        toast.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function() {
+          toast.classList.remove('show');
+        }, 2800);
+      }
+
+      // 6. URL Parsing & Category Bar Sync
       function parseUrlParams() {
         var params = new URLSearchParams(window.location.search);
         var book = params.get('book');
@@ -294,28 +540,101 @@
         });
       }
 
-      function renderCurrentPage() {
-        var target = parseUrlParams();
-        if (target.type === 'book') {
-          var bookNo = target.val;
+      // 7. Sticky Section Jump Bar (ScrollSpy) Generator
+      function buildStickyJumpbar() {
+        if (!stickyJumpBar || !jumpbarInner) return;
+        if (jumpbarObserver) {
+          jumpbarObserver.disconnect();
+          jumpbarObserver = null;
+        }
+
+        var sections = root.querySelectorAll('section.guide-section[id]');
+        if (!sections.length) {
+          stickyJumpBar.style.display = 'none';
+          return;
+        }
+
+        var html = '';
+        sections.forEach(function(sec, idx) {
+          var sId = sec.id;
+          var title = sec.getAttribute('data-section-title') || ('段落 ' + (idx + 1));
+          var icon = sec.getAttribute('data-section-icon') || 'fa-bookmark';
+          html += '<a href="#' + sId + '" class="jumpbar-pill' + (idx === 0 ? ' active' : '') + '" data-target="' + sId + '">' +
+            '<i class="fas ' + icon + ' jumpbar-icon" aria-hidden="true"></i>' +
+            '<span>' + escapeHtml(title) + '</span>' +
+          '</a>';
+        });
+
+        jumpbarInner.innerHTML = html;
+        stickyJumpBar.style.display = 'block';
+
+        // Setup ScrollSpy Observer
+        var pills = jumpbarInner.querySelectorAll('.jumpbar-pill');
+        var pillMap = {};
+        pills.forEach(function(p) {
+          pillMap[p.getAttribute('data-target')] = p;
+        });
+
+        jumpbarObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var id = entry.target.id;
+              pills.forEach(function(p) { p.classList.remove('active'); });
+              if (pillMap[id]) {
+                pillMap[id].classList.add('active');
+                try {
+                  pillMap[id].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } catch (e) {}
+              }
+            }
+          });
+        }, {
+          rootMargin: '-80px 0px -70% 0px',
+          threshold: 0
+        });
+
+        sections.forEach(function(sec) {
+          jumpbarObserver.observe(sec);
+        });
+
+        // Pill click smooth scroll with header offset
+        jumpbarInner.querySelectorAll('.jumpbar-pill').forEach(function(p) {
+          p.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('data-target');
+            var targetEl = document.getElementById(targetId);
+            if (targetEl) {
+              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        });
+      }
+
+      // 8. SPA In-Place Page Renderer (No Full Reload)
+      function renderCurrentPage(target, pushState) {
+        currentTarget = target || parseUrlParams();
+        clearInPageSearch();
+
+        if (currentTarget.type === 'book') {
+          var bookNo = currentTarget.val;
           if (bookNo < 1) bookNo = 1;
           if (bookNo > 66) bookNo = 66;
-          
-          if (picker) {
-            picker.value = 'book:' + bookNo;
-          }
+          currentTarget.val = bookNo;
+
+          if (picker) picker.value = 'book:' + bookNo;
+          if (openReaderTopBtn) openReaderTopBtn.href = 'index.html#read/' + bookNo + '/1';
+
           if (window.renderBookStudyGuideHtml) {
             root.innerHTML = window.renderBookStudyGuideHtml(bookNo, { isStandalone: true });
             var name = (window.BIBLIA_BOOK_STUDIES_OT && window.BIBLIA_BOOK_STUDIES_OT[bookNo]) ? window.BIBLIA_BOOK_STUDIES_OT[bookNo].meta.nameZh :
                        (window.BIBLIA_BOOK_STUDIES_NT && window.BIBLIA_BOOK_STUDIES_NT[bookNo]) ? window.BIBLIA_BOOK_STUDIES_NT[bookNo].meta.nameZh : ('第 ' + bookNo + ' 卷');
             document.title = name + ' 深入研究導讀 | Biblia';
-            if (subtitle) subtitle.textContent = name + ' 深入研究';
+            if (subtitle) subtitle.textContent = name + ' 深入研究導讀';
           }
-        } else if (target.type === 'survey') {
-          var surveyKey = target.val;
-          if (picker) {
-            picker.value = 'survey:' + surveyKey;
-          }
+        } else if (currentTarget.type === 'survey') {
+          var surveyKey = currentTarget.val;
+          if (picker) picker.value = 'survey:' + surveyKey;
+
           if (window.renderSurveyGuideHtml) {
             root.innerHTML = window.renderSurveyGuideHtml(surveyKey, { isStandalone: true });
             var sTitle = (surveyKey === 'nt_survey' || surveyKey === 'ntSurvey') ? '新約聖經總覽' : '舊約聖經總覽';
@@ -323,46 +642,395 @@
             if (subtitle) subtitle.textContent = sTitle;
           }
         }
-        updateActiveCategoryPill(target);
-        window.scrollTo(0, 0);
+
+        updateActiveCategoryPill(currentTarget);
+        buildStickyJumpbar();
+        updatePaletteActiveState();
+
+        if (pushState !== false) {
+          var newQuery = currentTarget.type === 'book' ? ('?book=' + currentTarget.val) : ('?survey=' + currentTarget.val);
+          if (window.location.search !== newQuery) {
+            history.pushState(null, '', newQuery);
+          }
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
+      // Popstate handling for browser back/forward buttons
+      window.addEventListener('popstate', function() {
+        renderCurrentPage(parseUrlParams(), false);
+      });
+
+      // 9. Quick Dropdown Picker Event
       if (picker) {
         picker.addEventListener('change', function() {
           var parts = this.value.split(':');
           if (parts[0] === 'book') {
-            window.location.search = '?book=' + parts[1];
+            renderCurrentPage({ type: 'book', val: parseInt(parts[1], 10) || 1 });
           } else if (parts[0] === 'survey') {
-            window.location.search = '?survey=' + parts[1];
+            renderCurrentPage({ type: 'survey', val: parts[1] });
           }
         });
       }
 
-      // Category Pill Navigation
+      // 10. Category Pill Navigation
       if (categoryBar) {
         categoryBar.addEventListener('click', function(e) {
           var pill = e.target.closest('.cat-pill');
           if (!pill) return;
           var cat = pill.getAttribute('data-cat');
           var catTargets = {
-            'all': '?book=1',
-            'survey': '?survey=ot_survey',
-            'torah': '?book=1',
-            'history_ot': '?book=6',
-            'poetry': '?book=18',
-            'prophet_major': '?book=23',
-            'prophet_minor': '?book=28',
-            'gospel_acts': '?book=40',
-            'pauline': '?book=45',
-            'general_rev': '?book=58'
+            'all': { type: 'book', val: 1 },
+            'survey': { type: 'survey', val: 'ot_survey' },
+            'torah': { type: 'book', val: 1 },
+            'history_ot': { type: 'book', val: 6 },
+            'poetry': { type: 'book', val: 18 },
+            'prophet_major': { type: 'book', val: 23 },
+            'prophet_minor': { type: 'book', val: 28 },
+            'gospel_acts': { type: 'book', val: 40 },
+            'pauline': { type: 'book', val: 45 },
+            'general_rev': { type: 'book', val: 58 }
           };
           if (catTargets[cat]) {
-            window.location.search = catTargets[cat];
+            renderCurrentPage(catTargets[cat]);
           }
         });
       }
 
-      // Strong Dictionary Interactive Modal
+      // 11. Visual 66-Book Explorer Palette Modal Engine
+      function renderPaletteGrid(filterQuery, filterCategory) {
+        if (!paletteBooksGrid) return;
+        var books = window.ALL_BOOKS_META || [];
+        var q = (filterQuery || '').trim().toLowerCase();
+        var cat = filterCategory || 'all';
+
+        var html = '';
+
+        // Surveys if filter allows
+        if (cat === 'all' || cat === 'survey') {
+          var sMatchOT = !q || '舊約聖經總覽 ot survey'.indexOf(q) !== -1;
+          var sMatchNT = !q || '新約聖經總覽 nt survey'.indexOf(q) !== -1;
+
+          if (sMatchOT) {
+            html += '<div class="palette-book-card" data-type="survey" data-val="ot_survey">' +
+              '<div class="palette-card-top"><span class="palette-card-num">SURVEY #1</span><span class="palette-card-cat">舊約總覽</span></div>' +
+              '<div class="palette-card-title">舊約聖經總覽</div>' +
+              '<div class="palette-card-en">Old Testament Survey</div>' +
+              '<div class="palette-card-orig">創世記至瑪拉基書 · 39 卷全貌</div>' +
+              '<div class="palette-card-meta"><span>救贖聖約展開</span><span>39 卷全景</span></div>' +
+            '</div>';
+          }
+          if (sMatchNT) {
+            html += '<div class="palette-book-card" data-type="survey" data-val="nt_survey">' +
+              '<div class="palette-card-top"><span class="palette-card-num">SURVEY #2</span><span class="palette-card-cat">新約總覽</span></div>' +
+              '<div class="palette-card-title">新約聖經總覽</div>' +
+              '<div class="palette-card-en">New Testament Survey</div>' +
+              '<div class="palette-card-orig">馬太福音至啟示錄 · 27 卷全貌</div>' +
+              '<div class="palette-card-meta"><span>基督國度成全</span><span>27 卷全景</span></div>' +
+            '</div>';
+          }
+        }
+
+        // 66 Books
+        books.forEach(function(b) {
+          // Category filter
+          if (cat !== 'all') {
+            if (cat === 'OT' && b.testament !== 'OT') return;
+            if (cat === 'NT' && b.testament !== 'NT') return;
+            if (cat === 'torah' && (b.no < 1 || b.no > 5)) return;
+            if (cat === 'history_ot' && (b.no < 6 || b.no > 17)) return;
+            if (cat === 'poetry' && (b.no < 18 || b.no > 22)) return;
+            if (cat === 'prophets' && (b.no < 23 || b.no > 39)) return;
+            if (cat === 'gospels' && (b.no < 40 || b.no > 44)) return;
+            if (cat === 'pauline' && (b.no < 45 || b.no > 57)) return;
+            if (cat === 'general' && (b.no < 58 || b.no > 66)) return;
+          }
+
+          // Search query filter
+          if (q) {
+            var searchStr = (b.nameZh + ' ' + b.nameEn + ' ' + (b.originalTitle || '') + ' ' + (b.category || '') + ' ' + b.no).toLowerCase();
+            if (searchStr.indexOf(q) === -1) return;
+          }
+
+          var numPad = b.no < 10 ? ('0' + b.no) : ('' + b.no);
+          var isActive = (currentTarget.type === 'book' && currentTarget.val === b.no);
+
+          html += '<div class="palette-book-card' + (isActive ? ' active' : '') + '" data-type="book" data-val="' + b.no + '">' +
+            '<div class="palette-card-top">' +
+              '<span class="palette-card-num">#' + numPad + '</span>' +
+              '<span class="palette-card-cat">' + escapeHtml(b.category || (b.testament === 'OT' ? '舊約' : '新約')) + '</span>' +
+            '</div>' +
+            '<div class="palette-card-title">' + escapeHtml(b.nameZh) + '</div>' +
+            '<div class="palette-card-en">' + escapeHtml(b.nameEn) + '</div>' +
+            (b.originalTitle ? ('<div class="palette-card-orig">' + escapeHtml(b.originalTitle) + '</div>') : '') +
+            '<div class="palette-card-meta">' +
+              '<span>' + (b.testament === 'OT' ? '舊約' : '新約') + '</span>' +
+              '<span>共 ' + (b.chapters || '') + ' 章</span>' +
+            '</div>' +
+          '</div>';
+        });
+
+        if (!html) {
+          html = '<div class="modal-empty" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--fg-muted);">' +
+            '<i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i><br>' +
+            '查無符合關鍵字「<strong>' + escapeHtml(q) + '</strong>」的聖經書卷。' +
+          '</div>';
+        }
+
+        paletteBooksGrid.innerHTML = html;
+      }
+
+      function updatePaletteActiveState() {
+        if (!paletteBooksGrid) return;
+        paletteBooksGrid.querySelectorAll('.palette-book-card').forEach(function(card) {
+          var t = card.getAttribute('data-type');
+          var v = card.getAttribute('data-val');
+          if (t === 'book') {
+            card.classList.toggle('active', currentTarget.type === 'book' && currentTarget.val === parseInt(v, 10));
+          } else if (t === 'survey') {
+            card.classList.toggle('active', currentTarget.type === 'survey' && currentTarget.val === v);
+          }
+        });
+      }
+
+      function openBookPalette() {
+        if (!bookPaletteModal) return;
+        bookPaletteModal.style.display = 'flex';
+        bookPaletteModal.setAttribute('aria-hidden', 'false');
+        if (paletteSearchInput) {
+          paletteSearchInput.value = '';
+          paletteSearchInput.focus();
+        }
+        var activePill = paletteFilterPills ? paletteFilterPills.querySelector('.palette-pill.active') : null;
+        var activeCat = activePill ? activePill.getAttribute('data-filter') : 'all';
+        renderPaletteGrid('', activeCat);
+      }
+
+      function closeBookPalette() {
+        if (!bookPaletteModal) return;
+        bookPaletteModal.style.display = 'none';
+        bookPaletteModal.setAttribute('aria-hidden', 'true');
+      }
+
+      if (openBookPaletteBtn) openBookPaletteBtn.addEventListener('click', openBookPalette);
+      if (fabPaletteBtn) fabPaletteBtn.addEventListener('click', openBookPalette);
+      if (paletteCloseBtn) paletteCloseBtn.addEventListener('click', closeBookPalette);
+
+      if (bookPaletteModal) {
+        bookPaletteModal.addEventListener('click', function(e) {
+          if (e.target === bookPaletteModal) closeBookPalette();
+        });
+      }
+
+      if (paletteSearchInput) {
+        paletteSearchInput.addEventListener('input', function() {
+          var activePill = paletteFilterPills ? paletteFilterPills.querySelector('.palette-pill.active') : null;
+          var activeCat = activePill ? activePill.getAttribute('data-filter') : 'all';
+          renderPaletteGrid(this.value, activeCat);
+        });
+      }
+
+      if (paletteFilterPills) {
+        paletteFilterPills.addEventListener('click', function(e) {
+          var pill = e.target.closest('.palette-pill');
+          if (!pill) return;
+          paletteFilterPills.querySelectorAll('.palette-pill').forEach(function(p) { p.classList.remove('active'); });
+          pill.classList.add('active');
+          var cat = pill.getAttribute('data-filter');
+          var q = paletteSearchInput ? paletteSearchInput.value : '';
+          renderPaletteGrid(q, cat);
+        });
+      }
+
+      if (paletteBooksGrid) {
+        paletteBooksGrid.addEventListener('click', function(e) {
+          var card = e.target.closest('.palette-book-card');
+          if (!card) return;
+          var t = card.getAttribute('data-type');
+          var v = card.getAttribute('data-val');
+          closeBookPalette();
+          if (t === 'book') {
+            renderCurrentPage({ type: 'book', val: parseInt(v, 10) || 1 });
+          } else if (t === 'survey') {
+            renderCurrentPage({ type: 'survey', val: v });
+          }
+        });
+      }
+
+      // 12. In-Page Realtime Fulltext Search Controller
+      function clearInPageSearch() {
+        if (!root) return;
+        root.querySelectorAll('.guide-search-highlight').forEach(function(m) {
+          var parent = m.parentNode;
+          parent.replaceChild(document.createTextNode(m.textContent), m);
+          parent.normalize();
+        });
+        searchMatches = [];
+        currentSearchIndex = -1;
+        if (searchMatchCount) searchMatchCount.style.display = 'none';
+        if (searchPrevBtn) searchPrevBtn.style.display = 'none';
+        if (searchNextBtn) searchNextBtn.style.display = 'none';
+        if (searchClearBtn) searchClearBtn.style.display = 'none';
+      }
+
+      function executeInPageSearch(term) {
+        clearInPageSearch();
+        term = (term || '').trim();
+        if (!term || term.length < 1) return;
+
+        var regex = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode: function(node) {
+            if (!node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+            var parent = node.parentElement;
+            if (!parent) return NodeFilter.FILTER_REJECT;
+            var tag = parent.tagName.toLowerCase();
+            if (tag === 'script' || tag === 'style' || tag === 'mark' || tag === 'select' || tag === 'button') {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+
+        var nodesToReplace = [];
+        while (walker.nextNode()) {
+          var textNode = walker.currentNode;
+          if (regex.test(textNode.nodeValue)) {
+            nodesToReplace.push(textNode);
+          }
+        }
+
+        nodesToReplace.forEach(function(textNode) {
+          var frag = document.createDocumentFragment();
+          var parts = textNode.nodeValue.split(regex);
+          parts.forEach(function(part) {
+            if (part && part.toLowerCase() === term.toLowerCase()) {
+              var mark = document.createElement('mark');
+              mark.className = 'guide-search-highlight';
+              mark.textContent = part;
+              frag.appendChild(mark);
+              searchMatches.push(mark);
+            } else if (part) {
+              frag.appendChild(document.createTextNode(part));
+            }
+          });
+          if (textNode.parentNode) {
+            textNode.parentNode.replaceChild(frag, textNode);
+          }
+        });
+
+        if (searchMatches.length > 0) {
+          currentSearchIndex = 0;
+          highlightCurrentMatch();
+          if (searchMatchCount) {
+            searchMatchCount.textContent = '1 / ' + searchMatches.length;
+            searchMatchCount.style.display = 'inline-block';
+          }
+          if (searchPrevBtn) searchPrevBtn.style.display = 'inline-block';
+          if (searchNextBtn) searchNextBtn.style.display = 'inline-block';
+          if (searchClearBtn) searchClearBtn.style.display = 'inline-block';
+        } else {
+          if (searchMatchCount) {
+            searchMatchCount.textContent = '0 處相符';
+            searchMatchCount.style.display = 'inline-block';
+          }
+          if (searchClearBtn) searchClearBtn.style.display = 'inline-block';
+        }
+      }
+
+      function highlightCurrentMatch() {
+        searchMatches.forEach(function(m, idx) {
+          m.classList.toggle('current', idx === currentSearchIndex);
+        });
+        if (searchMatches[currentSearchIndex]) {
+          searchMatches[currentSearchIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (searchMatchCount) {
+            searchMatchCount.textContent = (currentSearchIndex + 1) + ' / ' + searchMatches.length;
+          }
+        }
+      }
+
+      if (inPageSearchInput) {
+        var searchDebounce = null;
+        inPageSearchInput.addEventListener('input', function() {
+          var val = this.value;
+          clearTimeout(searchDebounce);
+          searchDebounce = setTimeout(function() {
+            executeInPageSearch(val);
+          }, 220);
+        });
+
+        inPageSearchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (e.shiftKey) {
+              navigateSearch(-1);
+            } else {
+              navigateSearch(1);
+            }
+          } else if (e.key === 'Escape') {
+            inPageSearchInput.value = '';
+            clearInPageSearch();
+            inPageSearchInput.blur();
+          }
+        });
+      }
+
+      function navigateSearch(delta) {
+        if (!searchMatches.length) return;
+        currentSearchIndex += delta;
+        if (currentSearchIndex < 0) currentSearchIndex = searchMatches.length - 1;
+        if (currentSearchIndex >= searchMatches.length) currentSearchIndex = 0;
+        highlightCurrentMatch();
+      }
+
+      if (searchPrevBtn) searchPrevBtn.addEventListener('click', function() { navigateSearch(-1); });
+      if (searchNextBtn) searchNextBtn.addEventListener('click', function() { navigateSearch(1); });
+      if (searchClearBtn) {
+        searchClearBtn.addEventListener('click', function() {
+          if (inPageSearchInput) inPageSearchInput.value = '';
+          clearInPageSearch();
+        });
+      }
+
+      // 13. Copy Verse & Share Section Anchor Handlers
+      document.addEventListener('click', function(e) {
+        // Copy verse button
+        var copyBtn = e.target.closest('.btn-copy-verse');
+        if (copyBtn) {
+          e.preventDefault();
+          var bookName = copyBtn.getAttribute('data-book') || '';
+          var ref = copyBtn.getAttribute('data-ref') || '';
+          var text = copyBtn.getAttribute('data-text') || '';
+          var fullText = '「' + text + '」—— 《' + bookName + '》' + ref;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(fullText).then(function() {
+              showToast('已複製經文：' + bookName + ' ' + ref, 'fa-copy');
+            }).catch(function() {
+              showToast('複製完成', 'fa-check');
+            });
+          } else {
+            showToast('已複製經文', 'fa-copy');
+          }
+          return;
+        }
+
+        // Section anchor button
+        var secAnchor = e.target.closest('.guide-sec-anchor-btn');
+        if (secAnchor) {
+          e.preventDefault();
+          var anchorId = secAnchor.getAttribute('data-anchor');
+          var shareUrl = window.location.origin + window.location.pathname + window.location.search + '#' + anchorId;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareUrl).then(function() {
+              showToast('已複製專題段落分享連結！', 'fa-link');
+            });
+          }
+        }
+      });
+
+      // 14. Strong Dictionary Modal Handlers
       function openStrongModal(code) {
         if (!modal || !modalStrongCode || !modalBody) return;
         code = (code || '').trim().toUpperCase();
@@ -405,23 +1073,14 @@
         modal.setAttribute('aria-hidden', 'true');
       }
 
-      if (modalCloseBtn) {
-        modalCloseBtn.addEventListener('click', closeStrongModal);
-      }
+      if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeStrongModal);
       if (modal) {
         modal.addEventListener('click', function(e) {
-          if (e.target === modal) {
-            closeStrongModal();
-          }
+          if (e.target === modal) closeStrongModal();
         });
       }
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
-          closeStrongModal();
-        }
-      });
 
-      // Global delegation for Strong tags
+      // Delegation for Strong tags
       document.addEventListener('click', function(e) {
         var strongTag = e.target.closest('.clickable-strong-tag');
         if (strongTag) {
@@ -431,8 +1090,81 @@
         }
       });
 
-      // Initial render
-      renderCurrentPage();
+      // 15. Floating Action Buttons (FAB) & Scroll Listener
+      window.addEventListener('scroll', function() {
+        var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        if (fabTopBtn) {
+          fabTopBtn.style.display = scrollY > 320 ? 'flex' : 'none';
+        }
+      }, { passive: true });
+
+      if (fabTopBtn) {
+        fabTopBtn.addEventListener('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      if (fabJumpBtn) {
+        fabJumpBtn.addEventListener('click', function() {
+          if (stickyJumpBar) {
+            stickyJumpBar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+      }
+
+      // 16. Global Keyboard Shortcuts
+      document.addEventListener('keydown', function(e) {
+        var activeTag = (document.activeElement && document.activeElement.tagName) ? document.activeElement.tagName.toLowerCase() : '';
+        var isInputFocused = (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select');
+
+        if (e.key === 'Escape') {
+          if (modal && modal.style.display === 'flex') {
+            closeStrongModal();
+          } else if (bookPaletteModal && bookPaletteModal.style.display === 'flex') {
+            closeBookPalette();
+          } else if (readingPrefsPopover && readingPrefsPopover.style.display === 'flex') {
+            readingPrefsPopover.style.display = 'none';
+          } else if (inPageSearchInput && inPageSearchInput.value) {
+            inPageSearchInput.value = '';
+            clearInPageSearch();
+            inPageSearchInput.blur();
+          }
+          return;
+        }
+
+        if (isInputFocused) return;
+
+        // B or G: Open Book Explorer Palette
+        if (e.key === 'b' || e.key === 'B' || e.key === 'g' || e.key === 'G') {
+          e.preventDefault();
+          openBookPalette();
+        }
+        // /: Focus In-Page Search
+        else if (e.key === '/') {
+          e.preventDefault();
+          if (inPageSearchInput) {
+            inPageSearchInput.focus();
+            inPageSearchInput.select();
+          }
+        }
+        // [ or P: Previous book
+        else if (e.key === '[' || e.key === 'p' || e.key === 'P') {
+          if (currentTarget.type === 'book' && currentTarget.val > 1) {
+            e.preventDefault();
+            renderCurrentPage({ type: 'book', val: currentTarget.val - 1 });
+          }
+        }
+        // ] or N: Next book
+        else if (e.key === ']' || e.key === 'n' || e.key === 'N') {
+          if (currentTarget.type === 'book' && currentTarget.val < 66) {
+            e.preventDefault();
+            renderCurrentPage({ type: 'book', val: currentTarget.val + 1 });
+          }
+        }
+      });
+
+      // 17. Initial Render
+      renderCurrentPage(parseUrlParams(), false);
 
     })();
   </script>

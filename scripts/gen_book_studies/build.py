@@ -191,7 +191,11 @@ def build_book_guide_renderer_js(all_books):
             "no": b["meta"]["bookNo"],
             "nameZh": b["meta"]["nameZh"],
             "nameEn": b["meta"]["nameEn"],
-            "testament": b["meta"]["testament"]
+            "originalTitle": b["meta"].get("originalTitle", ""),
+            "testament": b["meta"]["testament"],
+            "category": b["meta"].get("category", ""),
+            "chapters": b["meta"].get("chapters", 1),
+            "theme": b["meta"].get("theme", "")
         }
         for b in all_books
     ]
@@ -829,7 +833,7 @@ def build_book_guide_renderer_js(all_books):
 
     // 00. Canonical Book Dossier (正典檔案速查表)
     if (data.bookDossier) {
-      html += '    <section class="guide-section section-book-dossier">';
+      html += '    <section class="guide-section section-book-dossier" id="guide-sec-dossier" data-section-title="正典檔案速查" data-section-icon="fa-table-list">';
       html += renderBookDossierHtml(bookNo, { isStandalone: isStandalone, showHeading: true });
       html += '    </section>';
     }
@@ -837,7 +841,7 @@ def build_book_guide_renderer_js(all_books):
     // 0. Youth & Beginner Field Guide (青少年與初信者平易近人導讀)
     if (data.youthGuide) {
       var yg = data.youthGuide;
-      html += '    <section class="guide-section section-youth-guide">';
+      html += '    <section class="guide-section section-youth-guide" id="guide-sec-youth" data-section-title="青年破冰導讀" data-section-icon="fa-compass">';
       html += '      <div class="youth-guide-banner">';
       html += '        <div class="youth-banner-badge"><i class="fas fa-compass"></i> 青少年與初信者專屬指南 · 30秒極速讀懂</div>';
       html += '        <h2 class="guide-section-title youth-title"><i class="fas fa-sparkles"></i> 青年破冰與生命探索視角</h2>';
@@ -885,7 +889,7 @@ def build_book_guide_renderer_js(all_books):
     // 0.1 Academic Paper Research Specification (正統神學院碩博士等級學術論文規格)
     if (data.academicPaper) {
       var ap = data.academicPaper;
-      html += '    <section class="guide-section section-academic-paper">';
+      html += '    <section class="guide-section section-academic-paper" id="guide-sec-academic" data-section-title="學術論文命題" data-section-icon="fa-graduation-cap">';
       html += '      <div class="academic-paper-card">';
       html += '        <div class="academic-header-bar">';
       html += '          <div class="academic-badge-group">';
@@ -926,7 +930,7 @@ def build_book_guide_renderer_js(all_books):
 
     // 1. Key Verses
     if (m.keyVerses && m.keyVerses.length) {
-      html += '    <section class="guide-section section-key-verses">';
+      html += '    <section class="guide-section section-key-verses" id="guide-sec-verses" data-section-title="核心金句鑰節" data-section-icon="fa-key">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-key"></i> 核心金句與神學鑰節</h2>';
       html += '      <div class="key-verses-list">';
       m.keyVerses.forEach(function(kv) {
@@ -937,7 +941,10 @@ def build_book_guide_renderer_js(all_books):
         html += '        <div class="key-verse-card">';
         html += '          <div class="verse-header">';
         html += '            <span class="verse-ref"><i class="fas fa-bookmark"></i> ' + escapeHtml(kv.ref) + '</span>';
-        html += '            <a href="' + readJumpUrl + '" class="verse-jump-btn" title="在閱讀器中開啟此經節"><i class="fas fa-external-link-alt"></i> 閱讀經文</a>';
+        html += '            <div class="verse-actions-group">';
+        html += '              <button type="button" class="verse-action-btn btn-copy-verse" data-book="' + escapeHtml(m.nameZh) + '" data-ref="' + escapeHtml(kv.ref) + '" data-text="' + escapeHtml(kv.text) + '" title="複製此節金句與出處"><i class="fas fa-copy"></i> 複製金句</button>';
+        html += '              <a href="' + readJumpUrl + '" class="verse-jump-btn" title="在閱讀器中開啟此經節"><i class="fas fa-external-link-alt"></i> 閱讀經文</a>';
+        html += '            </div>';
         html += '          </div>';
         html += '          <blockquote class="verse-text">' + escapeHtml(kv.text) + '</blockquote>';
         if (kv.note) {
@@ -950,7 +957,7 @@ def build_book_guide_renderer_js(all_books):
     }
 
     // 2. Historical & Canonical Context
-    html += '    <section class="guide-section section-history">';
+    html += '    <section class="guide-section section-history" id="guide-sec-history" data-section-title="歷史地理考古" data-section-icon="fa-landmark">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-landmark"></i> 歷史地理、考古發現與正典脈絡</h2>';
     html += '      <div class="guide-text-block summary-block">' + escapeHtml(h.summary) + '</div>';
     html += '      <div class="history-details-grid">';
@@ -962,7 +969,7 @@ def build_book_guide_renderer_js(all_books):
     html += '    </section>';
 
     // 3. Authorship & Evangelical Defense
-    html += '    <section class="guide-section section-authorship">';
+    html += '    <section class="guide-section section-authorship" id="guide-sec-authorship" data-section-title="作者爭辯辨析" data-section-icon="fa-feather-alt">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-feather-alt"></i> 作者爭辯與正統福音派學術辨析</h2>';
     html += '      <div class="authorship-grid">';
     html += '        <div class="author-view-card traditional"><div class="view-tag">正統教會傳統立場</div><div class="view-body">' + escapeHtml(a.traditionalView) + '</div></div>';
@@ -972,7 +979,7 @@ def build_book_guide_renderer_js(all_books):
     html += '    </section>';
 
     // 4. Theology, Covenant & Christology
-    html += '    <section class="guide-section section-theology">';
+    html += '    <section class="guide-section section-theology" id="guide-sec-theology" data-section-title="聖約基督成全" data-section-icon="fa-cross">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-cross"></i> 聖約神學定位、核心主題與基督論成全</h2>';
     html += '      <div class="covenant-card"><div class="covenant-title"><i class="fas fa-ring"></i> 聖約歷史定位 (Covenantal Location)</div><div class="covenant-body">' + escapeHtml(t.covenantLocation) + '</div></div>';
     
@@ -1001,7 +1008,7 @@ def build_book_guide_renderer_js(all_books):
 
     // 5. 🏛️ Biblia 專家委員會七大座席評註與 7x7 研經典範 (The 7-Seat Expert Council)
     if (data.expertCouncilPerspectives) {
-      html += '    <section class="guide-section section-expert-council">';
+      html += '    <section class="guide-section section-expert-council" id="guide-sec-council" data-section-title="專家七席評註" data-section-icon="fa-landmark">';
       html += '      <div class="expert-council-banner">';
       html += '        <div class="expert-banner-badge"><i class="fas fa-certificate"></i> 專家委員會座席審定 · 7x7 深度研經</div>';
       html += '        <h2 class="guide-section-title expert-title"><i class="fas fa-landmark"></i> Biblia 專家委員會七席評註與 7x7 研經典範</h2>';
@@ -1040,7 +1047,7 @@ def build_book_guide_renderer_js(all_books):
     }
 
     // 6. Literary Structure & Detailed Outline
-    html += '    <section class="guide-section section-structure">';
+    html += '    <section class="guide-section section-structure" id="guide-sec-structure" data-section-title="宏觀架構大綱" data-section-icon="fa-sitemap">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-sitemap"></i> 文學體裁、結構特點與逐段深度大綱</h2>';
     html += '      <div class="structure-meta-card">';
     html += '        <div class="meta-row"><strong>文學體裁：</strong> ' + escapeHtml(l.genre) + '</div>';
@@ -1068,7 +1075,7 @@ def build_book_guide_renderer_js(all_books):
 
     // 6. Original Key Words & Exegesis
     if (data.keyWordsOriginal && data.keyWordsOriginal.length) {
-      html += '    <section class="guide-section section-keywords">';
+      html += '    <section class="guide-section section-keywords" id="guide-sec-keywords" data-section-title="原文關鍵字詞" data-section-icon="fa-language">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-language"></i> 原文關鍵詞彙神學釋經 (Hebrew / Greek)</h2>';
       html += '      <div class="keywords-grid">';
       data.keyWordsOriginal.forEach(function(kw) {
@@ -1090,7 +1097,7 @@ def build_book_guide_renderer_js(all_books):
 
     // 7. Interpretive Issues & Controversies
     if (data.interpretiveIssues && data.interpretiveIssues.length) {
-      html += '    <section class="guide-section section-interpretive">';
+      html += '    <section class="guide-section section-interpretive" id="guide-sec-interpretive" data-section-title="難解爭議共識" data-section-icon="fa-balance-scale">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-balance-scale"></i> 難解經文、學術爭議與歸正神學共識</h2>';
       html += '      <div class="interpretive-list">';
       data.interpretiveIssues.forEach(function(issue) {
@@ -1106,7 +1113,7 @@ def build_book_guide_renderer_js(all_books):
 
     // 8. Pastoral Applications
     if (data.pastoralApplications && data.pastoralApplications.length) {
-      html += '    <section class="guide-section section-applications">';
+      html += '    <section class="guide-section section-applications" id="guide-sec-applications" data-section-title="教牧生活應用" data-section-icon="fa-hands-helping">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-hands-helping"></i> 教牧與基督徒生活實踐應用</h2>';
       html += '      <div class="applications-grid">';
       data.pastoralApplications.forEach(function(app) {
@@ -1122,7 +1129,7 @@ def build_book_guide_renderer_js(all_books):
 
     // 9. Bibliography & Recommended Commentaries
     if (data.bibliography && data.bibliography.length) {
-      html += '    <section class="guide-section section-biblio">';
+      html += '    <section class="guide-section section-biblio" id="guide-sec-biblio" data-section-title="經典註釋書目" data-section-icon="fa-book">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-book"></i> 學術註釋書目與經典研經書單</h2>';
       html += '      <div class="biblio-grid">';
       data.bibliography.forEach(function(b) {
@@ -1213,7 +1220,7 @@ def build_book_guide_renderer_js(all_books):
 
     if (data.sections && data.sections.length) {
       data.sections.forEach(function(sec, idx) {
-        html += '    <section class="guide-section section-survey-part" id="' + escapeHtml(sec.id) + '">';
+        html += '    <section class="guide-section section-survey-part" id="' + escapeHtml(sec.id) + '" data-section-title="' + escapeHtml(sec.title) + '" data-section-icon="fa-book-reader">';
         html += '      <h2 class="guide-section-title"><i class="fas fa-book-reader"></i> ' + escapeHtml(sec.title) + '</h2>';
         html += '      <div class="survey-section-content">' + formatMarkdown(sec.content) + '</div>';
         html += '    </section>';

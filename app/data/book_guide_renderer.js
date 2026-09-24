@@ -11,397 +11,661 @@
     "no": 1,
     "nameZh": "創世記",
     "nameEn": "Genesis",
-    "testament": "OT"
+    "originalTitle": "בְּרֵאשִׁית (Bərēʾšīṯ, 起初)",
+    "testament": "OT",
+    "category": "律法書",
+    "chapters": 50,
+    "theme": "萬物起源、上帝的主權創造、人類墮落與三一神藉由恩典之約（亞伯拉罕之約）所展開的救贖歷史序章"
   },
   {
     "no": 2,
     "nameZh": "出埃及記",
     "nameEn": "Exodus",
-    "testament": "OT"
+    "originalTitle": "וְאֵלֶּה שְׁמוֹת (Wəʾēlleh šəmōṯ, 這是他們的名字)",
+    "testament": "OT",
+    "category": "律法書",
+    "chapters": 40,
+    "theme": "大能救贖與立約同在：耶和華擊潰埃及偶像、救贖百姓出奴役，於西奈山立約頒布十誡，並藉由會幕居住在祂子民中間"
   },
   {
     "no": 3,
     "nameZh": "利未記",
     "nameEn": "Leviticus",
-    "testament": "OT"
+    "originalTitle": "וַיִּקְרָא (Wayyiqrāʾ, 祂呼召)",
+    "testament": "OT",
+    "category": "律法書",
+    "chapters": 27,
+    "theme": "神聖臨在與完全聖潔：有罪的人如何藉由血的贖罪親近聖潔的上帝，並在萬民中活出分別為聖的敬拜與道德生命"
   },
   {
     "no": 4,
     "nameZh": "民數記",
     "nameEn": "Numbers",
-    "testament": "OT"
+    "originalTitle": "בְּמִדְבַּר (Bəmiḏbar, 在曠野中)",
+    "testament": "OT",
+    "category": "律法書",
+    "chapters": 36,
+    "theme": "曠野漂流與聖約信實：老一代的不信背叛與倒斃，神公義的管教，以及祂在長達38年漂流中對新一代堅不可摧的信實護引與爭戰預備"
   },
   {
     "no": 5,
     "nameZh": "申命記",
     "nameEn": "Deuteronomy",
-    "testament": "OT"
+    "originalTitle": "דְּבָרִים (Dəḇārīm, 話語 / 摩西講論)",
+    "testament": "OT",
+    "category": "律法書",
+    "chapters": 34,
+    "theme": "重申聖約與盡心愛神：摩西離世前對新世代的三篇深情講道，呼籲盡心、盡性、盡力愛獨一真神耶和華，在生死禍福前抉擇順服蒙福的聖約道路"
   },
   {
     "no": 6,
     "nameZh": "約書亞記",
     "nameEn": "Joshua",
-    "testament": "OT"
+    "originalTitle": "יְהוֹשֻׁעַ (Yəhōšūaʿ, 耶和華是拯救)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 24,
+    "theme": "信實成就與得地為業：耶和華照祂向列祖所起的誓，以大能引導百姓過約旦河、征服迦南、劃分地業，宣告神一切應許無一落空"
   },
   {
     "no": 7,
     "nameZh": "士師記",
     "nameEn": "Judges",
-    "testament": "OT"
+    "originalTitle": "שֹׁפְטִים (Šōp̄əṭīm, 士師 / 拯救者)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 21,
+    "theme": "背道崩潰與呼求拯救的螺旋：以色列人離棄耶和華、隨從巴力、受外邦壓迫，在呼求中神興起士師拯救，揭示「那時以色列中沒有王，各人任意而行」的全然敗壞，引頸期盼真正公義的彌賽亞君王"
   },
   {
     "no": 8,
     "nameZh": "路得記",
     "nameEn": "Ruth",
-    "testament": "OT"
+    "originalTitle": "רוּת (Rūṯ, 朋友 / 陪伴)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 4,
+    "theme": "至親贖買與堅定慈愛：在士師時代的黑暗中，外邦摩押女子路得以忠貞之愛(Hesed)跟隨婆婆與神，波阿斯履行至親贖買人(Goel)職責，神在幽微護理中為大衛王朝與彌賽亞基督預備譜系"
   },
   {
     "no": 9,
     "nameZh": "撒母耳記上",
     "nameEn": "1 Samuel",
-    "testament": "OT"
+    "originalTitle": "שְׁמוּאֵל א (Šəmūʾēl 1, 撒母耳上)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 31,
+    "theme": "從士師過渡到王國：最後一位士師撒母耳的興起、掃羅因驕傲不順服遭棄絕、合神心意的大衛蒙膏受磨礪，宣告「順服勝於獻祭」與神察看人心的主權"
   },
   {
     "no": 10,
     "nameZh": "撒母耳記下",
     "nameEn": "2 Samuel",
-    "testament": "OT"
+    "originalTitle": "שְׁמוּאֵל ב (Šəmūʾēl 2, 撒母耳下)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 24,
+    "theme": "大衛之約與大衛王朝：大衛統一全國、定都耶路撒冷、迎約櫃，神與大衛立永恆大衛之約；大衛拔示巴犯罪招致家庭與國家巨大刀劍災難，顯明神的聖潔公義與恩典赦免"
   },
   {
     "no": 11,
     "nameZh": "列王紀上",
     "nameEn": "1 Kings",
-    "testament": "OT"
+    "originalTitle": "מְלָכִים א (Məlāḵīm 1, 列王上一)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 22,
+    "theme": "聖殿榮耀、王國分裂與先知抗衡：所羅門建殿與晚年拜偶像墮落、王國分裂為南北二國、耶羅波安金牛犢陷罪、先知以利亞在迦密山大戰巴力先知，顯明王國興衰唯獨取決於對神的聖約忠誠"
   },
   {
     "no": 12,
     "nameZh": "列王紀下",
     "nameEn": "2 Kings",
-    "testament": "OT"
+    "originalTitle": "מְלָכִים ב (Məlāḵīm 2, 列王下二)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 25,
+    "theme": "背約審判、雙重淪亡與恩典殘株：以利沙加倍靈感事工、北國以色列遭亞述毀滅（前722年）、南國猶大希西家約西亞短暫復興終因瑪拿西極惡而遭巴比倫攻陷聖殿被毀（前586年），但全書以約雅斤在巴比倫抬頭蒙恩作結，保留大衛王朝彌賽亞火種"
   },
   {
     "no": 13,
     "nameZh": "歷代志上",
     "nameEn": "1 Chronicles",
-    "testament": "OT"
+    "originalTitle": "דִּבְרֵי הַיָּמִים א (Diḇrē Hayyāmīm 1, 那些日子的事上一)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 29,
+    "theme": "聖殿敬拜、大衛聖約與神聖譜系傳承：從亞當到大衛的族譜確立神選民身分，大衛盡心為聖殿預備建材、設立利未詩班與二十四班次敬拜，呼召歸回餘民以聖殿敬拜為中心重建生活"
   },
   {
     "no": 14,
     "nameZh": "歷代志下",
     "nameEn": "2 Chronicles",
-    "testament": "OT"
+    "originalTitle": "דִּבְרֵי הַיָּמִים ב (Diḇrē Hayyāmīm 2, 那些日子的事下二)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 36,
+    "theme": "所羅門聖殿、猶大列王靈性興衰與歸回重建聖殿呼召：所羅門建殿獻殿、神立約宣告「這稱為我名下的子民若自卑禱告」、猶大五大復興好王之歷史典範，全書以波斯王居魯士下詔重建聖殿為全本希伯來聖經大結局"
   },
   {
     "no": 15,
     "nameZh": "以斯拉記",
     "nameEn": "Ezra",
-    "testament": "OT"
+    "originalTitle": "עֶזְרָא (ʿEzrāʾ, 幫助者)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 10,
+    "theme": "回歸故土、重建聖殿與話語復興：神激動波斯王居魯士之心釋放選民回歸，在所羅巴伯帶領下歷經仇敵阻撓完成第二聖殿重建，隨後以斯拉率第二批歸回，以摩西律法教導百姓，推動聖潔婚姻改革"
   },
   {
     "no": 16,
     "nameZh": "尼希米記",
     "nameEn": "Nehemiah",
-    "testament": "OT"
+    "originalTitle": "נְחֶמְיָה (Nəḥemyāh, 耶和華安慰)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 13,
+    "theme": "重建城牆、屬靈復興與全方位改革：尼希米放棄波斯宮廷尊位，在仇敵多方阻撓下以一手拿兵器一手修牆的堅定信心，52天奇蹟重建耶路撒冷城牆，並與以斯拉同工推動宣讀律法、全民立約與社會聖潔改革"
   },
   {
     "no": 17,
     "nameZh": "以斯帖記",
     "nameEn": "Esther",
-    "testament": "OT"
+    "originalTitle": "אֶסְתֵּר (ʾEstēr, 星星 / 隱藏)",
+    "testament": "OT",
+    "category": "歷史書",
+    "chapters": 10,
+    "theme": "神隱蔽的至高護理與反敗為勝：在全書未提一次「神」字的精妙文學佈局中，無所不在的三一上帝在幕後精準調度歷史，藉以斯帖「死就死吧」的勇敢冒死進宮與末底改的忠誠，將哈曼滅絕全猶太民族的陰謀徹底逆轉為普珥節(Purim)的榮耀拯救"
   },
   {
     "no": 18,
     "nameZh": "約伯記",
     "nameEn": "Job",
-    "testament": "OT"
+    "originalTitle": "אִיּוֹב (ʾIyyōḇ, 遭仇敵迫害之人 / 歸向神者)",
+    "testament": "OT",
+    "category": "詩歌智慧書",
+    "chapters": 42,
+    "theme": "無辜受苦、至高主權與神義論辯護：義人為何受苦？神在苦難中的主權與智慧超越人的有限因果報應神學，呼召人在旋風神聖顯現中降服敬畏，確信救贖主活著"
   },
   {
     "no": 19,
     "nameZh": "詩篇",
     "nameEn": "Psalms",
-    "testament": "OT"
+    "originalTitle": "תְּהִלִּים (Təhillīm, 讚美詩集)",
+    "testament": "OT",
+    "category": "詩歌智慧書",
+    "chapters": 150,
+    "theme": "立約百姓的心靈之聲：讚美、哀告、悔改、感恩與彌賽亞永恆王權。加爾文譽為「靈魂解剖學」(Anatomy of All the Parts of the Soul)，將信徒全人一切情感向三一真神完全傾心吐意"
   },
   {
     "no": 20,
     "nameZh": "箴言",
     "nameEn": "Proverbs",
-    "testament": "OT"
+    "originalTitle": "מִשְׁלֵי (Mišlē, 所羅門的箴言)",
+    "testament": "OT",
+    "category": "詩歌智慧書",
+    "chapters": 31,
+    "theme": "敬畏耶和華是智慧的開端：將神聖律法化為日常生活中的實踐智慧，涵蓋言語、人際、財務、婚姻、管教、誠實與才德婦人之頌，指導信徒在日光之下活出榮耀神的敬虔生命"
   },
   {
     "no": 21,
     "nameZh": "傳道書",
     "nameEn": "Ecclesiastes",
-    "testament": "OT"
+    "originalTitle": "קֹהֶלֶת (Qōheleṯ, 召集者 / 傳道者)",
+    "testament": "OT",
+    "category": "詩歌智慧書",
+    "chapters": 12,
+    "theme": "日光之下的虛空與日光之上的敬畏：若沒有神，世間一切智慧、財富、享樂、權力與勞碌皆為虛空捕風；唯有敬畏上帝、謹守誡命、以感恩之心領受神的日常賞賜，在終極審判前確立人生的永恆意義"
   },
   {
     "no": 22,
     "nameZh": "雅歌",
     "nameEn": "Song of Songs",
-    "testament": "OT"
+    "originalTitle": "שִׁיר הַשִּׁירִים (Šīr Haššīrīm, 歌中之歌 / 最妙之歌)",
+    "testament": "OT",
+    "category": "詩歌智慧書",
+    "chapters": 8,
+    "theme": "神聖婚姻之愛與基督新婦之約：讚美男女在神聖盟約中純全、熱烈、堅貞的身體與心靈之愛，宣告「愛情如死之堅強」，並在救贖歷史層面深刻預表上帝對選民、基督對教會至死不渝的聖約之愛"
   },
   {
     "no": 23,
     "nameZh": "以賽亞書",
     "nameEn": "Isaiah",
-    "testament": "OT"
+    "originalTitle": "יְשַׁעְיָהוּ (Yəšaʿyāhū, 耶和華是拯救)",
+    "testament": "OT",
+    "category": "大先知書",
+    "chapters": 66,
+    "theme": "聖哉全能神與受苦僕人的榮耀救贖：被譽為「舊約中的第五福音」與「小聖經」（66章結構精準呼應聖經66卷）。審判悖逆選民與列國，並在歷史高潮啟示以馬內利童女生子、受苦僕人代贖捨命，以及新天新地新耶路撒冷的永恆榮耀"
   },
   {
     "no": 24,
     "nameZh": "耶利米書",
     "nameEn": "Jeremiah",
-    "testament": "OT"
+    "originalTitle": "יִרְמְיָהוּ (Yirməyāhū, 耶和華建立 / 拔出拆毀)",
+    "testament": "OT",
+    "category": "大先知書",
+    "chapters": 52,
+    "theme": "流淚先知與新約應許：宣告神公義的審判必藉巴比倫之手拔出、拆毀、毀壞、傾覆犯罪的猶大；但在至暗時刻啟示劃時代的「新約」(New Covenant)——神要將律法寫在信徒心上，赦免一切罪孽，建立公義苗裔大衛王權"
   },
   {
     "no": 25,
     "nameZh": "耶利米哀歌",
     "nameEn": "Lamentations",
-    "testament": "OT"
+    "originalTitle": "אֵיכָה (ʾĒḵāh, 何竟 / 哀哉)",
+    "testament": "OT",
+    "category": "大先知書",
+    "chapters": 5,
+    "theme": "廢墟中的哀慟與不變的慈愛：以五首精雕細琢的字母哀歌，深切哀悼耶路撒冷被焚、百姓饑饉易子而食的極致慘劇，在承認神公義審判中仰望「神的慈愛永不斷絕，每早晨這都是新的，祢的誠實極其廣大」"
   },
   {
     "no": 26,
     "nameZh": "以西結書",
     "nameEn": "Ezekiel",
-    "testament": "OT"
+    "originalTitle": "יְחֶזְקֵאל (Yəḥezqēʾl, 神必賜力量)",
+    "testament": "OT",
+    "category": "大先知書",
+    "chapters": 48,
+    "theme": "耶和華的榮光與永恆新造：祭司先知在異邦看見神寶座戰車旋風異象，宣告神榮耀因聖殿偶像污穢而離去（審判被擄）；並在歷史終局宣告枯骨復生、賜下肉心新靈，以及神榮光重返永恆新聖殿與聖城「耶和華的所在」(YHWH Shammah)"
   },
   {
     "no": 27,
     "nameZh": "但以理書",
     "nameEn": "Daniel",
-    "testament": "OT"
+    "originalTitle": "דָּנִיֵּאל (Dāniyyēʾl, 神是我的審判官)",
+    "testament": "OT",
+    "category": "大先知書",
+    "chapters": 12,
+    "theme": "神在人的國中掌權：至高神統管人類歷史與列國帝國興衰，保守火窯與獅子坑中忠貞不妥協的僕人，並在末世異象中啟示人子駕雲降臨承受永恆國度、七十個七彌賽亞受死贖罪，以及死人復活得榮耀"
   },
   {
     "no": 28,
     "nameZh": "何西阿書",
     "nameEn": "Hosea",
-    "testament": "OT"
+    "originalTitle": "הוֹשֵׁעַ (Hōšēaʿ, 拯救)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 14,
+    "theme": "神不離不棄的立約之愛：先知娶淫婦歌篾為妻之悲劇婚姻，生動展示以色列對神屬靈淫亂的背叛；神雖公義審判，卻以心碎的深情宣告「我怎能捨棄你，以法蓮」，並在悔改中賜下恩典復興"
   },
   {
     "no": 29,
     "nameZh": "約珥書",
     "nameEn": "Joel",
-    "testament": "OT"
+    "originalTitle": "יוֹאֵל (Yōʾēl, 耶和華是神)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 3,
+    "theme": "耶和華的日子與聖靈大澆灌：前所未有的毀滅性蝗災預兆「耶和華大而可畏的日子」，呼召全國禁食「撕裂心腸不撕裂衣服」歸向神；並在末世啟示聖靈普遍澆灌凡有氣息的、約沙法谷審判列國，以及「凡求告主名的就必得救」"
   },
   {
     "no": 30,
     "nameZh": "阿摩司書",
     "nameEn": "Amos",
-    "testament": "OT"
+    "originalTitle": "עָמוֹס (ʿĀmōs, 負重者)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 9,
+    "theme": "公義如江河滔滔：鄉村牧人受召如獅子吼叫，宣告神對列國及以色列社會不公、剝削窮人、虛偽敬拜的嚴厲審判；以準繩、夏果、祭壇等五大異象預告滅亡，並以末世重修大衛倒塌的帳幕、萬民歸順為榮耀盼望"
   },
   {
     "no": 31,
     "nameZh": "俄巴底亞書",
     "nameEn": "Obadiah",
-    "testament": "OT"
+    "originalTitle": "עֹבַדְיָה (ʿŌḇaḏyāh, 耶和華的僕人)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 1,
+    "theme": "以東狂傲的傾覆與耶和華國度的得勝：宣告居於以東磐石穴中的以掃後裔因兄弟遭難時袖手旁觀、落井下石，必遭神公義的徹底除滅；在「耶和華降罰的日子」，錫安山必有逃脫的人，國度必歸耶和華"
   },
   {
     "no": 32,
     "nameZh": "約拿書",
     "nameEn": "Jonah",
-    "testament": "OT"
+    "originalTitle": "יוֹנָה (Yōnāh, 鴿子)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 4,
+    "theme": "普世恩典與頑梗先知：逃避使命的先知在風浪與大魚腹中三日三夜蒙拯救，奉命向極惡殘暴的亞述首都尼尼微宣告審判；尼尼微全民禁食痛悔蒙神赦免；神藉蓖麻、蟲子與炎熱東風，向心懷不平的先知啟示上帝對普世萬邦萬民與牲畜的浩瀚憐憫"
   },
   {
     "no": 33,
     "nameZh": "彌迦書",
     "nameEn": "Micah",
-    "testament": "OT"
+    "originalTitle": "מִיכָה (Mīḵāh, 誰能像耶和華？)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 7,
+    "theme": "公義審判、伯利恆彌賽亞與赦罪恩典：宣告神對貴族吞滅窮人地產、假先知受賄的烈怒審判；啟示彌賽亞君王必降生於卑微之伯利恆以法他、行公義好憐憫存謙卑之心與神同行，並在全書壓軸讚美「有何神像你赦免罪孽」"
   },
   {
     "no": 34,
     "nameZh": "那鴻書",
     "nameEn": "Nahum",
-    "testament": "OT"
+    "originalTitle": "נַחוּם (Naḥūm, 安慰者)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 3,
+    "theme": "血腥殘暴之尼尼微的終極毀滅與耶和華的公義伸冤：約拿時代悔改約百年後，亞述重回極致兇殘暴虐，先知宣告忌邪施報的神必如烈火旋風徹底傾覆尼尼微；報好信傳平安之人的腳登山，宣告選民所受的轄制必被永遠折斷"
   },
   {
     "no": 35,
     "nameZh": "哈巴谷書",
     "nameEn": "Habakkuk",
-    "testament": "OT"
+    "originalTitle": "חֲבַקּוּק (Ḥăḇaqqūq, 擁抱者 / 摔跤搏鬥者)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 3,
+    "theme": "從困惑哀訴到信心凱歌：先知在守望樓上向神發出兩大激烈的神義論質疑（神為何容忍罪惡？神為何用更殘暴的巴比倫懲罰猶大？）；神啟示「迦勒底人自高自大，惟義人因信得生」與五重禍哉；先知在看見神大能顯現後，發出無花果樹不發旺仍因耶和華歡欣的終極信心之歌"
   },
   {
     "no": 36,
     "nameZh": "西番雅書",
     "nameEn": "Zephaniah",
-    "testament": "OT"
+    "originalTitle": "צְפַנְיָה (Ṣəp̄anyāh, 耶和華隱藏 / 護庇)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 3,
+    "theme": "耶和華的大日與謙卑餘民的喜樂：宣告耶和華大而可畏的日子臨近，如烈火掃除全地一切偶像污穢；呼召世上謙卑人尋求公義，並在末日應許拯救謙卑受苦的立約餘民，啟示三一真神親自在祂百姓中「因你愛你而默然喜愛，且因你喜樂歌唱」"
   },
   {
     "no": 37,
     "nameZh": "哈該書",
     "nameEn": "Haggai",
-    "testament": "OT"
+    "originalTitle": "חַגַּי (Ḥaggay, 節期的)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 2,
+    "theme": "省察行為、重建聖殿與萬國珍寶的降臨：老先知直擊人心斥責「這殿荒涼，你們自己還住天花板的房屋嗎？」激勵省長所羅巴伯與大祭司約書亞動工重修聖殿；宣告「這殿後來的榮耀必大過先前的榮耀」，神要震動萬國，立所羅巴伯為印戒"
   },
   {
     "no": 38,
     "nameZh": "撒迦利亞書",
     "nameEn": "Zechariah",
-    "testament": "OT"
+    "originalTitle": "זְכַרְיָה (Zəḵaryāh, 耶和華記念)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 14,
+    "theme": "八大夜間異象與彌賽亞的兩次降臨：被譽為「舊約小啟示錄」。宣告「不是倚靠勢力，不是倚靠才能，乃是倚靠我的靈方能成事」；以無與倫比的精確度預言彌賽亞騎驢進京、三十塊錢被賣、被扎仰望、開除罪泉源，以及末日橄欖山降臨作全地之王"
   },
   {
     "no": 39,
     "nameZh": "瑪拉基書",
     "nameEn": "Malachi",
-    "testament": "OT"
+    "originalTitle": "מַלְאָכִי (Malʾāḵī, 我的使者)",
+    "testament": "OT",
+    "category": "小先知書",
+    "chapters": 4,
+    "theme": "立約之愛、祭壇潔淨與公義日頭：以六大「答辯式神學訴訟」駁斥百姓與祭司對神之愛、敬拜與奉獻的麻木質疑；宣告立約之主必如煉金之火突臨聖殿，公義的日頭必破曉發出醫治之光，並預言立約使者施洗約翰（以利亞）必為基督預備人心，作為全本舊約正典的壯麗終曲"
   },
   {
     "no": 40,
     "nameZh": "馬太福音",
     "nameEn": "Matthew",
-    "testament": "NT"
+    "originalTitle": "ΚΑΤΑ ΜΑΘΘΑΙΟΝ (Kata Matthaion, 照馬太所傳的福音)",
+    "testament": "NT",
+    "category": "福音書",
+    "chapters": 28,
+    "theme": "天國君王耶穌基督與聖約成全：耶穌是亞伯拉罕的後裔、大衛的子孫，完全應驗了舊約一切預言；祂以五大天國講論教導天國憲章與門徒之道，藉十字架受死與復活得勝，並頒布普世宣教的大使命"
   },
   {
     "no": 41,
     "nameZh": "馬可福音",
     "nameEn": "Mark",
-    "testament": "NT"
+    "originalTitle": "ΚΑΤΑ ΜΑΡΚΟΝ (Kata Markon, 照馬可所傳的福音)",
+    "testament": "NT",
+    "category": "福音書",
+    "chapters": 16,
+    "theme": "受苦的僕人與大能的神子：行動迅速、充滿戲劇張力的福音書；耶穌以「僕人的樣式」大能醫病趕鬼，直面門徒的遲鈍與宗教領袖的仇恨，以「人子來不是要受人的服事，乃是要服事人，並且要捨命作多人的贖價」揭示十字架救贖代價"
   },
   {
     "no": 42,
     "nameZh": "路加福音",
     "nameEn": "Luke",
-    "testament": "NT"
+    "originalTitle": "ΚΑΤΑ ΛΟΥΚΑΝ (Kata Loukan, 照路加所傳的福音)",
+    "testament": "NT",
+    "category": "福音書",
+    "chapters": 24,
+    "theme": "完全的人子與普世罪人的救主：以嚴謹古典歷史學家眼光「從起頭詳細考察」，展現耶穌基督尋找拯救失喪之人的完全慈愛；特別關懷貧窮人、邊緣人、外邦人、稅吏、撒瑪利亞人與婦女，充滿禱告、聖靈、讚美詩歌與大喜的信息"
   },
   {
     "no": 43,
     "nameZh": "約翰福音",
     "nameEn": "John",
-    "testament": "NT"
+    "originalTitle": "ΚΑΤΑ ΙΩΑΝΝΗΝ (Kata Iōannēn, 照約翰所傳的福音)",
+    "testament": "NT",
+    "category": "福音書",
+    "chapters": 21,
+    "theme": "道成肉身、神聖獨生子與得享永生：全書以最高峰的「高派基督論」(High Christology) 宣告太初有道、道與神同在、道就是神；藉七大神蹟 (Signs) 與七個「我是」(I AM, Ego Eimi)，顯明耶穌是基督是神的兒子，「叫你們信了祂，就可以因祂的名得生命」"
   },
   {
     "no": 44,
     "nameZh": "使徒行傳",
     "nameEn": "Acts",
-    "testament": "NT"
+    "originalTitle": "ΠΡΑΞΕΙΣ ΑΠΟΣΤΟΛΩΝ (Praxeis Apostolōn, 使徒的行傳 / 聖靈行傳)",
+    "testament": "NT",
+    "category": "教會歷史",
+    "chapters": 28,
+    "theme": "聖靈大能與福音傳至地極：復活升天的基督藉著聖靈，在初代教會中繼續作工；從耶路撒冷、猶太全地、撒瑪利亞直到羅馬帝國地極，打破種族、文化與宗教壁壘，建立跨文化的普世基督教會，宣告神的國放膽傳講「無人禁止」"
   },
   {
     "no": 45,
     "nameZh": "羅馬書",
     "nameEn": "Romans",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΡΩΜΑΙΟΥΣ (Pros Rōmaious, 致羅馬人書)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 16,
+    "theme": "神的全備福音與因信稱義：馬丁·路德譽為「新約最主要的基石與最純全的福音」。世人都犯了罪虧缺神的榮耀；神設立基督為挽回祭，將基督完全的義白白歸算給凡信靠祂的人；信徒與基督同死同復活，在聖靈引導下得兒子的名分，確信沒有任何事物能叫我們與神的愛隔絕，並將全人獻上當作活祭"
   },
   {
     "no": 46,
     "nameZh": "哥林多前書",
     "nameEn": "1 Corinthians",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΚΟΡΙΝΘΙΟΥΣ Α (Pros Korinthious 1, 致哥林多人書一)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 16,
+    "theme": "十字架真智慧與教會實踐生活：以「十字架討平一切」的神學利劍，全面診斷並糾正教會內部分門結黨、亂倫淫亂、訴訟世俗、婚姻爭議、吃祭偶像之物與基督徒自由、聖餐混亂、恩賜濫用（愛篇第十三章），並在第十五章以全本聖經最壯麗的基督身體復活論捍衛福音基石"
   },
   {
     "no": 47,
     "nameZh": "哥林多後書",
     "nameEn": "2 Corinthians",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΚΟΡΙΝΘΙΟΥΣ Β (Pros Korinthious 2, 致哥林多人書二)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 13,
+    "theme": "軟弱中的大能與和好的使者：保羅最敞開心扉、最富情感深度的自白書信；駁斥假使徒（超級使徒）對其使徒權柄與外貌的毀謗；宣告「我們有這寶貝放在瓦器裡，要顯明這莫大的能力是出於神」；闡明和好的職分、樂捐的恩賜與「肉體中的一根刺——神說我的恩典夠你用的」"
   },
   {
     "no": 48,
     "nameZh": "加拉太書",
     "nameEn": "Galatians",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΓΑΛΑΤΑΣ (Pros Galatas, 致加拉太人書)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 6,
+    "theme": "基督徒自由的大憲章與唯獨因信稱義：嚴厲痛斥猶太律法主義「別的福音」；捍衛使徒權柄與稱義唯獨本於恩典與信心；宣告「我已經與基督同釘十字架，現在活著的不再是我，乃是基督在我裡面活著」；呼召順從聖靈引導，結出聖靈果子，靠十字架誇口作新造的人"
   },
   {
     "no": 49,
     "nameZh": "以弗所書",
     "nameEn": "Ephesians",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΕΦΕΣΙΟΥΣ (Pros Ephesious, 致以弗所人書)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 6,
+    "theme": "在基督裡的榮耀教會與宇宙萬有合一：被譽為「保羅神學的阿爾卑斯山」與「書信中的瑞士」。從創世以前天父的主權揀選、基督寶血救贖與聖靈印記出發，揭示外邦人與猶太人在基督十字架裡拆毀中間隔斷的牆，同歸於一成為榮耀的教會身體；並在家庭、職場與全副屬靈軍裝中活出新人的得勝生命"
   },
   {
     "no": 50,
     "nameZh": "腓立比書",
     "nameEn": "Philippians",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΦΙΛΙΠΠΗΣΙΟΥΣ (Pros Philippēsious, 致腓立比人書)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 4,
+    "theme": "在基督裡的純全喜樂與同心同行：被譽為「喜樂的書信」（喜樂 Joy/Rejoice 出現 16 次）。身處羅馬監獄捆鎖與生死邊緣的使徒，以基督倒空降卑終至超升的基督頌歌 (Carmen Christi) 為中心，呼召信徒以基督的心為心，在受苦中靠主常常喜樂，忘記背後努力面前，深信「靠著那加給我力量的，凡事都能做」"
   },
   {
     "no": 51,
     "nameZh": "歌羅西書",
     "nameEn": "Colossians",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΚΟΛΟΣΣΑΕΙΣ (Pros Kolossaeis, 致歌林多人書/歌羅西人書)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 4,
+    "theme": "基督的絕對至高超越與全備豐盛：全面擊潰混雜猶太律法、希臘神秘哲學與拜天使之「歌羅西異端」；宣告耶穌基督是一切受造物的首生者、是教會的元首、神本性一切的豐盛都有形有體居住在基督裡面；信徒在基督裡得著了完全的豐盛，當思念上面的事，穿上基督新人"
   },
   {
     "no": 52,
     "nameZh": "帖撒羅尼迦前書",
     "nameEn": "1 Thessalonians",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΘΕΣΣΑΛΟΝΙΚΕΙΣ Α (Pros Thessalonikeis 1, 致帖撒羅尼迦人書一)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 5,
+    "theme": "信徒聖潔生活與基督再來的榮耀盼望：被譽為「終末論的典範書信」（每章結尾皆定焦於基督榮耀再來）。稱讚信徒「信心的工夫、愛心的勞苦、盼望的忍耐」；勉勵遠避淫行活出聖潔；並以使徒權威啟示主降臨時吹號呼叫、死人復活、活著被提在空中與主相遇的大榮耀"
   },
   {
     "no": 53,
     "nameZh": "帖撒羅尼迦後書",
     "nameEn": "2 Thessalonians",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΘΕΣΣΑΛΟΝΙΚΕΙΣ Β (Pros Thessalonikeis 2, 致帖撒羅尼迦人書二)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 3,
+    "theme": "受苦忍耐、不法之人的顯露與安靜做工：在火煉逼迫中安慰聖徒仰望基督烈火降臨伸冤；澄清末日次序——在主再來前必先有離道反教的事，且那「大罪人不法之子」（敵基督）必先顯露，主必用口中的氣滅絕他；嚴厲警告游手好閒、藉口末日遊蕩之人「若有人不肯做工，就不可吃飯」"
   },
   {
     "no": 54,
     "nameZh": "提摩太前書",
     "nameEn": "1 Timothy",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΤΙΜΟΘΕΟΝ Α (Pros Timotheon 1, 致提摩太書一)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 6,
+    "theme": "神家中的規矩與純正教義的持守：教牧書信 (Pastoral Epistles) 之首；指導年輕牧者如何防備荒渺神話與律法異端，確立公共敬拜與禱告秩序，設立監督（長老）與執事的聖潔品格標準，宣告「這家就是永生神的教會，真理的柱石和根基」，並在敬虔知足中打美好的仗"
   },
   {
     "no": 55,
     "nameZh": "提摩太後書",
     "nameEn": "2 Timothy",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΤΙΜΟΘΕΟΝ Β (Pros Timotheon 2, 致提摩太書二)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 4,
+    "theme": "為福音受苦、持守真道與忠心交棒：保羅的「最後遺囑與天鵝之歌」(Swan Song)。在眾叛親離、身戴鎖鏈、行將被斬首的至暗時刻，勉勵提摩太「不要以給我們的主作見證為恥」、「按著正意分解真理的道」；宣告「聖經都是神所默示的」；並發出震撼千古的凱歌「那美好的仗我已經打過了，當跑的路我已經跑盡了，所信的道我已經守住了」"
   },
   {
     "no": 56,
     "nameZh": "提多書",
     "nameEn": "Titus",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΤΙΤΟΝ (Pros Titon, 致提多書)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 3,
+    "theme": "純正教義與美善生活的結合：指導提多在「常說謊話、乃是惡獸、又饞又懶」的革哩底海島社會中，在各城設立合格長老，以純正道理駁斥異端；宣告「神救眾人的恩典已經顯明出來」，激勵信徒在家庭、職場與公民社會中熱心行善，作神特作的子民"
   },
   {
     "no": 57,
     "nameZh": "腓利門書",
     "nameEn": "Philemon",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΦΙΛΗΜΟΝΑ (Pros Philēmona, 致腓利門書)",
+    "testament": "NT",
+    "category": "保羅書信",
+    "chapters": 1,
+    "theme": "在基督裡的弟兄和好與歸算代贖：保羅最短小精緻的私人書信。為逃跑並偷竊主人財物的奴隸阿尼西謀（在獄中蒙保羅帶領信主成靈性兒子）向主人腓利門代求；請求腓利門「不再當作奴僕，乃是當作親愛的弟兄」接納他；保羅宣告「他若虧負你，都歸在我的賬上」，生動演繹基督替罪人擔當罪債的福音大愛"
   },
   {
     "no": 58,
     "nameZh": "希伯來書",
     "nameEn": "Hebrews",
-    "testament": "NT"
+    "originalTitle": "ΠΡΟΣ ΕΒΡΑΙΟΥΣ (Pros Hebraious, 致希伯來人書)",
+    "testament": "NT",
+    "category": "普通書信",
+    "chapters": 13,
+    "theme": "基督的絕對超越性與更美的新約：基督遠超天使、摩西、約書亞與亞倫大祭司；基督照麥基洗德的等次為永遠大祭司，以祂自己的寶血一次獻上永遠完全的贖罪祭；五大嚴厲警告不可隨流失去，勉勵信徒效法第十一章信心偉人雲彩，仰望為我們信心創始成終的耶穌"
   },
   {
     "no": 59,
     "nameZh": "雅各書",
     "nameEn": "James",
-    "testament": "NT"
+    "originalTitle": "ΙΑΚΩΒΟΥ (Iakōbou, 雅各的書信)",
+    "testament": "NT",
+    "category": "普通書信",
+    "chapters": 5,
+    "theme": "真實活潑的信心與實踐生活：被譽為「新約的箴言」與「新約登山寶訓實踐篇」。宣告「信心若沒有行為就是死的」；直面試煉生忍耐、勒住舌頭、防備偏心待人、抵擋世俗與魔鬼、警告富豪囤積不義財物，並以以利亞的恆切祈禱勉勵信徒在苦難中堅忍等候主來"
   },
   {
     "no": 60,
     "nameZh": "彼得前書",
     "nameEn": "1 Peter",
-    "testament": "NT"
+    "originalTitle": "ΠΕΤΡΟΥ Α (Petrou 1, 彼得書信一)",
+    "testament": "NT",
+    "category": "普通書信",
+    "chapters": 5,
+    "theme": "火煉逼迫中的活潑盼望與聖潔朝聖：被譽為「盼望的書信」。宣告信徒藉基督復活重生得著「不能朽壞、不能玷污、不能衰殘的活潑盼望」；宣告信徒是「被揀選的族類、君尊的祭司、聖潔的國度、屬神的子民」；勉勵聖徒在家庭、社會與火煉試煉中順服受苦、效法基督受難榜樣，謹守警醒抵擋吼叫的獅子魔鬼"
   },
   {
     "no": 61,
     "nameZh": "彼得後書",
     "nameEn": "2 Peter",
-    "testament": "NT"
+    "originalTitle": "ΠΕΤΡΟΥ Β (Petrou 2, 彼得書信二)",
+    "testament": "NT",
+    "category": "普通書信",
+    "chapters": 3,
+    "theme": "在真知識上長進、防備假師傅與等候新天新地：彼得臨終遺囑。宣告神已將關乎生命與敬虔的事賜給我們，勉勵在德行與知識上「分外殷勤」與神性情有份；嚴厲駁斥譏誚主再來、放縱肉體情慾的假教師；宣告「主的日子要像賊來到一樣，天地廢去，我們等候新天新地，有義居在其中」"
   },
   {
     "no": 62,
     "nameZh": "約翰一書",
     "nameEn": "1 John",
-    "testament": "NT"
+    "originalTitle": "ΙΩΑΝΝΟΥ Α (Iōannou 1, 約翰書信一)",
+    "testament": "NT",
+    "category": "普通書信",
+    "chapters": 5,
+    "theme": "神聖團契、真愛與得救的確據：以使徒目擊證人權威宣告「論到從起初原有的生命之道，我們親眼看見、親手摸過」；宣告「神就是光」與「神就是愛」；提出檢驗真實信仰的三大試金石（純正教義認信基督道成肉身、遵守主誡命過聖潔生活、彼此切實相愛）；並宣告「我將這些話寫給你們，要叫你們知道自己有永生」"
   },
   {
     "no": 63,
     "nameZh": "約翰二書",
     "nameEn": "2 John",
-    "testament": "NT"
+    "originalTitle": "ΙΩΑΝΝΟΥ Β (Iōannou 2, 約翰書信二)",
+    "testament": "NT",
+    "category": "普通書信",
+    "chapters": 1,
+    "theme": "真理與愛心不可分割、防備傳異端者：全書僅 13 節。強調「愛是在真理中相愛」；宣告那不認耶穌基督是成了肉身來的乃是敵基督；嚴厲命令不可接待傳假教義者進家，也不可向他問安，免得在他們的惡行上有份"
   },
   {
     "no": 64,
     "nameZh": "約翰三書",
     "nameEn": "3 John",
-    "testament": "NT"
+    "originalTitle": "ΙΩΑΝΝΟΥ Γ (Iōannou 3, 約翰書信三)",
+    "testament": "NT",
+    "category": "普通書信",
+    "chapters": 1,
+    "theme": "真理中同行與宣教接待的典範：全書僅 14 節。稱讚該猶「靈魂興盛，按真理行事」，並熱心接待忠心宣教士，「配得過神，一同為真理做工」；嚴厲譴責好為人首、妄言中傷使徒、拒絕接待弟兄的丟特腓；並讚揚有好名聲的低米丟"
   },
   {
     "no": 65,
     "nameZh": "猶大書",
     "nameEn": "Jude",
-    "testament": "NT"
+    "originalTitle": "ΙΟΥΔΑ (Iouda, 猶大的書信)",
+    "testament": "NT",
+    "category": "普通書信",
+    "chapters": 1,
+    "theme": "竭力為真道竭力爭辯與防備不敬虔者：宣告「要為從前一次交付聖徒的真道竭力爭辯」；嚴厲揭露偷著潛入教會之假師傅的六大歷史審判鑑戒（出埃及不信者、墮落天使、所多瑪蛾摩拉、該隱、巴蘭、可拉）；並以全本聖經最璀璨磅礴的終極榮耀頌 (Doxology) 堅固聖徒"
   },
   {
     "no": 66,
     "nameZh": "啟示錄",
     "nameEn": "Revelation",
-    "testament": "NT"
+    "originalTitle": "ΑΠΟΚΑΛΥΨΙΣ ΙΩΑΝΝΟΥ (Apokalypsis Iōannou, 耶穌基督的啟示 / 拔摩海島異象)",
+    "testament": "NT",
+    "category": "啟示書",
+    "chapters": 22,
+    "theme": "羔羊的終極得勝與新天新地新耶路撒冷：全本聖經 66 卷的榮耀大終曲。揭示萬王之王、萬主之主耶穌基督的榮耀威嚴；以七印、七號、七碗的螺旋漸進啟示 (Progressive Recapitulation) 審判撒但大紅龍、獸與大巴比倫淫婦；宣告羔羊婚宴、萬國受審、撒但死亡被扔入火湖，以及神與人永遠同住的新天新地新耶路撒冷"
   }
 ];
 
@@ -1031,7 +1295,7 @@
 
     // 00. Canonical Book Dossier (正典檔案速查表)
     if (data.bookDossier) {
-      html += '    <section class="guide-section section-book-dossier">';
+      html += '    <section class="guide-section section-book-dossier" id="guide-sec-dossier" data-section-title="正典檔案速查" data-section-icon="fa-table-list">';
       html += renderBookDossierHtml(bookNo, { isStandalone: isStandalone, showHeading: true });
       html += '    </section>';
     }
@@ -1039,7 +1303,7 @@
     // 0. Youth & Beginner Field Guide (青少年與初信者平易近人導讀)
     if (data.youthGuide) {
       var yg = data.youthGuide;
-      html += '    <section class="guide-section section-youth-guide">';
+      html += '    <section class="guide-section section-youth-guide" id="guide-sec-youth" data-section-title="青年破冰導讀" data-section-icon="fa-compass">';
       html += '      <div class="youth-guide-banner">';
       html += '        <div class="youth-banner-badge"><i class="fas fa-compass"></i> 青少年與初信者專屬指南 · 30秒極速讀懂</div>';
       html += '        <h2 class="guide-section-title youth-title"><i class="fas fa-sparkles"></i> 青年破冰與生命探索視角</h2>';
@@ -1087,7 +1351,7 @@
     // 0.1 Academic Paper Research Specification (正統神學院碩博士等級學術論文規格)
     if (data.academicPaper) {
       var ap = data.academicPaper;
-      html += '    <section class="guide-section section-academic-paper">';
+      html += '    <section class="guide-section section-academic-paper" id="guide-sec-academic" data-section-title="學術論文命題" data-section-icon="fa-graduation-cap">';
       html += '      <div class="academic-paper-card">';
       html += '        <div class="academic-header-bar">';
       html += '          <div class="academic-badge-group">';
@@ -1128,7 +1392,7 @@
 
     // 1. Key Verses
     if (m.keyVerses && m.keyVerses.length) {
-      html += '    <section class="guide-section section-key-verses">';
+      html += '    <section class="guide-section section-key-verses" id="guide-sec-verses" data-section-title="核心金句鑰節" data-section-icon="fa-key">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-key"></i> 核心金句與神學鑰節</h2>';
       html += '      <div class="key-verses-list">';
       m.keyVerses.forEach(function(kv) {
@@ -1139,7 +1403,10 @@
         html += '        <div class="key-verse-card">';
         html += '          <div class="verse-header">';
         html += '            <span class="verse-ref"><i class="fas fa-bookmark"></i> ' + escapeHtml(kv.ref) + '</span>';
-        html += '            <a href="' + readJumpUrl + '" class="verse-jump-btn" title="在閱讀器中開啟此經節"><i class="fas fa-external-link-alt"></i> 閱讀經文</a>';
+        html += '            <div class="verse-actions-group">';
+        html += '              <button type="button" class="verse-action-btn btn-copy-verse" data-book="' + escapeHtml(m.nameZh) + '" data-ref="' + escapeHtml(kv.ref) + '" data-text="' + escapeHtml(kv.text) + '" title="複製此節金句與出處"><i class="fas fa-copy"></i> 複製金句</button>';
+        html += '              <a href="' + readJumpUrl + '" class="verse-jump-btn" title="在閱讀器中開啟此經節"><i class="fas fa-external-link-alt"></i> 閱讀經文</a>';
+        html += '            </div>';
         html += '          </div>';
         html += '          <blockquote class="verse-text">' + escapeHtml(kv.text) + '</blockquote>';
         if (kv.note) {
@@ -1152,7 +1419,7 @@
     }
 
     // 2. Historical & Canonical Context
-    html += '    <section class="guide-section section-history">';
+    html += '    <section class="guide-section section-history" id="guide-sec-history" data-section-title="歷史地理考古" data-section-icon="fa-landmark">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-landmark"></i> 歷史地理、考古發現與正典脈絡</h2>';
     html += '      <div class="guide-text-block summary-block">' + escapeHtml(h.summary) + '</div>';
     html += '      <div class="history-details-grid">';
@@ -1164,7 +1431,7 @@
     html += '    </section>';
 
     // 3. Authorship & Evangelical Defense
-    html += '    <section class="guide-section section-authorship">';
+    html += '    <section class="guide-section section-authorship" id="guide-sec-authorship" data-section-title="作者爭辯辨析" data-section-icon="fa-feather-alt">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-feather-alt"></i> 作者爭辯與正統福音派學術辨析</h2>';
     html += '      <div class="authorship-grid">';
     html += '        <div class="author-view-card traditional"><div class="view-tag">正統教會傳統立場</div><div class="view-body">' + escapeHtml(a.traditionalView) + '</div></div>';
@@ -1174,7 +1441,7 @@
     html += '    </section>';
 
     // 4. Theology, Covenant & Christology
-    html += '    <section class="guide-section section-theology">';
+    html += '    <section class="guide-section section-theology" id="guide-sec-theology" data-section-title="聖約基督成全" data-section-icon="fa-cross">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-cross"></i> 聖約神學定位、核心主題與基督論成全</h2>';
     html += '      <div class="covenant-card"><div class="covenant-title"><i class="fas fa-ring"></i> 聖約歷史定位 (Covenantal Location)</div><div class="covenant-body">' + escapeHtml(t.covenantLocation) + '</div></div>';
     
@@ -1203,7 +1470,7 @@
 
     // 5. 🏛️ Biblia 專家委員會七大座席評註與 7x7 研經典範 (The 7-Seat Expert Council)
     if (data.expertCouncilPerspectives) {
-      html += '    <section class="guide-section section-expert-council">';
+      html += '    <section class="guide-section section-expert-council" id="guide-sec-council" data-section-title="專家七席評註" data-section-icon="fa-landmark">';
       html += '      <div class="expert-council-banner">';
       html += '        <div class="expert-banner-badge"><i class="fas fa-certificate"></i> 專家委員會座席審定 · 7x7 深度研經</div>';
       html += '        <h2 class="guide-section-title expert-title"><i class="fas fa-landmark"></i> Biblia 專家委員會七席評註與 7x7 研經典範</h2>';
@@ -1242,7 +1509,7 @@
     }
 
     // 6. Literary Structure & Detailed Outline
-    html += '    <section class="guide-section section-structure">';
+    html += '    <section class="guide-section section-structure" id="guide-sec-structure" data-section-title="宏觀架構大綱" data-section-icon="fa-sitemap">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-sitemap"></i> 文學體裁、結構特點與逐段深度大綱</h2>';
     html += '      <div class="structure-meta-card">';
     html += '        <div class="meta-row"><strong>文學體裁：</strong> ' + escapeHtml(l.genre) + '</div>';
@@ -1270,7 +1537,7 @@
 
     // 6. Original Key Words & Exegesis
     if (data.keyWordsOriginal && data.keyWordsOriginal.length) {
-      html += '    <section class="guide-section section-keywords">';
+      html += '    <section class="guide-section section-keywords" id="guide-sec-keywords" data-section-title="原文關鍵字詞" data-section-icon="fa-language">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-language"></i> 原文關鍵詞彙神學釋經 (Hebrew / Greek)</h2>';
       html += '      <div class="keywords-grid">';
       data.keyWordsOriginal.forEach(function(kw) {
@@ -1292,7 +1559,7 @@
 
     // 7. Interpretive Issues & Controversies
     if (data.interpretiveIssues && data.interpretiveIssues.length) {
-      html += '    <section class="guide-section section-interpretive">';
+      html += '    <section class="guide-section section-interpretive" id="guide-sec-interpretive" data-section-title="難解爭議共識" data-section-icon="fa-balance-scale">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-balance-scale"></i> 難解經文、學術爭議與歸正神學共識</h2>';
       html += '      <div class="interpretive-list">';
       data.interpretiveIssues.forEach(function(issue) {
@@ -1308,7 +1575,7 @@
 
     // 8. Pastoral Applications
     if (data.pastoralApplications && data.pastoralApplications.length) {
-      html += '    <section class="guide-section section-applications">';
+      html += '    <section class="guide-section section-applications" id="guide-sec-applications" data-section-title="教牧生活應用" data-section-icon="fa-hands-helping">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-hands-helping"></i> 教牧與基督徒生活實踐應用</h2>';
       html += '      <div class="applications-grid">';
       data.pastoralApplications.forEach(function(app) {
@@ -1324,7 +1591,7 @@
 
     // 9. Bibliography & Recommended Commentaries
     if (data.bibliography && data.bibliography.length) {
-      html += '    <section class="guide-section section-biblio">';
+      html += '    <section class="guide-section section-biblio" id="guide-sec-biblio" data-section-title="經典註釋書目" data-section-icon="fa-book">';
       html += '      <h2 class="guide-section-title"><i class="fas fa-book"></i> 學術註釋書目與經典研經書單</h2>';
       html += '      <div class="biblio-grid">';
       data.bibliography.forEach(function(b) {
@@ -1415,7 +1682,7 @@
 
     if (data.sections && data.sections.length) {
       data.sections.forEach(function(sec, idx) {
-        html += '    <section class="guide-section section-survey-part" id="' + escapeHtml(sec.id) + '">';
+        html += '    <section class="guide-section section-survey-part" id="' + escapeHtml(sec.id) + '" data-section-title="' + escapeHtml(sec.title) + '" data-section-icon="fa-book-reader">';
         html += '      <h2 class="guide-section-title"><i class="fas fa-book-reader"></i> ' + escapeHtml(sec.title) + '</h2>';
         html += '      <div class="survey-section-content">' + formatMarkdown(sec.content) + '</div>';
         html += '    </section>';
