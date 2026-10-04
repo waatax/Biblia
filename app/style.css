@@ -304,6 +304,8 @@ h1, h2, h3 { line-height: 1.3; }
 .skip-link:focus { left: 0; }
 
 .view[hidden] { display: none !important; }
+/* hidden 屬性一律勝出：各元件的 display:flex/grid 不可讓已隱藏的彈窗、按鈕又冒出來 */
+[hidden] { display: none !important; }
 
 /* ===================== 3. 控制元件 (Buttons, Selects, Switches) ===================== */
 button, select, input, textarea { font: inherit; }
@@ -3387,7 +3389,7 @@ body.appearance-open .pager-aa-btn {
 /* SU101 參考資料庫卡片網格 */
 .ref-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: 18px;
 }
 
@@ -3560,7 +3562,7 @@ body.appearance-open .pager-aa-btn {
 /* 66 卷書簡介網格 */
 .book-intros-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
   gap: 20px;
 }
 
@@ -3843,7 +3845,7 @@ body.appearance-open .pager-aa-btn {
 /* 大綱節點圖解卡片網格 */
 .outline-diagram-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -4106,6 +4108,7 @@ body.appearance-open .pager-aa-btn {
   font-weight: 800;
   color: var(--fg);
   margin: 0;
+}
 
 .era-period-badge {
   font-size: 0.82rem;
@@ -5276,7 +5279,7 @@ html.dark .verse.hl-pink, html.oled .verse.hl-pink {
 
 .audio-hub-features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
   gap: 16px;
   margin-top: 8px;
 }
@@ -5351,7 +5354,7 @@ html.dark .verse.hl-pink, html.oled .verse.hl-pink {
 
 .audio-book-list-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
   gap: 12px;
 }
 
@@ -5841,7 +5844,7 @@ kbd {
 /* 圖表網格 */
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: 20px;
 }
 
@@ -6036,7 +6039,7 @@ body.zen-mode .zen-exit-pill {
 /* 圖表網格 */
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: 20px;
 }
 
@@ -6676,7 +6679,7 @@ body.font-shippori .compare-verse-quote {
 
 .rev-keyverses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -6788,7 +6791,7 @@ body.font-shippori .compare-verse-quote {
 /* 文體卡片 */
 .rev-genres-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 16px;
 }
 
@@ -6818,7 +6821,7 @@ body.font-shippori .compare-verse-quote {
 /* 四大解經進路矩陣 */
 .rev-approaches-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
   gap: 20px;
 }
 
@@ -6862,7 +6865,7 @@ body.font-shippori .compare-verse-quote {
 /* 福音派與靈恩派亮光 */
 .rev-traditions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
   gap: 20px;
 }
 
@@ -7106,7 +7109,7 @@ body.font-shippori .compare-verse-quote {
 /* 四大千禧年觀點 */
 .rev-millennium-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
   gap: 18px;
 }
 
@@ -7178,7 +7181,7 @@ body.font-shippori .compare-verse-quote {
 
 .biblio-books-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -7499,7 +7502,7 @@ body.font-shippori .compare-verse-quote {
 /* Meta Specs Grid */
 .book-guide-specs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 14px;
   margin-bottom: 30px;
 }
@@ -7615,7 +7618,7 @@ body.font-shippori .compare-verse-quote {
 /* History Grid */
 .history-details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -7728,7 +7731,7 @@ body.font-shippori .compare-verse-quote {
 
 .themes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -7883,7 +7886,7 @@ body.font-shippori .compare-verse-quote {
 /* Keywords Grid */
 .keywords-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -7982,7 +7985,7 @@ body.font-shippori .compare-verse-quote {
 /* Pastoral Applications */
 .applications-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -8019,7 +8022,7 @@ body.font-shippori .compare-verse-quote {
 /* Bibliography */
 .biblio-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -8458,7 +8461,7 @@ body.font-shippori .compare-verse-quote {
 
 .expert-seats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   gap: 16px;
   margin-top: 20px;
 }
@@ -8788,7 +8791,7 @@ body.font-shippori .compare-verse-quote {
 
 .youth-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 16px;
   margin-bottom: 18px;
 }
@@ -8847,7 +8850,7 @@ body.font-shippori .compare-verse-quote {
 
 .youth-sub-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 16px;
 }
 
@@ -10261,7 +10264,7 @@ body[data-guide-content-width="full"] .book-guide-container { max-width: 1420px;
 
 .palette-books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr));
   gap: 12px;
 }
 
@@ -10456,5 +10459,99 @@ body[data-guide-content-width="full"] .book-guide-container { max-width: 1420px;
 }
 
 
+/* ===================== 99. 全尺寸響應式最終層 (Responsive Final Layer) =====================
+ * 放在檔尾、最後套用，統一收斂各段散落的斷點規則。原則：
+ *   1. 按鈕文字永不折行（不再出現「一字一行」的直排按鈕）。
+ *   2. 寬度不夠時依序收起：重複的書卷/章下拉 → 次要按鈕文字（保留圖示與 title 提示）
+ *      → 次要按鈕本身（改由 ☰ 選單進入）。
+ *   3. 萬一仍放不下，頂欄可左右滑動，而不是撐破整頁出現水平捲軸。
+ * 斷點：<600 手機直式｜600–899 大手機／平板直式｜900–1279 平板橫式／小筆電｜≥1280 桌機 */
 
+/* --- 頂欄共通 --- */
+.bar-main {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.bar-main::-webkit-scrollbar { display: none; }
+.bar-main > * { flex-shrink: 0; }
+.bar-main > .bar-spacer { flex-shrink: 1; }
+.bar-main .btn,
+.bar-main .btn-text,
+.bar-main .quick-nav-text { white-space: nowrap; }
+.bar-main > .bar-title { flex-shrink: 1; min-width: 0; }
 
+/* --- 閱讀頁頂欄：與「約翰福音 第 3 章」快選鈕重複的書卷/章下拉，只在寬螢幕顯示 --- */
+@media (min-width: 600px) and (max-width: 1599px) {
+  #readerBar .ctl-book,
+  #readerBar .ctl-chap { display: none; }
+}
+
+/* 900–1279：功能鈕只留圖示（滑鼠停留有 title 說明） */
+@media (min-width: 900px) and (max-width: 1279px) {
+  #readerBar .bar-main .btn-text { display: none; }
+  #readerBar .bar-main > .btn:not(.btn-quick-nav) { padding-left: 9px; padding-right: 9px; }
+  #readerBar .mobile-menu-btn { display: none; }
+}
+
+/* 600–899：只留最常用的，其餘（專注、筆記、計畫、補充資料、快捷鍵、⚙）收進 ☰ */
+@media (min-width: 600px) and (max-width: 899px) {
+  #readerBar .bar-main .btn-text { display: none; }
+  #readerBar .bar-main > .btn:not(.btn-quick-nav) { padding-left: 9px; padding-right: 9px; }
+  #readerBar .zen-nav-btn,
+  #readerBar .study-nav-btn,
+  #readerBar .plan-nav-btn,
+  #readerBar .ref-nav-btn,
+  #readerBar .shortcuts-btn,
+  #readerBar .tools-btn,
+  #readerBar .bar-chapter-nav { display: none; }
+  #readerBar .mobile-menu-btn { display: inline-flex; }
+}
+
+/* 其他頁（搜尋、計畫、補充資料）頂欄：手機上只留圖示，標題可省略號截斷 */
+@media (max-width: 599px) {
+  .view:not(#readerView) .bar-main .btn-text { display: none; }
+  .view:not(#readerView) .bar-main .bar-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* --- 底部翻章列：極窄螢幕不讓「約翰福音 3 / 21」被擠成直排 --- */
+.pager-loc { min-width: 0; flex: 0 1 auto; }
+@media (max-width: 359px) {
+  .pager-btn { padding: 8px 10px; }
+  .pager-center .pager-zen-btn { display: none; }
+}
+
+/* --- 首頁：grid 欄位不可被下拉選單的內容寬度撐破 --- */
+.start-grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) {
+  .start-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+}
+.start-card { min-width: 0; }
+.pick select { min-width: 0; }
+@media (max-width: 599px) {
+  .card-head-row { flex-wrap: wrap; gap: 8px; }
+  .pick { flex-wrap: wrap; }
+  .pick .pick-label { flex: 0 0 100%; }
+  .pick .pick-book { flex: 1 1 55%; }
+  .pick .pick-chap { flex: 1 1 25%; }
+  .pick-block .pick-label { flex: 0 0 auto; }
+}
+
+/* --- 補充資料：66 卷卡片在窄螢幕不可超出畫面 --- */
+.book-intros-grid { grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr)); }
+.book-intro-card,
+.book-intro-tabs-box,
+.intro-tab-content { min-width: 0; }
+.intro-tab-btn { min-width: max-content; flex: 1 0 auto; }
+
+/* --- 經文排版：關閉 Chrome 的標點擠壓。全形標點維持全形（和合本傳統排法），
+ *     也避免「。」」落在行尾時整節被推到節號下一行的斷行錯誤。 --- */
+.reader .cell,
+.compare-card-text,
+.search-card-body,
+.daily-verse-quote { text-spacing-trim: space-all; }
