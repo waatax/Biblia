@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""raw/ → parsed/*.json 與 app/data/*.js
+"""raw/ → parsed/*.json 與 app/data/text|words/<版本>/NN.js
 
 以「節」為對位主鍵，多版本掛在同一節下。三個版本都出自 FHL 的同一套
 版本化（versification），所以節鍵天生一致，不需要節對位表。
@@ -7,17 +7,19 @@
 但實測發現少數地方版本間節數確實不同（例：約翰三書 KJV 14 節、和合本與
 WEB 15 節），故採「所有版本 sec 的聯集」，缺的版本該節留空，前端顯示空格。
 
-同時輸出兩種格式：
-  parsed/NN_Engs.json  正規資料格式（重建 / 再利用用）
-  app/data/NN_Engs.js  同一份資料包成 JS —— 因為 file:// 下 fetch() 會被
-                       CORS 擋掉，只有 <script src> 載得進來，這是「雙擊
-                       即開、免架伺服器」的關鍵。
+輸出：
+  parsed/NN_Engs.json  正規資料格式（整卷、全版本；重建 / 再利用用）
+  app/data/text/<版本>/NN.js、app/data/words/<版本>/NN.js
+                       前端實際載入的分層檔，由 build_layers.py 產生（見該檔說明）。
+                       包成 JS 是因為 file:// 下 fetch() 會被 CORS 擋掉，只有
+                       <script src> 載得進來，這是「雙擊即開、免架伺服器」的關鍵。
 """
 import io
 import json
 import os
 import sys
 
+import build_layers
 import common
 from fhl_markup import parse_verse
 
@@ -124,21 +126,6 @@ def build_book(book, stats):
     }
 
 
-def safe_write_text(path, text):
-    tmp_path = path + ".tmp"
-    for attempt in range(5):
-        try:
-            with open(tmp_path, "w", encoding="utf-8") as fh:
-                fh.write(text)
-            os.replace(tmp_path, path)
-            return
-        except OSError:
-            import time
-            time.sleep(0.2)
-    with open(path, "w", encoding="utf-8") as fh:
-        fh.write(text)
-
-
 def main():
     common.utf8_stdout()
     books = common.load_books()
@@ -150,6 +137,7 @@ def main():
         "missing_files": [], "missing_chapters": [], "verse_gaps": [],
     }
     index = []
+    datas = []
     total_bytes = 0
 
     for book in books:
@@ -158,16 +146,14 @@ def main():
 
         json_path = os.path.join(common.PARSED_DIR, stem + ".json")
         common.write_json(json_path, data)
-
-        js_path = os.path.join(common.APP_DATA_DIR, stem + ".js")
-        blob = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
-        safe_write_text(js_path, "BIBLIA.receive(" + blob + ");\n")
-        total_bytes += len(blob.encode("utf-8"))
+        datas.append(data)
+        total_bytes += len(json.dumps(data, ensure_ascii=False,
+                                      separators=(",", ":")).encode("utf-8"))
 
         index.append({
             "no": book["book_no"], "engs": book["engs"], "dir": book["dir"],
             "ab": book["chineses"], "zh": book["name_zh"], "en": book["name_en"],
-            "t": book["testament"], "nch": book["chapters"], "file": stem + ".js",
+            "t": book["testament"], "nch": book["chapters"],
         })
         common.log("解析 %-12s %2d 卷 %3d 章" % (book["name_zh"], book["book_no"],
                                               len(data["ch"])), echo=False)
@@ -176,6 +162,8 @@ def main():
     with io.open(books_js, "w", encoding="utf-8", newline="\n") as fh:
         fh.write("BIBLIA.books(" + json.dumps(index, ensure_ascii=False,
                                               separators=(",", ":")) + ");\n")
+
+    build_layers.build(books, datas)
 
     common.log("解析完成：%d 章 / %d 節 / %d 個相異 Strong / 資料 %.1f MB"
                % (stats["chapters"], stats["verses"], len(stats["strongs"]),

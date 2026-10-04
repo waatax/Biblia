@@ -3,7 +3,8 @@
  * 介面沿用信望愛 read100.html 的選擇方式：舊約 / 新約 各自一組
  * 「書卷 → 章 → 閱讀」，另加版本選擇；原站的「背景」選項不做。
  *
- * 資料以 <script src="data/NN_Book.js"> 動態注入載入，而不是 fetch()。
+ * 資料以 <script src="data/text/<版本>/NN.js"> 動態注入載入，而不是 fetch()；
+ * 經文按「版本 × 書卷」分檔，只抓目前勾選的版本（見 scripts/build_layers.py）。
  * 原因：用 file:// 直接開啟時，fetch()/XHR 會被 CORS 擋掉，讀不到本地檔案；
  * <script src> 不受此限。這是「雙擊 index.html 即可用、免架伺服器」的關鍵。
  *
@@ -40,7 +41,6 @@ var BIBLIA = (function () {
     index: [],
     byNo: {},
     cache: {},
-    pending: {},
     bookNo: 1,
     chap: 1,
     on: {},
@@ -136,39 +136,233 @@ var BIBLIA = (function () {
     saveUserAsset('biblia_history', readHistory);
   }
 
-  /* ---------- 資料載入 ---------- */
-  function bookFile(no) {
-    var meta = state.byNo[no];
-    return meta ? 'data/' + meta.file : null;
+  /* ---------- 指令碼載入佇列 ----------
+   * 一律以 <script> 注入（file:// 可用）。使用者正在等的（閱讀、對照、搜尋）
+   * 立即開抓；背景預載排隊、限制同時數量，不跟前景搶頻寬。 */
+  var scripts = {};          // src -> { st: new|queued|loading|ready|failed, cbs, bg, failedAt }
+  var scriptQueue = [];
+  var bgActive = 0;
+  var BG_LIMIT = 4;
+  var RETRY_MS = 10000;      // 失敗（多半是斷線）超過 10 秒，下次要用到時自動重試
+
+  function loadScript(src, cb, priority) {
+    var job = scripts[src];
+    if (job && job.st === 'failed' && Date.now() - job.failedAt > RETRY_MS) {
+      delete scripts[src];
+      job = null;
+    }
+    if (job && (job.st === 'ready' || job.st === 'failed')) {
+      if (cb) cb(job.st === 'ready');
+      return;
+    }
+    if (!job) job = scripts[src] = { src: src, st: 'new', cbs: [], bg: false };
+    if (cb) job.cbs.push(cb);
+    if (job.st === 'loading') return;
+    if (priority) { startScript(job, false); return; }
+    if (job.st === 'new') {
+      job.st = 'queued';
+      scriptQueue.push(job);
+      pumpScripts();
+    }
   }
 
-  function loadBook(no, cb) {
-    if (state.cache[no]) { cb(state.cache[no]); return; }
-    if (state.pending[no]) { state.pending[no].push(cb); return; }
+  function pumpScripts() {
+    while (bgActive < BG_LIMIT && scriptQueue.length) {
+      var job = scriptQueue.shift();
+      if (job.st === 'queued') startScript(job, true);
+    }
+  }
 
-    var src = bookFile(no);
-    if (!src) { cb(null); return; }
-
-    state.pending[no] = [cb];
+  function startScript(job, bg) {
+    job.st = 'loading';
+    job.bg = bg;
+    if (bg) bgActive++;
     var s = document.createElement('script');
-    s.src = src;
+    s.src = job.src;
     s.charset = 'utf-8';
-    s.onerror = function () {
-      var waiting = state.pending[no] || [];
-      delete state.pending[no];
-      waiting.forEach(function (fn) { fn(null); });
+    s.async = true;
+    s.onload = s.onerror = function (e) {
+      job.st = e.type === 'load' ? 'ready' : 'failed';
+      if (job.st === 'failed') job.failedAt = Date.now();
+      if (s.parentNode) s.parentNode.removeChild(s);
+      if (job.bg) bgActive--;
+      pumpScripts();
+      var cbs = job.cbs;
+      job.cbs = [];
+      cbs.forEach(function (fn) {
+        try { fn(job.st === 'ready'); } catch (err) { console.error(err); }
+      });
     };
     document.head.appendChild(s);
   }
 
-  function receive(data) {                    // 由 data/NN_Book.js 呼叫
-    state.cache[data.no] = data;
-    var waiting = state.pending[data.no] || [];
-    delete state.pending[data.no];
-    waiting.forEach(function (fn) { fn(data); });
+  /* 已就緒，或剛失敗不久（避免失敗後立刻重繪又重抓的迴圈）。 */
+  function scriptSettled(src) {
+    var job = scripts[src];
+    if (!job) return false;
+    return job.st === 'ready' || (job.st === 'failed' && Date.now() - job.failedAt <= RETRY_MS);
   }
 
-  var searchIndexData = null;
+  /* ---------- 經文資料：版本 × 書卷 分層載入 ----------
+   * data/text/<版本>/NN.js   該版本經文（和合本創世記 ≈ 56 KB gzip）
+   * data/words/<版本>/NN.js  逐字 Strong 對照，只在開啟逐字對照時才抓
+   * 各層到齊後合併成 state.cache[no] = { ch: [{ c, v: [{ s, p, t:{}, w:{}, n }] }] }，
+   * 與舊版整卷檔結構相同，其餘程式碼照舊讀 verse.t[版本]。 */
+  var VERSION_BY_KEY = {};
+  VERSIONS.forEach(function (v) { VERSION_BY_KEY[v.key] = v; });
+
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function layerExists(id, no) {
+    var kind = id.charAt(0);
+    var v = VERSION_BY_KEY[id.slice(2)];
+    if (!v || !state.byNo[no]) return false;
+    var isNT = no >= FIRST_NT;
+    if (v.otonly && isNT) return false;
+    if (v.ntonly && !isNT) return false;
+    if (kind === 'w' && !v.strong) return false;
+    return true;
+  }
+
+  function layerSrc(id, no) {
+    return 'data/' + (id.charAt(0) === 'w' ? 'words' : 'text') + '/' + id.slice(2) + '/' + pad2(no) + '.js';
+  }
+
+  /* 閱讀目前章節需要的層：和合本永遠載入（複製、書籤、朗讀都用它）。 */
+  function readerLayers(no) {
+    var ids = ['t:zh_unv'];
+    VERSIONS.forEach(function (v) {
+      if (!state.on[v.key]) return;
+      if (v.key !== 'zh_unv') ids.push('t:' + v.key);
+      if (state.inter && v.strong) ids.push('w:' + v.key);
+    });
+    return ids.filter(function (id) { return layerExists(id, no); });
+  }
+
+  function allTextLayers(no) {
+    return VERSIONS.map(function (v) { return 't:' + v.key; })
+      .filter(function (id) { return layerExists(id, no); });
+  }
+
+  function hasLayers(no, ids) {
+    return ids.every(function (id) { return scriptSettled(layerSrc(id, no)); });
+  }
+
+  function layerFailed(no, id) {
+    var job = scripts[layerSrc(id, no)];
+    return !!job && job.st === 'failed';
+  }
+
+  function forgetFailedLayers(no) {
+    VERSIONS.forEach(function (v) {
+      ['t:', 'w:'].forEach(function (k) {
+        var src = layerSrc(k + v.key, no);
+        if (scripts[src] && scripts[src].st === 'failed') delete scripts[src];
+      });
+    });
+  }
+
+  /* cb(data)：data 為合併後的整卷物件；所有要求的層都失敗時為 null。 */
+  function loadBook(no, cb, ids, priority) {
+    if (!state.byNo[no]) { cb(null); return; }
+    ids = (ids || readerLayers(no)).filter(function (id) { return layerExists(id, no); });
+    var remaining = ids.length;
+    if (!remaining) { cb(state.cache[no] || null); return; }
+    ids.forEach(function (id) {
+      loadScript(layerSrc(id, no), function () {
+        if (--remaining) return;
+        var anyOk = ids.some(function (x) { return !layerFailed(no, x); });
+        cb(anyOk ? state.cache[no] || null : null);
+      }, priority !== false);
+    });
+  }
+
+  function ensureSkeleton(no, skel) {
+    var book = state.cache[no];
+    if (book) return book;
+    var meta = state.byNo[no] || {};
+    book = { no: no, engs: meta.engs, dir: meta.dir, ab: meta.ab, zh: meta.zh,
+             en: meta.en, t: meta.t, nch: meta.nch, ch: [] };
+    skel.forEach(function (c) {
+      var secs = typeof c[1] === 'number' ? null : c[1];
+      var n = secs ? secs.length : c[1];
+      var paras = {};
+      (c[2] || []).forEach(function (i) { paras[i] = true; });
+      var vs = new Array(n);
+      for (var i = 0; i < n; i++) {
+        vs[i] = { s: secs ? secs[i] : i + 1, t: {}, w: {} };
+        if (paras[i]) vs[i].p = 1;
+      }
+      book.ch.push({ c: c[0], v: vs });
+    });
+    state.cache[no] = book;
+    return book;
+  }
+
+  function layer(kind, vkey, no, payload) {   // 由 data/text|words/<版本>/NN.js 呼叫
+    var chs = ensureSkeleton(no, payload.s).ch;
+    var rows = kind === 'w' ? payload.w : payload.t;
+    var field = kind === 'w' ? 'w' : 't';
+    for (var ci = 0; ci < rows.length; ci++) {
+      var row = rows[ci], vs = chs[ci].v;
+      for (var vi = 0; vi < row.length; vi++) {
+        if (row[vi] !== null) vs[vi][field][vkey] = row[vi];
+      }
+    }
+    (payload.n || []).forEach(function (n) {
+      var v = chs[n[0]].v[n[1]];
+      (v.n || (v.n = {}))[vkey] = n[2];
+    });
+  }
+
+  /* 閒置時請 Service Worker 把整本和合本（≈ 1.2 MB gzip）預先存進離線快取：
+   * 之後換卷秒開、全文搜尋免等網路、斷線也能讀。省流量模式與 2G 不做。 */
+  var offlineWarmed = false;
+  function warmOfflineText() {
+    if (offlineWarmed) return;
+    var sw = navigator.serviceWorker;
+    if (!sw) return;
+    offlineWarmed = true;
+    if (!sw.controller) {
+      // 第一次造訪時 SW 尚未接管頁面，等它接管後再請它預存
+      sw.addEventListener('controllerchange', function () {
+        offlineWarmed = false;
+        warmOfflineText();
+      }, { once: true });
+      return;
+    }
+    var conn = navigator.connection;
+    if (conn && (conn.saveData || /2g/.test(conn.effectiveType || ''))) return;
+    sw.controller.postMessage({
+      type: 'WARM',
+      urls: state.index.map(function (b) { return layerSrc('t:zh_unv', b.no); })
+    });
+  }
+
+  /* ---------- 延後載入的大型參考資料（研經導讀、時間軸…）約 2 MB，進入「聖經補充資料」才抓 ---------- */
+  var REF_SCRIPTS = [
+    'data/su101_references.js',
+    'data/book_intros.js',
+    'data/intro_revelation.js',
+    'data/bible_surveys.js',
+    'data/book_studies_ot.js',
+    'data/book_studies_nt.js',
+    'data/book_guide_renderer.js',
+    'data/timeline_data.js'
+  ];
+
+  function ensureRefData(cb) {
+    var remaining = REF_SCRIPTS.length;
+    REF_SCRIPTS.forEach(function (src) {
+      loadScript(src, function () { if (!--remaining) cb(); }, true);
+    });
+  }
+
+  function refDataReady() {
+    return REF_SCRIPTS.every(scriptSettled);
+  }
+
+  var searchGen = 0;           // 每次新搜尋 +1，舊搜尋的非同步回呼一律作廢
   var searchState = {
     results: [],
     filteredResults: [],
@@ -185,8 +379,32 @@ var BIBLIA = (function () {
     isSearching: false
   };
 
-  function searchIndex(data) {
-    searchIndexData = data;
+  /* ---------- Strong 反向索引（H / G 分檔，只在 Strong 搜尋時載入） ---------- */
+  var strongIdx = { H: null, G: null };
+
+  function strongIndex(lang, data) {   // 由 data/strong_index_<lang>.js 呼叫
+    strongIdx[lang] = data;
+  }
+
+  function ensureStrongIndex(langs, cb) {
+    var remaining = langs.length;
+    langs.forEach(function (lang) {
+      loadScript('data/strong_index_' + lang + '.js', function () { if (!--remaining) cb(); }, true);
+    });
+  }
+
+  /* 經節位置以 b*1e6 + c*1e3 + s 編碼並差分儲存，這裡還原成 [書, 章, 節]。 */
+  function strongHits(code) {
+    var bag = strongIdx[code.charAt(0)];
+    var deltas = bag && bag[code];
+    if (!deltas) return [];
+    var out = new Array(deltas.length);
+    var acc = 0;
+    for (var i = 0; i < deltas.length; i++) {
+      acc += deltas[i];
+      out[i] = [Math.floor(acc / 1000000), Math.floor(acc / 1000) % 1000, acc % 1000];
+    }
+    return out;
   }
 
   /* ---------- Strong 原文字典 ---------- */
@@ -357,10 +575,13 @@ var BIBLIA = (function () {
     initSwipeGesture();
     observeLayout();
     applyAppearance();
-    showStart();
+    // 先畫首頁但不動網址：否則 #read/書卷/章 會在 handleHash 讀到之前就被清掉，
+    // 重新整理或開啟分享連結都只會回到首頁
+    var initialHash = window.location.hash;
+    showStart({ fromHash: true });
     window.addEventListener('hashchange', handleHash);
     window.addEventListener('popstate', handleHash);
-    if (window.location.hash) handleHash();
+    if (initialHash) handleHash();
   }
 
   function cacheEls() {
@@ -1262,7 +1483,10 @@ var BIBLIA = (function () {
     el.compareVerseModal.hidden = false;
 
     loadBook(bNo, function (data) {
-      if (!data) return;
+      if (!data) {
+        el.compareVerseList.innerHTML = '<p class="placeholder">對照資料載入失敗，請檢查網路連線。</p>';
+        return;
+      }
       var chapter = data.ch.find(function (c) { return c.c === chap; });
       var verse = chapter ? chapter.v.find(function (v) { return v.s === sec; }) : null;
       if (!verse) {
@@ -1293,7 +1517,7 @@ var BIBLIA = (function () {
       });
 
       el.compareVerseList.innerHTML = cardsHtml;
-    });
+    }, allTextLayers(bNo));
   }
 
   function closeCompareVerseModal() {
@@ -1777,12 +2001,17 @@ var BIBLIA = (function () {
     }
 
     var data = state.cache[bNo];
-    if (!data) {
-      loadBook(bNo, function () { readCurrentVerseTTS(); });
+    if (!data || !hasLayers(bNo, ['t:zh_unv'])) {
+      loadBook(bNo, function (loaded) {
+        if (loaded) { readCurrentVerseTTS(); return; }
+        showToast('經文載入失敗，無法朗讀，請檢查網路連線', 3000);
+        stopAudio();
+      }, ['t:zh_unv']);
       return;
     }
 
     var chapter = data.ch.find(function (c) { return c.c === chap; });
+    if (chapter) audioState.totalSecs = chapter.v.length;
     var verse = chapter ? chapter.v.find(function (v) { return v.s === sec; }) : null;
     if (!verse) {
       handleAudioEnded();
@@ -2265,7 +2494,7 @@ var BIBLIA = (function () {
       stateObj = { view: 'search', query: searchState.query };
     } else if (el.readerView && !el.readerView.hidden) {
       var bMeta = state.byNo[state.bookNo];
-      var bKey = bMeta ? bMeta.abbr : state.bookNo;
+      var bKey = bMeta ? bMeta.dir : state.bookNo;   // 例：#read/Gen/1、#read/1Sam/3
       targetHash = '#read/' + bKey + '/' + state.chap;
       stateObj = { view: 'reader', bookNo: state.bookNo, chap: state.chap };
     }
@@ -2346,15 +2575,18 @@ var BIBLIA = (function () {
         var chap = m[2] ? parseInt(m[2], 10) : 1;
         var sec = m[3] ? parseInt(m[3], 10) : null;
         var targetBookNo = null;
-        var num = parseInt(bkKey, 10);
+        var num = /^\d+$/.test(bkKey) ? parseInt(bkKey, 10) : NaN;
         if (!isNaN(num) && state.byNo[num]) {
           targetBookNo = num;
+        } else if (bkKey === 'undefined') {
+          // 舊版網址曾誤寫成 #read/undefined/章，沿用上次閱讀的書卷
+          targetBookNo = state.bookNo;
         } else {
           for (var i = 0; i < state.index.length; i++) {
             var b = state.index[i];
-            if ((b.abbr && b.abbr.toLowerCase() === bkKey) ||
-                (b.zh && b.zh.toLowerCase() === bkKey) ||
-                (b.en && b.en.toLowerCase() === bkKey)) {
+            if ([b.dir, b.engs, b.ab, b.zh, b.en].some(function (k) {
+              return k && String(k).toLowerCase() === bkKey;
+            })) {
               targetBookNo = b.no;
               break;
             }
@@ -3181,14 +3413,16 @@ var BIBLIA = (function () {
     refState.introsCategory = 'all';
     refState.introsSearch = '';
     showRef('intros');
-    setTimeout(function () {
-      var target = document.querySelector('.book-intro-card[data-bookno="' + bookNo + '"]');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        target.classList.add('ref-card-highlight');
-        setTimeout(function () { target.classList.remove('ref-card-highlight'); }, 2500);
-      }
-    }, 150);
+    ensureRefData(function () {
+      setTimeout(function () {
+        var target = document.querySelector('.book-intro-card[data-bookno="' + bookNo + '"]');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.classList.add('ref-card-highlight');
+          setTimeout(function () { target.classList.remove('ref-card-highlight'); }, 2500);
+        }
+      }, 150);
+    });
   }
 
   function showRef(tabName, options) {
@@ -3225,6 +3459,22 @@ var BIBLIA = (function () {
     if (el.refPanelRevStudy) el.refPanelRevStudy.hidden = (refState.activeTab !== 'rev_study');
     if (el.refPanelTimeline) el.refPanelTimeline.hidden = (refState.activeTab !== 'timeline');
     if (el.refPanelAudio) el.refPanelAudio.hidden = (refState.activeTab !== 'audio');
+
+    if (refState.activeTab !== 'audio' && !refDataReady()) {
+      var panel = {
+        su101: el.refPanelSu101, intros: el.refPanelIntros, book_study: el.refPanelBookStudy,
+        ot_survey: el.refPanelOtSurvey, nt_survey: el.refPanelNtSurvey,
+        rev_study: el.refPanelRevStudy, timeline: el.refPanelTimeline
+      }[refState.activeTab];
+      if (panel) panel.innerHTML = '<div class="reader-skeleton ref-skeleton" role="status" aria-label="資料載入中">' +
+        '<div class="sk-line" style="width:60%"></div><div class="sk-line"></div><div class="sk-line" style="width:85%"></div>' +
+        '<div class="sk-line" style="width:92%"></div><div class="sk-line" style="width:70%"></div></div>';
+      var tabAtRequest = refState.activeTab;
+      ensureRefData(function () {
+        if (el.refView && !el.refView.hidden && refState.activeTab === tabAtRequest) renderRefView();
+      });
+      return;
+    }
 
     if (refState.activeTab === 'su101') renderRefPanelSu101();
     else if (refState.activeTab === 'intros') renderRefPanelIntros();
@@ -4668,7 +4918,15 @@ var BIBLIA = (function () {
       });
     }
 
-    window.addEventListener('scroll', updateReadingProgress, { passive: true });
+    var progressTicking = false;
+    window.addEventListener('scroll', function () {
+      if (progressTicking) return;
+      progressTicking = true;
+      requestAnimationFrame(function () {
+        progressTicking = false;
+        updateReadingProgress();
+      });
+    }, { passive: true });
 
     // 全域快捷鍵
     document.addEventListener('keydown', function (e) {
@@ -4824,12 +5082,13 @@ var BIBLIA = (function () {
     if (!meta) return;
 
     function doPreload() {
-      if (chap >= meta.nch - 1 && state.byNo[no + 1] && !state.cache[no + 1]) {
-        loadBook(no + 1, function () {});
+      if (chap >= meta.nch - 1 && state.byNo[no + 1]) {
+        loadBook(no + 1, function () {}, readerLayers(no + 1), false);
       }
-      if (chap <= 2 && state.byNo[no - 1] && !state.cache[no - 1]) {
-        loadBook(no - 1, function () {});
+      if (chap <= 2 && state.byNo[no - 1]) {
+        loadBook(no - 1, function () {}, readerLayers(no - 1), false);
       }
+      warmOfflineText();
     }
 
     if (window.requestIdleCallback) {
@@ -4837,6 +5096,26 @@ var BIBLIA = (function () {
     } else {
       setTimeout(doPreload, 800);
     }
+  }
+
+  function readerSkeleton(no, chap) {
+    var meta = state.byNo[no] || {};
+    var lines = '';
+    for (var i = 0; i < 7; i++) {
+      lines += '<div class="sk-line" style="width:' + (92 - (i % 3) * 14) + '%"></div>';
+    }
+    return '<div class="chapter-head"><div class="bk">' + escapeHtml(meta.zh || '') + ' 第 ' + chap + ' 章</div>' +
+      '<div class="ch">' + escapeHtml(meta.en || '') + ' ' + chap + '</div></div>' +
+      '<div class="reader-skeleton" role="status" aria-label="經文載入中">' + lines + '</div>';
+  }
+
+  function readerLoadError(no, chap) {
+    var meta = state.byNo[no] || {};
+    el.reader.innerHTML = '<div class="placeholder reader-load-error">' +
+      '<p>「' + escapeHtml(meta.zh || '') + '」經文載入失敗，請檢查網路連線。</p>' +
+      '<button type="button" class="reader-retry-btn">重新載入</button></div>';
+    var btn = el.reader.querySelector('.reader-retry-btn');
+    if (btn) btn.addEventListener('click', function () { go(no, chap, { replace: true }); });
   }
 
   function go(no, chap, cb, options) {
@@ -4878,23 +5157,25 @@ var BIBLIA = (function () {
       updateAudioLabels();
     }
 
-    if (state.cache[no]) {
+    var ids = readerLayers(no);
+    if (hasLayers(no, ids) && state.cache[no]) {
       render();
       schedulePreloadAdjacent(no, chap);
       if (cb) cb();
       return;
     }
-    el.reader.innerHTML = '<p class="placeholder">載入 ' + state.byNo[no].zh + ' …</p>';
+    forgetFailedLayers(no);
+    el.reader.innerHTML = readerSkeleton(no, chap);
     loadBook(no, function (data) {
-      if (!data) {
-        el.reader.innerHTML = '<p class="placeholder">載入失敗：找不到 ' +
-          bookFile(no) + '<br>請先執行 scripts/parse.py 產生資料。</p>';
-        return;
+      if (state.bookNo !== no || state.chap !== chap) return;   // 使用者已經換到別章
+      if (!data) { readerLoadError(no, chap); return; }
+      if (ids.some(function (id) { return layerFailed(no, id); })) {
+        showToast('部分譯本載入失敗，請檢查網路連線', 3000);
       }
       render();
       schedulePreloadAdjacent(no, chap);
       if (cb) cb();
-    });
+    }, ids);
   }
 
   function updatePager() {
@@ -4959,7 +5240,23 @@ var BIBLIA = (function () {
   }
 
   function render() {
-    var data = state.cache[state.bookNo];
+    var no = state.bookNo;
+    var need = readerLayers(no);
+    if (!hasLayers(no, need)) {
+      // 剛勾選新譯本或開啟逐字對照：先保留目前畫面，該層到了再重繪
+      var chap = state.chap;
+      if (!state.cache[no]) el.reader.innerHTML = readerSkeleton(no, chap);
+      loadBook(no, function (data) {
+        if (state.bookNo !== no || state.chap !== chap) return;
+        if (!data) { readerLoadError(no, chap); return; }
+        if (need.some(function (id) { return layerFailed(no, id); })) {
+          showToast('部分譯本載入失敗，請檢查網路連線', 3000);
+        }
+        render();
+      }, need);
+      return;
+    }
+    var data = state.cache[no];
     if (!data) return;
 
     var targetChap = parseInt(state.chap, 10);
@@ -5423,77 +5720,112 @@ var BIBLIA = (function () {
 
     updateHash();
 
-    if (isStrongMatch && searchIndexData && searchIndexData.strong) {
+    var gen = ++searchGen;
+
+    if (isStrongMatch) {
       var code = rawQ.toUpperCase();
-      var hits = searchIndexData.strong[code] || [];
-      if (!hits.length && !code.startsWith('H') && !code.startsWith('G')) {
-        hits = (searchIndexData.strong['H' + code] || []).concat(searchIndexData.strong['G' + code] || []);
-      }
-      var scopedBookNos = {};
-      filterBooksByScope(targetScope).forEach(function (b) { scopedBookNos[b.no] = true; });
+      var bare = !/^[HG]/.test(code);
+      ensureStrongIndex(bare ? ['H', 'G'] : [code.charAt(0)], function () {
+        if (gen !== searchGen) return;
+        var hits = bare ? strongHits('H' + code).concat(strongHits('G' + code)) : strongHits(code);
+        if (!strongIdx.H && !strongIdx.G) {
+          searchFailed('Strong 索引載入失敗，請檢查網路連線後再試一次。');
+          return;
+        }
+        var scopedBookNos = {};
+        filterBooksByScope(targetScope).forEach(function (b) { scopedBookNos[b.no] = true; });
 
-      var matchedRefs = hits.filter(function (ref) { return scopedBookNos[ref[0]]; });
-      searchState.results = matchedRefs.map(function (ref) {
-        return { bookNo: ref[0], chap: ref[1], sec: ref[2], vkey: 'zh_unv', isStrong: true, code: code, text: '' };
-      });
-
-      ensureStrongDict(code, function () {
+        searchState.results = hits.filter(function (ref) { return scopedBookNos[ref[0]]; })
+          .map(function (ref) {
+            return { bookNo: ref[0], chap: ref[1], sec: ref[2], vkey: 'zh_unv', isStrong: true, code: code, text: '' };
+          });
         finishSearchRender();
       });
-    } else {
-      var allowedBooks = filterBooksByScope(targetScope);
-      var countLoaded = 0;
-      var totalBooks = allowedBooks.length;
+      return;
+    }
 
-      if (!totalBooks) {
-        finishSearchRender();
-        return;
-      }
+    var scanKeys = targetVersion === 'all' || targetVersion === 'strong'
+      ? VERSIONS.map(function (v) { return v.key; })
+      : [targetVersion];
+    var jobs = [];
+    filterBooksByScope(targetScope).forEach(function (b) {
+      var ids = scanKeys.map(function (k) { return 't:' + k; })
+        .filter(function (id) { return layerExists(id, b.no); });
+      if (ids.length) jobs.push({ no: b.no, ids: ids });
+    });
+    if (!jobs.length) { finishSearchRender(); return; }
 
-      if (el.searchProgressWrap) {
-        el.searchProgressWrap.hidden = false;
-        if (el.searchProgressFill) el.searchProgressFill.style.width = '0%';
-        if (el.searchProgressText) el.searchProgressText.textContent = '0 / ' + totalBooks + ' 卷';
-      }
+    var total = jobs.length, next = 0, done = 0, inflight = 0, found = 0, failed = 0;
+    var perBook = {};
+    var tokens = searchState.tokens;
 
-      allowedBooks.forEach(function (b) {
-        loadBook(b.no, function (bookData) {
-          countLoaded++;
-          if (el.searchProgressWrap) {
-            var pct = Math.round((countLoaded / totalBooks) * 100);
-            if (el.searchProgressFill) el.searchProgressFill.style.width = pct + '%';
-            if (el.searchProgressText) el.searchProgressText.textContent = countLoaded + ' / ' + totalBooks + ' 卷';
-          }
+    if (el.searchProgressWrap) {
+      el.searchProgressWrap.hidden = false;
+      if (el.searchProgressFill) el.searchProgressFill.style.width = '0%';
+      if (el.searchProgressText) el.searchProgressText.textContent = '0 / ' + total + ' 卷';
+    }
 
-          if (bookData && bookData.ch) {
-            bookData.ch.forEach(function (ch) {
-              ch.v.forEach(function (verse) {
-                var verseTexts = verse.t || {};
-                var checkVersions = (targetVersion === 'all' || targetVersion === 'strong')
-                  ? Object.keys(verseTexts)
-                  : [targetVersion];
-
-                checkVersions.forEach(function (vkey) {
-                  var text = verseTexts[vkey];
-                  if (!text) return;
-                  var lowerText = text.toLowerCase();
-                  var matchAll = searchState.tokens.every(function (t) { return lowerText.indexOf(t) !== -1; });
-                  if (matchAll) {
-                    searchState.results.push({
-                      bookNo: b.no, chap: ch.c, sec: verse.s, vkey: vkey, text: text, tokens: searchState.tokens
-                    });
-                  }
-                });
-              });
-            });
-          }
-
-          if (countLoaded === totalBooks) {
-            finishSearchRender();
+    // 每次最多 12 卷在途（GitHub Pages 走 HTTP/2 可多工），逐卷到貨逐卷比對；
+    // 新搜尋開始（gen 改變）即停止派工
+    function scan(no, data) {
+      var out = [];
+      if (!data) return out;
+      data.ch.forEach(function (ch) {
+        ch.v.forEach(function (verse) {
+          for (var k = 0; k < scanKeys.length; k++) {
+            var text = verse.t[scanKeys[k]];
+            if (!text) continue;
+            var lower = text.toLowerCase();
+            var hit = true;
+            for (var t = 0; t < tokens.length; t++) {
+              if (lower.indexOf(tokens[t]) === -1) { hit = false; break; }
+            }
+            if (hit) out.push({ bookNo: no, chap: ch.c, sec: verse.s, vkey: scanKeys[k], text: text, tokens: tokens });
           }
         });
       });
+      return out;
     }
+
+    function pump() {
+      while (inflight < 12 && next < total) {
+        launch(jobs[next++]);
+      }
+    }
+
+    function launch(job) {
+      inflight++;
+      loadBook(job.no, function (data) {
+        inflight--;
+        if (gen !== searchGen) return;
+        if (!data) failed++;
+        perBook[job.no] = scan(job.no, data);
+        found += perBook[job.no].length;
+        done++;
+        if (el.searchProgressFill) el.searchProgressFill.style.width = Math.round(done / total * 100) + '%';
+        if (el.searchProgressText) el.searchProgressText.textContent = done + ' / ' + total + ' 卷';
+        el.searchSummary.innerHTML = '正在檢索「<mark>' + escapeHtml(rawQ) + '</mark>」… 已找到 <strong>' + found + '</strong> 筆';
+        if (done < total) { pump(); return; }
+        if (failed === total) {
+          searchFailed('經文資料載入失敗，請檢查網路連線後再試一次。');
+          return;
+        }
+        jobs.forEach(function (j) {
+          Array.prototype.push.apply(searchState.results, perBook[j.no]);
+        });
+        finishSearchRender();
+        if (failed) showToast('有 ' + failed + ' 卷載入失敗，結果可能不完整', 3500);
+      }, job.ids);
+    }
+
+    pump();
+  }
+
+  function searchFailed(text) {
+    searchState.isSearching = false;
+    if (el.searchProgressWrap) el.searchProgressWrap.hidden = true;
+    el.searchSummary.textContent = text;
+    el.searchResults.innerHTML = '<div class="search-empty-state"><div class="search-empty-icon">📡</div><h3 class="search-empty-title">無法完成搜尋</h3><p class="search-empty-desc">' + escapeHtml(text) + '</p></div>';
   }
 
   function finishSearchRender() {
@@ -5748,7 +6080,7 @@ var BIBLIA = (function () {
               cardBody.innerHTML = hl;
             }
           }
-        });
+        }, ['t:zh_unv']);
       }
       card.appendChild(cardBody);
 
@@ -5879,7 +6211,7 @@ var BIBLIA = (function () {
     warn.style.marginTop = '16px';
     warn.innerHTML =
       '<b>載入不到經文資料</b><br><br>' +
-      '請確認 <code>app/data/</code> 底下有 <code>books.js</code> 與 66 個卷檔；' +
+      '請確認 <code>app/data/</code> 底下有 <code>books.js</code> 與 <code>text/</code> 經文資料夾；' +
       '若沒有，請先執行：<br><code>python scripts/parse.py</code><br><br>' +
       '若檔案存在但仍看到這則訊息，代表你的瀏覽器擋掉了 file:// 的指令碼載入。' +
       '改用本機伺服器開啟即可：<br>' +
@@ -5894,7 +6226,7 @@ var BIBLIA = (function () {
     setTimeout(guard, 1200);
   }
 
-  return { books: books, receive: receive, searchIndex: searchIndex,
+  return { books: books, layer: layer, strongIndex: strongIndex,
            strongDict: strongDict, showPlan: showPlan, showStart: showStart, showRef: showRef,
            showSearch: showSearch, showReader: showReader, jumpToVerse: jumpToVerse };
 })();

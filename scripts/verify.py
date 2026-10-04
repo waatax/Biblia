@@ -245,13 +245,21 @@ def main():
                     bom.append(fn)
     check("所有輸出檔為 UTF-8 無 BOM", not bom, "含 BOM：%s" % bom[:5] if bom else "")
 
+    # 前端讀的是 build_layers.py 產生的「版本 × 書卷」分層檔
     missing_js = []
     for b in books:
-        stem = "%02d_%s.js" % (b["book_no"], b["dir"])
-        if not os.path.exists(os.path.join(common.APP_DATA_DIR, stem)):
-            missing_js.append(stem)
-    check("app/data 66 卷 JS 齊全", not missing_js,
+        for v in common.VERSIONS:
+            nt = b["book_no"] >= 40
+            if (v["key"] == "he_wlc" and nt) or (v["key"] == "gr_wh" and not nt):
+                continue
+            rel = os.path.join("text", v["key"], "%02d.js" % b["book_no"])
+            if not os.path.exists(os.path.join(common.APP_DATA_DIR, rel)):
+                missing_js.append(rel)
+    check("app/data/text 各版本 66 卷經文層齊全", not missing_js,
           "缺：%s" % missing_js[:5] if missing_js else "")
+    for lang in ("H", "G"):
+        check("app/data/strong_index_%s.js 存在" % lang,
+              os.path.exists(os.path.join(common.APP_DATA_DIR, "strong_index_%s.js" % lang)))
     check("app/data/books.js 存在",
           os.path.exists(os.path.join(common.APP_DATA_DIR, "books.js")))
 

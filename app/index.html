@@ -14,8 +14,30 @@
 <link rel="apple-touch-icon" href="icons/icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- 網路字型不擋首屏：先用系統字型畫出經文，字型到了再替換（display=swap） -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap"></noscript>
 <link rel="stylesheet" href="style.css">
+<script>
+/* 直接開啟經文網址（#read/書卷/章）時，趁 reader.js 還在下載就先抓這一卷的和合本。 */
+(function () {
+  try {
+    var m = /^#read\/([^\/]+)/.exec(location.hash);
+    if (!m) return;
+    var key = decodeURIComponent(m[1]).toLowerCase(), no = 0;
+    var dirs = 'Gen Ex Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kin 2Kin 1Chr 2Chr Ezra Neh Esth Job Ps Prov Eccl Song Is Jer Lam Ezek Dan Hos Joel Amos Obad Jon Mic Nah Hab Zeph Hag Zech Mal Matt Mark Luke John Acts Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Philem Heb James 1Pet 2Pet 1John 2John 3John Jude Rev'.toLowerCase().split(' ');
+    if (/^\d+$/.test(key)) no = +key;
+    else if (key === 'undefined') no = (JSON.parse(localStorage.getItem('biblia') || '{}') || {}).bookNo;
+    else no = dirs.indexOf(key) + 1;
+    if (!(no >= 1 && no <= 66)) return;
+    var link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'script';
+    link.href = 'data/text/zh_unv/' + (no < 10 ? '0' : '') + no + '.js';
+    document.head.appendChild(link);
+  } catch (e) { /* 預載只是加速，失敗無妨 */ }
+})();
+</script>
 </head>
 <body>
 
@@ -1363,21 +1385,15 @@
   </div>
 </div>
 
-<script src="data/plan_2026_q3.js"></script>
-<script src="data/plan_su101_2026.js"></script>
-<script src="data/su101_references.js"></script>
-<script src="data/book_intros.js"></script>
-<script src="data/intro_revelation.js"></script>
-<script src="data/bible_surveys.js"></script>
-<script src="data/book_studies_ot.js"></script>
-<script src="data/book_studies_nt.js"></script>
-<script src="data/book_guide_renderer.js"></script>
-<script src="data/timeline_data.js"></script>
-<script src="data/golden_verses.js"></script>
-<script src="data/morph_codes.js"></script>
-<script src="reader.js"></script>
-<script src="data/books.js"></script>
-<script src="data/search_index.js"></script>
+<!-- 首屏只載入必要的小檔（defer：不阻擋畫面、依序執行）。
+     研經導讀、時間軸等約 2 MB 參考資料改在進入「聖經補充資料」時才載入；
+     經文依「版本 × 書卷」分檔按需載入；Strong 索引只在 Strong 搜尋時載入。 -->
+<script defer src="data/plan_2026_q3.js"></script>
+<script defer src="data/plan_su101_2026.js"></script>
+<script defer src="data/golden_verses.js"></script>
+<script defer src="data/morph_codes.js"></script>
+<script defer src="reader.js"></script>
+<script defer src="data/books.js"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {

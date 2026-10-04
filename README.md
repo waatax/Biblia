@@ -44,7 +44,8 @@ python scripts/fetch_rvc.py           # 西班牙文 Reina Valera Contemporánea
 python scripts/fetch_nbs.py           # 法文 Nouvelle Bible Segond（單檔下載，數秒）
 python scripts/fetch_wlc.py           # 舊約希伯來文原文 WLC（含節對位，數十秒）
 python scripts/fetch_gnt.py           # 新約希臘文原文 WH（260 章 + Strong 對位，約 6 分）
-python scripts/parse.py               # 解析 Strong 標記，產出 parsed/ 與 app/data/
+python scripts/parse.py               # 解析 Strong 標記，產出 parsed/ 與 app/data/text、words 分層檔
+python scripts/build_layers.py        # （僅重建分層檔與 Strong 索引時）由 parsed/ 重新拆層，約 6 秒
 python scripts/verify.py              # 解析正確性驗證 → report.txt
 python scripts/check_completeness.py  # 完整性稽核 → completeness.txt
 
@@ -233,7 +234,9 @@ raw/he_wlc/_source     希伯來文 OSIS XML（39 卷 + VerseMap.xml）
 raw/gr_wh/_source      希臘文兩個來源：fhl/（重音經文）與 byztxt/（Strong）
 parsed/                解析後的正規 JSON，一卷一檔（可由 raw/ 重建，未進版控）
 app/                   離線閱讀器（純 HTML + CSS + 原生 JS，零框架）
-app/data/              前端資料：66 卷經文 + 搜尋索引 + Strong 字典（H／G 分檔）
+app/data/text/<版本>/   前端經文：版本 × 書卷分檔（和合本一卷約 30–80 KB gzip）
+app/data/words/<版本>/  逐字 Strong 對照層，只在開啟逐字對照時載入
+app/data/              另有 Strong 反向索引與字典（皆 H／G 分檔）、讀經計畫、研經導讀
 manifest.csv           每章的下載紀錄與 SHA1
 report.txt             解析正確性報告
 completeness.txt       完整性稽核報告
@@ -244,9 +247,24 @@ Biblia.md              原始設計藍圖
 
 **為什麼資料是 `.js` 而不是 `.json`？**
 用 `file://` 直接開啟網頁時，`fetch()` / `XHR` 會被 CORS 擋掉，讀不到本地
-JSON。`<script src>` 不受此限。`app/data/*.js` 就是把同一份 JSON 包成
-`BIBLIA.receive({...})`，讓「雙擊 index.html 就能用」成立。
+JSON。`<script src>` 不受此限。`app/data/text|words/<版本>/NN.js` 就是把
+資料包成 `BIBLIA.layer(...)`，讓「雙擊 index.html 就能用」成立。
 `parsed/*.json` 仍保留為正規資料格式。
+
+**為什麼經文要按「版本 × 書卷」拆檔？**
+早期一卷一檔把 11 個譯本加逐字對照全塞在一起（創世記 4.6 MB），只讀和合本
+也得整包下載；全文搜尋更要吞下 66 卷約 100 MB，手機在 GitHub Pages 上會卡死。
+`scripts/build_layers.py`（`parse.py` 結尾自動呼叫）把每卷拆成各版本的經文層與
+逐字層，前端只抓目前勾選的版本：
+
+| | 拆檔前 | 拆檔後 |
+|---|---|---|
+| 讀創世記（和合本） | 4.6 MB（gzip 1.2 MB） | 159 KB（gzip 56 KB） |
+| 和合本全文搜尋 | 約 100 MB、66 卷全部解析 | 3.2 MB（gzip 1.2 MB），只抓和合本 |
+| 首屏 JS | 6.8 MB（含 4.3 MB 搜尋索引、2 MB 研經資料） | 0.7 MB，其餘用到才載入 |
+
+Service Worker 另把經文層放在獨立的 `biblia-data-v1` 快取（cache-first、外殼改版
+不清除），並在閒置時預存整本和合本，之後換卷、搜尋、離線都不必再等網路。
 
 **Strong 標記怎麼解析？**
 FHL 在經文內嵌一整族標記，實測歸納如下：
