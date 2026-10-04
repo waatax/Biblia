@@ -10637,4 +10637,6 @@ body.bar-hidden .colhead { top: 0; }
 /* --- 手機翻章列：專注鈕讓位給「約翰福音 3 / 21」（專注模式在 ☰ 選單也有） --- */
 @media (max-width: 419px) {
   .pager-center .pager-zen-btn { display: none; }
+  .pager-loc { padding: 6px 8px; }
+  .pager-btn { padding-left: 11px; padding-right: 11px; }
 }

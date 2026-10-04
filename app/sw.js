@@ -7,7 +7,7 @@
  *                採 cache-first、永不背景重抓，且外殼改版時「不」清除，
  *                讀過的書卷與預存的和合本一直留著。經文資料真的重建時才改它的版號。
  */
-const SHELL_CACHE = 'biblia-shell-v24';
+const SHELL_CACHE = 'biblia-shell-v25';
 const DATA_CACHE = 'biblia-data-v1';
 const FONT_CACHE = 'biblia-fonts-v1';
 const KEEP = [SHELL_CACHE, DATA_CACHE, FONT_CACHE];

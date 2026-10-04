@@ -4903,7 +4903,7 @@ var BIBLIA = (function () {
     state.index.forEach(function (b) {
       var o = document.createElement('option');
       o.value = b.no;
-      o.textContent = b.no + '. ' + b.zh;
+      o.textContent = b.zh;   // 已依舊約／新約分組，編號只會在手機上擠掉書名
       (b.no >= FIRST_NT ? nt : ot).appendChild(o);
     });
     el.bookSelect.appendChild(ot);
@@ -5282,7 +5282,12 @@ var BIBLIA = (function () {
     if (!el.pagerLoc) return;
     var meta = state.byNo[state.bookNo];
     if (!meta) return;
-    el.pagerLoc.textContent = meta.zh + ' ' + state.chap + ' / ' + meta.nch;
+    el.pagerLoc.textContent = meta.zh + ' ' + state.chap + '/' + meta.nch;
+    el.pagerLoc.title = meta.zh + ' 第 ' + state.chap + ' 章（共 ' + meta.nch + ' 章）';
+    // 窄螢幕放不下長書名（如「帖撒羅尼迦前書」）時改用簡稱「帖前」，不出現刪節號
+    if (el.pagerLoc.clientWidth && el.pagerLoc.scrollWidth > el.pagerLoc.clientWidth + 1 && meta.ab) {
+      el.pagerLoc.textContent = meta.ab + ' ' + state.chap + '/' + meta.nch;
+    }
 
     var atStart = state.chap <= 1 && !state.byNo[state.bookNo - 1];
     var atEnd = state.chap >= meta.nch && !state.byNo[state.bookNo + 1];
