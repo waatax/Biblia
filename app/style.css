@@ -10509,6 +10509,17 @@ body[data-guide-content-width="full"] .book-guide-container { max-width: 1420px;
   #readerBar .mobile-menu-btn { display: inline-flex; }
 }
 
+/* <600：☰ 是手機進入搜尋、筆記、計畫、補充資料的唯一入口，必須常駐
+ * （第 5600 行附近的 .mobile-menu-btn { display:none } 寫在後面，會蓋掉早先的手機規則） */
+@media (max-width: 599px) {
+  #readerBar .mobile-menu-btn { display: inline-flex; }
+}
+/* <375（iPhone SE 等）：頂欄 Aa 收起（底部翻章列與 ☰ 都有 Aa），書卷下拉再窄一點，☰ 才不會被擠出畫面 */
+@media (max-width: 374px) {
+  #readerBar .btn-aa-top { display: none; }
+  #readerBar .ctl-book select { max-width: 6.6em; }
+}
+
 /* 其他頁（搜尋、計畫、補充資料）頂欄：手機上只留圖示，標題可省略號截斷 */
 @media (max-width: 599px) {
   .view:not(#readerView) .bar-main .btn-text { display: none; }
@@ -10606,3 +10617,24 @@ body[data-guide-content-width="full"] .book-guide-container { max-width: 1420px;
 /* --- 首頁金句卡按鈕：整顆換行，不把「分享」折成「分／享」 --- */
 .daily-actions { flex-wrap: wrap; }
 .daily-actions .btn { white-space: nowrap; }
+
+/* --- 66 卷簡介：畫面外的卡片先不排版、不繪製（捲到才算），大幅減輕手機開頁負擔 --- */
+.book-intro-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 960px;
+  scroll-margin-top: calc(var(--bar-h, 54px) + 12px);
+}
+
+/* --- 手機橫放：底部翻章列為了省高度已隱藏，頂欄必須保留 ◀ ▶ 才能翻章 --- */
+@media (max-height: 520px) and (orientation: landscape) {
+  #readerBar .bar-chapter-nav { display: inline-flex; }
+}
+
+/* --- 譯本欄標題：只有一個譯本時不必黏在頂端；手機頂欄自動隱藏時，黏住的標題跟著貼齊最上方 --- */
+.colhead.single { position: static; }
+body.bar-hidden .colhead { top: 0; }
+
+/* --- 手機翻章列：專注鈕讓位給「約翰福音 3 / 21」（專注模式在 ☰ 選單也有） --- */
+@media (max-width: 419px) {
+  .pager-center .pager-zen-btn { display: none; }
+}

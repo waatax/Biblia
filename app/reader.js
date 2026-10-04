@@ -3461,7 +3461,8 @@ var BIBLIA = (function () {
       setTimeout(function () {
         var target = document.querySelector('.book-intro-card[data-bookno="' + bookNo + '"]');
         if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // 卡片可能比整個螢幕還高（如啟示錄），對齊頂端才看得到書名
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           target.classList.add('ref-card-highlight');
           setTimeout(function () { target.classList.remove('ref-card-highlight'); }, 2500);
         }
@@ -3824,15 +3825,10 @@ var BIBLIA = (function () {
                 '<div class="intro-tab-pane pane-outline active" data-tab="outline">' +
                   (hasVisual1 ? window.renderBookOutlineChartHtml(b.no, { isStandalone: false, compact: true, showHeading: true, title: '📊 全書結構大綱圖表' }) : '') +
                 '</div>' +
-                '<div class="intro-tab-pane pane-geomap" data-tab="geomap" style="display:none;">' +
-                  (hasVisual2 ? window.renderBookGeoMapHtml(b.no, { isStandalone: false, compact: true, showHeading: true, title: '🗺️ 聖經歷史地緣動線圖' }) : '') +
-                '</div>' +
-                '<div class="intro-tab-pane pane-theology" data-tab="theology" style="display:none;">' +
-                  (hasVisual3 ? window.renderBookTheologyMatrixHtml(b.no, { isStandalone: false, compact: true, showHeading: true, title: '✝️ 救贖歷史神學矩陣' }) : '') +
-                '</div>' +
-                '<div class="intro-tab-pane pane-dossier" data-tab="dossier" style="display:none;">' +
-                  (hasVisual4 ? window.renderBookDossierHtml(b.no, { isStandalone: false, compact: true, showHeading: true, title: '📑 正典檔案速查表' }) : '') +
-                '</div>' +
+                // 其餘三個分頁點開才繪製：66 卷 × 3 張隱藏圖表原本一次建出約 2 萬個節點，手機開頁會卡數秒
+                '<div class="intro-tab-pane pane-geomap" data-tab="geomap" data-lazy="1" style="display:none;"></div>' +
+                '<div class="intro-tab-pane pane-theology" data-tab="theology" data-lazy="1" style="display:none;"></div>' +
+                '<div class="intro-tab-pane pane-dossier" data-tab="dossier" data-lazy="1" style="display:none;"></div>' +
               '</div>' +
             '</div>' +
           '</div>';
@@ -3936,6 +3932,10 @@ var BIBLIA = (function () {
         tabBtn.classList.add('active');
         parentCard.querySelectorAll('.intro-tab-pane').forEach(function (pane) {
           if (pane.getAttribute('data-tab') === targetTab) {
+            if (pane.getAttribute('data-lazy')) {
+              pane.removeAttribute('data-lazy');
+              pane.innerHTML = introPaneHtml(targetTab, parseInt(parentCard.getAttribute('data-bookno'), 10));
+            }
             pane.style.display = 'block';
           } else {
             pane.style.display = 'none';
@@ -3943,6 +3943,20 @@ var BIBLIA = (function () {
         });
       });
     });
+  }
+
+  var INTRO_PANES = {
+    geomap: ['renderBookGeoMapHtml', '🗺️ 聖經歷史地緣動線圖'],
+    theology: ['renderBookTheologyMatrixHtml', '✝️ 救贖歷史神學矩陣'],
+    dossier: ['renderBookDossierHtml', '📑 正典檔案速查表']
+  };
+
+  function introPaneHtml(tab, bookNo) {
+    var spec = INTRO_PANES[tab];
+    var fn = spec && window[spec[0]];
+    return typeof fn === 'function'
+      ? fn(bookNo, { isStandalone: false, compact: true, showHeading: true, title: spec[1] })
+      : '';
   }
 
   function renderRefPanelBookStudy() {
@@ -5388,7 +5402,7 @@ var BIBLIA = (function () {
     if (!chapter || !chapter.v.length) { el.reader.appendChild(msg('本章尚無資料。')); return; }
 
     var ch = document.createElement('div');
-    ch.className = 'colhead';
+    ch.className = 'colhead' + (cols.length === 1 ? ' single' : '');
     cols.forEach(function (v) {
       var d = document.createElement('div');
       d.textContent = v.label;
