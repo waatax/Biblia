@@ -57,6 +57,19 @@
       </div>
     </header>
 
+    <!-- 繼續閱讀：有閱讀紀錄才顯示，回訪一鍵回到上次讀到的那一節 -->
+    <div class="start-resume" id="startResume" hidden>
+      <button id="startResumeBtn" type="button" class="start-resume-btn">
+        <span class="start-resume-icon" aria-hidden="true">📖</span>
+        <span class="start-resume-body">
+          <span class="start-resume-label">繼續閱讀</span>
+          <span class="start-resume-ref" id="startResumeRef"></span>
+        </span>
+        <span class="start-resume-arrow" aria-hidden="true">→</span>
+      </button>
+      <div class="start-recent" id="startRecent" hidden></div>
+    </div>
+
     <!-- 每日精選金句卡片 -->
     <div class="start-card start-daily-card" id="startDailyVerseCard">
       <div class="daily-card-head">

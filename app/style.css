@@ -10555,3 +10555,54 @@ body[data-guide-content-width="full"] .book-guide-container { max-width: 1420px;
 .compare-card-text,
 .search-card-body,
 .daily-verse-quote { text-spacing-trim: space-all; }
+
+/* --- 首頁「繼續閱讀」：回訪者第一眼就能回到上次讀到的地方 --- */
+.start-resume { margin: 0 0 clamp(16px, 2.2vw, 24px); }
+.start-resume-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--accent);
+  border-radius: var(--r-lg);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-ui);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--sh-2);
+  transition: background var(--t-fast) ease, transform var(--t-fast) ease;
+}
+.start-resume-btn:hover { background: var(--accent-hi); }
+.start-resume-btn:active { transform: scale(.99); }
+.start-resume-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.start-resume-icon { font-size: 1.6rem; flex: 0 0 auto; line-height: 1; }
+.start-resume-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 auto; }
+.start-resume-label { font-size: .78rem; font-weight: 700; letter-spacing: .06em; opacity: .88; }
+.start-resume-ref {
+  font-size: clamp(1.05rem, 1rem + .4vw, 1.25rem);
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.start-resume-arrow { font-size: 1.3rem; font-weight: 800; flex: 0 0 auto; }
+.start-recent { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.start-recent-label { font-size: .78rem; font-weight: 700; color: var(--fg-dim); margin-right: 2px; }
+.start-recent-chip {
+  font: 600 .8125rem var(--font-ui);
+  color: var(--fg);
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  padding: 6px 12px;
+  min-height: 32px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.start-recent-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* --- 首頁金句卡按鈕：整顆換行，不把「分享」折成「分／享」 --- */
+.daily-actions { flex-wrap: wrap; }
+.daily-actions .btn { white-space: nowrap; }

@@ -363,6 +363,15 @@ var BIBLIA = (function () {
   }
 
   var searchGen = 0;           // 每次新搜尋 +1，舊搜尋的非同步回呼一律作廢
+  var liveSearchTimer = 0;
+
+  /* 邊打邊搜：停手 350ms 才搜；單一英文字母太廣（也可能是 Strong 前綴 H/G），等多打一點 */
+  function scheduleLiveSearch() {
+    clearTimeout(liveSearchTimer);
+    var q = el.searchInput ? el.searchInput.value.trim() : '';
+    if (!q || q === searchState.query || /^[a-z]$/i.test(q)) return;
+    liveSearchTimer = setTimeout(function () { runSearch({ replace: true }); }, 350);
+  }
   var searchState = {
     results: [],
     filteredResults: [],
@@ -2596,7 +2605,7 @@ var BIBLIA = (function () {
           if (sec) {
             jumpToVerse(targetBookNo, chap, sec, { fromHash: true });
           } else {
-            showReader(targetBookNo, chap, null, { fromHash: true });
+            showReader(targetBookNo, chap, function () { restorePosition(targetBookNo, chap); }, { fromHash: true });
           }
           return;
         }
@@ -2632,10 +2641,45 @@ var BIBLIA = (function () {
       }
     }
     syncVersions();
+    renderResumeCard();
     renderStartPlanCard();
     renderDailyVerseWidget();
     window.scrollTo(0, 0);
     updateHash(options);
+  }
+
+  function renderResumeCard() {
+    var box = document.getElementById('startResume');
+    if (!box) return;
+    var history = readHistory.filter(function (h) { return state.byNo[h.bookNo]; });
+    if (!history.length) { box.hidden = true; return; }
+
+    var last = history[0];
+    var sec = savedVerse(last.bookNo, last.chap);
+    document.getElementById('startResumeRef').textContent =
+      state.byNo[last.bookNo].zh + ' 第 ' + last.chap + ' 章' + (sec ? ' · 第 ' + sec + ' 節' : '');
+    var btn = document.getElementById('startResumeBtn');
+    btn.onclick = function () { openResume(last.bookNo, last.chap); };
+
+    var recent = history.slice(1, 5);
+    var wrap = document.getElementById('startRecent');
+    wrap.innerHTML = '';
+    if (recent.length) {
+      var label = document.createElement('span');
+      label.className = 'start-recent-label';
+      label.textContent = '最近讀過';
+      wrap.appendChild(label);
+      recent.forEach(function (h) {
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'start-recent-chip';
+        chip.textContent = state.byNo[h.bookNo].zh + ' ' + h.chap;
+        chip.addEventListener('click', function () { openResume(h.bookNo, h.chap); });
+        wrap.appendChild(chip);
+      });
+    }
+    wrap.hidden = !recent.length;
+    box.hidden = false;
   }
 
   function showReader(no, chap, cb, options) {
@@ -4745,6 +4789,47 @@ var BIBLIA = (function () {
   }
 
   var lastScrollTop = 0;
+  /* ---------- 閱讀位置記憶：停止捲動時記下畫面最上方那一節，重新整理或「繼續閱讀」時回到原處 ---------- */
+  var posTimer = 0;
+
+  function topVisibleVerse() {
+    var barBottom = el.readerBar ? Math.max(0, el.readerBar.getBoundingClientRect().bottom) : 0;
+    var rows = el.reader.querySelectorAll('.verse');
+    for (var i = 0; i < rows.length; i++) {
+      // 露出超過 24px 才算「正在讀」；需大於 restorePosition 的 12px 間距，否則每次續讀都會往前退一節
+      if (rows[i].getBoundingClientRect().bottom > barBottom + 24) {
+        return parseInt(rows[i].getAttribute('data-sec'), 10) || 1;
+      }
+    }
+    return 1;
+  }
+
+  function rememberPosition() {
+    clearTimeout(posTimer);
+    posTimer = setTimeout(function () {
+      if (!el.readerView || el.readerView.hidden || !el.reader.querySelector('.verse')) return;
+      saveUserAsset('biblia_pos', { b: state.bookNo, c: state.chap, s: topVisibleVerse() });
+    }, 400);
+  }
+
+  function savedVerse(no, chap) {
+    var pos = loadUserAsset('biblia_pos', null);
+    return pos && pos.b === no && pos.c === chap && pos.s > 1 ? pos.s : 0;
+  }
+
+  function restorePosition(no, chap) {
+    var sec = savedVerse(no, chap);
+    if (!sec || state.bookNo !== no || state.chap !== chap) return;
+    var row = el.reader.querySelector('.verse[data-sec="' + sec + '"]');
+    if (!row) return;
+    var barH = el.readerBar ? el.readerBar.getBoundingClientRect().height : 0;
+    window.scrollTo({ top: row.getBoundingClientRect().top + window.pageYOffset - barH - 12, behavior: 'instant' });
+  }
+
+  function openResume(no, chap) {
+    showReader(no, chap, function () { restorePosition(no, chap); });
+  }
+
   function updateReadingProgress() {
     if (el.readerView && el.readerView.hidden) return;
     var st = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -4926,6 +5011,7 @@ var BIBLIA = (function () {
         progressTicking = false;
         updateReadingProgress();
       });
+      if (el.readerView && !el.readerView.hidden) rememberPosition();
     }, { passive: true });
 
     // 全域快捷鍵
@@ -5609,9 +5695,11 @@ var BIBLIA = (function () {
 
     if (el.searchExecBtn) el.searchExecBtn.addEventListener('click', function () { runSearch(); });
     if (el.searchInput) {
-      el.searchInput.addEventListener('input', function () {
+      el.searchInput.addEventListener('input', function (e) {
         if (el.searchClearBtn) el.searchClearBtn.hidden = !el.searchInput.value.trim();
+        if (!e.isComposing) scheduleLiveSearch();   // 注音／倉頡選字中不搜尋
       });
+      el.searchInput.addEventListener('compositionend', scheduleLiveSearch);
       el.searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
           e.preventDefault();
@@ -5687,7 +5775,8 @@ var BIBLIA = (function () {
     return state.index;
   }
 
-  function runSearch() {
+  function runSearch(opts) {
+    clearTimeout(liveSearchTimer);
     var rawQ = (el.searchInput ? el.searchInput.value : '').trim();
     if (!rawQ) {
       el.searchSummary.innerHTML = '請輸入關鍵字或 Strong 號碼進行搜尋';
@@ -5718,7 +5807,8 @@ var BIBLIA = (function () {
     if (el.searchPaginationBottom) el.searchPaginationBottom.hidden = true;
     if (el.searchBookFilterRow) el.searchBookFilterRow.hidden = true;
 
-    updateHash();
+    // 邊打邊搜時改寫目前這一筆歷史，不要每個字都塞一筆「上一頁」
+    updateHash(opts && opts.replace ? { replace: true } : undefined);
 
     var gen = ++searchGen;
 
