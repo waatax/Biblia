@@ -2706,10 +2706,24 @@ var BIBLIA = (function () {
     if (el.refView) el.refView.hidden = true;
     if (el.searchView) el.searchView.hidden = true;
     if (el.planView) el.planView.hidden = false;
+
+    // 第一次打開時直接切到本月並捲到今天：原本從 1/1 第 1 週列起，今天的進度要往下捲兩百多張卡
+    var todayIt = !planOpened && planFilterState.month === 'all' && !planFilterState.query
+      ? todayItemOf(currentPlan()) : null;
+    planOpened = true;
+    if (todayIt) planFilterState.month = todayIt.month;
     renderPlan();
     window.scrollTo(0, 0);
+    if (todayIt) {
+      var target = document.getElementById('plan-item-' + todayIt.id);
+      if (target) {
+        var barH = el.planView.querySelector('.bar') ? el.planView.querySelector('.bar').getBoundingClientRect().height : 0;
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - barH - 16, behavior: 'instant' });
+      }
+    }
     updateHash(options);
   }
+  var planOpened = false;
 
   /* ===================== 讀經計畫資料與邏輯 ===================== */
   var PLAN_SOURCES = [
@@ -4545,6 +4559,15 @@ var BIBLIA = (function () {
     }
   }
 
+  function loadFontCss(id, family) {
+    if (document.getElementById(id)) return;
+    var link = document.createElement('link');
+    link.id = id;
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=' + family + '&display=swap';
+    document.head.appendChild(link);
+  }
+
   function applyAppearance() {
     document.documentElement.style.setProperty('--reading-size', state.size + 'px');
     if (el.sizeVal) el.sizeVal.textContent = state.size;
@@ -4553,6 +4576,10 @@ var BIBLIA = (function () {
       document.body.classList.remove(cls);
     });
     document.body.classList.add('font-' + (state.font || 'serif'));
+    if (state.font === 'shippori') {
+      // 和風明朝的字型表單 150 KB、上百個子集，只有選用時才載入
+      loadFontCss('fontShippori', 'Shippori+Mincho:wght@400;700');
+    }
 
     ['lh-compact', 'lh-normal', 'lh-relaxed', 'lh-generous'].forEach(function (cls) {
       document.body.classList.remove(cls);
@@ -6109,7 +6136,8 @@ var BIBLIA = (function () {
       readBtn.type = 'button';
       readBtn.className = 'search-action-btn primary';
       readBtn.title = '跳轉至此章節閱讀';
-      readBtn.innerHTML = '<span aria-hidden="true">📖</span> 閱讀';
+      readBtn.innerHTML = '<span aria-hidden="true">📖</span><span class="sab-text"> 閱讀</span>';
+      readBtn.setAttribute('aria-label', '閱讀');
       readBtn.addEventListener('click', function () {
         jumpToVerse(item.bookNo, item.chap, item.sec);
       });
@@ -6119,7 +6147,8 @@ var BIBLIA = (function () {
       compareBtn.type = 'button';
       compareBtn.className = 'search-action-btn';
       compareBtn.title = '單節 11 譯本即時對照';
-      compareBtn.innerHTML = '<span aria-hidden="true">🔀</span> 對照';
+      compareBtn.innerHTML = '<span aria-hidden="true">🔀</span><span class="sab-text"> 對照</span>';
+      compareBtn.setAttribute('aria-label', '對照');
       compareBtn.addEventListener('click', function () {
         openCompareVerseModal(item.bookNo, item.chap, item.sec);
       });
@@ -6129,7 +6158,8 @@ var BIBLIA = (function () {
       copyBtn.type = 'button';
       copyBtn.className = 'search-action-btn';
       copyBtn.title = '複製此節經文';
-      copyBtn.innerHTML = '<span aria-hidden="true">📋</span> 複製';
+      copyBtn.innerHTML = '<span aria-hidden="true">📋</span><span class="sab-text"> 複製</span>';
+      copyBtn.setAttribute('aria-label', '複製');
       copyBtn.addEventListener('click', function () {
         var copyText = bookZh + ' ' + item.chap + ':' + item.sec + ' ' + (item.text || verseText);
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -6148,11 +6178,16 @@ var BIBLIA = (function () {
       var bmKey = item.bookNo + '_' + item.chap + '_' + item.sec;
       var isBm = !!bookmarks[bmKey];
       bmBtn.title = isBm ? '已收藏在書籤' : '加入靈修書籤';
-      bmBtn.innerHTML = isBm ? '<span>🔖</span> 已收藏' : '<span>🔖</span> 書籤';
+      var bmLabel = function (on) {
+        bmBtn.setAttribute('aria-label', on ? '已收藏' : '加入書籤');
+        bmBtn.classList.toggle('is-on', on);
+        return '<span aria-hidden="true">🔖</span><span class="sab-text"> ' + (on ? '已收藏' : '書籤') + '</span>';
+      };
+      bmBtn.innerHTML = bmLabel(isBm);
       bmBtn.addEventListener('click', function () {
         toggleVerseBookmark(item.bookNo, item.chap, item.sec);
         var nowBm = !!bookmarks[bmKey];
-        bmBtn.innerHTML = nowBm ? '<span>🔖</span> 已收藏' : '<span>🔖</span> 書籤';
+        bmBtn.innerHTML = bmLabel(nowBm);
       });
       actions.appendChild(bmBtn);
 

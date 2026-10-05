@@ -75,10 +75,11 @@
   --col-min: 300px;
 
   /* 字體族群 */
-  --font-ui: 'Plus Jakarta Sans', "Noto Sans TC", "Segoe UI", system-ui, sans-serif;
-  --font-serif: "Noto Serif TC", "Source Han Serif TC", Georgia, serif;
+  /* 網路字型尚未到達或手機不載入時，中文依序落到各平台的系統字型：蘋方／微軟正黑體／Android 的 Noto CJK */
+  --font-ui: 'Plus Jakarta Sans', "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", "Segoe UI", system-ui, sans-serif;
+  --font-serif: "Noto Serif TC", "Source Han Serif TC", "Noto Serif CJK TC", "Songti TC", "PMingLiU", Georgia, serif;
   --font-shippori: 'Shippori Mincho', "Noto Serif TC", Georgia, serif;
-  --font-sans: "Noto Sans TC", 'Plus Jakarta Sans', "PingFang TC", system-ui, sans-serif;
+  --font-sans: "Noto Sans TC", 'Plus Jakarta Sans', "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", system-ui, sans-serif;
   --font-kaiti: "DFKai-SB", "BiauKai", "Kaiti TC", "KaiTi", "Noto Serif TC", serif;
   --font-cinzel: 'Cinzel', 'Noto Serif TC', serif;
   --font-mono: "Consolas", "SFMono-Regular", "Courier New", monospace;
@@ -10639,4 +10640,72 @@ body.bar-hidden .colhead { top: 0; }
   .pager-center .pager-zen-btn { display: none; }
   .pager-loc { padding: 6px 8px; }
   .pager-btn { padding-left: 11px; padding-right: 11px; }
+}
+
+/* --- 手機搜尋頁：原本標題＋表單就佔滿第一屏，結果要往下捲才看得到。
+ *     縮小標題、選項兩欄並排、熱門關鍵字改成單行橫滑，讓結果出現在第一屏 --- */
+@media (max-width: 599px) {
+  .search-main { padding-top: 14px; }
+  .search-hero { margin-bottom: 14px; }
+  .search-main-title { font-size: 1.15rem; margin-bottom: 10px; }
+  .search-subtitle { display: none; }
+  .search-hero-box { gap: 10px; padding: 12px; }
+  .search-filters-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+    padding-top: 10px;
+  }
+  .search-filter-item { display: flex; flex-direction: column; align-items: stretch; gap: 3px; min-width: 0; }
+  .search-filter-label { font-size: .72rem; }
+  .search-filter-item .search-select { width: 100%; min-width: 0; padding: 8px; }
+  .search-filter-item:has(#searchPageSizeSelect) { display: none; }   /* 手機固定每頁 20 筆 */
+  .search-preset-tags { flex-wrap: nowrap; min-width: 0; }
+  .search-preset-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    min-width: 0;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 20px), transparent);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 20px), transparent);
+  }
+  .search-preset-list::-webkit-scrollbar { display: none; }
+  .search-tag-chip { flex: 0 0 auto; white-space: nowrap; }
+}
+
+/* --- 手機搜尋結果：書卷快篩改單行橫滑、上方分頁列收起（底部仍有）、卡片動作鈕只留圖示並與經節同列 --- */
+.search-action-btn.is-on { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 599px) {
+  .search-book-filter-row { align-items: center; }
+  .search-book-pills {
+    flex-wrap: nowrap;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    min-width: 0;
+    padding-right: 0;
+  }
+  .search-book-pills::-webkit-scrollbar { display: none; }
+  .search-book-pill { flex: 0 0 auto; padding: 6px 12px; }
+  #searchPaginationTop { display: none !important; }
+
+  .search-card-header { flex-wrap: nowrap; }
+  .search-card-ref-wrap { min-width: 0; flex-wrap: wrap; gap: 4px 6px; }
+  .search-card-testament-badge { display: none; }
+  .search-card-actions { width: auto; flex: 0 0 auto; gap: 4px; }
+  .search-action-btn { padding: 0; width: 36px; height: 36px; justify-content: center; font-size: 1rem; }
+  .search-action-btn .sab-text { display: none; }
+}
+
+/* --- 觸控裝置：節號外觀不變，但可點範圍擴大到約 40px，手指點得中「複製／螢光／書籤」選單 --- */
+@media (pointer: coarse) {
+  .vn { position: relative; }
+  .vn::before {
+    content: "";
+    position: absolute;
+    inset: -12px -10px -12px -12px;
+  }
 }

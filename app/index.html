@@ -14,9 +14,37 @@
 <link rel="apple-touch-icon" href="icons/icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- 網路字型不擋首屏：先用系統字型畫出經文，字型到了再替換（display=swap） -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap"></noscript>
+<script>
+/* 第一次繪製前就套用使用者的色彩主題與字級：深色模式不再每次開啟都先閃一下白底
+ * （判斷邏輯與 reader.js 的 books() 相同：已存主題 → 舊版 dark 旗標 → 系統深淺色） */
+(function () {
+  try {
+    var s = JSON.parse(localStorage.getItem('biblia') || 'null') || {};
+    var sysDark = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = s.theme || (s.dark ? 'dark' : (sysDark ? 'dark' : 'light'));
+    document.documentElement.classList.add(theme);
+    if (typeof s.size === 'number') document.documentElement.style.setProperty('--reading-size', s.size + 'px');
+  } catch (e) { /* 讀不到就用預設主題 */ }
+})();
+
+/* 網路字型分級載入（不擋首屏，display=swap）：
+ * 經文的思源宋體只載 400/700。介面用的思源黑體只在桌機載入：手機系統本身就有同級的
+ * 黑體（Android 即 Noto Sans CJK、iPhone 為蘋方），中文字型每個字重要數十個子集檔，
+ * 手機首開原本光字型就約 2.8 MB。和風明朝（Shippori）只在使用者選用時才由 reader.js 載入。 */
+(function () {
+  var fams = ['Cinzel:wght@600;700;900', 'Plus+Jakarta+Sans:wght@400;500;600;700;800', 'Noto+Serif+TC:wght@400;700'];
+  var conn = navigator.connection || {};
+  var desktop = window.matchMedia && matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+  if (desktop && !conn.saveData) fams.push('Noto+Sans+TC:wght@400;700;900');
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=' + fams.join('&family=') + '&display=swap';
+  link.media = 'print';
+  link.onload = function () { this.media = 'all'; };
+  document.head.appendChild(link);
+})();
+</script>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;700&display=swap"></noscript>
 <link rel="stylesheet" href="style.css">
 <script>
 /* 直接開啟經文網址（#read/書卷/章）時，趁 reader.js 還在下載就先抓這一卷的和合本。 */
