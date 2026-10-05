@@ -144,6 +144,8 @@ var BIBLIA = (function () {
   var bgActive = 0;
   var BG_LIMIT = 4;
   var RETRY_MS = 10000;      // 失敗（多半是斷線）超過 10 秒，下次要用到時自動重試
+  // 經文分層檔很小（數十 KB），20 秒沒回應幾乎就是卡住；研經資料等大檔給到 60 秒
+  function scriptTimeout(src) { return /(^|\/)data\/(text|words)\//.test(src) ? 20000 : 60000; }
 
   function loadScript(src, cb, priority) {
     var job = scripts[src];
@@ -181,17 +183,29 @@ var BIBLIA = (function () {
     s.src = job.src;
     s.charset = 'utf-8';
     s.async = true;
-    s.onload = s.onerror = function (e) {
-      job.st = e.type === 'load' ? 'ready' : 'failed';
-      if (job.st === 'failed') job.failedAt = Date.now();
-      if (s.parentNode) s.parentNode.removeChild(s);
+    var settled = false;
+    // 手機網路不穩時請求可能既不成功也不失敗：逾時就當失敗，閱讀頁出現「重新載入」、搜尋照常收尾
+    var timer = setTimeout(function () { settle(false); }, scriptTimeout(job.src));
+    function settle(ok) {
+      if (settled) {
+        if (ok) job.st = 'ready';   // 逾時後才到：資料已合併，補記為就緒，下次直接使用
+        return;
+      }
+      settled = true;
+      clearTimeout(timer);
+      job.st = ok ? 'ready' : 'failed';
+      if (!ok) job.failedAt = Date.now();
       if (job.bg) bgActive--;
       pumpScripts();
       var cbs = job.cbs;
       job.cbs = [];
       cbs.forEach(function (fn) {
-        try { fn(job.st === 'ready'); } catch (err) { console.error(err); }
+        try { fn(ok); } catch (err) { console.error(err); }
       });
+    }
+    s.onload = s.onerror = function (e) {
+      if (s.parentNode) s.parentNode.removeChild(s);
+      settle(e.type === 'load');
     };
     document.head.appendChild(s);
   }
@@ -3507,6 +3521,14 @@ var BIBLIA = (function () {
         var isCurrent = btn.getAttribute('data-reftab') === refState.activeTab;
         btn.classList.toggle('active', isCurrent);
         btn.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+        // 手機上分頁是橫滑單列：把目前分頁捲進可視範圍（只捲分頁列，不動整頁）
+        if (isCurrent && el.refNavTabs.scrollWidth > el.refNavTabs.clientWidth) {
+          var nav = el.refNavTabs;
+          var left = btn.offsetLeft - nav.offsetLeft;
+          if (left < nav.scrollLeft || left + btn.offsetWidth > nav.scrollLeft + nav.clientWidth) {
+            nav.scrollLeft = Math.max(0, left - (nav.clientWidth - btn.offsetWidth) / 2);
+          }
+        }
       });
     }
 
