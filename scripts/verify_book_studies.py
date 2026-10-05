@@ -113,14 +113,17 @@ def test_html_files():
     
     with open(index_path, "r", encoding="utf-8") as f:
         index_content = f.read()
-    assert "bible_surveys.js" in index_content
-    assert "book_studies_ot.js" in index_content
-    assert "book_studies_nt.js" in index_content
-    assert "book_guide_renderer.js" in index_content
+    reader_path = os.path.join(APP_DIR, "reader.js")
+    with open(reader_path, "r", encoding="utf-8") as f:
+        reader_content = f.read()
+    assert "bible_surveys.js" in index_content or "bible_surveys.js" in reader_content
+    assert "book_studies_ot.js" in index_content or "book_studies_ot.js" in reader_content
+    assert "book_studies_nt.js" in index_content or "book_studies_nt.js" in reader_content
+    assert "book_guide_renderer.js" in index_content or "book_guide_renderer.js" in reader_content
     assert "refPanelBookStudy" in index_content
     assert "refPanelOtSurvey" in index_content
     assert "refPanelNtSurvey" in index_content
-    print("  [OK] index.html has all script references and tab panels.")
+    print("  [OK] index.html / reader.js has all script references and tab panels.")
 
     with open(guide_path, "r", encoding="utf-8") as f:
         guide_content = f.read()

@@ -701,7 +701,12 @@
         }
         if (!inTable) {
           inTable = true;
-          tableHtml = '<div class="guide-table-responsive"><table class="guide-table"><tbody>';
+          tableHtml = '<div class="guide-table-responsive"><table class="guide-table"><thead><tr>';
+          for (var c = 0; c < cells.length; c++) {
+            tableHtml += '<th>' + cells[c].trim() + '</th>';
+          }
+          tableHtml += '</tr></thead><tbody>';
+          continue;
         }
         tableHtml += '<tr>';
         for (var c = 0; c < cells.length; c++) {

@@ -7223,6 +7223,485 @@ body.font-shippori .compare-verse-quote {
   }
 }
 
+/* 啟示錄審判遞進指示條與全景圖表 */
+.rev-section-lead {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--fg-dim);
+  margin-bottom: 18px;
+}
+
+.rev-intensity-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  margin-bottom: 22px;
+  box-shadow: var(--sh-1);
+}
+
+.intensity-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+
+.intensity-arrow {
+  color: var(--accent);
+  font-weight: 900;
+  font-size: 1.2rem;
+}
+
+.badge-scope {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+}
+
+.intensity-seals .badge-scope {
+  background: rgba(184, 134, 11, 0.15);
+  color: #b8860b;
+}
+
+.intensity-trumpets .badge-scope {
+  background: rgba(192, 57, 43, 0.15);
+  color: #c0392b;
+}
+
+.intensity-bowls .badge-scope {
+  background: rgba(142, 28, 0, 0.2);
+  color: #8e1c00;
+}
+
+.rev-judgments-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.rev-judgment-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--sh-2);
+  display: flex;
+  flex-direction: column;
+}
+
+.judgment-card-head {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.series-seals .judgment-card-head {
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.12), transparent);
+  border-top: 4px solid #b8860b;
+}
+
+.series-trumpets .judgment-card-head {
+  background: linear-gradient(135deg, rgba(192, 57, 43, 0.12), transparent);
+  border-top: 4px solid #c0392b;
+}
+
+.series-bowls .judgment-card-head {
+  background: linear-gradient(135deg, rgba(142, 28, 0, 0.16), transparent);
+  border-top: 4px solid #8e1c00;
+}
+
+.judgment-series-title {
+  margin: 0 0 8px 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.judgment-meta-scope, .judgment-meta-agent {
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  margin-bottom: 4px;
+}
+
+.judgment-meta-char {
+  font-size: 0.82rem;
+  color: var(--fg-mute);
+  margin: 8px 0 0 0;
+  line-height: 1.45;
+}
+
+.judgment-items-list {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.judgment-item-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  background: var(--bg-soft);
+  font-size: 0.88rem;
+}
+
+.judgment-item-row.item-interlude {
+  background: rgba(46, 107, 73, 0.12);
+  border-left: 3px solid var(--ok);
+}
+
+.j-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  background: var(--bg-alt);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.badge-interlude {
+  background: var(--ok);
+  color: #fff;
+  border: none;
+}
+
+.j-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.j-title {
+  font-size: 0.88rem;
+  color: var(--fg);
+}
+
+.j-focus {
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  line-height: 1.4;
+}
+
+/* 天體敬拜層次圖 */
+.rev-throne-liturgy-box {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  box-shadow: var(--sh-1);
+}
+
+.throne-box-header {
+  margin-bottom: 18px;
+}
+
+.throne-box-title {
+  margin: 0 0 6px 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.throne-box-desc {
+  font-size: 0.92rem;
+  color: var(--fg-dim);
+  margin: 0;
+  line-height: 1.55;
+}
+
+.throne-layers-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 14px;
+}
+
+.throne-layer-card {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.layer-rank-1 {
+  border-top: 3px solid #b8860b;
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.08), var(--bg-soft));
+}
+
+.throne-layer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.throne-rank-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #b8860b;
+  background: rgba(184, 134, 11, 0.12);
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+}
+
+.throne-ref-tag {
+  font-size: 0.75rem;
+  color: var(--fg-mute);
+}
+
+.throne-layer-name {
+  margin: 2px 0 4px 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.throne-symbol, .throne-meaning {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+}
+
+/* 七教會郵路與屬靈診斷全表 */
+.rev-route-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  box-shadow: var(--sh-1);
+}
+
+.route-origin {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+}
+
+.route-station {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--fg);
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.station-num {
+  font-size: 0.72rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--r-pill);
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.route-arrow {
+  color: var(--accent);
+  font-weight: 900;
+  font-size: 0.85rem;
+}
+
+.rev-churches-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-1);
+  background: var(--bg-alt);
+}
+
+.rev-churches-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.rev-churches-table th {
+  background: var(--bg-soft);
+  color: var(--fg);
+  font-weight: 800;
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+
+.rev-churches-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.td-church-name {
+  font-size: 0.95rem;
+}
+
+.church-num-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #b8860b;
+  background: rgba(184, 134, 11, 0.12);
+  padding: 1px 6px;
+  border-radius: var(--r-xs);
+  margin-bottom: 4px;
+}
+
+.church-route-desc {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--fg-mute);
+  margin-top: 4px;
+}
+
+.badge-state {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+}
+
+.badge-honor {
+  background: rgba(46, 107, 73, 0.15);
+  color: #2e6b49;
+  border: 1px solid rgba(46, 107, 73, 0.3);
+}
+
+.badge-warning {
+  background: rgba(184, 134, 11, 0.15);
+  color: #b8860b;
+  border: 1px solid rgba(184, 134, 11, 0.3);
+}
+
+.badge-danger {
+  background: rgba(192, 57, 43, 0.15);
+  color: #c0392b;
+  border: 1px solid rgba(192, 57, 43, 0.3);
+}
+
+.td-promise strong {
+  color: #b8860b;
+}
+
+/* 千禧年視覺時間軸節點 */
+.mill-visual-track {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: var(--bg-soft);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line-soft);
+}
+
+.mill-track-label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mill-nodes-row {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mill-node-item {
+  flex: 1;
+  min-width: 120px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: center;
+}
+
+.mill-node-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #b8860b;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 4px auto;
+}
+
+.mill-node-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.mill-node-desc {
+  font-size: 0.75rem;
+  color: var(--fg-dim);
+  line-height: 1.35;
+}
+
+.mill-node-connector {
+  color: var(--accent);
+  font-size: 0.9rem;
+  align-self: center;
+  font-weight: 900;
+}
+
+@media (max-width: 900px) {
+  .rev-judgments-grid {
+    grid-template-columns: 1fr;
+  }
+  .rev-intensity-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .intensity-arrow {
+    text-align: center;
+    transform: rotate(90deg);
+  }
+}
+
 /* ==========================================================================
    66 卷聖經深入研究導讀與新舊約總覽 (66 Bible Books & Surveys Deep Guide)
    ========================================================================== */
@@ -10766,3 +11245,784 @@ body.bar-hidden .colhead { top: 0; }
 #refView img,
 #refView iframe,
 #refView video { max-width: 100%; height: auto; }
+
+/* ===================== 13. 閱讀研經教學指南與離線向量圖解 (Reader Exegesis Tutorial & Vector Charts) ===================== */
+
+.reader-tutorial-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 10px 0 60px;
+  color: var(--fg);
+}
+
+.tutorial-hero-card {
+  background: var(--bg-card, var(--bg-alt));
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl, 16px);
+  padding: 32px 28px;
+  margin-bottom: 32px;
+  box-shadow: var(--sh-1, 0 2px 8px rgba(0,0,0,0.06));
+  position: relative;
+  overflow: hidden;
+}
+
+.tutorial-hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent) 0%, #d4a373 100%);
+}
+
+.tut-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: var(--accent-soft, rgba(160, 82, 45, 0.1));
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.tut-hero-title {
+  font-family: var(--font-title, serif);
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--fg);
+  margin: 0 0 10px;
+}
+
+.tut-hero-subtitle {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--fg-dim);
+  margin: 0 0 20px;
+}
+
+.tut-quick-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.tut-jump-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: var(--r-md, 8px);
+  background: var(--bg, #fff);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.tut-jump-btn:hover {
+  background: var(--accent-soft, rgba(160, 82, 45, 0.12));
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.tut-section {
+  background: var(--bg-card, var(--bg-alt));
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl, 16px);
+  padding: 28px 24px;
+  margin-bottom: 30px;
+  box-shadow: var(--sh-1, 0 2px 8px rgba(0,0,0,0.04));
+}
+
+.tut-sec-head {
+  margin-bottom: 22px;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 16px;
+}
+
+.tut-sec-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.tut-sec-title {
+  font-family: var(--font-title, serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tut-sec-lead {
+  font-size: 0.96rem;
+  line-height: 1.6;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+/* Steps Grid */
+.tut-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.tut-step-card {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  padding: 18px 16px;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tut-step-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-2, 0 4px 12px rgba(0,0,0,0.07));
+}
+
+.step-num-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.step-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 8px;
+}
+
+.step-desc {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+/* Exegesis Cases Grid */
+.tut-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 16px;
+}
+
+.tut-case-card {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--r-md, 8px);
+  padding: 16px;
+}
+
+.case-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.case-ref-tag {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--accent);
+}
+
+.case-strong-badge {
+  font-size: 0.8rem;
+  font-family: var(--font-mono, monospace);
+  background: var(--accent-soft, rgba(160, 82, 45, 0.1));
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--fg);
+}
+
+.case-verse {
+  font-family: var(--font-title, serif);
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--fg);
+}
+
+.case-analysis {
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+/* Translation Matrix */
+.tut-trans-matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.trans-matrix-card {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  padding: 18px;
+}
+
+.matrix-cat-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 6px;
+}
+
+.matrix-cat-desc {
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  margin: 0 0 14px;
+}
+
+.matrix-versions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.version-row {
+  font-size: 0.87rem;
+  line-height: 1.5;
+  color: var(--fg);
+  border-bottom: 1px dotted var(--line-soft, var(--line));
+  padding-bottom: 8px;
+}
+
+.version-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.version-lang-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--bg-soft, #f4f4f4);
+  color: var(--fg-dim);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 6px;
+}
+
+.version-name {
+  color: var(--fg);
+}
+
+.version-feat {
+  color: var(--fg-dim);
+}
+
+.tut-pro-tips-card {
+  background: var(--bg-soft, rgba(0,0,0,0.02));
+  border: 1px dashed var(--line);
+  border-radius: var(--r-md, 8px);
+  padding: 16px 20px;
+}
+
+.tips-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--fg);
+}
+
+.tips-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--fg-dim);
+}
+
+/* Morphology Table & Golden Case */
+.tut-morph-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tut-morph-table th, .tut-morph-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.morph-code-pill {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--accent-soft, rgba(160, 82, 45, 0.1));
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.tut-golden-case-box {
+  background: linear-gradient(135deg, var(--bg, #fff) 0%, var(--bg-soft, #faf7f2) 100%);
+  border: 2px solid var(--accent);
+  border-radius: var(--r-lg, 12px);
+  padding: 20px;
+}
+
+.gc-head {
+  margin-bottom: 12px;
+}
+
+.gc-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.gc-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 4px 0 6px;
+}
+
+.gc-ref {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.gc-morph-label {
+  font-size: 0.88rem;
+  color: var(--fg);
+  margin-bottom: 8px;
+}
+
+.gc-text {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--fg);
+  margin: 0;
+}
+
+/* Features Grid */
+.tut-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.tut-feat-card {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md, 8px);
+  padding: 16px;
+  text-align: center;
+}
+
+.feat-icon {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.feat-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 6px;
+}
+
+.feat-desc {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+/* Keyboard Map Grid */
+.tut-keymap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.tut-key-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md, 8px);
+  padding: 12px 14px;
+}
+
+.key-badge kbd {
+  display: inline-block;
+  min-width: 38px;
+  padding: 4px 8px;
+  text-align: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: var(--bg-alt, #eee);
+  border: 1px solid var(--line-bold, #ccc);
+  border-bottom: 2px solid var(--line-bold, #aaa);
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  color: var(--fg);
+}
+
+.key-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.key-action {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--fg);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.key-desc {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--fg-dim);
+}
+
+/* ===================== 向量圖解樣式 (Offline Vector Visualizations) ===================== */
+
+.chart-vector-wrap {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.vector-chart-box {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  padding: 20px;
+}
+
+.vchart-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.98rem;
+  color: var(--fg);
+}
+
+.vchart-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* Chart 1: Prophets Eras Grid */
+.vchart-eras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.vchart-era-col {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md, 8px);
+  overflow: hidden;
+  background: var(--bg-soft, rgba(0,0,0,0.01));
+}
+
+.era-col-hdr {
+  padding: 12px 14px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--line);
+}
+
+.era-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+}
+
+.era-col-hdr h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 2px 0 4px;
+}
+
+.era-dates {
+  font-size: 0.78rem;
+  color: var(--fg-dim);
+  font-family: var(--font-mono, monospace);
+}
+
+.vchart-prophets {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.v-prophet-card {
+  background: var(--bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.loc-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.loc-badge.north { background: #e3f2fd; color: #1565c0; }
+.loc-badge.south { background: #e8f5e9; color: #2e7d32; }
+.loc-badge.for-gentiles { background: #fff3e0; color: #e65100; }
+.loc-badge.fall { background: #ffebee; color: #c62828; }
+.loc-badge.exiles { background: #f3e5f5; color: #6a1b9a; }
+.loc-badge.temple { background: #e0f2f1; color: #00695c; }
+.loc-badge.reform { background: #ede7f6; color: #4527a0; }
+
+.v-prophet-card strong {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+
+.v-prophet-card p {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+/* Chart 2: Haggai Chiasm Ladder */
+.chiasm-ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chiasm-row {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md, 8px);
+  overflow: hidden;
+  background: var(--bg, #fff);
+}
+
+.chiasm-row.c-outer {
+  border-left: 6px solid #b0bec5;
+}
+
+.chiasm-row.c-mid {
+  margin-left: 20px;
+  margin-right: 20px;
+  border-left: 6px solid #4fc3f7;
+}
+
+.chiasm-row.c-center {
+  margin-left: 40px;
+  margin-right: 40px;
+  border: 2px solid var(--accent);
+  background: var(--accent-soft, rgba(160, 82, 45, 0.08));
+}
+
+.chiasm-tag {
+  min-width: 44px;
+  padding: 10px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9rem;
+  background: var(--bg-alt);
+  border-right: 1px solid var(--line);
+  color: var(--fg);
+}
+
+.chiasm-row.c-center .chiasm-tag {
+  background: var(--accent);
+  color: #fff;
+  border-right: none;
+}
+
+.chiasm-body {
+  padding: 12px 14px;
+  flex: 1;
+}
+
+.chiasm-body strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+
+.chiasm-body p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+.chiasm-body .gold-text {
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+
+.chiasm-body .lead-text {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* Chart 3: Feasts Comparison Grid */
+.feasts-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.feasts-season-col {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg, 12px);
+  overflow: hidden;
+  background: var(--bg, #fff);
+}
+
+.season-head {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.feasts-season-col.spring .season-head {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(139, 195, 74, 0.04) 100%);
+}
+
+.feasts-season-col.autumn .season-head {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.08) 0%, rgba(255, 87, 34, 0.04) 100%);
+}
+
+.season-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.season-head h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 4px 0 4px;
+}
+
+.season-sub {
+  font-size: 0.78rem;
+  color: var(--fg-dim);
+  display: block;
+}
+
+.feasts-cards-list {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feast-vcard {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md, 8px);
+  background: var(--bg-soft, rgba(0,0,0,0.01));
+}
+
+.f-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 26px;
+  padding-top: 2px;
+}
+
+.f-info {
+  flex: 1;
+}
+
+.f-info h5 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 4px;
+}
+
+.f-ot {
+  font-size: 0.8rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+  margin: 0 0 4px;
+}
+
+.f-nt {
+  font-size: 0.82rem;
+  color: var(--fg);
+  line-height: 1.45;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .tut-hero-title { font-size: 1.45rem; }
+  .tut-sec-title { font-size: 1.25rem; }
+  .chiasm-row.c-mid { margin-left: 8px; margin-right: 8px; }
+  .chiasm-row.c-center { margin-left: 12px; margin-right: 12px; }
+}
+

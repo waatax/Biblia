@@ -362,7 +362,8 @@ var BIBLIA = (function () {
     'data/book_studies_ot.js',
     'data/book_studies_nt.js',
     'data/book_guide_renderer.js',
-    'data/timeline_data.js'
+    'data/timeline_data.js',
+    'data/reader_tutorial.js'
   ];
 
   function ensureRefData(cb) {
@@ -628,10 +629,10 @@ var BIBLIA = (function () {
       'planStatsCount', 'planStreakBadge', 'planMarkTodayBtn', 'planMonthTabs', 'planWeekSelect',
       'planSearchInput', 'planList', 'startPlanTodayBox', 'startPlanDate',
       'planSwitch', 'planTitle', 'planSubtitle', 'planSource', 'planHeadTitle',
-      'startRefBtn', 'readerRefBtn', 'planRefBtn', 'refHomeBtn', 'refReaderBtn',
+      'startRefBtn', 'startTutorialBtn', 'readerRefBtn', 'planRefBtn', 'refHomeBtn', 'refReaderBtn',
       'refPlanBtn', 'refThemeBtn', 'refNavTabs', 'refPanelSu101', 'refPanelIntros',
       'refPanelBookStudy', 'refPanelOtSurvey', 'refPanelNtSurvey',
-      'refPanelRevStudy', 'refPanelTimeline',
+      'refPanelRevStudy', 'refPanelTimeline', 'refPanelReaderGuide',
       'startDailyVerseCard', 'dailyVerseTheme', 'dailyVerseShuffleBtn', 'dailyVerseText',
       'dailyVerseEn', 'dailyVerseOrig', 'dailyVerseRef', 'dailyVerseCopyBtn', 'dailyVerseShareBtn', 'dailyVerseReadBtn',
       'startQuickNavBtn', 'quickNavBtn', 'quickNavBtnText', 'quickNavModal', 'quickNavOverlay',
@@ -3438,7 +3439,7 @@ var BIBLIA = (function () {
 
   /* ===================== 聖經補充資料邏輯 ===================== */
   var refState = {
-    activeTab: 'intros',      // 'intros' | 'ot_survey' | 'nt_survey' | 'su101' | 'book_study' | 'rev_study' | 'timeline' | 'audio'
+    activeTab: 'intros',      // 'intros' | 'ot_survey' | 'nt_survey' | 'su101' | 'book_study' | 'rev_study' | 'timeline' | 'reader_guide' | 'audio'
     currentBookStudyNo: 1,
     su101Quarter: 'all',
     su101Search: '',
@@ -3450,6 +3451,7 @@ var BIBLIA = (function () {
 
   function buildRefUI() {
     if (el.startRefBtn) el.startRefBtn.addEventListener('click', function () { showRef(); });
+    if (el.startTutorialBtn) el.startTutorialBtn.addEventListener('click', function () { showRef('reader_guide'); });
     if (el.readerRefBtn) el.readerRefBtn.addEventListener('click', function () {
       if (state.bookNo) {
         showRefForBook(state.bookNo);
@@ -3539,13 +3541,15 @@ var BIBLIA = (function () {
     if (el.refPanelNtSurvey) el.refPanelNtSurvey.hidden = (refState.activeTab !== 'nt_survey');
     if (el.refPanelRevStudy) el.refPanelRevStudy.hidden = (refState.activeTab !== 'rev_study');
     if (el.refPanelTimeline) el.refPanelTimeline.hidden = (refState.activeTab !== 'timeline');
+    if (el.refPanelReaderGuide) el.refPanelReaderGuide.hidden = (refState.activeTab !== 'reader_guide');
     if (el.refPanelAudio) el.refPanelAudio.hidden = (refState.activeTab !== 'audio');
 
     if (refState.activeTab !== 'audio' && !refDataReady()) {
       var panel = {
         su101: el.refPanelSu101, intros: el.refPanelIntros, book_study: el.refPanelBookStudy,
         ot_survey: el.refPanelOtSurvey, nt_survey: el.refPanelNtSurvey,
-        rev_study: el.refPanelRevStudy, timeline: el.refPanelTimeline
+        rev_study: el.refPanelRevStudy, timeline: el.refPanelTimeline,
+        reader_guide: el.refPanelReaderGuide
       }[refState.activeTab];
       if (panel) panel.innerHTML = '<div class="reader-skeleton ref-skeleton" role="status" aria-label="資料載入中">' +
         '<div class="sk-line" style="width:60%"></div><div class="sk-line"></div><div class="sk-line" style="width:85%"></div>' +
@@ -3564,6 +3568,7 @@ var BIBLIA = (function () {
     else if (refState.activeTab === 'nt_survey') renderRefPanelNtSurvey();
     else if (refState.activeTab === 'rev_study') renderRefPanelRevStudy();
     else if (refState.activeTab === 'timeline') renderRefPanelTimeline();
+    else if (refState.activeTab === 'reader_guide') renderRefPanelReaderGuide();
     else if (refState.activeTab === 'audio') renderRefPanelAudio();
   }
 
@@ -4286,15 +4291,27 @@ var BIBLIA = (function () {
         htmlStr += '<div class="chart-card">' +
           '<div class="chart-card-header">' +
             '<h3 class="chart-title">' + escapeHtml(ch.title) + '</h3>' +
-          '</div>' +
-          '<div class="chart-img-wrap">' +
-            '<img src="' + escapeHtml(ch.img) + '" alt="' + escapeHtml(ch.title) + '" loading="lazy" class="chart-img">' +
-          '</div>' +
-          '<div class="chart-card-body">' +
-            '<p>' + escapeHtml(ch.desc) + '</p>' +
-            '<a href="' + escapeHtml(ch.img) + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">' +
-              '🔍 放大檢視高畫質原圖 ↗</a>' +
-          '</div></div>';
+          '</div>';
+
+        if (ch.vector_html) {
+          htmlStr += '<div class="chart-vector-wrap">' + ch.vector_html + '</div>';
+        }
+
+        if (ch.img) {
+          htmlStr += '<div class="chart-img-wrap">' +
+            '<img src="' + escapeHtml(ch.img) + '" alt="' + escapeHtml(ch.title) + '" loading="lazy" class="chart-img" onerror="this.parentElement.style.display=\'none\'">' +
+          '</div>';
+        }
+
+        htmlStr += '<div class="chart-card-body">' +
+            '<p>' + escapeHtml(ch.desc) + '</p>';
+
+        if (ch.img) {
+          htmlStr += '<a href="' + escapeHtml(ch.img) + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">' +
+            '🔍 檢視歷史掃描原圖檔 ↗</a>';
+        }
+
+        htmlStr += '</div></div>';
       });
       htmlStr += '</div>';
     }
@@ -4309,6 +4326,16 @@ var BIBLIA = (function () {
           renderRefPanelTimeline();
         });
       });
+    }
+  }
+
+  function renderRefPanelReaderGuide() {
+    var container = el.refPanelReaderGuide;
+    if (!container) return;
+    if (typeof window.renderReaderTutorialHtml === 'function') {
+      container.innerHTML = window.renderReaderTutorialHtml();
+    } else {
+      container.innerHTML = '<div class="ref-empty-state">研經教學指南載入中...</div>';
     }
   }
 

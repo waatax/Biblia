@@ -141,6 +141,222 @@
       }
     ],
 
+    // 小亞細亞七教會環形郵路地理動線與屬靈診斷全圖表
+    sevenChurches: [
+      {
+        no: 1,
+        nameZh: '以弗所教會',
+        nameEn: 'Ephesus',
+        routeOrder: '第 1 站（亞細亞省首府與愛琴海大港）',
+        cityBg: '亞細亞省行政商業中心，擁有世界七大奇蹟之一的亞底米女神大廟，異教迷信與巫術盛行。',
+        christTitle: '那右手拿著七星、在七個金燈臺中間行走的 (2:1)',
+        spiritualState: '真理純全堅固，但離棄起初愛心',
+        stateType: 'warning',
+        commendation: '勞碌、忍耐、試驗出假使徒並揭露其偽、痛恨尼哥拉黨的妥協惡行。',
+        critique: '把起初的愛心（對神、對弟兄姊妹真摯的熱忱）離棄了。',
+        counsel: '當回想是從哪裡墜落的，並要悔改，行起初所行的事；若不悔改，我就臨到你那裡，把你的燈臺從原處挪去。',
+        promise: '得勝的，我必將神樂園中生命樹的果子賜給他吃 (2:7)。'
+      },
+      {
+        no: 2,
+        nameZh: '士每拿教會',
+        nameEn: 'Smyrna',
+        routeOrder: '第 2 站（沿海向北約55公里之繁榮海港）',
+        cityBg: '忠誠效忠羅馬的自由市，凱撒崇拜重鎮；猶太勢力強大且敵視基督徒；產沒藥（象徵受苦死亡）。',
+        christTitle: '那首先的、末後的、死過又活的 (2:8)',
+        spiritualState: '在受苦與赤貧中蒙神稱許為極其富足',
+        stateType: 'honor',
+        commendation: '在極端患難貧窮中持守信仰，實質在神面前極其富足；勇敢面對自稱猶太人者（實為撒但一會）的毀謗。',
+        critique: '【無任何責備】七教會中僅有的兩個全蒙稱讚教會之一！',
+        counsel: '你將要受的苦你不用怕。魔鬼要將你們幾個人下在監裡受試煉十日；你務要至死忠心，我就賜給你那生命的冠冕。',
+        promise: '得勝的，必不受第二次死的害 (2:11)。'
+      },
+      {
+        no: 3,
+        nameZh: '別迦摩教會',
+        nameEn: 'Pergamum',
+        routeOrder: '第 3 站（轉向內陸以北之高山政治衛城）',
+        cityBg: '羅馬總督駐地與文化名城，建於高山上；有巨型宙斯祭壇（如寶座）與蛇神廟，被稱為「撒但座位之處」。',
+        christTitle: '那有兩刃利劍的 (2:12)',
+        spiritualState: '堅守主名但容讓巴蘭妥協與肉體縱慾',
+        stateType: 'warning',
+        commendation: '堅守主名，即使在忠心見證人安提帕殉道時，也沒有棄絕信仰。',
+        critique: '有人服從了巴蘭的教訓（引誘人吃祭偶像之物，行姦淫），也有人服從了尼哥拉黨的教訓。',
+        counsel: '所以，你當悔改；若不悔改，我就快臨到你那裡，用我口中的劍攻擊他們。',
+        promise: '得勝的，我必將那隱藏的嗎哪賜給他，並賜他一塊白石，石上寫著新名 (2:17)。'
+      },
+      {
+        no: 4,
+        nameZh: '推雅推喇教會',
+        nameEn: 'Thyatira',
+        routeOrder: '第 4 站（東南內陸交通要衝與商業行會重鎮）',
+        cityBg: '手工業行會（銅匠、染布業）極發達；入會必須參加異教宴席吃祭肉，否則遭經濟封鎖。',
+        christTitle: '那眼目如火焰、腳像光明銅的神之子 (2:18)',
+        spiritualState: '愛心與善行增加，但容讓假先知耶洗別引誘行淫',
+        stateType: 'danger',
+        commendation: '知道你的行為、愛心、信心、勤勞、忍耐，又知道你末後所行的善比起初所行的更多。',
+        critique: '容讓那自稱是先知的婦人耶洗別教導我的僕人，引誘他們行姦淫，吃祭偶像之物。',
+        counsel: '我曾給她悔改的機會，她卻不肯。看哪，我要叫她臥病在床...但你們其餘不從這教訓的人，我只要你們持守你們所有的，直等到我來。',
+        promise: '得勝的，又遵守我命令到底的，我賜給他制伏列國的權柄，並要把晨星賜給他 (2:26-28)。'
+      },
+      {
+        no: 5,
+        nameZh: '撒狄教會',
+        nameEn: 'Sardis',
+        routeOrder: '第 5 站（向南之昔日呂底亞帝國雄偉古都）',
+        cityBg: '古代黃金產地與紡織工業中心；建於峭壁上號稱固若金湯，但歷史上曾兩次因守衛傲慢嗜睡被敵軍突襲攻破。',
+        christTitle: '那有神的七靈和七星的 (3:1)',
+        spiritualState: '按名是活著的，實質上是死的',
+        stateType: 'danger',
+        commendation: '在撒狄你還有幾名是未曾污穢自己衣服的，他們要穿白衣與我同行。',
+        critique: '按名你是活的，其實是死的！我見你的行為，在我神面前沒有一樣是完全的。',
+        counsel: '你要儆醒，堅固那剩下將要衰微的...若不儆醒，我必臨到你那裡，如同賊一樣。我幾時臨到，你也決不能知道。',
+        promise: '凡得勝的必這樣穿白衣，我也必不從生命冊上塗抹他的名，且要在我父面前宣告他的名 (3:5)。'
+      },
+      {
+        no: 6,
+        nameZh: '非拉鐵非教會',
+        nameEn: 'Philadelphia',
+        routeOrder: '第 6 站（向東南之「弟兄相愛」之城與宣教門戶）',
+        cityBg: '建城為向弗呂家傳播希臘文化，被稱為「通往東方的大門」；位處地震帶，居民常逃至城外空地。',
+        christTitle: '那聖潔、真實、拿著大衛的鑰匙、開了就沒有人能關的 (3:7)',
+        spiritualState: '略有一點力量，但堅守主道未曾棄絕主名',
+        stateType: 'honor',
+        commendation: '略有一點力量，也曾遵守我的道，沒有棄絕我的名；在患難中忍耐持守。無任何責備！',
+        critique: '【無任何責備】七教會中另一個全蒙喜悅讚賞的教會！',
+        counsel: '我必快來，你要持守你所有的，免得人奪去你的冠冕。',
+        promise: '得勝的，我要叫他在我神殿中作柱子，他也必不再從那裡出去。我又要將我神的名和我神城的名寫在他上面 (3:12)。'
+      },
+      {
+        no: 7,
+        nameZh: '老底嘉教會',
+        nameEn: 'Laodicea',
+        routeOrder: '第 7 站（向東南利卡河谷三城之一，金融醫療重鎮）',
+        cityBg: '富庶的銀行金融中心、黑色羊毛紡織業、著名眼藥粉醫學院；本地無水源，引泉水到城中變成溫吞令人作嘔的水。',
+        christTitle: '那為阿們的，為誠信真實見證的，在神創造萬物之上為元首的 (3:14)',
+        spiritualState: '不冷不熱，自誇富足卻貧窮瞎眼赤身',
+        stateType: 'danger',
+        commendation: '【無任何稱讚】七教會中唯一沒有得到任何正面稱讚的教會！',
+        critique: '我知道你的行為，你也不冷也不熱；你既如溫水，所以我必從我口中把你吐出去！你說我是富足，卻不知自己是貧窮、瞎眼、赤身的。',
+        counsel: '我勸你向我買火煉的金子，叫你富足；又買白衣穿上，叫你赤身的羞恥不露出來；又買眼藥擦你的眼睛...看哪，我站在門外叩門，若有聽見我聲音就開門的，我要進到他那裡去與他同席。',
+        promise: '得勝的，我要賜他在我寶座上與我同坐，就如我得了勝，在我父的寶座上與祂同坐一般 (3:21)。'
+      }
+    ],
+
+    // 七印、七號、七碗結構遞進與重疊對照全景圖表
+    sevenJudgments: {
+      overview: '啟示錄採用三組「七重審判」呈現救贖歷史終末審判的進程。神學界普遍肯定三者既具備「重疊性（Recapitulation，反覆從不同維度檢視基督初臨到再臨之屬靈現實）」，又具備「遞進性（Progression，審判的烈度與範圍從 1/4 到 1/3，最終達到 100% 全然傾倒）」。',
+      series: [
+        {
+          id: 'seals',
+          title: '一、七印審判 (The 7 Seals, 啟 6:1–8:1)',
+          agent: '被殺的羔羊親自揭開書卷七印',
+          scope: '影響地上 1/4（四分之一）的範圍',
+          character: '普世人類歷史歷史性大趨勢與屬靈爭戰，揭示受苦中神的掌權',
+          items: [
+            { no: 1, name: '第一印：白馬騎士', ref: '6:1-2', focus: '手拿著弓，並有冠冕賜給他，出來勝了又要勝（福音得勝宣揚 / 軍事帝國征服）' },
+            { no: 2, name: '第二印：紅馬騎士', ref: '6:3-4', focus: '有大刀賜給他，可以從地上奪去太平，使人彼此相殺（殘酷戰火與流血內訌）' },
+            { no: 3, name: '第三印：黑馬騎士', ref: '6:5-6', focus: '手拿天平，一錢銀子買一升麥子，油和酒不可糟蹋（嚴重通貨膨脹與物資匱乏饑荒）' },
+            { no: 4, name: '第四印：灰馬騎士', ref: '6:7-8', focus: '名字叫作死，陰府也隨著他；用刀劍、饑荒、瘟疫、野獸殺害地上四分之一的人' },
+            { no: 5, name: '第五印：祭壇下的呼冤', ref: '6:9-11', focus: '為神之道被殺之人的靈魂大聲喊著：「聖潔真實的主啊，要到幾時呢？」賜給白衣並要安息片時' },
+            { no: 6, name: '第六印：天地宇宙震動', ref: '6:12-17', focus: '地大震動，日黑如毛布，滿月變紅像血，天星墜落，列王世人向大山巖石求藏身，躲避羔羊的忿怒' },
+            { no: '插曲', name: '【第7章重要插曲】', ref: '7:1-17', focus: '地上受印的 144,000 立約爭戰軍隊（7:1-8）＋ 天上無數身穿白衣手拿棕樹枝的凱旋大群眾（7:9-17）' },
+            { no: 7, name: '第七印：寂靜與七號引出', ref: '8:1-5', focus: '天上寂靜約有二刻；天使拿金香爐盛滿聖徒的祈禱倒在地上，有雷轟、大聲、閃電、地震，帶出七枝號！' }
+          ]
+        },
+        {
+          id: 'trumpets',
+          title: '二、七號審判 (The 7 Trumpets, 啟 8:2–11:19)',
+          agent: '七位天使依序吹號宣告審判警戒',
+          scope: '摧毀自然生態與人類社會 1/3（三分之一）的範圍',
+          character: '神針對背道與叛逆世界的超自然警告性審判，回應祭壇下聖徒的祈禱',
+          items: [
+            { no: 1, name: '第一號：雹與火摻血', ref: '8:7', focus: '雹與火摻著血丟在地上；地的三分之一和樹的三分之一被燒了，一切青草也被燒了' },
+            { no: 2, name: '第二號：火燒大山投海', ref: '8:8-9', focus: '彷彿火燒的大山扔在海中；海的三分之一變成血，海中有生命之物死了三分之一，船隻壞了三分之一' },
+            { no: 3, name: '第三號：茵陳巨星落江', ref: '8:10-11', focus: '燒著的大星名叫茵陳，落在江河的三分之一和眾水的泉源上；水變苦，因水變苦死了許多人' },
+            { no: 4, name: '第四號：日月星辰擊打', ref: '8:12', focus: '日頭、月亮、星辰的三分之一都被擊打，以致日月星的三分之一黑暗了，白晝的三分之一沒有光' },
+            { no: 5, name: '第五號：第一樣災禍（無底坑蝗蟲）', ref: '9:1-12', focus: '無底坑開啟，如蠍子毒鉤的蝗蟲大軍折磨額上沒有神印記之人五個月，求死不得' },
+            { no: 6, name: '第六號：第二樣災禍（二萬萬馬軍）', ref: '9:13-21', focus: '釋放伯拉大河捆綁的四個使者；二萬萬馬軍出動，殺害人類的三分之一；其餘未被殺的人仍不悔改' },
+            { no: '插曲', name: '【第10-11章重要插曲】', ref: '10:1-11:14', focus: '大能天使與小書卷（約翰吃盡，肚子發苦口中甘甜，必再指萬民說預言）＋ 兩位見證人（傳道1260天，被獸殺死三天半復活升天）' },
+            { no: 7, name: '第七號：第三樣災禍（基督國度降臨）', ref: '11:15-19', focus: '世上的國成了我主和主基督的國！祂要作王直到永永遠遠！神在天上的殿開了，顯出約櫃，帶出七碗！' }
+          ]
+        },
+        {
+          id: 'bowls',
+          title: '三、七碗審判 (The 7 Bowls, 啟 15:1–16:21)',
+          agent: '七位天使將盛滿神大怒的金碗全數傾倒',
+          scope: '全然傾倒，影響全地 100%（毫無保留與延遲）',
+          character: '神公義忿怒的終極審判與罪惡帝國巴比倫的徹底毀滅，救贖歷史大結局',
+          items: [
+            { no: 1, name: '第一碗：生極惡毒瘡', ref: '16:2', focus: '倒在地上，就有惡而且毒的瘡生在那些有獸印記、拜獸像的人身上' },
+            { no: 2, name: '第二碗：全海變死人血', ref: '16:3', focus: '倒在海裡，海就變成血，好像死人的血，海中的活物都死了（全面性徹底崩毀）' },
+            { no: 3, name: '第三碗：江河水泉成血', ref: '16:4-7', focus: '倒在江河與泉源裡，水就變成血；掌管水的天使宣告神是公義的，因他們曾流聖徒與先知的血' },
+            { no: 4, name: '第四碗：烈日炙烤眾人', ref: '16:8-9', focus: '倒在日頭上，叫日頭能用火烤人；人被大熱所烤，就褻瀆神的名，並不悔改歸榮耀給神' },
+            { no: 5, name: '第五碗：獸的國度黑暗', ref: '16:10-11', focus: '倒在獸的座位上；獸的國就黑暗了；人因疼痛就咬自己的舌頭，仍褻瀆天上的神' },
+            { no: 6, name: '第六碗：伯拉大河乾涸', ref: '16:12-16', focus: '伯拉大河水乾了，為東方諸王預備道路；三個青蛙怪靈從龍口、獸口、假先知口中出來，招聚普世列王在哈米吉多頓爭戰' },
+            { no: '警語', name: '【基督親自警語宣告】', ref: '16:15', focus: '「看哪，我來像賊一樣。那儆醒、看守衣服、免得赤身而行叫人見他羞恥的有福了！」' },
+            { no: 7, name: '第七碗：傾倒空中·成了！', ref: '16:17-21', focus: '倒在空中，寶座出大聲音說：「成了 (Gegonen)！」大地震、大雹子、大巴比倫裂為三段，神的忿怒大杯全傾！' }
+          ]
+        }
+      ]
+    },
+
+    // 天體敬拜與寶座同在層次圖解
+    throneLiturgy: {
+      title: '啟示錄天體敬拜與宇宙寶座同在層次圖解 (Revelation 4–5 Liturgy)',
+      desc: '在世上苦難與逼迫爆發前，聖靈首先將信徒的視線引導至宇宙的最高控制中心——天上的寶座。這是一切屬靈得勝與歷史命定的發源地。',
+      layers: [
+        {
+          rank: '核心中樞',
+          name: '坐寶座的三一真神 (The Enthroned One)',
+          ref: '啟 4:2-3',
+          symbol: '碧玉與紅寶石，周圍有虹圍繞如綠寶石',
+          meaning: '至高榮耀、公義審判與信實守約（彩虹是聖約記號）的宇宙掌管者'
+        },
+        {
+          rank: '神聖運行',
+          name: '神的七靈與被殺的羔羊 (Seven Spirits & The Slain Lamb)',
+          ref: '啟 4:5, 5:6',
+          symbol: '寶座前的七盞火燈、站立如被殺過之羔羊（七角七眼）',
+          meaning: '全備全能的聖靈；唯有在十字架受死流血代贖的基督，配開救贖審判歷史書卷'
+        },
+        {
+          rank: '受造代表',
+          name: '四活物 (Four Living Creatures)',
+          ref: '啟 4:6-8',
+          symbol: '獅、牛、人、鷹，前後遍體滿了眼睛，六個翅膀',
+          meaning: '代表全體受造界（野獸、牲畜、人類、飛禽）晝夜不息頌讚「聖哉！聖哉！聖哉！」'
+        },
+        {
+          rank: '聖約子民',
+          name: '二十四位長老 (Twenty-Four Elders)',
+          ref: '啟 4:4, 4:10',
+          symbol: '身穿白衣，頭戴金冠冕，俯伏將冠冕放在寶座前',
+          meaning: '代表舊約十二支派與新約十二使徒的全體立約選民共同體，將一切冠冕榮耀歸給主'
+        },
+        {
+          rank: '天體大軍',
+          name: '千萬天使天軍 (Myriads of Angels)',
+          ref: '啟 5:11-12',
+          symbol: '千千萬萬的天使大聲宣告',
+          meaning: '「曾被殺的羔羊是配得權柄、豐富、智慧、能力、尊貴、榮耀、頌讚的！」'
+        },
+        {
+          rank: '得勝聖徒',
+          name: '十四萬四千人與各國各族大群眾 (Sealed Army & Great Multitude)',
+          ref: '啟 7:1-17, 14:1-5',
+          symbol: '額上受印者、身穿白衣手拿棕樹枝的大群眾',
+          meaning: '在世上歷經大患難、用羔羊的血洗淨衣裳的得勝教會，在永恆寶座前歡呼得救'
+        },
+        {
+          rank: '終極成全',
+          name: '新天新地與新耶路撒冷 (New Creation & New Jerusalem)',
+          ref: '啟 21:1-22:5',
+          symbol: '聖城新耶路撒冷由神那裡從天而降，城中無殿，生命水的河與生命樹',
+          meaning: '神要親自與人同住，擦去一切眼淚，不再有死亡、悲哀、哭號、疼痛，永遠作王！'
+        }
+      ]
+    },
     // 二十二章逐段深度研經
     sections: [
       {
@@ -396,33 +612,69 @@
     ],
 
     // 千禧年四大觀點對照表
+        // 四大千禧年神學觀點深度對比
     millenniumViews: [
       {
+        id: 'historic_pre',
         name: '歷史前千禧年派 (Historic Premillennialism)',
         advocates: '查斯丁 (Justin Martyr)、愛任紐 (Irenaeus)、George Eldon Ladd、Craig Keener',
-        timeline: '教會時代受苦 $\\rightarrow$ 基督榮耀再來 $\\rightarrow$ 信徒復活、基督在地上統治一千年 $\\rightarrow$ 撒但最後叛亂覆滅 $\\rightarrow$ 白色大寶座審判 $\\rightarrow$ 新天新地。',
-        features: '不區分秘密被提與降臨，強調教會與以色列在救贖歷史中的連續性，重視神國在地上歷史中的具體彰顯。'
+        timeline: '教會時代受苦 ➔ 基督榮耀再來 ➔ 信徒復活、基督在地上統治一千年 ➔ 撒但最後叛亂覆滅 ➔ 白色大寶座審判 ➔ 新天新地。',
+        features: '不區分秘密被提與降臨，強調教會與以色列在救贖歷史中的連續性，重視神國在地上歷史中的具體彰顯。',
+        stages: [
+          { name: '基督初臨受死', desc: '十字架代贖' },
+          { name: '教會時代受苦', desc: '患難中作見證' },
+          { name: '基督榮耀再臨', desc: '聖徒復活相會' },
+          { name: '千禧年地上統治', desc: '基督與聖徒掌王權 1,000 年' },
+          { name: '末日最後審判', desc: '撒但徹底敗亡' },
+          { name: '新天新地永恆', desc: '永世榮美成全' }
+        ]
       },
       {
+        id: 'dispensational_pre',
         name: '時代論前千禧年派 (Dispensational Premillennialism)',
         advocates: '達秘 (J.N. Darby)、司可福 (C.I. Scofield)、John Walvoord、達拉斯神學院 (DTS) 傳統',
-        timeline: '教會時代 $\\rightarrow$ 基督秘密被提教會 $\\rightarrow$ 七年大災難 $\\rightarrow$ 基督與聖徒榮耀降臨 $\\rightarrow$ 猶太民族復興、地上千禧年國度 $\\rightarrow$ 撒但叛亂 $\\rightarrow$ 審判 $\\rightarrow$ 新天新地。',
-        features: '嚴格區分以色列與教會的定命，字面解釋舊約國度預言，強調末世大災難與被提的時間次序。'
+        timeline: '教會時代 ➔ 基督秘密被提教會 ➔ 七年大災難 ➔ 基督與聖徒榮耀降臨 ➔ 猶太民族復興、地上千禧年國度 ➔ 撒但叛亂 ➔ 審判 ➔ 新天新地。',
+        features: '嚴格區分以色列與教會的定命，字面解釋舊約國度預言，強調末世大災難與被提的時間次序。',
+        stages: [
+          { name: '基督初臨恩典', desc: '教會奧祕開啟' },
+          { name: '信徒空中被提', desc: '七年大災難前被提' },
+          { name: '七年大患難期', desc: '敵基督與普世審判' },
+          { name: '基督可見降臨', desc: '橄欖山降臨' },
+          { name: '字面千禧年國', desc: '以色列復興作王 1,000 年' },
+          { name: '新天新地永恆', desc: '白色大寶座後' }
+        ]
       },
       {
+        id: 'amillennialism',
         name: '無千禧年派 (Amillennialism)',
         advocates: '奧古斯丁、加爾文、B.B. Warfield、William Hendriksen、G.K. Beale、改革宗/長老會主流',
-        timeline: '「一千年」是象徵完全數，指基督初臨復活到再來之間的整個「教會時代」（撒但在此期間受捆綁無法迷惑萬國） $\\rightarrow$ 基督榮耀再來 $\\rightarrow$ 死人一同復活與最後審判 $\\rightarrow$ 新天新地永恆狀態。',
-        features: '強調神國在當下以屬靈方式（基督在人心與教會中掌權）已經臨在（Already），在再來時完全成全（Not Yet）。'
+        timeline: '「一千年」是象徵完全數，指基督初臨復活到再來之間的整個「教會時代」（撒但在此期間受捆綁無法迷惑萬國） ➔ 基督榮耀再來 ➔ 死人一同復活與最後審判 ➔ 新天新地永恆狀態。',
+        features: '強調神國在當下以屬靈方式（基督在人心與教會中掌權）已經臨在（Already），在再來時完全成全（Not Yet）。',
+        stages: [
+          { name: '基督初臨得勝', desc: '捆綁撒但、十字架掌權' },
+          { name: '屬靈千禧年國', desc: '現在教會時代＝千禧年' },
+          { name: '末期短暫背道', desc: '撒但暫時被釋放' },
+          { name: '基督榮耀再臨', desc: '唯一一次降臨' },
+          { name: '普世總復活審判', desc: '綿羊山羊分別' },
+          { name: '新天新地永恆', desc: '永恆神國成全' }
+        ]
       },
       {
+        id: 'postmillennialism',
         name: '後千禧年派 (Postmillennialism)',
         advocates: '清教徒傳統 (Puritans)、約拿單·愛德華茲 (Jonathan Edwards)、Loraine Boettner',
-        timeline: '教會時代福音廣傳 $\\rightarrow$ 聖靈大澆灌引發普世復興、地上進入公義和平的黃金時代（千禧年） $\\rightarrow$ 基督降臨 $\\rightarrow$ 最後審判與新天新地。',
-        features: '對福音改變社會文化抱持高度樂觀，強調大使命的歷史性得勝，多在歷史大復興時期興盛。'
+        timeline: '教會時代福音廣傳 ➔ 聖靈大澆灌引發普世復興、地上進入公義和平的黃金時代（千禧年） ➔ 基督降臨 ➔ 最後審判與新天新地。',
+        features: '對福音改變社會文化抱持高度樂觀，強調大使命的歷史性得勝，多在歷史大復興時期興盛。',
+        stages: [
+          { name: '基督初臨開國', desc: '福音種子灑下' },
+          { name: '福音漸進征服', desc: '聖靈澆灌普世復興' },
+          { name: '地上黃金千禧', desc: '公義和平遍滿全地' },
+          { name: '基督凱旋再臨', desc: '接納已得勝國度' },
+          { name: '終局最後審判', desc: '公義裁決' },
+          { name: '新天新地永恆', desc: '榮耀極致' }
+        ]
       }
     ],
-
     // 權威註釋書與學者參考庫
     bibliography: [
       {
@@ -501,6 +753,9 @@
   /**
    * 渲染啟示錄深度導論與全書釋義的主面板 HTML
    */
+  /**
+   * 渲染啟示錄深度導論與全書釋義的主面板 HTML
+   */
   window.renderRevelationStudyGuideHtml = function (activeSubSection) {
     var g = window.BIBLIA_REVELATION_GUIDE;
     if (!g) return '<div class="ref-empty-state">啟示錄導論資料庫加載中...</div>';
@@ -542,6 +797,8 @@
     // 導航選單 Pills
     html += '<div class="rev-subnav-bar" id="revGuideNavPills">' +
       '<button type="button" class="rev-nav-pill ' + (curSub === 'all' ? 'active' : '') + '" data-revtab="all">📑 完整研經全覽</button>' +
+      '<button type="button" class="rev-nav-pill ' + (curSub === 'charts' ? 'active' : '') + '" data-revtab="charts">📊 審判圖表與架構</button>' +
+      '<button type="button" class="rev-nav-pill ' + (curSub === 'churches' ? 'active' : '') + '" data-revtab="churches">⛪ 七教會郵路與診斷表</button>' +
       '<button type="button" class="rev-nav-pill ' + (curSub === 'intro' ? 'active' : '') + '" data-revtab="intro">🏛️ 導論與文體</button>' +
       '<button type="button" class="rev-nav-pill ' + (curSub === 'approaches' ? 'active' : '') + '" data-revtab="approaches">⚖️ 四大解經進路</button>' +
       '<button type="button" class="rev-nav-pill ' + (curSub === 'traditions' ? 'active' : '') + '" data-revtab="traditions">🔥 福音派與靈恩派亮光</button>' +
@@ -550,6 +807,141 @@
       '<button type="button" class="rev-nav-pill ' + (curSub === 'millennium' ? 'active' : '') + '" data-revtab="millennium">⏳ 四大千禧年觀點</button>' +
       '<button type="button" class="rev-nav-pill ' + (curSub === 'biblio' ? 'active' : '') + '" data-revtab="biblio">📚 權威註釋書目</button>' +
     '</div>';
+
+    // ==========================================
+    // 【新增組件 1】宏觀審判結構圖表 (七印、七號、七碗)
+    // ==========================================
+    if (curSub === 'all' || curSub === 'charts') {
+      html += '<section class="rev-section" id="revSecCharts">' +
+        '<h3 class="rev-sec-heading"><span class="sec-icon">📊</span> 七印、七號、七碗結構遞進與重疊對照全景圖</h3>' +
+        '<p class="rev-section-lead">' + g.sevenJudgments.overview + '</p>' +
+
+        // 審判強度遞進指示條
+        '<div class="rev-intensity-bar">' +
+          '<div class="intensity-col intensity-seals"><span class="badge-scope">1/4 範圍</span> <strong>七印審判</strong>：普世歷史趨勢與受苦警告</div>' +
+          '<div class="intensity-arrow">➔</div>' +
+          '<div class="intensity-col intensity-trumpets"><span class="badge-scope">1/3 範圍</span> <strong>七號審判</strong>：自然生態與背道世界警告</div>' +
+          '<div class="intensity-arrow">➔</div>' +
+          '<div class="intensity-col intensity-bowls"><span class="badge-scope">100% 全然傾倒</span> <strong>七碗審判</strong>：神公義忿怒的終極傾倒</div>' +
+        '</div>' +
+
+        // 三大審判系列平行並排卡片
+        '<div class="rev-judgments-grid">';
+
+      g.sevenJudgments.series.forEach(function (ser) {
+        html += '<div class="rev-judgment-card series-' + ser.id + '">' +
+          '<div class="judgment-card-head">' +
+            '<h4 class="judgment-series-title">' + ser.title + '</h4>' +
+            '<div class="judgment-meta-scope"><strong>⚡ 審判強度：</strong>' + ser.scope + '</div>' +
+            '<div class="judgment-meta-agent"><strong>👤 執行實體：</strong>' + ser.agent + '</div>' +
+            '<p class="judgment-meta-char">' + ser.character + '</p>' +
+          '</div>' +
+          '<div class="judgment-items-list">';
+
+        ser.items.forEach(function (it) {
+          var isInterlude = (it.no === '插曲' || it.no === '警語');
+          html += '<div class="judgment-item-row ' + (isInterlude ? 'item-interlude' : '') + '">' +
+            '<span class="j-badge ' + (isInterlude ? 'badge-interlude' : '') + '">' + it.no + '</span>' +
+            '<div class="j-content">' +
+              '<div class="j-title"><strong>' + it.name + '</strong> <small class="text-mute">(' + it.ref + ')</small></div>' +
+              '<div class="j-focus">' + it.focus + '</div>' +
+            '</div>' +
+          '</div>';
+        });
+
+        html += '</div></div>';
+      });
+
+      html += '</div>' +
+
+        // 天體敬拜層次圖解
+        '<div class="rev-throne-liturgy-box" style="margin-top:28px;">' +
+          '<div class="throne-box-header">' +
+            '<h4 class="throne-box-title"><span class="sec-icon">🕊️</span> ' + g.throneLiturgy.title + '</h4>' +
+            '<p class="throne-box-desc">' + g.throneLiturgy.desc + '</p>' +
+          '</div>' +
+          '<div class="throne-layers-track">';
+
+      g.throneLiturgy.layers.forEach(function (lay, idx) {
+        html += '<div class="throne-layer-card layer-rank-' + (idx + 1) + '">' +
+          '<div class="throne-layer-top">' +
+            '<span class="throne-rank-tag">' + lay.rank + '</span>' +
+            '<span class="throne-ref-tag">' + lay.ref + '</span>' +
+          '</div>' +
+          '<h5 class="throne-layer-name">' + lay.name + '</h5>' +
+          '<div class="throne-symbol"><strong>象徵異象：</strong>' + lay.symbol + '</div>' +
+          '<div class="throne-meaning"><strong>神學本質：</strong>' + lay.meaning + '</div>' +
+        '</div>';
+      });
+
+      html += '</div></div>' +
+      '</section>';
+    }
+
+    // ==========================================
+    // 【新增組件 2】小亞細亞七教會郵路與屬靈診斷全表
+    // ==========================================
+    if (curSub === 'all' || curSub === 'churches') {
+      html += '<section class="rev-section" id="revSecChurches">' +
+        '<h3 class="rev-sec-heading"><span class="sec-icon">⛪</span> 小亞細亞七教會環形郵路地理動線與屬靈診斷全圖表</h3>' +
+        '<p class="rev-section-lead">使徒約翰受聖靈感動從拔摩島寄發信件，依照古代羅馬帝國小亞細亞行省的天然環形郵政驛道依序造訪七大教會。七教會既是公元一世紀的具體教會，亦代表歷世歷代基督教會面臨的七種屬靈光景與試煉。</p>' +
+
+        // 郵路路線站點視覺圖
+        '<div class="rev-route-flow" role="region" aria-label="七教會郵路進程">' +
+          '<div class="route-origin"><span class="origin-icon">🏝️</span> 拔摩島 (Patmos)</div>' +
+          '<div class="route-arrow">➔</div>' +
+          '<div class="route-station"><span class="station-num">1</span> 以弗所</div>' +
+          '<div class="route-arrow">➔</div>' +
+          '<div class="route-station"><span class="station-num">2</span> 士每拿</div>' +
+          '<div class="route-arrow">➔</div>' +
+          '<div class="route-station"><span class="station-num">3</span> 別迦摩</div>' +
+          '<div class="route-arrow">➔</div>' +
+          '<div class="route-station"><span class="station-num">4</span> 推雅推喇</div>' +
+          '<div class="route-arrow">➔</div>' +
+          '<div class="route-station"><span class="station-num">5</span> 撒狄</div>' +
+          '<div class="route-arrow">➔</div>' +
+          '<div class="route-station"><span class="station-num">6</span> 非拉鐵非</div>' +
+          '<div class="route-arrow">➔</div>' +
+          '<div class="route-station"><span class="station-num">7</span> 老底嘉</div>' +
+        '</div>' +
+
+        // 七教會完整診斷大表格
+        '<div class="rev-churches-table-wrap">' +
+          '<table class="rev-churches-table">' +
+            '<thead>' +
+              '<tr>' +
+                '<th style="width:12%;">教會與地理位置</th>' +
+                '<th style="width:14%;">基督顯現自稱</th>' +
+                '<th style="width:13%;">屬靈狀態診斷</th>' +
+                '<th style="width:15%;">正面稱讚 (Commendation)</th>' +
+                '<th style="width:15%;">責備與危機 (Critique)</th>' +
+                '<th style="width:15%;">警戒與勸勉 (Counsel)</th>' +
+                '<th style="width:16%;">給得勝者應許 (Promise)</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>';
+
+      g.sevenChurches.forEach(function (c) {
+        html += '<tr>' +
+          '<td class="td-church-name">' +
+            '<span class="church-num-badge">#' + c.no + '</span>' +
+            '<strong>' + c.nameZh + '</strong><br>' +
+            '<small class="text-mute">' + c.nameEn + '</small><br>' +
+            '<span class="church-route-desc">' + c.routeOrder + '</span>' +
+          '</td>' +
+          '<td class="td-christ-title">' + c.christTitle + '</td>' +
+          '<td class="td-state">' +
+            '<span class="badge-state badge-' + c.stateType + '">' + c.spiritualState + '</span>' +
+          '</td>' +
+          '<td class="td-commend">' + c.commendation + '</td>' +
+          '<td class="td-critique">' + c.critique + '</td>' +
+          '<td class="td-counsel">' + c.counsel + '</td>' +
+          '<td class="td-promise"><strong>' + c.promise + '</strong></td>' +
+        '</tr>';
+      });
+
+      html += '</tbody></table></div></section>';
+    }
 
     // 1. 導論與文體特徵
     if (curSub === 'all' || curSub === 'intro') {
@@ -673,19 +1065,40 @@
       html += '</div></section>';
     }
 
-    // 6. 四大千禧年觀點深度對比
+    // 6. 四大千禧年觀點深度對比 (含視覺化時間線)
     if (curSub === 'all' || curSub === 'millennium') {
       html += '<section class="rev-section" id="revSecMillennium">' +
         '<h3 class="rev-sec-heading"><span class="sec-icon">⏳</span> 啟示錄第二十章：四大千禧年神學觀點深度對照</h3>' +
         '<div class="rev-millennium-grid">';
+
       g.millenniumViews.forEach(function (mv) {
         html += '<div class="rev-mill-card">' +
           '<h4 class="mill-name">' + mv.name + '</h4>' +
           '<div class="mill-advocates">👥 <strong>代表學者 / 傳統：</strong>' + mv.advocates + '</div>' +
-          '<div class="mill-timeline"><strong>📈 時間線進程：</strong><p>' + mv.timeline + '</p></div>' +
-          '<div class="mill-features"><strong>🔑 釋經重點：</strong>' + mv.features + '</div>' +
-        '</div>';
+          '<div class="mill-timeline"><strong>📈 文字進程：</strong><p>' + mv.timeline + '</p></div>' +
+          '<div class="mill-features"><strong>🔑 釋經重點：</strong>' + mv.features + '</div>';
+
+        // 視覺化時間軸節點
+        if (mv.stages && mv.stages.length) {
+          html += '<div class="mill-visual-track" role="region" aria-label="' + mv.name + ' 時間軸">' +
+            '<div class="mill-track-label"><i class="fas fa-stream"></i> 救贖歷史進程圖解：</div>' +
+            '<div class="mill-nodes-row">';
+          mv.stages.forEach(function (st, sIdx) {
+            html += '<div class="mill-node-item">' +
+              '<div class="mill-node-dot">' + (sIdx + 1) + '</div>' +
+              '<div class="mill-node-name">' + st.name + '</div>' +
+              '<div class="mill-node-desc">' + st.desc + '</div>' +
+            '</div>';
+            if (sIdx < mv.stages.length - 1) {
+              html += '<div class="mill-node-connector">➔</div>';
+            }
+          });
+          html += '</div></div>';
+        }
+
+        html += '</div>';
       });
+
       html += '</div></section>';
     }
 

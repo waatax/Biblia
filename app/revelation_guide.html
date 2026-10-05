@@ -9,6 +9,7 @@
 <meta name="description" content="《啟示錄》深度神學導論與全書逐段釋義：正統基督新教、福音派、靈恩派、正統神學院非異端學術成果彙整，含四大解經進路、異端防禦、22章逐段深度研經。">
 <title>《啟示錄》深度神學導論與全書逐段釋義 — Biblia 66卷聖經導論</title>
 <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,7 +23,7 @@
   .standalone-wrap {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px 20px;
+    padding: 24px 20px 60px;
   }
   .standalone-nav {
     display: flex;
@@ -31,6 +32,11 @@
     margin-bottom: 24px;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    background: var(--bg-glass, var(--bg));
+    backdrop-filter: blur(10px);
+    z-index: 100;
   }
   .brand-link {
     display: flex;
@@ -41,6 +47,11 @@
     font-weight: 800;
     font-size: 1.2rem;
   }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 </style>
 </head>
 <body>
@@ -49,15 +60,16 @@
   <header class="standalone-nav">
     <a href="./#ref/intros" class="brand-link" title="返回 Biblia 66卷聖經導論">
       <img src="icons/icon.svg" alt="Biblia" width="32" height="32">
-      <span>Biblia · 66 卷聖經導論</span>
+      <span>Biblia · 啟示錄深度導論</span>
     </a>
-    <div style="display:flex; gap:10px;">
+    <div class="nav-actions">
       <a href="./#read/66/1" class="btn btn-primary" style="text-decoration:none;">
-        📖 進入啟示錄逐字對照
+        📖 逐字對照閱讀
       </a>
-      <a href="./#ref/intros" class="btn" style="text-decoration:none;">
-        📚 全部 66 卷導論
+      <a href="book_guide.html" class="btn" style="text-decoration:none;">
+        📚 66卷研究中心
       </a>
+      <button id="themeToggleBtn" type="button" class="btn btn-icon" title="切換深淺色彩主題" aria-label="切換深淺色">◐</button>
     </div>
   </header>
 
@@ -68,7 +80,23 @@
 <script>
   (function () {
     var mount = document.getElementById('revGuideContentMount');
-    var curTab = 'all';
+    var urlParams = new URLSearchParams(window.location.search);
+    var curTab = urlParams.get('tab') || 'all';
+
+    // Theme toggle
+    var themeBtn = document.getElementById('themeToggleBtn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var current = document.documentElement.getAttribute('data-theme');
+        var next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('biblia-theme', next);
+      });
+      var savedTheme = localStorage.getItem('biblia-theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    }
 
     function render() {
       if (typeof window.renderRevelationStudyGuideHtml === 'function') {
@@ -79,6 +107,11 @@
           pills.querySelectorAll('.rev-nav-pill').forEach(function (btn) {
             btn.addEventListener('click', function () {
               curTab = btn.getAttribute('data-revtab');
+              try {
+                var url = new URL(window.location);
+                url.searchParams.set('tab', curTab);
+                window.history.replaceState({}, '', url);
+              } catch(e) {}
               render();
             });
           });

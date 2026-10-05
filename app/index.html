@@ -239,6 +239,7 @@
 
         <div class="start-plan-body start-ref-body">
           <ul class="start-ref-features">
+            <li><span class="ref-feat-icon">🎓</span> <strong>閱讀研經教學指南：</strong>Strong 逐字對照、多譯本比較、文法詞形解析與全鍵盤地圖</li>
             <li><span class="ref-feat-icon">📖</span> <strong>66 卷深度導讀與大綱：</strong>神學主題、基督預表、原文釋經與註釋</li>
             <li><span class="ref-feat-icon">📜</span> <strong>舊約與新約聖經總覽：</strong>救贖歷史進程、聖約架構與正典神學</li>
             <li><span class="ref-feat-icon">📑</span> <strong>每日研經釋義參考庫：</strong>逐季匯整各書卷註釋、影音與結構圖</li>
@@ -247,9 +248,14 @@
           </ul>
         </div>
 
-        <button id="startRefBtn" type="button" class="btn btn-primary btn-block go-ref">
-          <span aria-hidden="true">📚</span> 開啟聖經補充資料
-        </button>
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <button id="startRefBtn" type="button" class="btn btn-primary go-ref" style="flex:1.2;">
+            <span aria-hidden="true">📚</span> 聖經補充資料
+          </button>
+          <button id="startTutorialBtn" type="button" class="btn go-tutorial" style="flex:1;">
+            <span aria-hidden="true">🎓</span> 研經圖解教學
+          </button>
+        </div>
       </div>
 
     </div>
@@ -1005,6 +1011,9 @@
       <button type="button" class="ref-tab-btn" data-reftab="timeline" role="tab" aria-selected="false">
         <span aria-hidden="true">⏳</span> 聖經歷史時間表與圖表
       </button>
+      <button type="button" class="ref-tab-btn" data-reftab="reader_guide" role="tab" aria-selected="false">
+        <span aria-hidden="true">🎓</span> 閱讀研經教學指南
+      </button>
       <button type="button" class="ref-tab-btn" data-reftab="audio" role="tab" aria-selected="false">
         <span aria-hidden="true">🎧</span> 有聲聖經資源庫
       </button>
@@ -1012,6 +1021,7 @@
 
     <!-- Tab Content Panels -->
     <div id="refPanelIntros" class="ref-panel active"></div>
+    <div id="refPanelReaderGuide" class="ref-panel" hidden></div>
     <div id="refPanelOtSurvey" class="ref-panel" hidden></div>
     <div id="refPanelNtSurvey" class="ref-panel" hidden></div>
     <div id="refPanelSu101" class="ref-panel" hidden></div>
