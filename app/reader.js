@@ -2752,6 +2752,13 @@ var BIBLIA = (function () {
   /* ===================== 讀經計畫資料與邏輯 ===================== */
   var PLAN_SOURCES = [
     {
+      id: 'church_q4_2026',
+      name: 'WOL 教會速讀 (Q4)',
+      sub: '一年讀完聖經 (第四季)',
+      get: function () { return window.BIBLIA_PLAN_2026_Q4; },
+      note: 'WOL 教會 2026 年聖經速讀進度表（第四季，10/1 ~ 12/31，一年讀完聖經進度）'
+    },
+    {
       id: 'su101_2026',
       name: '每日研經釋義',
       sub: '2026 全年 (365天)',
@@ -2760,10 +2767,10 @@ var BIBLIA = (function () {
     },
     {
       id: 'church_q3_2026',
-      name: 'WOL 教會速讀',
-      sub: '一年讀完聖經 (Q3)',
+      name: 'WOL 教會速讀 (Q3)',
+      sub: '一年讀完聖經 (第三季)',
       get: function () { return window.BIBLIA_PLAN_2026_Q3; },
-      note: 'WOL 教會 2026 年聖經速讀進度表（第三季，一年讀完聖經進度）'
+      note: 'WOL 教會 2026 年聖經速讀進度表（第三季，7/1 ~ 9/30，一年讀完聖經進度）'
     }
   ];
 
@@ -2831,6 +2838,13 @@ var BIBLIA = (function () {
     try { savedId = localStorage.getItem('biblia_plan_id'); } catch (e) {}
     planIdx = 0;
     if (savedId) {
+      if (savedId === 'church_q3_2026') {
+        var iso = todayIso();
+        if (plans.some(function (p) { return p.id === 'church_q4_2026' && p.items.some(function (it) { return it.isoDate === iso; }); })) {
+          savedId = 'church_q4_2026';
+          try { localStorage.setItem('biblia_plan_id', savedId); } catch (e) {}
+        }
+      }
       plans.forEach(function (p, i) { if (p.id === savedId) planIdx = i; });
     } else {
       var iso = todayIso();
@@ -3002,7 +3016,21 @@ var BIBLIA = (function () {
     el.startPlanTodayBox.innerHTML = '';
     var frag = document.createDocumentFragment();
 
-    plans.forEach(function (plan) {
+    // 篩選首頁卡片：若已有進行中的同系列進度（如 Q4），不需在首頁展示已結束的舊季度（如 Q3）
+    var visiblePlans = plans.filter(function (plan) {
+      var it = todayItemOf(plan);
+      if (it) return true;
+      var lastIso = plan.items.length ? plan.items[plan.items.length - 1].isoDate : '';
+      if (lastIso && iso > lastIso) {
+        var hasActiveCounterpart = plans.some(function (other) {
+          return other.id !== plan.id && other.id.indexOf('church_') === 0 && todayItemOf(other);
+        });
+        if (hasActiveCounterpart) return false;
+      }
+      return true;
+    });
+
+    visiblePlans.forEach(function (plan) {
       var it = todayItemOf(plan);
       var firstIso = plan.items.length ? plan.items[0].isoDate : '';
       var lastIso = plan.items.length ? plan.items[plan.items.length - 1].isoDate : '';
@@ -3172,6 +3200,17 @@ var BIBLIA = (function () {
     var allDays = {};
     try {
       var prog = planProgress || {};
+      (plans || []).forEach(function (pl) {
+        var pMap = prog[pl.id];
+        if (pMap && typeof pMap === 'object') {
+          (pl.items || []).forEach(function (it) {
+            if (pMap[it.id]) {
+              if (it.isoDate) allDays[it.isoDate] = true;
+              if (it.date) allDays[it.date] = true;
+            }
+          });
+        }
+      });
       Object.keys(prog).forEach(function (pk) {
         if (prog[pk] && typeof prog[pk] === 'object') {
           Object.keys(prog[pk]).forEach(function (k) { if (prog[pk][k]) allDays[k] = true; });
