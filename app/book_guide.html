@@ -138,11 +138,26 @@
       <!-- Reading Preferences Button -->
       <button class="nav-icon-btn" id="readingPrefsToggleBtn" title="閱讀版面設定"><i class="fas fa-sliders-h"></i></button>
 
+      <!-- Fullscreen / Widescreen Mode Button -->
+      <button class="nav-icon-btn" id="fullscreenBtn" title="切換橫式全螢幕 (快捷鍵: F)"><i class="fas fa-expand"></i></button>
+
       <!-- Theme Toggle -->
       <button class="nav-icon-btn" id="themeToggleBtn" title="切換深色/淺色主題"><i class="fas fa-moon"></i></button>
 
       <!-- Print / Export PDF -->
       <button class="nav-icon-btn" id="printBtn" title="列印或匯出 PDF"><i class="fas fa-print"></i></button>
+
+      <!-- Knowledge Base Hub Link -->
+      <a class="nav-btn" href="index.html#ref/prophecy" title="探索基督彌賽亞預言應驗寶典">
+        <i class="fas fa-star"></i>
+        <span>預言寶典</span>
+      </a>
+
+      <!-- Geography Link -->
+      <a class="nav-btn" href="index.html#ref/geography" title="查看聖經地理地圖與動線">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>地理動線</span>
+      </a>
 
       <!-- Tutorial Link -->
       <a class="nav-btn" href="index.html#ref/reader_guide" title="查看研經圖解教學指南">
@@ -179,8 +194,9 @@
         <span class="prefs-row-label">閱讀寬度</span>
         <div class="prefs-btn-group" id="prefContentWidthGroup">
           <button class="prefs-choice-btn" data-val="normal">標準 (960px)</button>
-          <button class="prefs-choice-btn active" data-val="wide">舒適 (1180px)</button>
+          <button class="prefs-choice-btn" data-val="wide">舒適 (1180px)</button>
           <button class="prefs-choice-btn" data-val="full">寬版 (1420px)</button>
+          <button class="prefs-choice-btn active" data-val="ultrawide">全螢幕寬屏 (96vw)</button>
         </div>
       </div>
     </div>
@@ -480,6 +496,24 @@
             applyReadingPrefs(savedPrefs);
           });
         }
+      }
+
+      var fullscreenBtn = document.getElementById('fullscreenBtn');
+      function toggleGuideFullscreen() {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          }
+          showToast('已開啟橫式全螢幕沉浸導讀 (按 Esc 或 F 退出) ⛶', 'fa-expand');
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+          showToast('已退出全螢幕模式', 'fa-compress');
+        }
+      }
+      if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', toggleGuideFullscreen);
       }
 
       if (printBtn) {
@@ -1140,8 +1174,13 @@
 
         if (isInputFocused) return;
 
+        // F: Toggle Fullscreen
+        if (e.key === 'f' || e.key === 'F') {
+          e.preventDefault();
+          toggleGuideFullscreen();
+        }
         // B or G: Open Book Explorer Palette
-        if (e.key === 'b' || e.key === 'B' || e.key === 'g' || e.key === 'G') {
+        else if (e.key === 'b' || e.key === 'B' || e.key === 'g' || e.key === 'G') {
           e.preventDefault();
           openBookPalette();
         }

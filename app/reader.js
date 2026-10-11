@@ -363,7 +363,8 @@ var BIBLIA = (function () {
     'data/book_studies_nt.js',
     'data/book_guide_renderer.js',
     'data/timeline_data.js',
-    'data/reader_tutorial.js'
+    'data/reader_tutorial.js',
+    'data/knowledge_base.js'
   ];
 
   function ensureRefData(cb) {
@@ -604,6 +605,8 @@ var BIBLIA = (function () {
     buildSearchControls();
     buildPlanUI();
     buildRefUI();
+    setupWorkbench();
+    setupFullscreenAndWidescreen();
     initSwipeGesture();
     observeLayout();
     applyAppearance();
@@ -641,6 +644,8 @@ var BIBLIA = (function () {
       'startRefBtn', 'startTutorialBtn', 'readerRefBtn', 'planRefBtn', 'refHomeBtn', 'refReaderBtn',
       'refPlanBtn', 'refThemeBtn', 'refNavTabs', 'refPanelSu101', 'refPanelIntros',
       'refPanelBookStudy', 'refPanelOtSurvey', 'refPanelNtSurvey',
+      'refPanelProphecy', 'refPanelGeography', 'refPanelCharacters', 'refPanelWordStudy',
+      'refPanelApologetics', 'refPanelCovenantsCreeds', 'refWidescreenBtn', 'refMain',
       'refPanelRevStudy', 'refPanelTimeline', 'refPanelReaderGuide',
       'startDailyVerseCard', 'dailyVerseTheme', 'dailyVerseShuffleBtn', 'dailyVerseText',
       'dailyVerseEn', 'dailyVerseOrig', 'dailyVerseRef', 'dailyVerseCopyBtn', 'dailyVerseShareBtn', 'dailyVerseReadBtn',
@@ -667,6 +672,8 @@ var BIBLIA = (function () {
       'refPanelAudio',
       'shortcutsModal', 'shortcutsOverlay', 'shortcutsCloseBtn', 'shortcutsBtn',
       'toolsBtn', 'barTools', 'sizeVal', 'pager', 'pagerPrev', 'pagerNext', 'pagerLoc',
+      'workbenchToggleBtn', 'fullscreenToggleBtn', 'readerMainWrap', 'readerStudyWorkbench',
+      'wbBookLabel', 'wbWidescreenBtn', 'wbCloseBtn', 'workbenchTabs', 'workbenchBody',
       'readerAaBtn', 'openAaModalBtn', 'pagerAaBtn', 'zenBtn', 'pagerZenBtn', 'readingProgressBar', 'readingProgressFill',
       'versionModalBtn', 'versionBadgeCount', 'versionModal', 'versionOverlay', 'versionCloseBtn',
       'versionConfirmBtn', 'versionCountSummary', 'modalInterlinearChk', 'versionPresetGrid',
@@ -3487,14 +3494,24 @@ var BIBLIA = (function () {
 
   /* ===================== 聖經補充資料邏輯 ===================== */
   var refState = {
-    activeTab: 'intros',      // 'intros' | 'ot_survey' | 'nt_survey' | 'su101' | 'book_study' | 'rev_study' | 'timeline' | 'reader_guide' | 'audio'
+    activeTab: 'intros',      // 'intros' | 'ot_survey' | 'nt_survey' | 'su101' | 'book_study' | 'rev_study' | 'timeline' | 'reader_guide' | 'audio' | 'prophecy' | 'geography' | 'characters' | 'word_study' | 'apologetics' | 'covenants_creeds'
     currentBookStudyNo: 1,
     su101Quarter: 'all',
     su101Search: '',
     introsCategory: 'all',
     introsSearch: '',
     revStudyTab: 'all',       // 'all' | 'intro' | 'approaches' | 'traditions' | 'heresy' | 'exposition' | 'millennium' | 'biblio'
-    timelineTab: 'eras'       // 'eras' | 'prophets' | 'calendar' | 'charts'
+    timelineTab: 'eras',      // 'eras' | 'prophets' | 'calendar' | 'charts'
+    prophecyCategory: 'all',
+    prophecySearch: '',
+    geoSearch: '',
+    charCategory: 'all',
+    charSearch: '',
+    wordStudyLang: 'all',
+    wordStudySearch: '',
+    apologeticsCategory: 'all',
+    apologeticsSearch: '',
+    covTab: 'covenants'
   };
 
   function buildRefUI() {
@@ -3511,6 +3528,9 @@ var BIBLIA = (function () {
     if (el.refHomeBtn) el.refHomeBtn.addEventListener('click', function () { showStart(); });
     if (el.refReaderBtn) el.refReaderBtn.addEventListener('click', function () { showReader(state.bookNo, state.chap); });
     if (el.refPlanBtn) el.refPlanBtn.addEventListener('click', function () { showPlan(); });
+    if (el.refWidescreenBtn) el.refWidescreenBtn.addEventListener('click', function () {
+      toggleFullscreenAndWidescreen();
+    });
     if (el.refThemeBtn) el.refThemeBtn.addEventListener('click', function () {
       var tInfo = THEMES[state.theme] || THEMES.light;
       applyTheme(tInfo.next);
@@ -3587,6 +3607,12 @@ var BIBLIA = (function () {
     if (el.refPanelBookStudy) el.refPanelBookStudy.hidden = (refState.activeTab !== 'book_study');
     if (el.refPanelOtSurvey) el.refPanelOtSurvey.hidden = (refState.activeTab !== 'ot_survey');
     if (el.refPanelNtSurvey) el.refPanelNtSurvey.hidden = (refState.activeTab !== 'nt_survey');
+    if (el.refPanelProphecy) el.refPanelProphecy.hidden = (refState.activeTab !== 'prophecy');
+    if (el.refPanelGeography) el.refPanelGeography.hidden = (refState.activeTab !== 'geography');
+    if (el.refPanelCharacters) el.refPanelCharacters.hidden = (refState.activeTab !== 'characters');
+    if (el.refPanelWordStudy) el.refPanelWordStudy.hidden = (refState.activeTab !== 'word_study');
+    if (el.refPanelApologetics) el.refPanelApologetics.hidden = (refState.activeTab !== 'apologetics');
+    if (el.refPanelCovenantsCreeds) el.refPanelCovenantsCreeds.hidden = (refState.activeTab !== 'covenants_creeds');
     if (el.refPanelRevStudy) el.refPanelRevStudy.hidden = (refState.activeTab !== 'rev_study');
     if (el.refPanelTimeline) el.refPanelTimeline.hidden = (refState.activeTab !== 'timeline');
     if (el.refPanelReaderGuide) el.refPanelReaderGuide.hidden = (refState.activeTab !== 'reader_guide');
@@ -3596,6 +3622,9 @@ var BIBLIA = (function () {
       var panel = {
         su101: el.refPanelSu101, intros: el.refPanelIntros, book_study: el.refPanelBookStudy,
         ot_survey: el.refPanelOtSurvey, nt_survey: el.refPanelNtSurvey,
+        prophecy: el.refPanelProphecy, geography: el.refPanelGeography,
+        characters: el.refPanelCharacters, word_study: el.refPanelWordStudy,
+        apologetics: el.refPanelApologetics, covenants_creeds: el.refPanelCovenantsCreeds,
         rev_study: el.refPanelRevStudy, timeline: el.refPanelTimeline,
         reader_guide: el.refPanelReaderGuide
       }[refState.activeTab];
@@ -3614,6 +3643,12 @@ var BIBLIA = (function () {
     else if (refState.activeTab === 'book_study') renderRefPanelBookStudy();
     else if (refState.activeTab === 'ot_survey') renderRefPanelOtSurvey();
     else if (refState.activeTab === 'nt_survey') renderRefPanelNtSurvey();
+    else if (refState.activeTab === 'prophecy') renderRefPanelProphecy();
+    else if (refState.activeTab === 'geography') renderRefPanelGeography();
+    else if (refState.activeTab === 'characters') renderRefPanelCharacters();
+    else if (refState.activeTab === 'word_study') renderRefPanelWordStudy();
+    else if (refState.activeTab === 'apologetics') renderRefPanelApologetics();
+    else if (refState.activeTab === 'covenants_creeds') renderRefPanelCovenantsCreeds();
     else if (refState.activeTab === 'rev_study') renderRefPanelRevStudy();
     else if (refState.activeTab === 'timeline') renderRefPanelTimeline();
     else if (refState.activeTab === 'reader_guide') renderRefPanelReaderGuide();
@@ -4503,6 +4538,830 @@ var BIBLIA = (function () {
     }
   }
 
+  /* ===================== 知識網跳轉輔助函式 ===================== */
+  function jumpToScriptureRef(refStr) {
+    if (!refStr) return false;
+    var m = /^([\u4e00-\u9fa5\w]+)\s*(\d+)[:：](\d+)/.exec(refStr.trim());
+    if (!m) {
+      m = /^([\u4e00-\u9fa5\w]+)\s*(\d+)/.exec(refStr.trim());
+    }
+    if (m) {
+      var bName = m[1];
+      var chap = parseInt(m[2], 10) || 1;
+      var sec = parseInt(m[3], 10) || null;
+      var book = (state.index || []).find(function (b) {
+        return b.zh === bName || b.ab === bName || (b.en && b.en.toLowerCase() === bName.toLowerCase());
+      });
+      if (book) {
+        showReader(book.no, chap, function () {
+          if (sec) {
+            setTimeout(function () {
+              var vRow = document.querySelector('.verse[data-sec="' + sec + '"]');
+              if (vRow) {
+                vRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                vRow.classList.add('verse-flash-highlight');
+                setTimeout(function () { vRow.classList.remove('verse-flash-highlight'); }, 2200);
+              }
+            }, 250);
+          }
+        });
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function bindScriptureJumpLinks(container) {
+    if (!container) return;
+    container.querySelectorAll('.ref-scripture-jump').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var ref = btn.getAttribute('data-ref') || btn.textContent;
+        jumpToScriptureRef(ref);
+      });
+    });
+  }
+
+  /* ===================== 1. 基督彌賽亞預言與新約應驗面板 ===================== */
+  function renderRefPanelProphecy() {
+    var container = el.refPanelProphecy;
+    if (!container) return;
+
+    var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
+    var allItems = kb.prophecies || [];
+
+    var catsMap = {};
+    allItems.forEach(function (p) {
+      if (p.category) catsMap[p.category] = (catsMap[p.category] || 0) + 1;
+    });
+
+    var filtered = allItems.filter(function (p) {
+      if (refState.prophecyCategory !== 'all' && p.category !== refState.prophecyCategory) return false;
+      if (refState.prophecySearch) {
+        var q = refState.prophecySearch.toLowerCase().trim();
+        var matchTheme = (p.theme || '').toLowerCase().includes(q);
+        var matchOt = (p.otRef + ' ' + p.otText).toLowerCase().includes(q);
+        var matchNt = (p.ntRef + ' ' + p.ntText).toLowerCase().includes(q);
+        var matchSig = (p.significance || '').toLowerCase().includes(q);
+        if (!matchTheme && !matchOt && !matchNt && !matchSig) return false;
+      }
+      return true;
+    });
+
+    var html = '<div class="kb-sub-header">' +
+      '<div class="kb-search-row">' +
+        '<input type="search" id="prophecySearchInput" class="kb-search-input" placeholder="🔍 搜尋彌賽亞預言（如：童女、受難、創世記、復活、代贖）..." value="' + escapeHtml(refState.prophecySearch) + '">' +
+      '</div>' +
+      '<div class="kb-filter-pills" id="prophecyFilterPills">' +
+        '<button type="button" class="kb-pill-btn ' + (refState.prophecyCategory === 'all' ? 'active' : '') + '" data-cat="all">全部 (' + allItems.length + ')</button>';
+
+    Object.keys(catsMap).forEach(function (cat) {
+      html += '<button type="button" class="kb-pill-btn ' + (refState.prophecyCategory === cat ? 'active' : '') + '" data-cat="' + escapeHtml(cat) + '">' +
+        escapeHtml(cat) + ' (' + catsMap[cat] + ')</button>';
+    });
+
+    html += '</div></div>';
+
+    if (!filtered.length) {
+      html += '<p class="placeholder">無符合篩選條件之彌賽亞預言條目。</p>';
+    } else {
+      html += '<div class="prophecy-grid">';
+      filtered.forEach(function (p) {
+        html += '<div class="prophecy-card">' +
+          '<div class="prophecy-card-header">' +
+            '<h3 class="prophecy-title">' + escapeHtml(p.theme) + '</h3>' +
+            '<span class="prophecy-badge">' + escapeHtml(p.category) + '</span>' +
+          '</div>' +
+          '<div class="prophecy-pair-box">' +
+            '<div class="prophecy-side prophecy-side-ot">' +
+              '<span class="prophecy-side-label">📜 舊約預言</span>' +
+              '<span class="prophecy-side-ref ref-scripture-jump" data-ref="' + escapeHtml(p.otRef) + '">' + escapeHtml(p.otRef) + '</span>' +
+              '<div class="prophecy-side-text">「' + escapeHtml(p.otText) + '」</div>' +
+            '</div>' +
+            '<div class="prophecy-divider-icon" aria-hidden="true">➔</div>' +
+            '<div class="prophecy-side prophecy-side-nt">' +
+              '<span class="prophecy-side-label">✝️ 新約應驗</span>' +
+              '<span class="prophecy-side-ref ref-scripture-jump" data-ref="' + escapeHtml(p.ntRef) + '">' + escapeHtml(p.ntRef) + '</span>' +
+              '<div class="prophecy-side-text">「' + escapeHtml(p.ntText) + '」</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="prophecy-footer-meta">' +
+            (p.hebrewGreek ? '<div><span class="prophecy-orig-term">原文字詞：' + escapeHtml(p.hebrewGreek) + '</span></div>' : '') +
+            '<div style="margin-top:4px;"><strong>救贖神學釋義：</strong>' + escapeHtml(p.significance) + '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+
+    var sInput = container.querySelector('#prophecySearchInput');
+    if (sInput) {
+      sInput.addEventListener('input', function () {
+        refState.prophecySearch = sInput.value;
+        renderRefPanelProphecy();
+      });
+    }
+
+    var pills = container.querySelector('#prophecyFilterPills');
+    if (pills) {
+      pills.querySelectorAll('.kb-pill-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          refState.prophecyCategory = btn.getAttribute('data-cat') || 'all';
+          renderRefPanelProphecy();
+        });
+      });
+    }
+
+    bindScriptureJumpLinks(container);
+  }
+
+  /* ===================== 2. 聖經地理、地圖與行軍宣教動線面板 ===================== */
+  function renderRefPanelGeography() {
+    var container = el.refPanelGeography;
+    if (!container) return;
+
+    var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
+    var allItems = kb.geography || [];
+
+    var filtered = allItems.filter(function (g) {
+      if (refState.geoSearch) {
+        var q = refState.geoSearch.toLowerCase().trim();
+        var matchTitle = (g.title || '').toLowerCase().includes(q);
+        var matchRoute = (g.routePoints || '').toLowerCase().includes(q);
+        var matchDesc = (g.description || '').toLowerCase().includes(q);
+        if (!matchTitle && !matchRoute && !matchDesc) return false;
+      }
+      return true;
+    });
+
+    var html = '<div class="kb-sub-header">' +
+      '<div class="kb-search-row">' +
+        '<input type="search" id="geoSearchInput" class="kb-search-input" placeholder="🔍 搜尋聖經路線或地點（如：出埃及、迦南、巴比倫、加利利、保羅、羅馬）..." value="' + escapeHtml(refState.geoSearch) + '">' +
+      '</div>' +
+    '</div>';
+
+    if (!filtered.length) {
+      html += '<p class="placeholder">無符合搜尋條件之聖經地理路線。</p>';
+    } else {
+      html += '<div class="geo-grid">';
+      filtered.forEach(function (g) {
+        html += '<div class="geo-card">' +
+          '<div class="geo-card-head">' +
+            '<h3 class="geo-card-title">🗺️ ' + escapeHtml(g.title) + '</h3>' +
+            '<span class="geo-period-tag">⏳ ' + escapeHtml(g.period) + '</span>' +
+          '</div>' +
+          '<div class="geo-route-flow">' +
+            '<span class="geo-route-label">🚩 核心動線：</span>' +
+            '<span>' + escapeHtml(g.routePoints) + '</span>' +
+          '</div>' +
+          '<div><strong>📖 核心經文：</strong><span class="ref-scripture-jump" data-ref="' + escapeHtml(g.keyScriptures.split(';')[0]) + '">' + escapeHtml(g.keyScriptures) + '</span></div>' +
+          '<p class="geo-desc-text">' + escapeHtml(g.description) + '</p>' +
+          '<div class="geo-spiritual-box">' +
+            '<strong>🕊️ 救贖象徵與靈修指引：</strong>' + escapeHtml(g.spiritualMeaning) +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+
+    var sInput = container.querySelector('#geoSearchInput');
+    if (sInput) {
+      sInput.addEventListener('input', function () {
+        refState.geoSearch = sInput.value;
+        renderRefPanelGeography();
+      });
+    }
+
+    bindScriptureJumpLinks(container);
+  }
+
+  /* ===================== 3. 聖經 50 位關鍵人物志面板 ===================== */
+  function renderRefPanelCharacters() {
+    var container = el.refPanelCharacters;
+    if (!container) return;
+
+    var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
+    var allItems = kb.characters || [];
+
+    var catsMap = {};
+    allItems.forEach(function (c) {
+      if (c.category) catsMap[c.category] = (catsMap[c.category] || 0) + 1;
+    });
+
+    var filtered = allItems.filter(function (c) {
+      if (refState.charCategory !== 'all' && c.category !== refState.charCategory) return false;
+      if (refState.charSearch) {
+        var q = refState.charSearch.toLowerCase().trim();
+        var matchName = (c.name || '').toLowerCase().includes(q);
+        var matchBooks = (c.books || '').toLowerCase().includes(q);
+        var matchLegacy = (c.spiritualLegacy || '').toLowerCase().includes(q);
+        if (!matchName && !matchBooks && !matchLegacy) return false;
+      }
+      return true;
+    });
+
+    var html = '<div class="kb-sub-header">' +
+      '<div class="kb-search-row">' +
+        '<input type="search" id="charSearchInput" class="kb-search-input" placeholder="🔍 搜尋聖經人物（如：亞伯拉罕、摩西、大衛、彼得、保羅、路得）..." value="' + escapeHtml(refState.charSearch) + '">' +
+      '</div>' +
+      '<div class="kb-filter-pills" id="charFilterPills">' +
+        '<button type="button" class="kb-pill-btn ' + (refState.charCategory === 'all' ? 'active' : '') + '" data-cat="all">全部 (' + allItems.length + ')</button>';
+
+    Object.keys(catsMap).forEach(function (cat) {
+      html += '<button type="button" class="kb-pill-btn ' + (refState.charCategory === cat ? 'active' : '') + '" data-cat="' + escapeHtml(cat) + '">' +
+        escapeHtml(cat) + ' (' + catsMap[cat] + ')</button>';
+    });
+
+    html += '</div></div>';
+
+    if (!filtered.length) {
+      html += '<p class="placeholder">無符合篩選條件之聖經人物。</p>';
+    } else {
+      html += '<div class="character-grid">';
+      filtered.forEach(function (c) {
+        html += '<div class="character-card">' +
+          '<div class="char-header">' +
+            '<div>' +
+              '<h3 class="char-name">' + escapeHtml(c.name) + '</h3>' +
+              '<div class="char-meaning">名義原意：' + escapeHtml(c.nameMeaning) + ' · ⏳ ' + escapeHtml(c.era) + '</div>' +
+            '</div>' +
+            '<span class="char-category-badge">' + escapeHtml(c.category) + '</span>' +
+          '</div>' +
+          '<div class="char-keyverse">' + escapeHtml(c.keyVerse) + '</div>' +
+          '<div class="char-body">' +
+            '<div><strong>📜 記載書卷：</strong>' + escapeHtml(c.books) + '</div>' +
+            '<div><strong>👑 基督預表與角色：</strong>' + escapeHtml(c.typologyAndRole) + '</div>' +
+            '<div><strong>🌟 屬靈傳承與操練：</strong>' + escapeHtml(c.spiritualLegacy) + '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+
+    var sInput = container.querySelector('#charSearchInput');
+    if (sInput) {
+      sInput.addEventListener('input', function () {
+        refState.charSearch = sInput.value;
+        renderRefPanelCharacters();
+      });
+    }
+
+    var pills = container.querySelector('#charFilterPills');
+    if (pills) {
+      pills.querySelectorAll('.kb-pill-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          refState.charCategory = btn.getAttribute('data-cat') || 'all';
+          renderRefPanelCharacters();
+        });
+      });
+    }
+
+    bindScriptureJumpLinks(container);
+  }
+
+  /* ===================== 4. 希伯來文與希臘文核心神學字詞庫面板 ===================== */
+  function renderRefPanelWordStudy() {
+    var container = el.refPanelWordStudy;
+    if (!container) return;
+
+    var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
+    var allItems = kb.wordStudies || [];
+
+    var filtered = allItems.filter(function (w) {
+      if (refState.wordStudyLang !== 'all' && w.lang !== refState.wordStudyLang) return false;
+      if (refState.wordStudySearch) {
+        var q = refState.wordStudySearch.toLowerCase().trim();
+        var matchTerm = (w.term + ' ' + w.translit + ' ' + w.strong).toLowerCase().includes(q);
+        var matchMean = (w.meaning || '').toLowerCase().includes(q);
+        var matchCore = (w.theologicalCore || '').toLowerCase().includes(q);
+        if (!matchTerm && !matchMean && !matchCore) return false;
+      }
+      return true;
+    });
+
+    var html = '<div class="kb-sub-header">' +
+      '<div class="kb-search-row">' +
+        '<input type="search" id="wordSearchInput" class="kb-search-input" placeholder="🔍 搜尋原文字詞（如：Hesed, Shalom, Agape, Grace, H2617, G26, 恩典, 平安）..." value="' + escapeHtml(refState.wordStudySearch) + '">' +
+      '</div>' +
+      '<div class="kb-filter-pills" id="wordFilterPills">' +
+        '<button type="button" class="kb-pill-btn ' + (refState.wordStudyLang === 'all' ? 'active' : '') + '" data-lang="all">全部 (' + allItems.length + ')</button>' +
+        '<button type="button" class="kb-pill-btn ' + (refState.wordStudyLang === 'Hebrew' ? 'active' : '') + '" data-lang="Hebrew">希伯來文 舊約 (Hebrew)</button>' +
+        '<button type="button" class="kb-pill-btn ' + (refState.wordStudyLang === 'Greek' ? 'active' : '') + '" data-lang="Greek">希臘文 新約 (Greek)</button>' +
+      '</div>' +
+    '</div>';
+
+    if (!filtered.length) {
+      html += '<p class="placeholder">無符合篩選條件之神學原文字詞。</p>';
+    } else {
+      html += '<div class="word-study-grid">';
+      filtered.forEach(function (w) {
+        html += '<div class="word-study-card">' +
+          '<div class="word-header-row">' +
+            '<div class="word-orig-wrap">' +
+              '<span class="word-orig-text" dir="' + (w.lang === 'Hebrew' ? 'rtl' : 'ltr') + '">' + escapeHtml(w.term) + '</span>' +
+              '<span class="word-translit">(' + escapeHtml(w.translit) + ')</span>' +
+            '</div>' +
+            '<button type="button" class="word-strong-badge open-strong-btn" data-strong="' + escapeHtml(w.strong) + '" title="在字典中查閱此 Strong 編號">' + escapeHtml(w.strong) + '</button>' +
+          '</div>' +
+          '<div class="word-definition">' + escapeHtml(w.meaning) + '</div>' +
+          '<div class="word-occurrences">📊 ' + escapeHtml(w.occurrences) + '</div>' +
+          '<div class="word-core-text">' + escapeHtml(w.theologicalCore) + '</div>' +
+          '<div class="word-verses-row"><strong>📖 代表經節：</strong>' + escapeHtml(w.keyVerses) + '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+
+    var sInput = container.querySelector('#wordSearchInput');
+    if (sInput) {
+      sInput.addEventListener('input', function () {
+        refState.wordStudySearch = sInput.value;
+        renderRefPanelWordStudy();
+      });
+    }
+
+    var pills = container.querySelector('#wordFilterPills');
+    if (pills) {
+      pills.querySelectorAll('.kb-pill-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          refState.wordStudyLang = btn.getAttribute('data-lang') || 'all';
+          renderRefPanelWordStudy();
+        });
+      });
+    }
+
+    container.querySelectorAll('.open-strong-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var code = btn.getAttribute('data-strong');
+        if (code && typeof openStrongModal === 'function') {
+          openStrongModal(code);
+        } else if (code && typeof showStrong === 'function') {
+          showStrong(code);
+        }
+      });
+    });
+
+    bindScriptureJumpLinks(container);
+  }
+
+  /* ===================== 5. 研經難題與護教專題面板 ===================== */
+  function renderRefPanelApologetics() {
+    var container = el.refPanelApologetics;
+    if (!container) return;
+
+    var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
+    var allItems = kb.apologetics || [];
+
+    var catsMap = {};
+    allItems.forEach(function (a) {
+      if (a.category) catsMap[a.category] = (catsMap[a.category] || 0) + 1;
+    });
+
+    var filtered = allItems.filter(function (a) {
+      if (refState.apologeticsCategory !== 'all' && a.category !== refState.apologeticsCategory) return false;
+      if (refState.apologeticsSearch) {
+        var q = refState.apologeticsSearch.toLowerCase().trim();
+        var matchTitle = (a.title || '').toLowerCase().includes(q);
+        var matchQ = (a.question || '').toLowerCase().includes(q);
+        var matchCore = (a.exegeticalCore || '').toLowerCase().includes(q);
+        if (!matchTitle && !matchQ && !matchCore) return false;
+      }
+      return true;
+    });
+
+    var html = '<div class="kb-sub-header">' +
+      '<div class="kb-search-row">' +
+        '<input type="search" id="apologeticsSearchInput" class="kb-search-input" placeholder="🔍 搜尋研經難題（如：創造、苦難、約伯、迦南、福音書、稱義）..." value="' + escapeHtml(refState.apologeticsSearch) + '">' +
+      '</div>' +
+      '<div class="kb-filter-pills" id="apologeticsFilterPills">' +
+        '<button type="button" class="kb-pill-btn ' + (refState.apologeticsCategory === 'all' ? 'active' : '') + '" data-cat="all">全部 (' + allItems.length + ')</button>';
+
+    Object.keys(catsMap).forEach(function (cat) {
+      html += '<button type="button" class="kb-pill-btn ' + (refState.apologeticsCategory === cat ? 'active' : '') + '" data-cat="' + escapeHtml(cat) + '">' +
+        escapeHtml(cat) + ' (' + catsMap[cat] + ')</button>';
+    });
+
+    html += '</div></div>';
+
+    if (!filtered.length) {
+      html += '<p class="placeholder">無符合篩選條件之研經難題。</p>';
+    } else {
+      html += '<div class="apologetics-list">';
+      filtered.forEach(function (a) {
+        html += '<div class="apologetics-card">' +
+          '<div class="apologetics-card-head">' +
+            '<h3 class="apologetics-card-title">💡 ' + escapeHtml(a.title) + '</h3>' +
+            '<span class="prophecy-badge">' + escapeHtml(a.category) + '</span>' +
+          '</div>' +
+          '<div class="apologetics-q-box">❓ 爭端焦點：' + escapeHtml(a.question) + '</div>' +
+          '<div class="apologetics-section">' +
+            '<span class="apologetics-sec-label">🏛️ 正統學術進路：</span>' +
+            '<div class="apologetics-sec-content">' + escapeHtml(a.scholarshipView) + '</div>' +
+          '</div>' +
+          '<div class="apologetics-section">' +
+            '<span class="apologetics-sec-label">🔑 釋經學核心解答：</span>' +
+            '<div class="apologetics-sec-content">' + escapeHtml(a.exegeticalCore) + '</div>' +
+          '</div>' +
+          '<div><strong>📖 核心經文：</strong>' + escapeHtml(a.keyReferences) + '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+
+    var sInput = container.querySelector('#apologeticsSearchInput');
+    if (sInput) {
+      sInput.addEventListener('input', function () {
+        refState.apologeticsSearch = sInput.value;
+        renderRefPanelApologetics();
+      });
+    }
+
+    var pills = container.querySelector('#apologeticsFilterPills');
+    if (pills) {
+      pills.querySelectorAll('.kb-pill-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          refState.apologeticsCategory = btn.getAttribute('data-cat') || 'all';
+          renderRefPanelApologetics();
+        });
+      });
+    }
+
+    bindScriptureJumpLinks(container);
+  }
+
+  /* ===================== 6. 聖約神學矩陣與歷代信經面板 ===================== */
+  function renderRefPanelCovenantsCreeds() {
+    var container = el.refPanelCovenantsCreeds;
+    if (!container) return;
+
+    var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
+    var covs = kb.covenants || [];
+    var creeds = kb.creeds || [];
+
+    var html = '<div class="kb-sub-header">' +
+      '<div class="kb-filter-pills" id="covCreedNavTabs">' +
+        '<button type="button" class="kb-pill-btn ' + (refState.covTab === 'covenants' ? 'active' : '') + '" data-tab="covenants">📜 六大聖約神學立體矩陣</button>' +
+        '<button type="button" class="kb-pill-btn ' + (refState.covTab === 'creeds' ? 'active' : '') + '" data-tab="creeds">🏛️ 歷代大公信經 (使徒/尼西亞/迦克敦)</button>' +
+      '</div>' +
+    '</div>';
+
+    if (refState.covTab === 'covenants') {
+      html += '<div class="covenants-matrix-wrap">' +
+        '<table class="covenants-table">' +
+          '<thead>' +
+            '<tr>' +
+              '<th>聖約名稱</th>' +
+              '<th>立約雙方與代表</th>' +
+              '<th>立約記號</th>' +
+              '<th>恩典應許</th>' +
+              '<th>基督裡的終極成全</th>' +
+            '</tr>' +
+          '</thead>' +
+          '<tbody>';
+      covs.forEach(function (c) {
+        html += '<tr>' +
+          '<td class="cov-name">' + escapeHtml(c.name) + '<br><small style="color:var(--fg-dim);font-weight:normal;">' + escapeHtml(c.scripture) + '</small></td>' +
+          '<td>' + escapeHtml(c.parties) + '</td>' +
+          '<td><span class="prophecy-badge">' + escapeHtml(c.covenantSign) + '</span></td>' +
+          '<td>' + escapeHtml(c.promises) + '</td>' +
+          '<td>' + escapeHtml(c.christFulfillment) + '</td>' +
+        '</tr>';
+      });
+      html += '</tbody></table></div>';
+    } else {
+      html += '<div class="creed-grid">';
+      creeds.forEach(function (cr) {
+        html += '<div class="creed-card">' +
+          '<h3 class="creed-card-title">' + escapeHtml(cr.title) + '</h3>' +
+          '<div class="creed-meta-sub">⏳ ' + escapeHtml(cr.period) + ' · 🛡️ ' + escapeHtml(cr.role) + '</div>' +
+          '<div class="creed-text-box">' + escapeHtml(cr.textZh) + '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+
+    var tabs = container.querySelector('#covCreedNavTabs');
+    if (tabs) {
+      tabs.querySelectorAll('.kb-pill-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          refState.covTab = btn.getAttribute('data-tab') || 'covenants';
+          renderRefPanelCovenantsCreeds();
+        });
+      });
+    }
+
+    bindScriptureJumpLinks(container);
+  }
+
+  /* ===================== 7. 雙欄研經對照工作台 (Study Workbench) 控制器 ===================== */
+  var workbenchState = {
+    isOpen: false,
+    isExpanded: false,
+    activeTab: 'outline' // 'outline' | 'theology' | 'history' | 'notes' | 'wordstudy'
+  };
+
+  function setupWorkbench() {
+    if (el.workbenchToggleBtn) {
+      el.workbenchToggleBtn.addEventListener('click', function () {
+        toggleWorkbench();
+      });
+    }
+    if (el.wbCloseBtn) {
+      el.wbCloseBtn.addEventListener('click', function () {
+        toggleWorkbench(false);
+      });
+    }
+    if (el.wbWidescreenBtn) {
+      el.wbWidescreenBtn.addEventListener('click', function () {
+        workbenchState.isExpanded = !workbenchState.isExpanded;
+        if (el.readerStudyWorkbench) el.readerStudyWorkbench.classList.toggle('wb-expanded', workbenchState.isExpanded);
+        el.wbWidescreenBtn.textContent = workbenchState.isExpanded ? '⤡' : '⤢';
+      });
+    }
+    if (el.workbenchTabs) {
+      el.workbenchTabs.querySelectorAll('.wb-tab-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var tab = btn.getAttribute('data-wbtab');
+          workbenchState.activeTab = tab;
+          el.workbenchTabs.querySelectorAll('.wb-tab-btn').forEach(function (x) {
+            var active = (x.getAttribute('data-wbtab') === tab);
+            x.classList.toggle('active', active);
+            x.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+          renderWorkbenchContent();
+        });
+      });
+    }
+  }
+
+  function toggleWorkbench(forceOpen) {
+    if (typeof forceOpen === 'boolean') {
+      workbenchState.isOpen = forceOpen;
+    } else {
+      workbenchState.isOpen = !workbenchState.isOpen;
+    }
+
+    if (el.readerStudyWorkbench) el.readerStudyWorkbench.hidden = !workbenchState.isOpen;
+    if (el.readerMainWrap) el.readerMainWrap.classList.toggle('with-workbench', workbenchState.isOpen);
+    if (el.workbenchToggleBtn) el.workbenchToggleBtn.classList.toggle('active', workbenchState.isOpen);
+
+    if (workbenchState.isOpen) {
+      ensureRefData(function () {
+        renderWorkbenchContent();
+      });
+      showToast('已開啟雙欄研經工作台 🖥️（按 W 鍵關閉）');
+    }
+  }
+
+  function renderWorkbenchContent() {
+    if (!workbenchState.isOpen || !el.workbenchBody) return;
+
+    var bNo = state.bookNo || 1;
+    var chap = state.chap || 1;
+    var meta = (state.index || []).find(function (b) { return b.no === bNo; }) || { zh: '書卷', en: 'Book' };
+
+    if (el.wbBookLabel) {
+      el.wbBookLabel.textContent = meta.zh + ' 第 ' + chap + ' 章 (' + meta.en + ')';
+    }
+
+    var isOT = bNo <= 39;
+    var studiesData = isOT ? (window.BIBLIA_BOOK_STUDIES_OT || {}) : (window.BIBLIA_BOOK_STUDIES_NT || {});
+    var bookStudy = studiesData[String(bNo)] || null;
+    var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
+
+    var html = '';
+
+    // 1. 導讀大綱分頁 (Outline Tab)
+    if (workbenchState.activeTab === 'outline') {
+      if (bookStudy && bookStudy.meta) {
+        html += '<div class="wb-card">' +
+          '<div class="wb-card-title">📖 ' + escapeHtml(meta.zh) + ' 核心神學主題</div>' +
+          '<p class="wb-text"><i class="fas fa-quote-left"></i> ' + escapeHtml(bookStudy.meta.theme) + ' <i class="fas fa-quote-right"></i></p>' +
+          '<div class="wb-meta-grid">' +
+            '<div class="wb-meta-item">原知名稱：<strong>' + escapeHtml(bookStudy.meta.originalTitle || '') + '</strong></div>' +
+            '<div class="wb-meta-item">全書章數：<strong>共 ' + escapeHtml(bookStudy.meta.chapters || '') + ' 章</strong></div>' +
+          '</div>' +
+        '</div>';
+
+        if (bookStudy.meta.keyVerses && bookStudy.meta.keyVerses.length) {
+          html += '<div class="wb-card">' +
+            '<div class="wb-card-title">✨ 本書核心金句</div>';
+          bookStudy.meta.keyVerses.forEach(function (kv) {
+            html += '<div class="wb-key-verse">' +
+              '<span class="wb-kv-ref ref-scripture-jump" data-ref="' + escapeHtml(kv.ref) + '">' + escapeHtml(kv.ref) + '</span>' +
+              '<div class="wb-kv-text">「' + escapeHtml(kv.text) + '」</div>' +
+              '<div style="font-size:0.75rem;color:var(--fg-dim);margin-top:2px;">' + escapeHtml(kv.note || '') + '</div>' +
+            '</div>';
+          });
+          html += '</div>';
+        }
+
+        if (bookStudy.structureAndOutline && bookStudy.structureAndOutline.outline) {
+          html += '<div class="wb-card">' +
+            '<div class="wb-card-title">📊 全書文學架構與大綱</div>' +
+            '<div class="wb-outline-list">';
+          bookStudy.structureAndOutline.outline.forEach(function (item) {
+            var isCurrent = (item.chapters || '').includes(String(chap));
+            html += '<div class="wb-outline-row ' + (isCurrent ? 'current-chap' : '') + '">' +
+              '<span class="wb-outline-chaps">' + escapeHtml(item.part || '') + ' (' + escapeHtml(item.chapters || '') + ')</span>' +
+              '<span class="wb-outline-title">' + escapeHtml(item.title || '') + '</span>' +
+            '</div>';
+          });
+          html += '</div></div>';
+        }
+
+        html += '<a class="wb-btn-fullstudy" href="#ref/book_study/' + bNo + '">' +
+          '<span>👑 開啟 ' + escapeHtml(meta.zh) + ' 完整 7x7 專家級研經專頁</span>' +
+        '</a>';
+      } else {
+        html += '<div class="wb-card"><p class="wb-text">正典研經資料載入中或正在準備本卷導讀...</p></div>';
+      }
+    }
+    // 2. 神學基督分頁 (Theology Tab)
+    else if (workbenchState.activeTab === 'theology') {
+      if (bookStudy && bookStudy.theologyAndChrist) {
+        var tc = bookStudy.theologyAndChrist;
+        html += '<div class="wb-card">' +
+          '<div class="wb-card-title">👑 基督預表與應驗 (Christology)</div>' +
+          '<p class="wb-text">' + escapeHtml(tc.christTypology || '') + '</p>' +
+        '</div>';
+
+        if (tc.covenantConnection) {
+          html += '<div class="wb-card">' +
+            '<div class="wb-card-title">📜 聖約神學脈絡 (Covenant)</div>' +
+            '<p class="wb-text">' + escapeHtml(tc.covenantConnection) + '</p>' +
+          '</div>';
+        }
+
+        if (tc.coreThemes && tc.coreThemes.length) {
+          html += '<div class="wb-card">' +
+            '<div class="wb-card-title">💎 核心神學教義主題</div>';
+          tc.coreThemes.forEach(function (ct) {
+            html += '<div style="margin-bottom:8px;">' +
+              '<strong style="color:var(--accent);">' + escapeHtml(ct.theme || '') + '：</strong>' +
+              '<span style="font-size:0.875rem;color:var(--fg);">' + escapeHtml(ct.content || '') + '</span>' +
+            '</div>';
+          });
+          html += '</div>';
+        }
+      } else {
+        html += '<div class="wb-card"><p class="wb-text">本卷神學與基督論資料載入中...</p></div>';
+      }
+    }
+    // 3. 歷史年代與地圖分頁 (History Tab)
+    else if (workbenchState.activeTab === 'history') {
+      if (bookStudy && bookStudy.historicalContext) {
+        var hc = bookStudy.historicalContext;
+        html += '<div class="wb-card">' +
+          '<div class="wb-card-title">⏳ 成書歷史與地理背景</div>' +
+          '<p class="wb-text">' + escapeHtml(hc.summary || '') + '</p>' +
+          '<div class="wb-meta-grid">' +
+            '<div class="wb-meta-item">作者：<strong>' + escapeHtml(bookStudy.meta.author || '') + '</strong></div>' +
+            '<div class="wb-meta-item">成書年代：<strong>' + escapeHtml(bookStudy.meta.date || '') + '</strong></div>' +
+            '<div class="wb-meta-item">寫作地點：<strong>' + escapeHtml(bookStudy.meta.location || '') + '</strong></div>' +
+            '<div class="wb-meta-item">首要受眾：<strong>' + escapeHtml(bookStudy.meta.recipients || '') + '</strong></div>' +
+          '</div>' +
+        '</div>';
+
+        if (hc.archaeology) {
+          html += '<div class="wb-card">' +
+            '<div class="wb-card-title">🏺 考古文物實證</div>' +
+            '<p class="wb-text">' + escapeHtml(hc.archaeology) + '</p>' +
+          '</div>';
+        }
+      } else {
+        html += '<div class="wb-card"><p class="wb-text">本卷歷史考古背景載入中...</p></div>';
+      }
+    }
+    // 4. 本章筆記分頁 (Notes Tab)
+    else if (workbenchState.activeTab === 'notes') {
+      var chapterPrefix = bNo + ':' + chap + ':';
+      var chapNotes = [];
+      var allNotes = notes || {};
+      Object.keys(allNotes).forEach(function (k) {
+        if (k.startsWith(chapterPrefix)) {
+          var sec = k.split(':')[2];
+          chapNotes.push({ sec: sec, text: allNotes[k].text, tags: allNotes[k].tags });
+        }
+      });
+
+      html += '<div class="wb-card">' +
+        '<div class="wb-card-title">✏️ 經文靈修筆記（第 ' + chap + ' 章）</div>' +
+        '<p class="wb-text">在此快速記錄本章靈修感想，或點擊左側經節號開啟指定節筆記。</p>' +
+        '<div class="wb-note-box">' +
+          '<textarea id="wbQuickNoteInput" class="wb-note-textarea" rows="4" placeholder="記錄本章第 ' + chap + ' 章的靈修心得與講章札記..."></textarea>' +
+          '<button type="button" id="wbSaveNoteBtn" class="btn btn-primary wb-note-save-btn">儲存本章筆記</button>' +
+        '</div>' +
+      '</div>';
+
+      if (chapNotes.length) {
+        html += '<div class="wb-card">' +
+          '<div class="wb-card-title">🔖 已存經節筆記 (' + chapNotes.length + ')</div>';
+        chapNotes.forEach(function (cn) {
+          html += '<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed var(--line);">' +
+            '<strong class="ref-scripture-jump" data-ref="' + meta.zh + ' ' + chap + ':' + cn.sec + '">第 ' + cn.sec + ' 節：</strong> ' +
+            '<span>' + escapeHtml(cn.text) + '</span>' +
+          '</div>';
+        });
+        html += '</div>';
+      }
+    }
+    // 5. 原文神學字彙分頁 (Word Study Tab)
+    else if (workbenchState.activeTab === 'wordstudy') {
+      var targetLang = isOT ? 'Hebrew' : 'Greek';
+      var words = (kb.wordStudies || []).filter(function (w) { return w.lang === targetLang; });
+
+      html += '<div class="wb-card">' +
+        '<div class="wb-card-title">🔤 ' + (isOT ? '舊約希伯來文' : '新約希臘文') + ' 核心神學詞條速查</div>' +
+        '<p class="wb-text">精選本約救贖歷史核心原文字根與 Strong 字典釋義：</p>' +
+      '</div>';
+
+      words.forEach(function (w) {
+        html += '<div class="wb-card">' +
+          '<div style="display:flex;justify-content:space-between;align-items:baseline;">' +
+            '<strong style="font-size:1.1rem;color:var(--strong);">' + escapeHtml(w.term) + ' (' + escapeHtml(w.translit) + ')</strong>' +
+            '<button type="button" class="word-strong-badge open-strong-btn" data-strong="' + escapeHtml(w.strong) + '">' + escapeHtml(w.strong) + '</button>' +
+          '</div>' +
+          '<div style="font-size:0.875rem;font-weight:700;color:var(--accent);margin-top:3px;">' + escapeHtml(w.meaning) + '</div>' +
+          '<div style="font-size:0.8125rem;line-height:1.55;color:var(--fg);margin-top:4px;">' + escapeHtml(w.theologicalCore) + '</div>' +
+        '</div>';
+      });
+    }
+
+    el.workbenchBody.innerHTML = html;
+
+    var saveBtn = el.workbenchBody.querySelector('#wbSaveNoteBtn');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', function () {
+        var input = el.workbenchBody.querySelector('#wbQuickNoteInput');
+        if (input && input.value.trim()) {
+          var k = bNo + ':' + chap + ':1';
+          notes[k] = { text: input.value.trim(), tags: ['#靈修'], updatedAt: Date.now() };
+          save();
+          showToast('已儲存第 ' + chap + ' 章靈修筆記！✏️');
+          renderWorkbenchContent();
+        }
+      });
+    }
+
+    el.workbenchBody.querySelectorAll('.open-strong-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var code = btn.getAttribute('data-strong');
+        if (code && typeof openStrongModal === 'function') openStrongModal(code);
+        else if (code && typeof showStrong === 'function') showStrong(code);
+      });
+    });
+
+    bindScriptureJumpLinks(el.workbenchBody);
+  }
+
+  /* ===================== 8. 橫向全螢幕與寬屏控制器 ===================== */
+  function toggleFullscreenAndWidescreen() {
+    var isFull = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    if (!isFull) {
+      var elem = document.documentElement;
+      if (elem.requestFullscreen) elem.requestFullscreen();
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+      document.body.classList.add('fullscreen-active');
+      document.body.classList.add('widescreen-mode');
+      showToast('已開啟橫式全螢幕沉浸研經模式 ⛶（按 Esc 或 F 退出）');
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      document.body.classList.remove('fullscreen-active');
+      showToast('已退出全螢幕模式');
+    }
+    colLayout();
+  }
+
+  function setupFullscreenAndWidescreen() {
+    if (el.fullscreenToggleBtn) {
+      el.fullscreenToggleBtn.addEventListener('click', function () {
+        toggleFullscreenAndWidescreen();
+      });
+    }
+    document.addEventListener('fullscreenchange', function () {
+      var isFull = !!document.fullscreenElement;
+      document.body.classList.toggle('fullscreen-active', isFull);
+      if (el.fullscreenToggleBtn) {
+        el.fullscreenToggleBtn.classList.toggle('active', isFull);
+      }
+      colLayout();
+    });
+  }
+
   /* ===================== 閱讀排版與外觀設定 (Aa Modal) 控制器 ===================== */
   var appearanceOpener = null;
 
@@ -5179,6 +6038,18 @@ var BIBLIA = (function () {
         return;
       }
 
+      if ((e.key === 'w' || e.key === 'W') && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        toggleWorkbench();
+        return;
+      }
+
+      if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        toggleFullscreenAndWidescreen();
+        return;
+      }
+
       if ((e.key === 'v' || e.key === 'V') && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();
         if (el.versionModal && !el.versionModal.hidden) {
@@ -5552,6 +6423,7 @@ var BIBLIA = (function () {
     el.reader.appendChild(frag);
 
     if (state.strong) paintStrong();
+    if (workbenchState.isOpen) renderWorkbenchContent();
   }
 
   function msg(text) {

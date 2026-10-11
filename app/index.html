@@ -313,6 +313,16 @@
 
       <span class="bar-spacer"></span>
 
+      <!-- 雙欄研經工作台按鈕 (Study Workbench) -->
+      <button id="workbenchToggleBtn" type="button" class="btn workbench-nav-btn" title="切換雙欄研經工作台 (W)" aria-label="研經工作台">
+        <span aria-hidden="true" class="workbench-nav-icon">🖥️</span><span class="btn-text">研經台</span>
+      </button>
+
+      <!-- 橫式全螢幕/寬屏模式按鈕 (Fullscreen) -->
+      <button id="fullscreenToggleBtn" type="button" class="btn fullscreen-nav-btn" title="切換橫式全螢幕/寬屏模式 (F)" aria-label="全螢幕模式">
+        <span aria-hidden="true" class="fullscreen-nav-icon">⛶</span><span class="btn-text">全螢幕</span>
+      </button>
+
       <!-- 禪意專注閱讀按鈕 (Zen Mode) -->
       <button id="zenBtn" type="button" class="btn zen-nav-btn" title="禪意專注閱讀模式 (Z)" aria-label="禪意專注閱讀模式">
         <span aria-hidden="true">🍵</span><span class="btn-text">專注</span>
@@ -472,9 +482,51 @@
     </div>
   </div>
 
-  <main id="reader" class="reader" tabindex="-1">
-    <p class="placeholder">載入中…</p>
-  </main>
+  <div id="readerMainWrap" class="reader-main-wrap">
+    <main id="reader" class="reader" tabindex="-1">
+      <p class="placeholder">載入中…</p>
+    </main>
+
+    <!-- 桌面端雙欄研經對照工作台 (Desktop Split-Screen Study Workbench) -->
+    <aside id="readerStudyWorkbench" class="reader-study-workbench" hidden aria-label="研經資料對照台">
+      <header class="workbench-header">
+        <div class="workbench-title-group">
+          <span class="workbench-badge">🏛️ 研經工作台</span>
+          <span class="workbench-book-label" id="wbBookLabel">創世記 第 1 章</span>
+        </div>
+        <div class="workbench-header-actions">
+          <button id="wbWidescreenBtn" type="button" class="btn btn-sm btn-ghost wb-expand-btn" title="切換工作台寬版/標準">⤢</button>
+          <button id="wbCloseBtn" type="button" class="workbench-close-btn" title="關閉研經工作台 (W)" aria-label="關閉研經工作台">×</button>
+        </div>
+      </header>
+
+      <!-- 工作台分頁選單 -->
+      <div class="workbench-tabs" id="workbenchTabs" role="tablist" aria-label="工作台功能分頁">
+        <button type="button" class="wb-tab-btn active" data-wbtab="outline" role="tab" aria-selected="true" title="查看書卷架構與大綱">
+          <span>📖 導讀大綱</span>
+        </button>
+        <button type="button" class="wb-tab-btn" data-wbtab="theology" role="tab" aria-selected="false" title="查看神學主題與基督預表">
+          <span>👑 神學基督</span>
+        </button>
+        <button type="button" class="wb-tab-btn" data-wbtab="history" role="tab" aria-selected="false" title="查看歷史年代與地理背景">
+          <span>⏳ 年代地圖</span>
+        </button>
+        <button type="button" class="wb-tab-btn" data-wbtab="notes" role="tab" aria-selected="false" title="查看本章筆記與書籤">
+          <span>✏️ 本章筆記</span>
+        </button>
+        <button type="button" class="wb-tab-btn" data-wbtab="wordstudy" role="tab" aria-selected="false" title="查閱核心神學原文字彙">
+          <span>🔤 原文辭彙</span>
+        </button>
+      </div>
+
+      <!-- 工作台各分頁內容容器 -->
+      <div class="workbench-body" id="workbenchBody">
+        <div class="workbench-loading">
+          <p>正在載入研經資料...</p>
+        </div>
+      </div>
+    </aside>
+  </div>
 
   <!-- 桌機側邊浮動翻章導覽 (Desktop Floating Side Nav) -->
   <button id="sidePrevBtn" class="side-nav-btn side-nav-prev" title="上一章（← 或 [）" aria-label="上一章">
@@ -852,7 +904,9 @@
 
     <div class="shortcuts-body">
       <div class="shortcut-group">
-        <h3 class="shortcut-group-title">經文導覽與操作</h3>
+        <h3 class="shortcut-group-title">經文導覽與研經工作台</h3>
+        <div class="shortcut-row"><span class="shortcut-keys"><kbd>W</kbd></span><span class="shortcut-desc">切換雙欄研經工作台（導讀、大綱、神學、筆記、原文字彙）</span></div>
+        <div class="shortcut-row"><span class="shortcut-keys"><kbd>F</kbd></span><span class="shortcut-desc">切換橫式全螢幕 / 寬屏模式</span></div>
         <div class="shortcut-row"><span class="shortcut-keys"><kbd>G</kbd></span><span class="shortcut-desc">開啟極速查經選卷選章九宮格</span></div>
         <div class="shortcut-row"><span class="shortcut-keys"><kbd>Z</kbd></span><span class="shortcut-desc">切換禪意專注閱讀模式（全螢幕沉浸）</span></div>
         <div class="shortcut-row"><span class="shortcut-keys"><kbd>←</kbd> / <kbd>→</kbd> 或 <kbd>P</kbd> / <kbd>N</kbd></span><span class="shortcut-desc">切換上一章 / 下一章</span></div>
@@ -973,49 +1027,73 @@
         <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
       </button>
 
-      <span class="bar-title">聖經補充資料</span>
+      <span class="bar-title">聖經研經知識網</span>
 
       <span class="bar-spacer"></span>
+
+      <!-- 橫向全螢幕/寬屏切換按鈕 -->
+      <button id="refWidescreenBtn" type="button" class="btn fullscreen-nav-btn" title="切換橫向全螢幕/寬屏模式 (F)" aria-label="全螢幕模式">
+        <span aria-hidden="true">⛶</span><span class="btn-text">全螢幕</span>
+      </button>
 
       <button id="refThemeBtn" type="button" class="btn btn-icon" title="切換深淺色" aria-label="切換深淺色">◐</button>
     </div>
   </header>
 
-  <main class="ref-main">
+  <main class="ref-main" id="refMain">
     <div class="ref-hero">
       <div class="ref-hero-content">
-        <h1 class="ref-main-title">聖經補充資料</h1>
+        <h1 class="ref-main-title">Biblia 聖經研經知識網</h1>
+        <p class="ref-subtitle">66卷正典導讀 · 救贖歷史總覽 · 彌賽亞預言 · 聖經地理動線 · 核心神學詞庫 · 聖約信經</p>
       </div>
     </div>
 
     <!-- 頁籤導覽 (Tab Switcher) -->
     <div class="ref-nav-tabs" id="refNavTabs" role="tablist" aria-label="資料庫分頁選擇">
       <button type="button" class="ref-tab-btn active" data-reftab="intros" role="tab" aria-selected="true">
-        <span aria-hidden="true">📖</span> 66 卷聖經書卷簡介
+        <span aria-hidden="true">📖</span> 66 卷簡介
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="book_study" role="tab" aria-selected="false">
-        <span aria-hidden="true">🏛️</span> 66 卷深度研究導讀
+        <span aria-hidden="true">🏛️</span> 66 卷深度導讀
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="ot_survey" role="tab" aria-selected="false">
-        <span aria-hidden="true">📜</span> 舊約聖經總覽
+        <span aria-hidden="true">📜</span> 舊約總覽
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="nt_survey" role="tab" aria-selected="false">
-        <span aria-hidden="true">✝️</span> 新約聖經總覽
+        <span aria-hidden="true">✝️</span> 新約總覽
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="prophecy" role="tab" aria-selected="false">
+        <span aria-hidden="true">🌟</span> 彌賽亞預言應驗
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="geography" role="tab" aria-selected="false">
+        <span aria-hidden="true">🗺️</span> 聖經地理與動線
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="characters" role="tab" aria-selected="false">
+        <span aria-hidden="true">👥</span> 關鍵人物志
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="word_study" role="tab" aria-selected="false">
+        <span aria-hidden="true">🔤</span> 原文神學詞庫
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="apologetics" role="tab" aria-selected="false">
+        <span aria-hidden="true">💡</span> 研經難題與護教
+      </button>
+      <button type="button" class="ref-tab-btn" data-reftab="covenants_creeds" role="tab" aria-selected="false">
+        <span aria-hidden="true">📜</span> 聖約矩陣與信經
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="su101" role="tab" aria-selected="false">
-        <span aria-hidden="true">📑</span> 每日研經釋義參考庫
+        <span aria-hidden="true">📑</span> 每日研經釋義
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="rev_study" role="tab" aria-selected="false">
         <span aria-hidden="true">👑</span> 啟示錄深度導論
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="timeline" role="tab" aria-selected="false">
-        <span aria-hidden="true">⏳</span> 聖經歷史時間表與圖表
+        <span aria-hidden="true">⏳</span> 歷史時間表
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="reader_guide" role="tab" aria-selected="false">
-        <span aria-hidden="true">🎓</span> 閱讀研經教學指南
+        <span aria-hidden="true">🎓</span> 研經教學指南
       </button>
       <button type="button" class="ref-tab-btn" data-reftab="audio" role="tab" aria-selected="false">
-        <span aria-hidden="true">🎧</span> 有聲聖經資源庫
+        <span aria-hidden="true">🎧</span> 有聲聖經庫
       </button>
     </div>
 
@@ -1024,6 +1102,12 @@
     <div id="refPanelReaderGuide" class="ref-panel" hidden></div>
     <div id="refPanelOtSurvey" class="ref-panel" hidden></div>
     <div id="refPanelNtSurvey" class="ref-panel" hidden></div>
+    <div id="refPanelProphecy" class="ref-panel" hidden></div>
+    <div id="refPanelGeography" class="ref-panel" hidden></div>
+    <div id="refPanelCharacters" class="ref-panel" hidden></div>
+    <div id="refPanelWordStudy" class="ref-panel" hidden></div>
+    <div id="refPanelApologetics" class="ref-panel" hidden></div>
+    <div id="refPanelCovenantsCreeds" class="ref-panel" hidden></div>
     <div id="refPanelSu101" class="ref-panel" hidden></div>
     <div id="refPanelBookStudy" class="ref-panel" hidden></div>
     <div id="refPanelRevStudy" class="ref-panel" hidden></div>
