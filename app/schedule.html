@@ -6,7 +6,7 @@
   <title>Biblia 讀經進度中心 — 每日研經釋義每月進度表 ＆ WOL 聖經速讀每季進度頁面</title>
   <meta name="description" content="Biblia 讀經進度中心：完整提供國際讀經會《每日研經釋義》每月進度表、WOL 教會一年讀完聖經每季速讀進度頁面。即時計算月完成度、季完成度與未讀追蹤，支援和合本直達閱讀與一鍵列印進度表。">
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=33">
   <style>
     /* 獨立進度表專用排版優化 */
     .schedule-page-body {
@@ -269,9 +269,9 @@
   </main>
 
   <!-- 載入讀經資料腳本 -->
-  <script src="data/plan_2026_q4.js"></script>
-  <script src="data/plan_2026_q3.js"></script>
-  <script src="data/plan_su101_2026.js"></script>
+  <script src="data/plan_2026_q4.js?v=33"></script>
+  <script src="data/plan_2026_q3.js?v=33"></script>
+  <script src="data/plan_su101_2026.js?v=33"></script>
 
   <script>
   (function () {
@@ -598,6 +598,8 @@
       allBtn.innerHTML = '全部 (' + plan.items.length + '天)<span class="tab-badge">' + (metrics ? metrics.percent + '%' : '') + '</span>';
       allBtn.addEventListener('click', function () {
         planFilterState.month = 'all';
+        planFilterState.week = 'all';
+        renderWeekSelect(plan);
         renderMonthTabs(plan);
         updatePlanStats();
         renderPlanList();
@@ -616,6 +618,8 @@
         btn.title = m + ' 月：已讀 ' + (b ? b.done : 0) + ' / ' + count + ' 天（完成度 ' + pctText + '）';
         btn.addEventListener('click', function () {
           planFilterState.month = m;
+          planFilterState.week = 'all';
+          renderWeekSelect(plan);
           renderMonthTabs(plan);
           updatePlanStats();
           renderPlanList();
@@ -629,14 +633,33 @@
     function renderWeekSelect(plan) {
       var elSel = document.getElementById('scheduleWeekSelect');
       if (!elSel) return;
-      elSel.innerHTML = '<option value="all">所有週次</option>';
-      plan.weeks.forEach(function (w) {
+      var availableWeeks = [];
+      var itemsInMonth = (planFilterState.month === 'all')
+        ? plan.items
+        : plan.items.filter(function (it) { return it.month === planFilterState.month; });
+
+      var seenWeeks = {};
+      itemsInMonth.forEach(function (it) {
+        if (it.week && !seenWeeks[it.week]) {
+          seenWeeks[it.week] = true;
+          availableWeeks.push(it.week);
+        }
+      });
+      availableWeeks.sort(function (a, b) { return a - b; });
+
+      if (planFilterState.week !== 'all' && availableWeeks.indexOf(+planFilterState.week) === -1) {
+        planFilterState.week = 'all';
+      }
+
+      elSel.innerHTML = '<option value="all">所有週次' + (planFilterState.month !== 'all' ? ' (' + planFilterState.month + '月)' : '') + '</option>';
+      availableWeeks.forEach(function (w) {
         var o = document.createElement('option');
         o.value = w;
         o.textContent = '第 ' + w + ' 週';
-        if (planFilterState.week === String(w)) o.selected = true;
+        if (String(planFilterState.week) === String(w)) o.selected = true;
         elSel.appendChild(o);
       });
+      elSel.value = planFilterState.week;
     }
 
     function updatePlanStats() {
@@ -707,6 +730,8 @@
               '<div class="breakdown-item-foot"><span>已讀 ' + b.done + '/' + b.total + '</span><span style="color:#d97706;">未讀 ' + b.unread + '</span></div>';
             item.addEventListener('click', function () {
               planFilterState.month = (planFilterState.month === m) ? 'all' : m;
+              planFilterState.week = 'all';
+              renderWeekSelect(plan);
               renderMonthTabs(plan);
               updatePlanStats();
               renderPlanList();
@@ -742,6 +767,18 @@
       if (!plan) return;
 
       var p = progressOf(plan);
+
+      // 容錯防護：若當前週次在當前選取的月份範圍內不存在，自動重置為 'all'
+      if (planFilterState.week !== 'all' && planFilterState.month !== 'all') {
+        var weekExistsInMonth = plan.items.some(function (it) {
+          return it.month === planFilterState.month && String(it.week) === String(planFilterState.week);
+        });
+        if (!weekExistsInMonth) {
+          planFilterState.week = 'all';
+          var weekSel = document.getElementById('scheduleWeekSelect');
+          if (weekSel) weekSel.value = 'all';
+        }
+      }
 
       var inScope = plan.items.filter(function (it) {
         if (planFilterState.month !== 'all' && it.month !== planFilterState.month) return false;

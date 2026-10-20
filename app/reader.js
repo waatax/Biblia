@@ -2775,8 +2775,14 @@ var BIBLIA = (function () {
       planFilterState.month = options.month;
     }
 
+    // 每次開啟讀經計畫時重設週次與搜尋條件，避免跨月/跨計畫週次殘留
+    planFilterState.week = 'all';
+    planFilterState.query = '';
+    if (el.planSearchInput) el.planSearchInput.value = '';
+    if (el.planWeekSelect) el.planWeekSelect.value = 'all';
+
     // 第一次打開時直接切到本月並捲到今天：原本從 1/1 第 1 週列起，今天的進度要往下捲兩百多張卡
-    var todayIt = !planOpened && planFilterState.month === 'all' && !planFilterState.query
+    var todayIt = !planOpened && planFilterState.month === 'all'
       ? todayItemOf(currentPlan()) : null;
     planOpened = true;
     if (todayIt && !options.month) planFilterState.month = todayIt.month;
@@ -3180,10 +3186,18 @@ var BIBLIA = (function () {
         if (planIdx === i) return;
         planIdx = i;
         try { localStorage.setItem('biblia_plan_id', p.id); } catch (e) {}
-        planFilterState.month = 'all';
+        var todayIt = todayItemOf(p);
+        if (todayIt) {
+          planFilterState.month = todayIt.month;
+        } else if (p.months && p.months.length && p.months.indexOf(planFilterState.month) === -1) {
+          planFilterState.month = p.months[0];
+        } else {
+          planFilterState.month = 'all';
+        }
         planFilterState.week = 'all';
         planFilterState.query = '';
         if (el.planSearchInput) el.planSearchInput.value = '';
+        if (el.planWeekSelect) el.planWeekSelect.value = 'all';
         buildPlanSwitch();
         renderPlan();
         updateHash();
@@ -3392,6 +3406,8 @@ var BIBLIA = (function () {
     allBtn.innerHTML = '全部 (' + plan.items.length + '天)<span class="tab-badge">' + (metrics ? metrics.percent + '%' : '') + '</span>';
     allBtn.addEventListener('click', function () {
       planFilterState.month = 'all';
+      planFilterState.week = 'all';
+      renderWeekSelect(plan);
       renderMonthTabs(plan);
       updatePlanStats();
       renderPlanList();
@@ -3411,6 +3427,8 @@ var BIBLIA = (function () {
       btn.title = m + ' 月進度：已讀 ' + (b ? b.done : 0) + ' / ' + count + ' 天（' + (b ? b.unread : count) + ' 天未讀，完成度 ' + pctText + '）';
       btn.addEventListener('click', function () {
         planFilterState.month = m;
+        planFilterState.week = 'all';
+        renderWeekSelect(plan);
         renderMonthTabs(plan);
         updatePlanStats();
         renderPlanList();
@@ -3424,14 +3442,35 @@ var BIBLIA = (function () {
 
   function renderWeekSelect(plan) {
     if (!el.planWeekSelect) return;
-    el.planWeekSelect.innerHTML = '<option value="all">所有週次</option>';
-    plan.weeks.forEach(function (w) {
+    // 依據當前選取的月份，動態篩選出該月實際涵蓋的週次清單
+    var availableWeeks = [];
+    var itemsInMonth = (planFilterState.month === 'all')
+      ? plan.items
+      : plan.items.filter(function (it) { return it.month === planFilterState.month; });
+
+    var seenWeeks = {};
+    itemsInMonth.forEach(function (it) {
+      if (it.week && !seenWeeks[it.week]) {
+        seenWeeks[it.week] = true;
+        availableWeeks.push(it.week);
+      }
+    });
+    availableWeeks.sort(function (a, b) { return a - b; });
+
+    // 若當前所選的週次不在該月的週次內，自動重設為 'all'
+    if (planFilterState.week !== 'all' && availableWeeks.indexOf(+planFilterState.week) === -1) {
+      planFilterState.week = 'all';
+    }
+
+    el.planWeekSelect.innerHTML = '<option value="all">所有週次' + (planFilterState.month !== 'all' ? ' (' + planFilterState.month + '月)' : '') + '</option>';
+    availableWeeks.forEach(function (w) {
       var o = document.createElement('option');
       o.value = w;
       o.textContent = '第 ' + w + ' 週';
-      if (planFilterState.week === String(w)) o.selected = true;
+      if (String(planFilterState.week) === String(w)) o.selected = true;
       el.planWeekSelect.appendChild(o);
     });
+    el.planWeekSelect.value = planFilterState.week;
   }
 
   function computeReadingStreaks() {
@@ -3551,6 +3590,8 @@ var BIBLIA = (function () {
             '<div class="breakdown-item-foot"><span>已讀 ' + b.done + '/' + b.total + '</span><span style="color:#d97706;">未讀 ' + b.unread + '</span></div>';
           item.addEventListener('click', function () {
             planFilterState.month = (planFilterState.month === m) ? 'all' : m;
+            planFilterState.week = 'all';
+            renderWeekSelect(plan);
             renderMonthTabs(plan);
             updatePlanStats();
             renderPlanList();
@@ -3589,6 +3630,17 @@ var BIBLIA = (function () {
     if (!plan) return;
 
     var p = progressOf(plan);
+
+    // 容錯防護：若當前週次在當前選取的月份範圍內不存在，自動重置為 'all'，避免月份切換時清單空白
+    if (planFilterState.week !== 'all' && planFilterState.month !== 'all') {
+      var weekExistsInMonth = plan.items.some(function (it) {
+        return it.month === planFilterState.month && String(it.week) === String(planFilterState.week);
+      });
+      if (!weekExistsInMonth) {
+        planFilterState.week = 'all';
+        if (el.planWeekSelect) el.planWeekSelect.value = 'all';
+      }
+    }
 
     // 首先按月份、週次、關鍵字篩選出基礎集合
     var inScope = plan.items.filter(function (it) {
