@@ -637,6 +637,13 @@ var BIBLIA = (function () {
       'searchPaginationBottom', 'searchPageInfoBottom', 'searchPaginationControlsBottom',
       'searchScrollTopBtn', 'planSearchNavBtn', 'refSearchNavBtn',
       'startPlanBtn', 'readerPlanBtn', 'planHomeBtn', 'planReaderBtn', 'planJumpTodayBtn',
+      'planPrintBtn', 'planSchedulePageBtn', 'planBadgeType', 'planStatsUnread',
+      'planMonthMetricBox', 'planMonthTitle', 'planMonthPercent', 'planMonthProgressBar', 'planMonthProgressFill', 'planMonthCount', 'planMonthUnread',
+      'planQuarterMetricBox', 'planQuarterTitle', 'planQuarterPercent', 'planQuarterProgressBar', 'planQuarterProgressFill', 'planQuarterCount', 'planQuarterUnread',
+      'planQuarterBreakdown', 'planQuarterBreakdownGrid',
+      'planModeTableBtn', 'planModeCardsBtn',
+      'planStatusAllBtn', 'planStatusUnreadBtn', 'planStatusReadBtn', 'pillUnreadCount', 'pillReadCount',
+      'planSectionHeader', 'planSectionTitle', 'planSectionSubtitle', 'planSectionQuickStats',
       'planThemeBtn', 'planStatsPercent', 'planProgressFill', 'planProgressBar',
       'planStatsCount', 'planStreakBadge', 'planMarkTodayBtn', 'planMonthTabs', 'planWeekSelect',
       'planSearchInput', 'planList', 'startPlanTodayBox', 'startPlanDate',
@@ -2519,8 +2526,17 @@ var BIBLIA = (function () {
       targetHash = '';
       stateObj = { view: 'start' };
     } else if (el.planView && !el.planView.hidden) {
-      targetHash = '#plan';
-      stateObj = { view: 'plan' };
+      var currentP = currentPlan();
+      var planHash = '#plan';
+      if (currentP) {
+        if (currentP.id === 'church_q4_2026') planHash = '#plan/wol/q4';
+        else if (currentP.id === 'church_q3_2026') planHash = '#plan/wol/q3';
+        else if (currentP.id === 'su101_2026') {
+          planHash = '#plan/su101' + (planFilterState.month !== 'all' ? '/' + planFilterState.month : '');
+        }
+      }
+      targetHash = planHash;
+      stateObj = { view: 'plan', planId: currentP ? currentP.id : null, month: planFilterState.month };
     } else if (el.refView && !el.refView.hidden) {
       var refHash = '#ref' + (refState && refState.activeTab ? '/' + refState.activeTab : '');
       if (refState && refState.activeTab === 'book_study' && refState.currentBookStudyNo) {
@@ -2582,8 +2598,17 @@ var BIBLIA = (function () {
         showStart({ fromHash: true });
         return;
       }
-      if (hash === '#plan') {
-        showPlan({ fromHash: true });
+      if (hash === '#plan' || hash.indexOf('#plan') === 0) {
+        var pParts = hash.split('/');
+        var pOpts = { fromHash: true };
+        if (pParts[1] === 'wol') {
+          if (pParts[2] === 'q3') pOpts.planId = 'church_q3_2026';
+          else pOpts.planId = 'church_q4_2026';
+        } else if (pParts[1] === 'su101') {
+          pOpts.planId = 'su101_2026';
+          if (pParts[2]) pOpts.month = parseInt(pParts[2], 10);
+        }
+        showPlan(pOpts);
         return;
       }
       if (hash.indexOf('#ref') === 0) {
@@ -2738,11 +2763,24 @@ var BIBLIA = (function () {
     if (el.searchView) el.searchView.hidden = true;
     if (el.planView) el.planView.hidden = false;
 
+    normalisePlans();
+
+    if (options.planId) {
+      plans.forEach(function (p, i) {
+        if (p.id === options.planId) planIdx = i;
+      });
+      try { localStorage.setItem('biblia_plan_id', plans[planIdx].id); } catch (e) {}
+    }
+    if (options.month) {
+      planFilterState.month = options.month;
+    }
+
     // 第一次打開時直接切到本月並捲到今天：原本從 1/1 第 1 週列起，今天的進度要往下捲兩百多張卡
     var todayIt = !planOpened && planFilterState.month === 'all' && !planFilterState.query
       ? todayItemOf(currentPlan()) : null;
     planOpened = true;
-    if (todayIt) planFilterState.month = todayIt.month;
+    if (todayIt && !options.month) planFilterState.month = todayIt.month;
+    buildPlanSwitch();
     renderPlan();
     window.scrollTo(0, 0);
     if (todayIt) {
@@ -2783,10 +2821,19 @@ var BIBLIA = (function () {
 
   var WEEKDAY = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
 
+  var initialPlanViewMode = 'table';
+  try { initialPlanViewMode = localStorage.getItem('biblia_plan_view_mode') || 'table'; } catch (e) {}
+
   var plans = [];
   var planIdx = 0;
   var planProgress = loadPlanProgress();
-  var planFilterState = { month: 'all', week: 'all', query: '' };
+  var planFilterState = {
+    month: 'all',
+    week: 'all',
+    query: '',
+    status: 'all',          // 'all' | 'unread' | 'read'
+    viewMode: initialPlanViewMode  // 'table' | 'cards'
+  };
 
   function normalisePlans() {
     plans = [];
@@ -2824,8 +2871,14 @@ var BIBLIA = (function () {
       months.sort(function (a, b) { return a - b; });
       weeks.sort(function (a, b) { return a - b; });
 
+      var planType = src.id.indexOf('church_') === 0 ? 'wol' : 'su101';
+      var planQuarter = raw.quarter || (src.id === 'church_q4_2026' ? 4 : (src.id === 'church_q3_2026' ? 3 : null));
+
       plans.push({
         id: src.id,
+        type: planType,
+        quarter: planQuarter,
+        year: raw.year || 2026,
         name: src.name,
         sub: src.sub,
         title: raw.title || src.name,
@@ -2862,6 +2915,86 @@ var BIBLIA = (function () {
         }
       }
     }
+  }
+
+  function computePlanMetrics(plan) {
+    if (!plan || !plan.items) return null;
+    var p = progressOf(plan);
+    var total = plan.items.length;
+    var done = 0;
+
+    var byMonth = {};
+    (plan.months || []).forEach(function (m) {
+      byMonth[m] = {
+        month: m,
+        total: 0,
+        done: 0,
+        unread: 0,
+        percent: 0,
+        quarter: Math.ceil(m / 3)
+      };
+    });
+
+    var byQuarter = {
+      1: { quarter: 1, name: '第一季 (Q1)', total: 0, done: 0, unread: 0, percent: 0, months: [1, 2, 3] },
+      2: { quarter: 2, name: '第二季 (Q2)', total: 0, done: 0, unread: 0, percent: 0, months: [4, 5, 6] },
+      3: { quarter: 3, name: '第三季 (Q3)', total: 0, done: 0, unread: 0, percent: 0, months: [7, 8, 9] },
+      4: { quarter: 4, name: '第四季 (Q4)', total: 0, done: 0, unread: 0, percent: 0, months: [10, 11, 12] }
+    };
+
+    plan.items.forEach(function (it) {
+      var isDone = !!p[it.id];
+      if (isDone) done++;
+
+      var m = it.month;
+      if (m && byMonth[m]) {
+        byMonth[m].total++;
+        if (isDone) byMonth[m].done++;
+      }
+
+      var q = plan.quarter || Math.ceil(m / 3);
+      if (q && byQuarter[q]) {
+        byQuarter[q].total++;
+        if (isDone) byQuarter[q].done++;
+      }
+    });
+
+    Object.keys(byMonth).forEach(function (m) {
+      var b = byMonth[m];
+      b.unread = b.total - b.done;
+      b.percent = b.total ? Math.round((b.done / b.total) * 100) : 0;
+    });
+
+    Object.keys(byQuarter).forEach(function (q) {
+      var b = byQuarter[q];
+      b.unread = b.total - b.done;
+      b.percent = b.total ? Math.round((b.done / b.total) * 100) : 0;
+    });
+
+    // 決定當前活躍月份與季度的統計
+    var activeM = planFilterState.month !== 'all' ? Number(planFilterState.month) : null;
+    if (!activeM) {
+      var tIt = todayItemOf(plan);
+      if (tIt) activeM = tIt.month;
+      else if (plan.months && plan.months.length) activeM = plan.months[0];
+    }
+    var monthMetrics = activeM && byMonth[activeM] ? byMonth[activeM] : null;
+
+    var activeQ = plan.quarter || (activeM ? Math.ceil(activeM / 3) : 4);
+    var quarterMetrics = activeQ && byQuarter[activeQ] ? byQuarter[activeQ] : null;
+
+    return {
+      total: total,
+      done: done,
+      unread: total - done,
+      percent: total ? Math.round((done / total) * 100) : 0,
+      byMonth: byMonth,
+      byQuarter: byQuarter,
+      activeMonth: activeM,
+      monthMetrics: monthMetrics,
+      activeQuarter: activeQ,
+      quarterMetrics: quarterMetrics
+    };
   }
 
   function currentPlan() { return plans[planIdx] || null; }
@@ -2938,6 +3071,49 @@ var BIBLIA = (function () {
       });
     }
 
+    if (el.planPrintBtn) {
+      el.planPrintBtn.addEventListener('click', function () {
+        window.print();
+      });
+    }
+
+    if (el.planModeTableBtn) {
+      el.planModeTableBtn.addEventListener('click', function () {
+        planFilterState.viewMode = 'table';
+        try { localStorage.setItem('biblia_plan_view_mode', 'table'); } catch (e) {}
+        updatePlanViewModeButtons();
+        renderPlanList();
+      });
+    }
+
+    if (el.planModeCardsBtn) {
+      el.planModeCardsBtn.addEventListener('click', function () {
+        planFilterState.viewMode = 'cards';
+        try { localStorage.setItem('biblia_plan_view_mode', 'cards'); } catch (e) {}
+        updatePlanViewModeButtons();
+        renderPlanList();
+      });
+    }
+
+    var statusBtns = [
+      { btn: el.planStatusAllBtn, status: 'all' },
+      { btn: el.planStatusUnreadBtn, status: 'unread' },
+      { btn: el.planStatusReadBtn, status: 'read' }
+    ];
+    statusBtns.forEach(function (item) {
+      if (item.btn) {
+        item.btn.addEventListener('click', function () {
+          planFilterState.status = item.status;
+          statusBtns.forEach(function (s) {
+            if (s.btn) s.btn.classList.toggle('active', s.status === item.status);
+          });
+          renderPlanList();
+        });
+      }
+    });
+
+    updatePlanViewModeButtons();
+
     if (el.planMarkTodayBtn) {
       el.planMarkTodayBtn.addEventListener('click', function () {
         var plan = currentPlan();
@@ -2947,6 +3123,7 @@ var BIBLIA = (function () {
         p[todayIt.id] = !p[todayIt.id];
         savePlanProgress();
         updatePlanStats();
+        renderMonthTabs(plan);
         renderPlanList();
       });
     }
@@ -2978,6 +3155,11 @@ var BIBLIA = (function () {
     if (el.readerPlanBtn) el.readerPlanBtn.addEventListener('click', showPlan);
   }
 
+  function updatePlanViewModeButtons() {
+    if (el.planModeTableBtn) el.planModeTableBtn.classList.toggle('active', planFilterState.viewMode === 'table');
+    if (el.planModeCardsBtn) el.planModeCardsBtn.classList.toggle('active', planFilterState.viewMode === 'cards');
+  }
+
   function buildPlanSwitch() {
     if (!el.planSwitch) return;
     el.planSwitch.innerHTML = '';
@@ -3004,6 +3186,7 @@ var BIBLIA = (function () {
         if (el.planSearchInput) el.planSearchInput.value = '';
         buildPlanSwitch();
         renderPlan();
+        updateHash();
       });
       el.planSwitch.appendChild(btn);
     });
@@ -3100,6 +3283,39 @@ var BIBLIA = (function () {
         if (it.passages && it.passages.length) {
           body.appendChild(passageChips(it.passages));
         }
+
+        // 月完成度與季完成度徽章指示
+        var metrics = computePlanMetrics(plan);
+        if (metrics) {
+          var statPill = document.createElement('div');
+          statPill.className = 'start-plan-stats-pill';
+          statPill.style.cssText = 'font-size:0.75rem; color:var(--fg-dim); font-weight:700; margin-top:5px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;';
+          if (plan.type === 'wol') {
+            var qText = (plan.quarter ? ('第 ' + plan.quarter + ' 季完成度 ') : '季完成度 ') + metrics.percent + '%';
+            var mText = metrics.monthMetrics ? (metrics.monthMetrics.month + '月完成度 ' + metrics.monthMetrics.percent + '%') : '';
+            statPill.innerHTML = '<span style="color:var(--accent);">🌿 ' + escapeHtml(qText) + '</span>' + (mText ? '<span>· ' + escapeHtml(mText) + '</span>' : '');
+          } else {
+            var mText2 = metrics.monthMetrics ? (metrics.monthMetrics.month + '月完成度 ' + metrics.monthMetrics.percent + '%') : '';
+            var allText = '全年完成度 ' + metrics.percent + '%';
+            statPill.innerHTML = '<span style="color:var(--accent);">📖 ' + escapeHtml(mText2 || allText) + '</span>' + (mText2 ? '<span>· ' + escapeHtml(allText) + '</span>' : '');
+          }
+          body.appendChild(statPill);
+        }
+
+        var subFoot = document.createElement('div');
+        subFoot.style.cssText = 'display:flex; justify-content:flex-end; align-items:center; margin-top:4px;';
+        var jumpPlanBtn = document.createElement('button');
+        jumpPlanBtn.type = 'button';
+        jumpPlanBtn.className = 'btn btn-ghost btn-sm';
+        jumpPlanBtn.style.padding = '2px 8px';
+        jumpPlanBtn.style.fontSize = '0.75rem';
+        jumpPlanBtn.textContent = plan.type === 'wol' ? '查看季進度表 →' : '查看每月進度表 →';
+        jumpPlanBtn.addEventListener('click', function () {
+          showPlan({ planId: plan.id, month: it.month });
+        });
+        subFoot.appendChild(jumpPlanBtn);
+        body.appendChild(subFoot);
+
       } else {
         var nodata = document.createElement('div');
         nodata.className = 'start-plan-nodata';
@@ -3123,10 +3339,15 @@ var BIBLIA = (function () {
     var plan = currentPlan();
     if (!plan) return;
 
-    if (el.planHeadTitle) el.planHeadTitle.textContent = plan.name;
+    if (el.planHeadTitle) {
+      el.planHeadTitle.textContent = plan.type === 'wol' ? (plan.name + ' 季進度表') : '讀經釋義每月進度表';
+    }
     if (el.planTitle) el.planTitle.textContent = plan.title;
     if (el.planSubtitle) {
       el.planSubtitle.textContent = plan.subtitle || (plan.sub + (plan.org ? ' · ' + plan.org : ''));
+    }
+    if (el.planBadgeType) {
+      el.planBadgeType.textContent = plan.type === 'wol' ? (plan.quarter ? ('2026 第 ' + plan.quarter + ' 季速讀進度') : '季進度') : '2026 全年釋義每月進度';
     }
     if (el.planSource) {
       el.planSource.innerHTML = '';
@@ -3163,27 +3384,37 @@ var BIBLIA = (function () {
     el.planMonthTabs.innerHTML = '';
     var frag = document.createDocumentFragment();
 
+    var metrics = computePlanMetrics(plan);
+
     var allBtn = document.createElement('button');
     allBtn.type = 'button';
     allBtn.className = 'plan-tab' + (planFilterState.month === 'all' ? ' active' : '');
-    allBtn.textContent = '全部 (' + plan.items.length + '天)';
+    allBtn.innerHTML = '全部 (' + plan.items.length + '天)<span class="tab-badge">' + (metrics ? metrics.percent + '%' : '') + '</span>';
     allBtn.addEventListener('click', function () {
       planFilterState.month = 'all';
       renderMonthTabs(plan);
+      updatePlanStats();
       renderPlanList();
+      updateHash();
     });
     frag.appendChild(allBtn);
 
     plan.months.forEach(function (m) {
       var count = plan.items.filter(function (it) { return it.month === m; }).length;
+      var b = (metrics && metrics.byMonth) ? metrics.byMonth[m] : null;
+      var pctText = b ? (b.percent + '%') : (count + '天');
+
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'plan-tab' + (planFilterState.month === m ? ' active' : '');
-      btn.textContent = m + ' 月 (' + count + ')';
+      btn.innerHTML = m + ' 月 (' + count + ')<span class="tab-badge">' + pctText + '</span>';
+      btn.title = m + ' 月進度：已讀 ' + (b ? b.done : 0) + ' / ' + count + ' 天（' + (b ? b.unread : count) + ' 天未讀，完成度 ' + pctText + '）';
       btn.addEventListener('click', function () {
         planFilterState.month = m;
         renderMonthTabs(plan);
+        updatePlanStats();
         renderPlanList();
+        updateHash();
       });
       frag.appendChild(btn);
     });
@@ -3260,16 +3491,76 @@ var BIBLIA = (function () {
   function updatePlanStats() {
     var plan = currentPlan();
     if (!plan) return;
-    var p = progressOf(plan);
-    var done = 0;
-    plan.items.forEach(function (it) { if (p[it.id]) done++; });
-    var total = plan.items.length;
-    var percent = total ? Math.round((done / total) * 100) : 0;
+    var metrics = computePlanMetrics(plan);
+    if (!metrics) return;
 
-    if (el.planStatsPercent) el.planStatsPercent.textContent = percent + '%';
-    if (el.planStatsCount) el.planStatsCount.textContent = '已完成 ' + done + ' / ' + total + ' 天';
-    if (el.planProgressFill) el.planProgressFill.style.width = percent + '%';
-    if (el.planProgressBar) el.planProgressBar.setAttribute('aria-valuenow', percent);
+    var p = progressOf(plan);
+
+    // 1. 全計畫總累計完成度
+    if (el.planStatsPercent) el.planStatsPercent.textContent = metrics.percent + '%';
+    if (el.planStatsCount) el.planStatsCount.textContent = '已完成 ' + metrics.done + ' / ' + metrics.total + ' 天';
+    if (el.planStatsUnread) el.planStatsUnread.textContent = '未讀 ' + metrics.unread + ' 天';
+    if (el.planProgressFill) el.planProgressFill.style.width = metrics.percent + '%';
+    if (el.planProgressBar) el.planProgressBar.setAttribute('aria-valuenow', metrics.percent);
+
+    // 2. 月完成度 (Monthly Completion Rate)
+    if (el.planMonthMetricBox) {
+      if (metrics.monthMetrics) {
+        el.planMonthMetricBox.style.display = '';
+        var mm = metrics.monthMetrics;
+        if (el.planMonthTitle) el.planMonthTitle.textContent = mm.month + ' 月完成度';
+        if (el.planMonthPercent) el.planMonthPercent.textContent = mm.percent + '%';
+        if (el.planMonthCount) el.planMonthCount.textContent = '已完成 ' + mm.done + ' / ' + mm.total + ' 天';
+        if (el.planMonthUnread) el.planMonthUnread.textContent = '未讀 ' + mm.unread + ' 天';
+        if (el.planMonthProgressFill) el.planMonthProgressFill.style.width = mm.percent + '%';
+        if (el.planMonthProgressBar) el.planMonthProgressBar.setAttribute('aria-valuenow', mm.percent);
+      } else {
+        el.planMonthMetricBox.style.display = 'none';
+      }
+    }
+
+    // 3. 季完成度 (Quarterly Completion Rate)
+    if (el.planQuarterMetricBox) {
+      if (metrics.quarterMetrics) {
+        el.planQuarterMetricBox.style.display = '';
+        var qm = metrics.quarterMetrics;
+        if (el.planQuarterTitle) el.planQuarterTitle.textContent = (qm.name || ('第 ' + qm.quarter + ' 季')) + ' 完成度';
+        if (el.planQuarterPercent) el.planQuarterPercent.textContent = qm.percent + '%';
+        if (el.planQuarterCount) el.planQuarterCount.textContent = '已完成 ' + qm.done + ' / ' + qm.total + ' 天';
+        if (el.planQuarterUnread) el.planQuarterUnread.textContent = '未讀 ' + qm.unread + ' 天';
+        if (el.planQuarterProgressFill) el.planQuarterProgressFill.style.width = qm.percent + '%';
+        if (el.planQuarterProgressBar) el.planQuarterProgressBar.setAttribute('aria-valuenow', qm.percent);
+      } else {
+        el.planQuarterMetricBox.style.display = 'none';
+      }
+    }
+
+    // 4. WOL 季計畫專屬分解卡片
+    if (el.planQuarterBreakdown && el.planQuarterBreakdownGrid) {
+      if (plan.type === 'wol' && plan.quarter) {
+        el.planQuarterBreakdown.style.display = '';
+        el.planQuarterBreakdownGrid.innerHTML = '';
+        var qMonths = metrics.quarterMetrics ? metrics.quarterMetrics.months : plan.months;
+        (qMonths || []).forEach(function (m) {
+          var b = metrics.byMonth[m] || { total: 0, done: 0, unread: 0, percent: 0 };
+          var item = document.createElement('div');
+          item.className = 'breakdown-item' + (planFilterState.month === m ? ' active' : '');
+          item.innerHTML =
+            '<div class="breakdown-item-head"><span>' + m + ' 月</span><span style="color:var(--accent);">' + b.percent + '%</span></div>' +
+            '<div class="plan-progress-bar" style="height:5px; margin:3px 0 4px;"><div class="plan-progress-fill plan-fill-month" style="width:' + b.percent + '%;"></div></div>' +
+            '<div class="breakdown-item-foot"><span>已讀 ' + b.done + '/' + b.total + '</span><span style="color:#d97706;">未讀 ' + b.unread + '</span></div>';
+          item.addEventListener('click', function () {
+            planFilterState.month = (planFilterState.month === m) ? 'all' : m;
+            renderMonthTabs(plan);
+            updatePlanStats();
+            renderPlanList();
+          });
+          el.planQuarterBreakdownGrid.appendChild(item);
+        });
+      } else {
+        el.planQuarterBreakdown.style.display = 'none';
+      }
+    }
 
     if (el.planStreakBadge) {
       var streaks = computeReadingStreaks();
@@ -3297,31 +3588,255 @@ var BIBLIA = (function () {
     var plan = currentPlan();
     if (!plan) return;
 
-    var filtered = plan.items.filter(function (it) {
+    var p = progressOf(plan);
+
+    // 首先按月份、週次、關鍵字篩選出基礎集合
+    var inScope = plan.items.filter(function (it) {
       if (planFilterState.month !== 'all' && it.month !== planFilterState.month) return false;
       if (planFilterState.week !== 'all' && String(it.week) !== String(planFilterState.week)) return false;
       if (planFilterState.query) {
         var q = planFilterState.query;
         var inRaw = it.rawText.toLowerCase().indexOf(q) !== -1;
         var inDate = it.date.indexOf(q) !== -1 || (it.isoDate && it.isoDate.indexOf(q) !== -1);
-        var inPass = it.passages.some(function (p) {
-          var b = state.byNo[p.bookNo];
-          return (b && b.zh.indexOf(q) !== -1) || p.label.toLowerCase().indexOf(q) !== -1;
+        var inPass = it.passages.some(function (pass) {
+          var b = state.byNo[pass.bookNo];
+          return (b && b.zh.indexOf(q) !== -1) || pass.label.toLowerCase().indexOf(q) !== -1;
         });
         if (!inRaw && !inDate && !inPass) return false;
       }
       return true;
     });
 
+    // 計算當前範圍內的已讀與未讀計數
+    var scopeRead = 0, scopeUnread = 0;
+    inScope.forEach(function (it) {
+      if (p[it.id]) scopeRead++;
+      else scopeUnread++;
+    });
+
+    if (el.pillUnreadCount) el.pillUnreadCount.textContent = scopeUnread;
+    if (el.pillReadCount) el.pillReadCount.textContent = scopeRead;
+
+    // 根據狀態（全部 / 未讀 / 已讀完）進行過濾
+    var filtered = inScope.filter(function (it) {
+      if (planFilterState.status === 'unread') return !p[it.id];
+      if (planFilterState.status === 'read') return !!p[it.id];
+      return true;
+    });
+
+    // 更新抬頭資訊
+    if (el.planSectionTitle) {
+      if (plan.type === 'wol') {
+        el.planSectionTitle.textContent = (plan.quarter ? ('2026年 第 ' + plan.quarter + ' 季聖經速讀進度表') : 'WOL 聖經速讀進度表');
+      } else {
+        el.planSectionTitle.textContent = (planFilterState.month !== 'all' ? ('2026年 ' + planFilterState.month + ' 月 每日研經釋義每月進度表') : '2026 全年 每日研經釋義進度表');
+      }
+    }
+    if (el.planSectionSubtitle) {
+      if (plan.type === 'wol') {
+        el.planSectionSubtitle.textContent = plan.subtitle || (plan.coverage ? '涵蓋範圍：' + plan.coverage : '');
+      } else {
+        el.planSectionSubtitle.textContent = (planFilterState.month !== 'all' ? (planFilterState.month + ' 月完整每日進度與釋義連結') : '國際讀經會台灣總會 365 天讀經進度');
+      }
+    }
+    if (el.planSectionQuickStats) {
+      var pct = inScope.length ? Math.round((scopeRead / inScope.length) * 100) : 0;
+      el.planSectionQuickStats.textContent = '此範圍共 ' + inScope.length + ' 天（已讀完 ' + scopeRead + ' 天 · 未讀 ' + scopeUnread + ' 天 · 完成率 ' + pct + '%）';
+    }
+
     el.planList.innerHTML = '';
     if (!filtered.length) {
       var emp = document.createElement('div');
       emp.className = 'plan-empty';
-      emp.textContent = '沒有符合條件的讀經進度';
+      if (planFilterState.status === 'unread' && scopeRead > 0 && scopeUnread === 0) {
+        emp.innerHTML = '🎉 <strong>太棒了！</strong>目前所選範圍的讀經進度已全部讀完！';
+      } else {
+        emp.textContent = '沒有符合條件的讀經進度';
+      }
       el.planList.appendChild(emp);
       return;
     }
 
+    if (planFilterState.viewMode === 'table') {
+      renderPlanTable(filtered, plan);
+    } else {
+      renderPlanCards(filtered, plan);
+    }
+  }
+
+  function renderPlanTable(filtered, plan) {
+    var p = progressOf(plan);
+    var todayStr = todayIso();
+
+    var wrap = document.createElement('div');
+    wrap.className = 'plan-table-wrap';
+
+    var table = document.createElement('table');
+    table.className = 'plan-table';
+
+    var thead = document.createElement('thead');
+    thead.innerHTML =
+      '<tr>' +
+        '<th style="width:115px;">閱讀狀態</th>' +
+        '<th style="width:115px;">日期</th>' +
+        '<th style="width:85px;">週次</th>' +
+        '<th>讀經進度經文</th>' +
+        '<th style="width:130px;">研經釋義</th>' +
+        '<th style="width:90px; text-align:right;">直達研讀</th>' +
+      '</tr>';
+    table.appendChild(thead);
+
+    var tbody = document.createElement('tbody');
+
+    filtered.forEach(function (it) {
+      var isToday = (it.isoDate === todayStr);
+      var done = !!p[it.id];
+
+      var tr = document.createElement('tr');
+      tr.className = 'plan-table-row' + (done ? ' done' : '') + (isToday ? ' today' : '');
+      tr.id = 'plan-item-' + it.id;
+
+      // Col 1: 閱讀狀態 Checkbox + 標籤
+      var tdStatus = document.createElement('td');
+      var chkLabel = document.createElement('label');
+      chkLabel.className = 'plan-table-chk-label';
+      var box = document.createElement('input');
+      box.type = 'checkbox';
+      box.checked = done;
+      box.setAttribute('aria-label', it.date + ' ' + it.rawText + ' 已讀完打卡');
+
+      var tag = document.createElement('span');
+      tag.className = 'plan-status-tag ' + (done ? 'tag-done' : 'tag-unread');
+      tag.textContent = done ? '✓ 已讀完' : '未讀';
+
+      box.addEventListener('change', function () {
+        var isChecked = box.checked;
+        p[it.id] = isChecked;
+        savePlanProgress();
+        tr.classList.toggle('done', isChecked);
+        tag.className = 'plan-status-tag ' + (isChecked ? 'tag-done' : 'tag-unread');
+        tag.textContent = isChecked ? '✓ 已讀完' : '未讀';
+        updatePlanStats();
+        renderMonthTabs(plan);
+        if (planFilterState.status !== 'all') {
+          renderPlanList();
+        }
+      });
+      chkLabel.appendChild(box);
+      chkLabel.appendChild(tag);
+      tdStatus.appendChild(chkLabel);
+      tr.appendChild(tdStatus);
+
+      // Col 2: 日期
+      var tdDate = document.createElement('td');
+      var dateSpan = document.createElement('span');
+      dateSpan.className = 'plan-table-date';
+      dateSpan.textContent = it.date;
+      tdDate.appendChild(dateSpan);
+
+      var wdSpan = document.createElement('span');
+      wdSpan.className = 'plan-table-wd';
+      wdSpan.textContent = it.wd;
+      tdDate.appendChild(wdSpan);
+
+      if (isToday) {
+        var tPill = document.createElement('span');
+        tPill.className = 'plan-table-today-pill';
+        tPill.textContent = '今日';
+        tdDate.appendChild(tPill);
+      }
+      tr.appendChild(tdDate);
+
+      // Col 3: 週次
+      var tdWeek = document.createElement('td');
+      if (it.week) {
+        var wBadge = document.createElement('span');
+        wBadge.className = 'plan-table-week-badge';
+        wBadge.textContent = '第 ' + it.week + ' 週';
+        tdWeek.appendChild(wBadge);
+      }
+      tr.appendChild(tdWeek);
+
+      // Col 4: 經文
+      var tdRef = document.createElement('td');
+      var refTitle = document.createElement('div');
+      refTitle.className = 'plan-table-ref-title';
+      refTitle.textContent = it.rawText;
+      if (it.passages && it.passages.length) {
+        refTitle.title = '點擊前往閱讀今日進度經文（和合本）';
+        refTitle.addEventListener('click', function () {
+          var p0 = it.passages[0];
+          var sChap = parseInt(p0.startChap || p0.chap, 10) || 1;
+          var sVerse = parseInt(p0.startVerse || p0.secStart || p0.sec, 10) || 1;
+          var eVerse = parseInt(p0.endVerse || p0.secEnd, 10) || (p0.startVerse ? sVerse : null);
+          if (!state.on['zh_unv']) {
+            state.on['zh_unv'] = true;
+            syncVersions();
+          }
+          jumpToVerse(p0.bookNo, sChap, sVerse, eVerse);
+        });
+      }
+      tdRef.appendChild(refTitle);
+
+      if (it.passages && it.passages.length) {
+        var pWrap = passageChips(it.passages);
+        pWrap.classList.add('plan-table-passages');
+        tdRef.appendChild(pWrap);
+      }
+      tr.appendChild(tdRef);
+
+      // Col 5: 釋義連結
+      var tdLink = document.createElement('td');
+      if (it.link) {
+        var aLink = document.createElement('a');
+        aLink.className = 'plan-table-link';
+        aLink.href = it.link;
+        aLink.target = '_blank';
+        aLink.rel = 'noopener noreferrer';
+        aLink.textContent = it.src === 'plan' ? '整季進度表 ↗' : '看當日釋義 ↗';
+        tdLink.appendChild(aLink);
+      } else {
+        var spanNoLink = document.createElement('span');
+        spanNoLink.style.color = 'var(--fg-mute)';
+        spanNoLink.style.fontSize = '.75rem';
+        spanNoLink.textContent = plan.type === 'wol' ? '速讀經文' : '進度經文';
+        tdLink.appendChild(spanNoLink);
+      }
+      tr.appendChild(tdLink);
+
+      // Col 6: 直達閱讀
+      var tdAction = document.createElement('td');
+      tdAction.style.textAlign = 'right';
+      if (it.passages && it.passages.length) {
+        var readBtn = document.createElement('button');
+        readBtn.type = 'button';
+        readBtn.className = 'plan-pass-btn';
+        readBtn.innerHTML = '<span class="plan-pass-icon" aria-hidden="true">📖</span> 研讀';
+        readBtn.title = '在閱讀器中研讀 ' + it.rawText;
+        readBtn.addEventListener('click', function () {
+          var p0 = it.passages[0];
+          var sChap = parseInt(p0.startChap || p0.chap, 10) || 1;
+          var sVerse = parseInt(p0.startVerse || p0.secStart || p0.sec, 10) || 1;
+          var eVerse = parseInt(p0.endVerse || p0.secEnd, 10) || (p0.startVerse ? sVerse : null);
+          if (!state.on['zh_unv']) {
+            state.on['zh_unv'] = true;
+            syncVersions();
+          }
+          jumpToVerse(p0.bookNo, sChap, sVerse, eVerse);
+        });
+        tdAction.appendChild(readBtn);
+      }
+      tr.appendChild(tdAction);
+
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    el.planList.appendChild(wrap);
+  }
+
+  function renderPlanCards(filtered, plan) {
     var byWeek = {};
     filtered.forEach(function (it) {
       var w = it.week || 0;
@@ -3389,6 +3904,10 @@ var BIBLIA = (function () {
       savePlanProgress();
       card.classList.toggle('done', box.checked);
       updatePlanStats();
+      renderMonthTabs(plan);
+      if (planFilterState.status !== 'all') {
+        renderPlanList();
+      }
     });
     chk.appendChild(box);
     var mark = document.createElement('span');

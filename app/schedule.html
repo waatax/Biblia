@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblia 讀經進度中心 — 每日研經釋義每月進度表 ＆ WOL 聖經速讀每季進度頁面</title>
+  <meta name="description" content="Biblia 讀經進度中心：完整提供國際讀經會《每日研經釋義》每月進度表、WOL 教會一年讀完聖經每季速讀進度頁面。即時計算月完成度、季完成度與未讀追蹤，支援和合本直達閱讀與一鍵列印進度表。">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 獨立進度表專用排版優化 */
+    .schedule-page-body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-ui);
+    }
+    .schedule-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--line);
+      box-shadow: var(--sh-1);
+      backdrop-filter: blur(10px);
+    }
+    .schedule-nav-inner {
+      max-width: var(--maxw-plan);
+      margin: 0 auto;
+      padding: 10px var(--pad-x);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .schedule-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .schedule-brand:hover {
+      opacity: .85;
+    }
+    .schedule-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .schedule-container {
+      max-width: var(--maxw-plan);
+      width: 100%;
+      margin: 0 auto;
+      padding: clamp(20px, 3vw, 32px) var(--pad-x) 60px;
+      flex: 1;
+    }
+    .schedule-print-note {
+      display: none;
+      font-size: .8125rem;
+      color: #666;
+      margin-top: 8px;
+      border-top: 1px solid #ddd;
+      padding-top: 6px;
+    }
+    @media print {
+      .schedule-navbar, .schedule-nav-actions, .plan-switch, .plan-filter-bar,
+      .plan-mark-today-btn, .plan-view-toggle, .plan-status-pills, .schedule-jump-reader,
+      .schedule-back-btn, #themeBtn {
+        display: none !important;
+      }
+      .schedule-page-body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .schedule-container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .plan-stats-card {
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        background: #fff !important;
+      }
+      .plan-table-wrap {
+        border: 1px solid #333 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+      .plan-table th, .plan-table td {
+        border-bottom: 1px solid #ddd !important;
+        color: #000 !important;
+        padding: 6px 8px !important;
+      }
+      .plan-table tr.today td {
+        background: #f0f0f0 !important;
+      }
+      .schedule-print-note {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body class="schedule-page-body">
+
+  <!-- 頂部獨立導航列 -->
+  <nav class="schedule-navbar">
+    <div class="schedule-nav-inner">
+      <a href="index.html#plan" class="schedule-brand" title="返回 Biblia 聖經研讀首頁">
+        <span aria-hidden="true">📖</span>
+        <span>Biblia 讀經進度中心</span>
+      </a>
+
+      <div class="schedule-nav-actions">
+        <a href="index.html" class="btn btn-ghost schedule-back-btn" title="前往經文閱讀器">
+          <span aria-hidden="true">📖</span> 前往閱讀器
+        </a>
+        <button id="schedulePrintBtn" type="button" class="btn btn-ghost" title="列印或另存為 PDF 進度表">
+          <span aria-hidden="true">🖨</span> 列印進度表
+        </button>
+        <button id="scheduleThemeBtn" type="button" class="btn btn-icon" title="切換深淺色主題" aria-label="切換深淺色主題">◐</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要內容區 -->
+  <main class="schedule-container">
+    <!-- 計畫切換分頁 -->
+    <div class="plan-switch" id="schedulePlanSwitch" role="tablist" aria-label="選擇讀經計畫"></div>
+
+    <!-- 頂部 Hero 與多指標完成度分析面板 -->
+    <div class="plan-hero">
+      <div class="plan-hero-content">
+        <div class="plan-title-row">
+          <h1 class="plan-main-title" id="schedulePlanTitle">讀經進度表</h1>
+          <span class="plan-badge-type" id="schedulePlanBadge">進度表</span>
+        </div>
+        <p class="plan-subtitle" id="schedulePlanSubtitle"></p>
+        <p class="plan-source" id="schedulePlanSource"></p>
+      </div>
+
+      <!-- 完成度儀表板：總計畫、月完成度、季完成度 -->
+      <div class="plan-stats-card">
+        <div class="plan-stats-header">
+          <div class="plan-stats-heading-wrap">
+            <span class="plan-stats-label">個人讀經完成度分析</span>
+            <span class="plan-streak-badge" id="scheduleStreakBadge" title="連續讀經天數">🔥 連續 0 天</span>
+          </div>
+          <button id="scheduleMarkTodayBtn" type="button" class="btn plan-mark-today-btn">✓ 標記今天已讀</button>
+        </div>
+
+        <div class="plan-metrics-grid">
+          <!-- 全計畫累計 -->
+          <div class="plan-metric-box plan-metric-overall">
+            <div class="plan-metric-top">
+              <span class="plan-metric-title">總計畫累計完成率</span>
+              <span class="plan-metric-val" id="scheduleStatsPercent">0%</span>
+            </div>
+            <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="scheduleProgressBar">
+              <div class="plan-progress-fill" id="scheduleProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="plan-metric-foot">
+              <span class="plan-stats-count" id="scheduleStatsCount">已完成 0 / 0 天</span>
+              <span class="plan-metric-unread" id="scheduleStatsUnread">未讀 0 天</span>
+            </div>
+          </div>
+
+          <!-- 月完成度 -->
+          <div class="plan-metric-box plan-metric-month" id="scheduleMonthMetricBox">
+            <div class="plan-metric-top">
+              <span class="plan-metric-title" id="scheduleMonthTitle">本月完成度</span>
+              <span class="plan-metric-val" id="scheduleMonthPercent">0%</span>
+            </div>
+            <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="scheduleMonthProgressBar">
+              <div class="plan-progress-fill plan-fill-month" id="scheduleMonthProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="plan-metric-foot">
+              <span class="plan-stats-count" id="scheduleMonthCount">已完成 0 / 0 天</span>
+              <span class="plan-metric-unread" id="scheduleMonthUnread">未讀 0 天</span>
+            </div>
+          </div>
+
+          <!-- 季完成度 -->
+          <div class="plan-metric-box plan-metric-quarter" id="scheduleQuarterMetricBox">
+            <div class="plan-metric-top">
+              <span class="plan-metric-title" id="scheduleQuarterTitle">當季完成度</span>
+              <span class="plan-metric-val" id="scheduleQuarterPercent">0%</span>
+            </div>
+            <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="scheduleQuarterProgressBar">
+              <div class="plan-progress-fill plan-fill-quarter" id="scheduleQuarterProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="plan-metric-foot">
+              <span class="plan-stats-count" id="scheduleQuarterCount">已完成 0 / 0 天</span>
+              <span class="plan-metric-unread" id="scheduleQuarterUnread">未讀 0 天</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 季內各月分解卡片 (WOL 季進度模式) -->
+        <div class="plan-quarter-breakdown" id="scheduleQuarterBreakdown" style="display: none;">
+          <div class="breakdown-title">季度內各月完成度：</div>
+          <div class="breakdown-grid" id="scheduleQuarterBreakdownGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 篩選與工具列 -->
+    <div class="plan-filter-bar">
+      <!-- 月份標籤 (1~12月) -->
+      <div class="plan-tabs-wrap">
+        <div class="plan-tabs" id="scheduleMonthTabs" role="tablist" aria-label="月份篩選"></div>
+      </div>
+
+      <div class="plan-controls-row">
+        <!-- 檢視模式切換：表格 vs 卡片 -->
+        <div class="plan-view-toggle" role="group" aria-label="切換進度表檢視模式">
+          <button type="button" class="plan-toggle-btn active" id="scheduleModeTableBtn" data-mode="table" title="進度表格檢視">
+            <span aria-hidden="true">📋</span> 進度表格
+          </button>
+          <button type="button" class="plan-toggle-btn" id="scheduleModeCardsBtn" data-mode="cards" title="卡片格狀檢視">
+            <span aria-hidden="true">🗂</span> 卡片檢視
+          </button>
+        </div>
+
+        <!-- 狀態過濾：全部 / 未讀 / 已讀完 -->
+        <div class="plan-status-pills" role="group" aria-label="狀態過濾">
+          <button type="button" class="plan-status-pill active" id="scheduleStatusAllBtn" data-status="all">全部</button>
+          <button type="button" class="plan-status-pill pill-unread" id="scheduleStatusUnreadBtn" data-status="unread">未讀 <span class="pill-count" id="schedulePillUnreadCount">0</span></button>
+          <button type="button" class="plan-status-pill pill-read" id="scheduleStatusReadBtn" data-status="read">已讀完 <span class="pill-count" id="schedulePillReadCount">0</span></button>
+        </div>
+
+        <div class="plan-filter-inputs">
+          <label class="plan-filter-ctl">
+            <span>週次</span>
+            <select id="scheduleWeekSelect" aria-label="週次篩選">
+              <option value="all">所有週次</option>
+            </select>
+          </label>
+
+          <input type="search" id="scheduleSearchInput" class="plan-search-input"
+                 placeholder="搜尋日期或經文（例如 10/15、賽、撒上）" autocomplete="off" aria-label="搜尋讀經進度">
+        </div>
+      </div>
+    </div>
+
+    <!-- 進度表抬頭標題 -->
+    <div class="plan-section-header">
+      <div class="section-title-wrap">
+        <h2 class="section-title" id="scheduleSectionTitle">讀經進度表</h2>
+        <span class="section-subtitle" id="scheduleSectionSubtitle"></span>
+      </div>
+      <div class="section-quick-stats" id="scheduleSectionQuickStats"></div>
+    </div>
+
+    <!-- 進度動態渲染區塊（表格或卡片） -->
+    <div id="schedulePlanList" class="plan-content-area"></div>
+
+    <!-- 列印頁尾註記 -->
+    <div class="schedule-print-note">
+      列印自 Biblia 聖經研讀系統 (https://waatax.github.io/Biblia/) ・ 讀經打卡資料自動同步離線儲存。
+    </div>
+  </main>
+
+  <!-- 載入讀經資料腳本 -->
+  <script src="data/plan_2026_q4.js"></script>
+  <script src="data/plan_2026_q3.js"></script>
+  <script src="data/plan_su101_2026.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var WEEKDAY = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
+
+    var PLAN_SOURCES = [
+      {
+        id: 'church_q4_2026',
+        name: 'WOL 教會速讀 (Q4)',
+        sub: '一年讀完聖經 (第四季)',
+        get: function () { return window.BIBLIA_PLAN_2026_Q4; },
+        note: 'WOL 教會 2026 年聖經速讀進度表（第四季，10/1 ~ 12/31，一年讀完聖經進度）'
+      },
+      {
+        id: 'su101_2026',
+        name: '每日研經釋義',
+        sub: '2026 全年 (365天)',
+        get: function () { return window.BIBLIA_PLAN_SU101_2026; },
+        note: '國際讀經會台灣總會 2026 年讀經進度表（含聖教會第四季進度，全年 365 天）'
+      },
+      {
+        id: 'church_q3_2026',
+        name: 'WOL 教會速讀 (Q3)',
+        sub: '一年讀完聖經 (第三季)',
+        get: function () { return window.BIBLIA_PLAN_2026_Q3; },
+        note: 'WOL 教會 2026 年聖經速讀進度表（第三季，7/1 ~ 9/30，一年讀完聖經進度）'
+      }
+    ];
+
+    var plans = [];
+    var planIdx = 0;
+    var planProgress = loadPlanProgress();
+
+    var initialMode = 'table';
+    try { initialMode = localStorage.getItem('biblia_plan_view_mode') || 'table'; } catch (e) {}
+
+    var planFilterState = {
+      month: 'all',
+      week: 'all',
+      query: '',
+      status: 'all',
+      viewMode: initialMode
+    };
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function todayIso() {
+      var d = new Date();
+      function pad(n) { return n < 10 ? '0' + n : '' + n; }
+      return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+    }
+
+    function loadPlanProgress() {
+      try {
+        var raw = localStorage.getItem('biblia_plan_progress');
+        return raw ? (JSON.parse(raw) || {}) : {};
+      } catch (e) { return {}; }
+    }
+
+    function savePlanProgress() {
+      try {
+        localStorage.setItem('biblia_plan_progress', JSON.stringify(planProgress));
+      } catch (e) {}
+    }
+
+    function progressOf(plan) {
+      if (!planProgress[plan.id]) planProgress[plan.id] = {};
+      return planProgress[plan.id];
+    }
+
+    function todayItemOf(plan) {
+      if (!plan) return null;
+      var iso = todayIso();
+      for (var i = 0; i < plan.items.length; i++) {
+        if (plan.items[i].isoDate === iso) return plan.items[i];
+      }
+      return null;
+    }
+
+    function normalisePlans() {
+      plans = [];
+      PLAN_SOURCES.forEach(function (src) {
+        var raw = src.get();
+        if (!raw || !raw.items || !raw.items.length) return;
+
+        var items = raw.items.map(function (it) {
+          var iso = it.isoDate;
+          var wd = it.wd;
+          if (!wd && iso) {
+            var parts = iso.split('-');
+            wd = WEEKDAY[new Date(+parts[0], +parts[1] - 1, +parts[2]).getDay()];
+          }
+          return {
+            id: it.id,
+            isoDate: iso,
+            date: it.date,
+            month: it.month,
+            day: it.day,
+            week: it.week,
+            wd: wd || '',
+            rawText: it.rawText || '',
+            passages: it.passages || [],
+            link: it.link || '',
+            src: it.src || ''
+          };
+        });
+
+        var months = [], weeks = [];
+        items.forEach(function (it) {
+          if (months.indexOf(it.month) === -1) months.push(it.month);
+          if (weeks.indexOf(it.week) === -1) weeks.push(it.week);
+        });
+        months.sort(function (a, b) { return a - b; });
+        weeks.sort(function (a, b) { return a - b; });
+
+        var planType = src.id.indexOf('church_') === 0 ? 'wol' : 'su101';
+        var planQuarter = raw.quarter || (src.id === 'church_q4_2026' ? 4 : (src.id === 'church_q3_2026' ? 3 : null));
+
+        plans.push({
+          id: src.id,
+          type: planType,
+          quarter: planQuarter,
+          year: raw.year || 2026,
+          name: src.name,
+          sub: src.sub,
+          title: raw.title || src.name,
+          subtitle: raw.subtitle || '',
+          org: raw.org || '',
+          sourceUrl: raw.sourceUrl || '',
+          note: src.note,
+          coverage: raw.coverage || '',
+          coverageNote: raw.coverageNote || '',
+          months: months,
+          weeks: weeks,
+          items: items
+        });
+      });
+
+      // 依網址 hash 決定預設分頁
+      var hash = window.location.hash || '';
+      var savedId = null;
+      if (hash.indexOf('wol-q3') !== -1 || hash.indexOf('q3') !== -1) savedId = 'church_q3_2026';
+      else if (hash.indexOf('wol-q4') !== -1 || hash.indexOf('wol') !== -1) savedId = 'church_q4_2026';
+      else if (hash.indexOf('su101') !== -1) savedId = 'su101_2026';
+      else {
+        try { savedId = localStorage.getItem('biblia_plan_id'); } catch (e) {}
+      }
+
+      planIdx = 0;
+      if (savedId) {
+        plans.forEach(function (p, i) { if (p.id === savedId) planIdx = i; });
+      } else {
+        var iso = todayIso();
+        for (var i = 0; i < plans.length; i++) {
+          if (plans[i].items.some(function (it) { return it.isoDate === iso; })) {
+            planIdx = i;
+            break;
+          }
+        }
+      }
+
+      // 若有指定月份 hash（例如 #su101-10 或 #m10）
+      var mMatch = hash.match(/(?:m|-)(\d{1,2})/);
+      if (mMatch && mMatch[1]) {
+        planFilterState.month = parseInt(mMatch[1], 10);
+      }
+    }
+
+    function currentPlan() { return plans[planIdx] || null; }
+
+    function computePlanMetrics(plan) {
+      if (!plan || !plan.items) return null;
+      var p = progressOf(plan);
+      var total = plan.items.length;
+      var done = 0;
+
+      var byMonth = {};
+      (plan.months || []).forEach(function (m) {
+        byMonth[m] = { month: m, total: 0, done: 0, unread: 0, percent: 0, quarter: Math.ceil(m / 3) };
+      });
+
+      var byQuarter = {
+        1: { quarter: 1, name: '第一季 (Q1)', total: 0, done: 0, unread: 0, percent: 0, months: [1, 2, 3] },
+        2: { quarter: 2, name: '第二季 (Q2)', total: 0, done: 0, unread: 0, percent: 0, months: [4, 5, 6] },
+        3: { quarter: 3, name: '第三季 (Q3)', total: 0, done: 0, unread: 0, percent: 0, months: [7, 8, 9] },
+        4: { quarter: 4, name: '第四季 (Q4)', total: 0, done: 0, unread: 0, percent: 0, months: [10, 11, 12] }
+      };
+
+      plan.items.forEach(function (it) {
+        var isDone = !!p[it.id];
+        if (isDone) done++;
+
+        var m = it.month;
+        if (m && byMonth[m]) {
+          byMonth[m].total++;
+          if (isDone) byMonth[m].done++;
+        }
+
+        var q = plan.quarter || Math.ceil(m / 3);
+        if (q && byQuarter[q]) {
+          byQuarter[q].total++;
+          if (isDone) byQuarter[q].done++;
+        }
+      });
+
+      Object.keys(byMonth).forEach(function (m) {
+        var b = byMonth[m];
+        b.unread = b.total - b.done;
+        b.percent = b.total ? Math.round((b.done / b.total) * 100) : 0;
+      });
+
+      Object.keys(byQuarter).forEach(function (q) {
+        var b = byQuarter[q];
+        b.unread = b.total - b.done;
+        b.percent = b.total ? Math.round((b.done / b.total) * 100) : 0;
+      });
+
+      var activeM = planFilterState.month !== 'all' ? Number(planFilterState.month) : null;
+      if (!activeM) {
+        var tIt = todayItemOf(plan);
+        if (tIt) activeM = tIt.month;
+        else if (plan.months && plan.months.length) activeM = plan.months[0];
+      }
+      var monthMetrics = activeM && byMonth[activeM] ? byMonth[activeM] : null;
+      var activeQ = plan.quarter || (activeM ? Math.ceil(activeM / 3) : 4);
+      var quarterMetrics = activeQ && byQuarter[activeQ] ? byQuarter[activeQ] : null;
+
+      return {
+        total: total,
+        done: done,
+        unread: total - done,
+        percent: total ? Math.round((done / total) * 100) : 0,
+        byMonth: byMonth,
+        byQuarter: byQuarter,
+        activeMonth: activeM,
+        monthMetrics: monthMetrics,
+        activeQuarter: activeQ,
+        quarterMetrics: quarterMetrics
+      };
+    }
+
+    function buildPlanSwitch() {
+      var elSwitch = document.getElementById('schedulePlanSwitch');
+      if (!elSwitch) return;
+      elSwitch.innerHTML = '';
+      plans.forEach(function (p, i) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'plan-switch-btn' + (i === planIdx ? ' active' : '');
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', i === planIdx ? 'true' : 'false');
+        btn.innerHTML = '<span class="plan-switch-main sw-name">' + escapeHtml(p.name) + '</span>' +
+                        '<span class="plan-switch-sub sw-sub">' + escapeHtml(p.sub) + '</span>';
+        btn.addEventListener('click', function () {
+          if (planIdx === i) return;
+          planIdx = i;
+          try { localStorage.setItem('biblia_plan_id', p.id); } catch (e) {}
+          planFilterState.month = 'all';
+          planFilterState.week = 'all';
+          planFilterState.query = '';
+          var sInput = document.getElementById('scheduleSearchInput');
+          if (sInput) sInput.value = '';
+          buildPlanSwitch();
+          renderPlan();
+        });
+        elSwitch.appendChild(btn);
+      });
+    }
+
+    function renderPlan() {
+      var plan = currentPlan();
+      if (!plan) return;
+
+      var pTitle = document.getElementById('schedulePlanTitle');
+      if (pTitle) pTitle.textContent = plan.title;
+
+      var pSub = document.getElementById('schedulePlanSubtitle');
+      if (pSub) pSub.textContent = plan.subtitle || (plan.sub + (plan.org ? ' · ' + plan.org : ''));
+
+      var pBadge = document.getElementById('schedulePlanBadge');
+      if (pBadge) pBadge.textContent = plan.type === 'wol' ? (plan.quarter ? ('第 ' + plan.quarter + ' 季速讀') : '季進度') : '全年釋義每月進度';
+
+      var pSource = document.getElementById('schedulePlanSource');
+      if (pSource) {
+        pSource.innerHTML = '';
+        if (plan.coverage) {
+          var span = document.createElement('span');
+          span.className = 'plan-coverage-badge';
+          span.textContent = plan.coverage;
+          pSource.appendChild(span);
+        }
+        if (plan.sourceUrl) {
+          var a = document.createElement('a');
+          a.href = plan.sourceUrl;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = plan.org ? ('來源：' + plan.org + ' ↗') : '官方網頁 ↗';
+          pSource.appendChild(a);
+        }
+      }
+
+      renderMonthTabs(plan);
+      renderWeekSelect(plan);
+      updatePlanStats();
+      renderPlanList();
+    }
+
+    function renderMonthTabs(plan) {
+      var elTabs = document.getElementById('scheduleMonthTabs');
+      if (!elTabs) return;
+      elTabs.innerHTML = '';
+      var frag = document.createDocumentFragment();
+
+      var metrics = computePlanMetrics(plan);
+
+      var allBtn = document.createElement('button');
+      allBtn.type = 'button';
+      allBtn.className = 'plan-tab' + (planFilterState.month === 'all' ? ' active' : '');
+      allBtn.innerHTML = '全部 (' + plan.items.length + '天)<span class="tab-badge">' + (metrics ? metrics.percent + '%' : '') + '</span>';
+      allBtn.addEventListener('click', function () {
+        planFilterState.month = 'all';
+        renderMonthTabs(plan);
+        updatePlanStats();
+        renderPlanList();
+      });
+      frag.appendChild(allBtn);
+
+      plan.months.forEach(function (m) {
+        var count = plan.items.filter(function (it) { return it.month === m; }).length;
+        var b = (metrics && metrics.byMonth) ? metrics.byMonth[m] : null;
+        var pctText = b ? (b.percent + '%') : (count + '天');
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'plan-tab' + (planFilterState.month === m ? ' active' : '');
+        btn.innerHTML = m + ' 月 (' + count + ')<span class="tab-badge">' + pctText + '</span>';
+        btn.title = m + ' 月：已讀 ' + (b ? b.done : 0) + ' / ' + count + ' 天（完成度 ' + pctText + '）';
+        btn.addEventListener('click', function () {
+          planFilterState.month = m;
+          renderMonthTabs(plan);
+          updatePlanStats();
+          renderPlanList();
+        });
+        frag.appendChild(btn);
+      });
+
+      elTabs.appendChild(frag);
+    }
+
+    function renderWeekSelect(plan) {
+      var elSel = document.getElementById('scheduleWeekSelect');
+      if (!elSel) return;
+      elSel.innerHTML = '<option value="all">所有週次</option>';
+      plan.weeks.forEach(function (w) {
+        var o = document.createElement('option');
+        o.value = w;
+        o.textContent = '第 ' + w + ' 週';
+        if (planFilterState.week === String(w)) o.selected = true;
+        elSel.appendChild(o);
+      });
+    }
+
+    function updatePlanStats() {
+      var plan = currentPlan();
+      if (!plan) return;
+      var metrics = computePlanMetrics(plan);
+      if (!metrics) return;
+
+      var p = progressOf(plan);
+
+      // 總計畫
+      var sPct = document.getElementById('scheduleStatsPercent');
+      if (sPct) sPct.textContent = metrics.percent + '%';
+      var sCnt = document.getElementById('scheduleStatsCount');
+      if (sCnt) sCnt.textContent = '已完成 ' + metrics.done + ' / ' + metrics.total + ' 天';
+      var sUn = document.getElementById('scheduleStatsUnread');
+      if (sUn) sUn.textContent = '未讀 ' + metrics.unread + ' 天';
+      var sFill = document.getElementById('scheduleProgressFill');
+      if (sFill) sFill.style.width = metrics.percent + '%';
+
+      // 月完成度
+      var mBox = document.getElementById('scheduleMonthMetricBox');
+      if (mBox) {
+        if (metrics.monthMetrics) {
+          mBox.style.display = '';
+          var mm = metrics.monthMetrics;
+          document.getElementById('scheduleMonthTitle').textContent = mm.month + ' 月完成度';
+          document.getElementById('scheduleMonthPercent').textContent = mm.percent + '%';
+          document.getElementById('scheduleMonthCount').textContent = '已完成 ' + mm.done + ' / ' + mm.total + ' 天';
+          document.getElementById('scheduleMonthUnread').textContent = '未讀 ' + mm.unread + ' 天';
+          document.getElementById('scheduleMonthProgressFill').style.width = mm.percent + '%';
+        } else {
+          mBox.style.display = 'none';
+        }
+      }
+
+      // 季完成度
+      var qBox = document.getElementById('scheduleQuarterMetricBox');
+      if (qBox) {
+        if (metrics.quarterMetrics) {
+          qBox.style.display = '';
+          var qm = metrics.quarterMetrics;
+          document.getElementById('scheduleQuarterTitle').textContent = (qm.name || ('第 ' + qm.quarter + ' 季')) + ' 完成度';
+          document.getElementById('scheduleQuarterPercent').textContent = qm.percent + '%';
+          document.getElementById('scheduleQuarterCount').textContent = '已完成 ' + qm.done + ' / ' + qm.total + ' 天';
+          document.getElementById('scheduleQuarterUnread').textContent = '未讀 ' + qm.unread + ' 天';
+          document.getElementById('scheduleQuarterProgressFill').style.width = qm.percent + '%';
+        } else {
+          qBox.style.display = 'none';
+        }
+      }
+
+      // WOL 季分解
+      var qBd = document.getElementById('scheduleQuarterBreakdown');
+      var qBdGrid = document.getElementById('scheduleQuarterBreakdownGrid');
+      if (qBd && qBdGrid) {
+        if (plan.type === 'wol' && plan.quarter) {
+          qBd.style.display = '';
+          qBdGrid.innerHTML = '';
+          var qMonths = metrics.quarterMetrics ? metrics.quarterMetrics.months : plan.months;
+          (qMonths || []).forEach(function (m) {
+            var b = metrics.byMonth[m] || { total: 0, done: 0, unread: 0, percent: 0 };
+            var item = document.createElement('div');
+            item.className = 'breakdown-item' + (planFilterState.month === m ? ' active' : '');
+            item.innerHTML =
+              '<div class="breakdown-item-head"><span>' + m + ' 月</span><span style="color:var(--accent);">' + b.percent + '%</span></div>' +
+              '<div class="plan-progress-bar" style="height:5px; margin:3px 0 4px;"><div class="plan-progress-fill plan-fill-month" style="width:' + b.percent + '%;"></div></div>' +
+              '<div class="breakdown-item-foot"><span>已讀 ' + b.done + '/' + b.total + '</span><span style="color:#d97706;">未讀 ' + b.unread + '</span></div>';
+            item.addEventListener('click', function () {
+              planFilterState.month = (planFilterState.month === m) ? 'all' : m;
+              renderMonthTabs(plan);
+              updatePlanStats();
+              renderPlanList();
+            });
+            qBdGrid.appendChild(item);
+          });
+        } else {
+          qBd.style.display = 'none';
+        }
+      }
+
+      // 今日按鈕狀態
+      var todayIt = todayItemOf(plan);
+      var markBtn = document.getElementById('scheduleMarkTodayBtn');
+      if (markBtn) {
+        if (todayIt) {
+          var todayDone = !!p[todayIt.id];
+          markBtn.disabled = false;
+          markBtn.textContent = todayDone ? '✓ 今日已讀（點擊取消）' : '✓ 標記今天已讀';
+          markBtn.classList.toggle('done', todayDone);
+        } else {
+          markBtn.disabled = true;
+          markBtn.textContent = '今天非進度日';
+          markBtn.classList.remove('done');
+        }
+      }
+    }
+
+    function renderPlanList() {
+      var listWrap = document.getElementById('schedulePlanList');
+      if (!listWrap) return;
+      var plan = currentPlan();
+      if (!plan) return;
+
+      var p = progressOf(plan);
+
+      var inScope = plan.items.filter(function (it) {
+        if (planFilterState.month !== 'all' && it.month !== planFilterState.month) return false;
+        if (planFilterState.week !== 'all' && String(it.week) !== String(planFilterState.week)) return false;
+        if (planFilterState.query) {
+          var q = planFilterState.query;
+          var inRaw = it.rawText.toLowerCase().indexOf(q) !== -1;
+          var inDate = it.date.indexOf(q) !== -1 || (it.isoDate && it.isoDate.indexOf(q) !== -1);
+          var inPass = it.passages.some(function (pass) {
+            return pass.label.toLowerCase().indexOf(q) !== -1 || (pass.bookZh && pass.bookZh.indexOf(q) !== -1);
+          });
+          if (!inRaw && !inDate && !inPass) return false;
+        }
+        return true;
+      });
+
+      var scopeRead = 0, scopeUnread = 0;
+      inScope.forEach(function (it) {
+        if (p[it.id]) scopeRead++;
+        else scopeUnread++;
+      });
+
+      var pillUn = document.getElementById('schedulePillUnreadCount');
+      if (pillUn) pillUn.textContent = scopeUnread;
+      var pillRd = document.getElementById('schedulePillReadCount');
+      if (pillRd) pillRd.textContent = scopeRead;
+
+      var filtered = inScope.filter(function (it) {
+        if (planFilterState.status === 'unread') return !p[it.id];
+        if (planFilterState.status === 'read') return !!p[it.id];
+        return true;
+      });
+
+      var secTitle = document.getElementById('scheduleSectionTitle');
+      if (secTitle) {
+        if (plan.type === 'wol') {
+          secTitle.textContent = (plan.quarter ? ('2026年 第 ' + plan.quarter + ' 季聖經速讀進度表') : 'WOL 聖經速讀進度表');
+        } else {
+          secTitle.textContent = (planFilterState.month !== 'all' ? ('2026年 ' + planFilterState.month + ' 月 每日研經釋義每月進度表') : '2026 全年 每日研經釋義進度表');
+        }
+      }
+      var secSub = document.getElementById('scheduleSectionSubtitle');
+      if (secSub) {
+        if (plan.type === 'wol') {
+          secSub.textContent = plan.subtitle || (plan.coverage ? '涵蓋範圍：' + plan.coverage : '');
+        } else {
+          secSub.textContent = (planFilterState.month !== 'all' ? (planFilterState.month + ' 月完整每日進度與釋義連結') : '國際讀經會台灣總會 365 天讀經進度');
+        }
+      }
+      var secStats = document.getElementById('scheduleSectionQuickStats');
+      if (secStats) {
+        var pct = inScope.length ? Math.round((scopeRead / inScope.length) * 100) : 0;
+        secStats.textContent = '此範圍共 ' + inScope.length + ' 天（已讀完 ' + scopeRead + ' 天 · 未讀 ' + scopeUnread + ' 天 · 完成率 ' + pct + '%）';
+      }
+
+      listWrap.innerHTML = '';
+      if (!filtered.length) {
+        var emp = document.createElement('div');
+        emp.className = 'plan-empty';
+        if (planFilterState.status === 'unread' && scopeRead > 0 && scopeUnread === 0) {
+          emp.innerHTML = '🎉 <strong>太棒了！</strong>目前所選範圍的讀經進度已全部讀完！';
+        } else {
+          emp.textContent = '沒有符合條件的讀經進度';
+        }
+        listWrap.appendChild(emp);
+        return;
+      }
+
+      if (planFilterState.viewMode === 'table') {
+        renderTableMode(filtered, plan, listWrap);
+      } else {
+        renderCardsMode(filtered, plan, listWrap);
+      }
+    }
+
+    function renderTableMode(filtered, plan, container) {
+      var p = progressOf(plan);
+      var todayStr = todayIso();
+
+      var wrap = document.createElement('div');
+      wrap.className = 'plan-table-wrap';
+
+      var table = document.createElement('table');
+      table.className = 'plan-table';
+
+      var thead = document.createElement('thead');
+      thead.innerHTML =
+        '<tr>' +
+          '<th style="width:115px;">閱讀狀態</th>' +
+          '<th style="width:115px;">日期</th>' +
+          '<th style="width:85px;">週次</th>' +
+          '<th>讀經進度經文</th>' +
+          '<th style="width:130px;">研經釋義</th>' +
+          '<th style="width:90px; text-align:right;">直達研讀</th>' +
+        '</tr>';
+      table.appendChild(thead);
+
+      var tbody = document.createElement('tbody');
+
+      filtered.forEach(function (it) {
+        var isToday = (it.isoDate === todayStr);
+        var done = !!p[it.id];
+
+        var tr = document.createElement('tr');
+        tr.className = 'plan-table-row' + (done ? ' done' : '') + (isToday ? ' today' : '');
+        tr.id = 'plan-item-' + it.id;
+
+        // 狀態
+        var tdStatus = document.createElement('td');
+        var chkLabel = document.createElement('label');
+        chkLabel.className = 'plan-table-chk-label';
+        var box = document.createElement('input');
+        box.type = 'checkbox';
+        box.checked = done;
+        var tag = document.createElement('span');
+        tag.className = 'plan-status-tag ' + (done ? 'tag-done' : 'tag-unread');
+        tag.textContent = done ? '✓ 已讀完' : '未讀';
+
+        box.addEventListener('change', function () {
+          var isChecked = box.checked;
+          p[it.id] = isChecked;
+          savePlanProgress();
+          tr.classList.toggle('done', isChecked);
+          tag.className = 'plan-status-tag ' + (isChecked ? 'tag-done' : 'tag-unread');
+          tag.textContent = isChecked ? '✓ 已讀完' : '未讀';
+          updatePlanStats();
+          renderMonthTabs(plan);
+          if (planFilterState.status !== 'all') {
+            renderPlanList();
+          }
+        });
+        chkLabel.appendChild(box);
+        chkLabel.appendChild(tag);
+        tdStatus.appendChild(chkLabel);
+        tr.appendChild(tdStatus);
+
+        // 日期
+        var tdDate = document.createElement('td');
+        var dateSpan = document.createElement('span');
+        dateSpan.className = 'plan-table-date';
+        dateSpan.textContent = it.date;
+        tdDate.appendChild(dateSpan);
+        var wdSpan = document.createElement('span');
+        wdSpan.className = 'plan-table-wd';
+        wdSpan.textContent = it.wd;
+        tdDate.appendChild(wdSpan);
+        if (isToday) {
+          var tPill = document.createElement('span');
+          tPill.className = 'plan-table-today-pill';
+          tPill.textContent = '今日';
+          tdDate.appendChild(tPill);
+        }
+        tr.appendChild(tdDate);
+
+        // 週次
+        var tdWeek = document.createElement('td');
+        if (it.week) {
+          var wBadge = document.createElement('span');
+          wBadge.className = 'plan-table-week-badge';
+          wBadge.textContent = '第 ' + it.week + ' 週';
+          tdWeek.appendChild(wBadge);
+        }
+        tr.appendChild(tdWeek);
+
+        // 經文
+        var tdRef = document.createElement('td');
+        var refTitle = document.createElement('div');
+        refTitle.className = 'plan-table-ref-title';
+        refTitle.textContent = it.rawText;
+        if (it.passages && it.passages.length) {
+          var p0 = it.passages[0];
+          refTitle.title = '點擊前往 Biblia 閱讀經文';
+          refTitle.addEventListener('click', function () {
+            window.location.href = 'index.html#read/' + (p0.abbr || p0.bookZh || p0.bookNo) + '/' + (p0.startChap || p0.chap || 1);
+          });
+        }
+        tdRef.appendChild(refTitle);
+        tr.appendChild(tdRef);
+
+        // 釋義連結
+        var tdLink = document.createElement('td');
+        if (it.link) {
+          var aLink = document.createElement('a');
+          aLink.className = 'plan-table-link';
+          aLink.href = it.link;
+          aLink.target = '_blank';
+          aLink.rel = 'noopener noreferrer';
+          aLink.textContent = it.src === 'plan' ? '整季進度表 ↗' : '看當日釋義 ↗';
+          tdLink.appendChild(aLink);
+        } else {
+          var spanNoLink = document.createElement('span');
+          spanNoLink.style.color = 'var(--fg-mute)';
+          spanNoLink.style.fontSize = '.75rem';
+          spanNoLink.textContent = plan.type === 'wol' ? '速讀經文' : '進度經文';
+          tdLink.appendChild(spanNoLink);
+        }
+        tr.appendChild(tdLink);
+
+        // 直達按鈕
+        var tdAction = document.createElement('td');
+        tdAction.style.textAlign = 'right';
+        if (it.passages && it.passages.length) {
+          var p0 = it.passages[0];
+          var readBtn = document.createElement('button');
+          readBtn.type = 'button';
+          readBtn.className = 'plan-pass-btn';
+          readBtn.innerHTML = '<span class="plan-pass-icon" aria-hidden="true">📖</span> 研讀';
+          readBtn.addEventListener('click', function () {
+            window.location.href = 'index.html#read/' + (p0.abbr || p0.bookZh || p0.bookNo) + '/' + (p0.startChap || p0.chap || 1);
+          });
+          tdAction.appendChild(readBtn);
+        }
+        tr.appendChild(tdAction);
+
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      wrap.appendChild(table);
+      container.appendChild(wrap);
+    }
+
+    function renderCardsMode(filtered, plan, container) {
+      var byWeek = {};
+      filtered.forEach(function (it) {
+        var w = it.week || 0;
+        if (!byWeek[w]) byWeek[w] = [];
+        byWeek[w].push(it);
+      });
+
+      var todayStr = todayIso();
+      var frag = document.createDocumentFragment();
+
+      Object.keys(byWeek).sort(function (a, b) { return a - b; }).forEach(function (w) {
+        var sec = document.createElement('section');
+        sec.className = 'plan-week-section';
+
+        if (w !== '0') {
+          var head = document.createElement('h2');
+          head.className = 'plan-week-title';
+          head.textContent = '第 ' + w + ' 週';
+          sec.appendChild(head);
+        }
+
+        var grid = document.createElement('div');
+        grid.className = 'plan-grid';
+        byWeek[w].forEach(function (it) {
+          grid.appendChild(buildCardItem(plan, it, it.isoDate === todayStr));
+        });
+        sec.appendChild(grid);
+        frag.appendChild(sec);
+      });
+
+      container.appendChild(frag);
+    }
+
+    function buildCardItem(plan, it, isToday) {
+      var p = progressOf(plan);
+      var done = !!p[it.id];
+
+      var card = document.createElement('div');
+      card.className = 'plan-card' + (done ? ' done' : '') + (isToday ? ' today' : '');
+      card.id = 'plan-item-' + it.id;
+
+      var head = document.createElement('div');
+      head.className = 'plan-card-head';
+
+      var dateBadge = document.createElement('div');
+      dateBadge.className = 'plan-card-date';
+      dateBadge.innerHTML = '<span class="plan-date-num">' + escapeHtml(it.date) + '</span>' +
+                            '<span class="plan-date-wd">' + escapeHtml(it.wd) + '</span>';
+      head.appendChild(dateBadge);
+
+      if (isToday) {
+        var todayPill = document.createElement('span');
+        todayPill.className = 'plan-today-pill';
+        todayPill.textContent = '今日';
+        head.appendChild(todayPill);
+      }
+
+      var chk = document.createElement('label');
+      chk.className = 'plan-chk';
+      var box = document.createElement('input');
+      box.type = 'checkbox';
+      box.checked = done;
+      box.addEventListener('change', function () {
+        p[it.id] = box.checked;
+        savePlanProgress();
+        card.classList.toggle('done', box.checked);
+        updatePlanStats();
+        renderMonthTabs(plan);
+        if (planFilterState.status !== 'all') renderPlanList();
+      });
+      chk.appendChild(box);
+      var mark = document.createElement('span');
+      mark.className = 'plan-chk-mark';
+      mark.setAttribute('aria-hidden', 'true');
+      chk.appendChild(mark);
+      head.appendChild(chk);
+      card.appendChild(head);
+
+      var body = document.createElement('div');
+      body.className = 'plan-card-body';
+
+      var ref = document.createElement('div');
+      ref.className = 'plan-card-ref';
+      ref.textContent = it.rawText;
+      if (it.passages && it.passages.length) {
+        var p0 = it.passages[0];
+        ref.title = '點擊前往 Biblia 閱讀經文';
+        ref.style.cursor = 'pointer';
+        ref.addEventListener('click', function () {
+          window.location.href = 'index.html#read/' + (p0.abbr || p0.bookZh || p0.bookNo) + '/' + (p0.startChap || p0.chap || 1);
+        });
+      }
+      body.appendChild(ref);
+
+      if (it.link) {
+        var a = document.createElement('a');
+        a.className = 'plan-card-link';
+        a.href = it.link;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = it.src === 'plan' ? '看整季進度表 ↗' : '看當日釋義 ↗';
+        body.appendChild(a);
+      }
+
+      card.appendChild(body);
+      return card;
+    }
+
+    // 主題初始化
+    var savedTheme = 'light';
+    try {
+      var s = JSON.parse(localStorage.getItem('biblia') || '{}');
+      if (s.theme) savedTheme = s.theme;
+    } catch (e) {}
+    document.body.classList.add(savedTheme);
+
+    var themeBtn = document.getElementById('scheduleThemeBtn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var THEMES = ['light', 'sepia', 'dark', 'oled'];
+        var curIdx = THEMES.indexOf(savedTheme);
+        var nextTheme = THEMES[(curIdx + 1) % THEMES.length];
+        THEMES.forEach(function (t) { document.body.classList.remove(t); });
+        document.body.classList.add(nextTheme);
+        savedTheme = nextTheme;
+        try {
+          var s = JSON.parse(localStorage.getItem('biblia') || '{}');
+          s.theme = nextTheme;
+          localStorage.setItem('biblia', JSON.stringify(s));
+        } catch (e) {}
+      });
+    }
+
+    // 列印按鈕
+    var printBtn = document.getElementById('schedulePrintBtn');
+    if (printBtn) {
+      printBtn.addEventListener('click', function () { window.print(); });
+    }
+
+    // 檢視模式切換
+    var modeTableBtn = document.getElementById('scheduleModeTableBtn');
+    var modeCardsBtn = document.getElementById('scheduleModeCardsBtn');
+    if (modeTableBtn && modeCardsBtn) {
+      modeTableBtn.addEventListener('click', function () {
+        planFilterState.viewMode = 'table';
+        try { localStorage.setItem('biblia_plan_view_mode', 'table'); } catch (e) {}
+        modeTableBtn.classList.add('active');
+        modeCardsBtn.classList.remove('active');
+        renderPlanList();
+      });
+      modeCardsBtn.addEventListener('click', function () {
+        planFilterState.viewMode = 'cards';
+        try { localStorage.setItem('biblia_plan_view_mode', 'cards'); } catch (e) {}
+        modeCardsBtn.classList.add('active');
+        modeTableBtn.classList.remove('active');
+        renderPlanList();
+      });
+    }
+
+    // 狀態篩選
+    var stAll = document.getElementById('scheduleStatusAllBtn');
+    var stUn = document.getElementById('scheduleStatusUnreadBtn');
+    var stRd = document.getElementById('scheduleStatusReadBtn');
+    [
+      { btn: stAll, status: 'all' },
+      { btn: stUn, status: 'unread' },
+      { btn: stRd, status: 'read' }
+    ].forEach(function (item) {
+      if (item.btn) {
+        item.btn.addEventListener('click', function () {
+          planFilterState.status = item.status;
+          [stAll, stUn, stRd].forEach(function (b) { if (b) b.classList.remove('active'); });
+          item.btn.classList.add('active');
+          renderPlanList();
+        });
+      }
+    });
+
+    // 週次下拉
+    var weekSel = document.getElementById('scheduleWeekSelect');
+    if (weekSel) {
+      weekSel.addEventListener('change', function () {
+        planFilterState.week = weekSel.value;
+        renderPlanList();
+      });
+    }
+
+    // 搜尋輸入
+    var searchInput = document.getElementById('scheduleSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        planFilterState.query = searchInput.value.trim().toLowerCase();
+        renderPlanList();
+      });
+    }
+
+    // 標記今天已讀
+    var markTodayBtn = document.getElementById('scheduleMarkTodayBtn');
+    if (markTodayBtn) {
+      markTodayBtn.addEventListener('click', function () {
+        var plan = currentPlan();
+        var todayIt = todayItemOf(plan);
+        if (!todayIt) return;
+        var p = progressOf(plan);
+        p[todayIt.id] = !p[todayIt.id];
+        savePlanProgress();
+        updatePlanStats();
+        renderMonthTabs(plan);
+        renderPlanList();
+      });
+    }
+
+    // 啟動初始化
+    normalisePlans();
+    buildPlanSwitch();
+    renderPlan();
+
+  })();
+  </script>
+</body>
+</html>

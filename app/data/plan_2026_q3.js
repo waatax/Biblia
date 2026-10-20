@@ -188,6 +188,7 @@
 
   if (typeof window !== 'undefined') {
     window.BIBLIA_PLAN_2026_Q3 = {
+      id: 'church_q3_2026',
       title: 'WOL 教會 2026年聖經速讀進度表（第三季）',
       subtitle: '7/1 ~ 9/30 ・ 一年讀完聖經 ・ 週次 27 ~ 40',
       year: 2026,

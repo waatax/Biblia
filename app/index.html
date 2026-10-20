@@ -222,9 +222,14 @@
           <!-- 今日讀經動態載入 -->
         </div>
 
-        <button id="startPlanBtn" type="button" class="btn btn-primary btn-block go-plan">
-          <span aria-hidden="true">📅</span> 開啟完整讀經計畫表
-        </button>
+        <div class="start-plan-actions">
+          <button id="startPlanBtn" type="button" class="btn btn-primary btn-block go-plan">
+            <span aria-hidden="true">📅</span> 開啟完整讀經計畫（月/季進度表）
+          </button>
+          <a href="schedule.html" class="btn btn-ghost btn-block go-schedule-standalone" target="_blank" rel="noopener">
+            <span aria-hidden="true">📑</span> 每季 WOL / 每月釋義進度總表頁面 ↗
+          </a>
+        </div>
       </div>
 
       <!-- ===================== 聖經補充資料入口卡片 ===================== -->
@@ -947,10 +952,16 @@
         <span aria-hidden="true">📚</span><span class="btn-text">補充資料</span>
       </button>
 
-      <span class="bar-title" id="planHeadTitle">讀經計畫</span>
+      <span class="bar-title" id="planHeadTitle">讀經進度表</span>
 
       <span class="bar-spacer"></span>
 
+      <button id="planPrintBtn" type="button" class="btn btn-ghost" title="列印或匯出當前進度表">
+        <span aria-hidden="true">🖨</span><span class="btn-text">列印</span>
+      </button>
+      <a id="planSchedulePageBtn" href="schedule.html" target="_blank" rel="noopener" class="btn btn-ghost" title="在新分頁開啟完整進度表總覽">
+        <span aria-hidden="true">📑</span><span class="btn-text">總表頁面 ↗</span>
+      </a>
       <button id="planJumpTodayBtn" type="button" class="btn search-btn plan-today-btn" title="定位到今天">
         <span aria-hidden="true">📍</span><span class="btn-text">定位到今天</span>
       </button>
@@ -959,52 +970,137 @@
   </header>
 
   <main class="plan-main">
-    <!-- 讀經計畫（每日研經釋義全年 365 天） -->
+    <!-- 讀經計畫切換器（每日研經釋義 / WOL 第四季 / WOL 第三季） -->
     <div class="plan-switch" id="planSwitch" role="tablist" aria-label="選擇讀經計畫"></div>
 
     <div class="plan-hero">
       <div class="plan-hero-content">
-        <h1 class="plan-main-title" id="planTitle">讀經計畫</h1>
+        <div class="plan-title-row">
+          <h1 class="plan-main-title" id="planTitle">讀經計畫</h1>
+          <span class="plan-badge-type" id="planBadgeType">全年進度</span>
+        </div>
         <p class="plan-subtitle" id="planSubtitle"></p>
         <p class="plan-source" id="planSource"></p>
       </div>
 
+      <!-- 多指標完成度分析面板：全計畫、月完成度、季完成度 -->
       <div class="plan-stats-card">
         <div class="plan-stats-header">
           <div class="plan-stats-heading-wrap">
-            <span class="plan-stats-label">個人讀經完成率</span>
+            <span class="plan-stats-label">個人讀經完成度分析</span>
             <span class="plan-streak-badge" id="planStreakBadge" title="連續讀經天數">🔥 連續 0 天</span>
           </div>
-          <span class="plan-stats-val" id="planStatsPercent">0%</span>
-        </div>
-        <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-             aria-valuenow="0" id="planProgressBar">
-          <div class="plan-progress-fill" id="planProgressFill" style="width: 0%;"></div>
-        </div>
-        <div class="plan-stats-foot">
-          <span class="plan-stats-count" id="planStatsCount">已完成 0 天</span>
           <button id="planMarkTodayBtn" type="button" class="btn plan-mark-today-btn">✓ 標記今天已讀</button>
         </div>
+
+        <div class="plan-metrics-grid">
+          <!-- 指標 1：全計畫累計完成度 -->
+          <div class="plan-metric-box plan-metric-overall">
+            <div class="plan-metric-top">
+              <span class="plan-metric-title">總計畫累計</span>
+              <span class="plan-metric-val" id="planStatsPercent">0%</span>
+            </div>
+            <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                 aria-valuenow="0" id="planProgressBar">
+              <div class="plan-progress-fill" id="planProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="plan-metric-foot">
+              <span class="plan-stats-count" id="planStatsCount">已完成 0 / 0 天</span>
+              <span class="plan-metric-unread" id="planStatsUnread">未讀 0 天</span>
+            </div>
+          </div>
+
+          <!-- 指標 2：月完成度 -->
+          <div class="plan-metric-box plan-metric-month" id="planMonthMetricBox">
+            <div class="plan-metric-top">
+              <span class="plan-metric-title" id="planMonthTitle">本月完成度</span>
+              <span class="plan-metric-val" id="planMonthPercent">0%</span>
+            </div>
+            <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                 aria-valuenow="0" id="planMonthProgressBar">
+              <div class="plan-progress-fill plan-fill-month" id="planMonthProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="plan-metric-foot">
+              <span class="plan-stats-count" id="planMonthCount">已完成 0 / 0 天</span>
+              <span class="plan-metric-unread" id="planMonthUnread">未讀 0 天</span>
+            </div>
+          </div>
+
+          <!-- 指標 3：季完成度 -->
+          <div class="plan-metric-box plan-metric-quarter" id="planQuarterMetricBox">
+            <div class="plan-metric-top">
+              <span class="plan-metric-title" id="planQuarterTitle">當季完成度</span>
+              <span class="plan-metric-val" id="planQuarterPercent">0%</span>
+            </div>
+            <div class="plan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                 aria-valuenow="0" id="planQuarterProgressBar">
+              <div class="plan-progress-fill plan-fill-quarter" id="planQuarterProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="plan-metric-foot">
+              <span class="plan-stats-count" id="planQuarterCount">已完成 0 / 0 天</span>
+              <span class="plan-metric-unread" id="planQuarterUnread">未讀 0 天</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 季內月份分解卡片（在季進度模式下呈現） -->
+        <div class="plan-quarter-breakdown" id="planQuarterBreakdown" style="display: none;">
+          <div class="breakdown-title">季度內各月完成度：</div>
+          <div class="breakdown-grid" id="planQuarterBreakdownGrid"></div>
+        </div>
       </div>
     </div>
 
+    <!-- 進度表篩選與檢視工具列 -->
     <div class="plan-filter-bar">
-      <div class="plan-tabs" id="planMonthTabs" role="tablist" aria-label="月份篩選"></div>
+      <!-- 月份標籤 (1~12月) -->
+      <div class="plan-tabs-wrap">
+        <div class="plan-tabs" id="planMonthTabs" role="tablist" aria-label="月份篩選"></div>
+      </div>
 
-      <div class="plan-filter-inputs">
-        <label class="plan-filter-ctl">
-          <span>週次</span>
-          <select id="planWeekSelect" aria-label="週次篩選">
-            <option value="all">所有週次</option>
-          </select>
-        </label>
+      <div class="plan-controls-row">
+        <!-- 檢視模式切換：表格進度表 vs 卡片檢視 -->
+        <div class="plan-view-toggle" role="group" aria-label="切換進度表檢視模式">
+          <button type="button" class="plan-toggle-btn active" id="planModeTableBtn" data-mode="table" title="每月/每季進度表（經典表格檢視）">
+            <span aria-hidden="true">📋</span> 進度表格
+          </button>
+          <button type="button" class="plan-toggle-btn" id="planModeCardsBtn" data-mode="cards" title="卡片格狀檢視">
+            <span aria-hidden="true">🗂</span> 卡片檢視
+          </button>
+        </div>
 
-        <input type="search" id="planSearchInput" class="plan-search-input"
-               placeholder="搜尋日期或經文（例如 7/15、撒上、詩篇）" autocomplete="off" aria-label="搜尋讀經進度">
+        <!-- 狀態過濾：全部 / 未讀 / 已讀完 -->
+        <div class="plan-status-pills" role="group" aria-label="狀態過濾">
+          <button type="button" class="plan-status-pill active" id="planStatusAllBtn" data-status="all">全部</button>
+          <button type="button" class="plan-status-pill pill-unread" id="planStatusUnreadBtn" data-status="unread">未讀 <span class="pill-count" id="pillUnreadCount">0</span></button>
+          <button type="button" class="plan-status-pill pill-read" id="planStatusReadBtn" data-status="read">已讀完 <span class="pill-count" id="pillReadCount">0</span></button>
+        </div>
+
+        <div class="plan-filter-inputs">
+          <label class="plan-filter-ctl">
+            <span>週次</span>
+            <select id="planWeekSelect" aria-label="週次篩選">
+              <option value="all">所有週次</option>
+            </select>
+          </label>
+
+          <input type="search" id="planSearchInput" class="plan-search-input"
+                 placeholder="搜尋日期或經文（例如 10/15、賽、撒上）" autocomplete="off" aria-label="搜尋讀經進度">
+        </div>
       </div>
     </div>
 
-    <div id="planList" class="plan-list">
+    <!-- 當前進度表抬頭標題 -->
+    <div class="plan-section-header" id="planSectionHeader">
+      <div class="section-title-wrap">
+        <h2 class="section-title" id="planSectionTitle">讀經進度表</h2>
+        <span class="section-subtitle" id="planSectionSubtitle"></span>
+      </div>
+      <div class="section-quick-stats" id="planSectionQuickStats"></div>
+    </div>
+
+    <!-- 進度動態渲染區塊（表格或卡片） -->
+    <div id="planList" class="plan-content-area">
       <!-- 讀經進度動態渲染區塊 -->
     </div>
   </main>
