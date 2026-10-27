@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fbf9f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
+<title>Biblia 777 經文背誦 — 基甸會聖經處境選讀 ＆ 手機全螢幕記憶卡</title>
+<meta name="description" content="以中文和合本 (1919) 設計之手機全螢幕 777 節經文背誦輔助練習卡。結合國際基甸會聖經「經文選讀 / 需要幫助的時候」7 大生命處境分類（恐懼、憂慮、靈性復興、人生指引、患難盼望、救恩確據、愛心美德），支援四段遮蔽練習、首字提示、挖空填充、逐字點按、打字默寫、語音朗讀與 SRS 間隔重複記憶。">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script>
+(function () {
+  try {
+    var s = JSON.parse(localStorage.getItem('biblia') || 'null') || {};
+    var sysDark = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = s.theme || (s.dark ? 'dark' : (sysDark ? 'dark' : 'light'));
+    document.documentElement.classList.add(theme);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;600;700;900&display=swap">
+<link rel="stylesheet" href="style.css?v=34">
+<style>
+/* ===================== 777 手機全螢幕經文背誦專屬樣式 ===================== */
+:root {
+  --mem-safe-top: env(safe-area-inset-top, 0px);
+  --mem-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --mem-card-font-size: 1.42rem;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body.mem-body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 外層框架：手機全螢幕直式佈局，桌機居中呈現精緻手機艙 + 側邊快捷輔助 */
+.mem-app-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 540px;
+  height: 100dvh;
+  margin: 0 auto;
+  position: relative;
+  background: var(--bg);
+  box-shadow: 0 0 60px rgba(0,0,0,0.12);
+  overflow: hidden;
+}
+
+@media (min-width: 960px) {
+  body.mem-body {
+    background: var(--bg-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mem-app-shell {
+    max-width: 500px;
+    height: min(94dvh, 920px);
+    border-radius: 28px;
+    border: 1px solid var(--line);
+    box-shadow: var(--sh-4);
+  }
+  body.mem-body.is-true-fullscreen .mem-app-shell {
+    max-width: 680px;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+  }
+}
+
+/* 1. 頂部極簡狀態與控制列 */
+.mem-topbar {
+  padding: calc(8px + var(--mem-safe-top)) 12px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  background: var(--bar);
+  border-bottom: 1px solid var(--line-soft);
+  z-index: 20;
+  flex-shrink: 0;
+}
+
+.mem-top-left, .mem-top-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mem-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0 9px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.mem-icon-btn:active {
+  transform: scale(0.94);
+}
+
+.mem-icon-btn.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.mem-brand-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.mem-brand-pill:hover {
+  border-color: var(--accent);
+}
+
+.mem-streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(214, 158, 46, 0.14);
+  color: #b7791f;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+html.dark .mem-streak-pill, html.oled .mem-streak-pill {
+  color: #f6e05e;
+}
+
+/* 2. 基甸會 7 大處境與學習隊列橫向膠囊列 */
+.mem-cat-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  overflow-x: auto;
+  background: var(--bar);
+  border-bottom: 1px solid var(--line-soft);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex-shrink: 0;
+}
+.mem-cat-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.mem-cat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-dim);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.mem-cat-chip .chip-count {
+  font-size: 0.68rem;
+  opacity: 0.75;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+}
+
+.mem-cat-chip.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px var(--ring);
+}
+
+.mem-cat-chip.active .chip-count {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+  opacity: 1;
+}
+
+/* 處境細項與進度微導覽條 */
+.mem-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 14px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 0.75rem;
+  color: var(--fg-dim);
+  flex-shrink: 0;
+}
+
+.mem-subbar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mem-subbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.mem-progress-track {
+  width: 100%;
+  height: 3px;
+  background: var(--line-soft);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.mem-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--ok));
+  width: 0%;
+  transition: width 0.25s ease;
+}
+
+/* 3. 中央全螢幕主背誦卡片舞台 */
+.mem-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  overflow: hidden;
+  position: relative;
+  min-height: 0;
+}
+
+.mem-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--sh-3);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.22s var(--ease), opacity 0.22s ease, border-color 0.2s ease;
+  min-height: 0;
+}
+
+.mem-card.swipe-left {
+  transform: translateX(-28px) scale(0.98);
+  opacity: 0.5;
+}
+.mem-card.swipe-right {
+  transform: translateX(28px) scale(0.98);
+  opacity: 0.5;
+}
+
+/* 卡片頂部裝飾色帶与中繼標籤 */
+.mem-card-ribbon {
+  height: 5px;
+  width: 100%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.mem-card-header {
+  padding: 12px 16px 8px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px dashed var(--line-soft);
+  flex-shrink: 0;
+}
+
+.mem-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.mem-gideon-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.73rem;
+  font-weight: 800;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.mem-group-tag {
+  font-size: 0.73rem;
+  color: var(--fg-mute);
+  font-weight: 600;
+}
+
+.mem-card-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.mem-mini-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line-soft);
+  background: var(--bg);
+  color: var(--fg-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.mem-mini-btn:active {
+  transform: scale(0.9);
+}
+.mem-mini-btn.is-starred {
+  color: #d69e2e;
+  border-color: #d69e2e;
+  background: rgba(214, 158, 46, 0.12);
+}
+.mem-mini-btn.is-speaking {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  animation: memPulse 1.4s infinite;
+}
+
+@keyframes memPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--ring); }
+  50% { box-shadow: 0 0 0 6px transparent; }
+}
+
+/* 經文出處標題列 */
+.mem-ref-bar {
+  padding: 10px 18px 4px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mem-ref-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mem-ref-en {
+  font-size: 0.78rem;
+  color: var(--fg-mute);
+  font-weight: 600;
+  font-family: var(--font-ui);
+}
+
+.mem-srs-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--fg-dim);
+}
+.mem-srs-badge.mastered {
+  background: rgba(46, 107, 73, 0.15);
+  color: var(--ok);
+}
+.mem-srs-badge.learning {
+  background: rgba(214, 158, 46, 0.16);
+  color: #b7791f;
+}
+
+/* 卡片核心捲動內容區 */
+.mem-card-body {
+  flex: 1;
+  padding: 12px 20px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* 經文長節自動靠上對齊避免截斷 */
+.mem-card-body.is-long {
+  justify-content: flex-start;
+}
+
+/* 和合本主經文顯示區 */
+.mem-verse-zh {
+  font-family: var(--reading-font, var(--font-serif));
+  font-size: var(--mem-card-font-size);
+  line-height: 1.92;
+  font-weight: 600;
+  color: var(--fg);
+  letter-spacing: 0.03em;
+  text-align: justify;
+  word-break: break-word;
+}
+
+/* 遮蔽與填空 Token 設計 */
+.mem-token {
+  display: inline;
+  transition: all 0.15s ease;
+  border-radius: 5px;
+}
+
+.mem-token.masked {
+  display: inline-block;
+  min-width: 1.25em;
+  padding: 0 3px;
+  margin: 0 2px;
+  background: var(--bg-soft);
+  border-bottom: 2px solid var(--accent);
+  color: transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: baseline;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.mem-token.masked.hint-first {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.mem-token.masked.revealed {
+  background: var(--hl-yellow);
+  color: var(--hl-yellow-text);
+  border-bottom-color: transparent;
+  padding: 0 4px;
+}
+
+/* 逐字點按模式 (Tap Reveal Mode) */
+.mem-tap-phrase {
+  display: inline-block;
+  margin: 3px 4px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: 1.5px dashed var(--accent);
+  background: var(--bg-soft);
+  color: var(--fg-mute);
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+.mem-tap-phrase.revealed {
+  border-style: solid;
+  border-color: var(--ok);
+  background: rgba(46, 107, 73, 0.1);
+  color: var(--fg);
+}
+
+/* 挖空選擇題選項盤 (Quiz Options) */
+.mem-quiz-panel {
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+}
+.mem-quiz-panel[hidden],
+.mem-dictation-box[hidden],
+.mem-dictation-result[hidden],
+.mem-sub-layers[hidden],
+.mem-en-text[hidden],
+.mem-orig-text[hidden],
+.mem-strong-pills[hidden] {
+  display: none !important;
+}
+.mem-quiz-prompt {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--fg-dim);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mem-quiz-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.mem-quiz-opt {
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+.mem-quiz-opt:active {
+  transform: scale(0.96);
+}
+.mem-quiz-opt.correct {
+  background: rgba(46, 107, 73, 0.18);
+  border-color: var(--ok);
+  color: var(--ok);
+}
+.mem-quiz-opt.wrong {
+  background: rgba(192, 56, 43, 0.15);
+  border-color: var(--seal);
+  color: var(--seal);
+}
+
+/* 默寫輸入模式 (Dictation Mode) */
+.mem-dictation-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+.mem-dictation-input {
+  width: 100%;
+  min-height: 78px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  resize: none;
+}
+.mem-dictation-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+.mem-dictation-result {
+  font-size: 0.88rem;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--bg-soft);
+  line-height: 1.6;
+}
+
+/* 輔助對照資訊：英文 KJV、原文 WLC/WH、Strong 核心字義 */
+.mem-sub-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.mem-en-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--fg-dim);
+  font-family: var(--font-ui);
+}
+
+.mem-orig-text {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--fg-mute);
+  font-family: var(--font-serif);
+}
+.mem-orig-text.rtl {
+  direction: rtl;
+  text-align: right;
+  font-size: 1.08rem;
+}
+
+.mem-strong-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.mem-strong-pill {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--bg-soft);
+  color: var(--strong);
+  border: 1px solid var(--line-soft);
+  font-weight: 600;
+}
+
+/* 卡片底部資訊與按住偷看按鈕 */
+.mem-card-footer {
+  padding: 8px 14px;
+  background: var(--bg-soft);
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mem-peek-btn {
+  flex: 1;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.mem-peek-btn:active, .mem-peek-btn.peeking {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.mem-card-jump-btn {
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 4. 底部雙層操控塢 (Mode Bar + SRS / Navigation) */
+.mem-dock {
+  background: var(--bar);
+  border-top: 1px solid var(--line);
+  padding: 8px 12px calc(10px + var(--mem-safe-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 20;
+  flex-shrink: 0;
+}
+
+/* 背誦模式選擇列 */
+.mem-mode-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  background: var(--bg-soft);
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.mem-mode-btn {
+  padding: 6px 2px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: var(--fg-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.15s ease;
+}
+.mem-mode-btn .mode-ico {
+  font-size: 0.92rem;
+}
+.mem-mode-btn.active {
+  background: var(--bg-alt);
+  color: var(--accent);
+  box-shadow: var(--sh-1);
+}
+
+/* 遮蔽強度快速切換條 (當處於遮蔽/首字模式時顯示) */
+.mem-mask-subrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 2px;
+}
+.mem-mask-label {
+  font-size: 0.74rem;
+  color: var(--fg-mute);
+  font-weight: 700;
+}
+.mem-mask-pills {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.mem-mask-pill {
+  flex: 1;
+  padding: 4px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-dim);
+  font-size: 0.73rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+.mem-mask-pill.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* 底部主動作列：上一節 + SRS 三鍵自評 + 下一節 */
+.mem-action-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mem-nav-arrow {
+  width: 44px;
+  height: 46px;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mem-nav-arrow:active {
+  transform: scale(0.93);
+}
+
+.mem-srs-group {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.mem-srs-btn {
+  height: 46px;
+  border-radius: 13px;
+  border: 1.5px solid transparent;
+  font-weight: 800;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.15;
+  transition: transform 0.12s ease, filter 0.15s ease;
+}
+.mem-srs-btn:active {
+  transform: scale(0.95);
+}
+.mem-srs-btn .srs-sub {
+  font-size: 0.64rem;
+  opacity: 0.82;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.mem-srs-again {
+  background: rgba(192, 56, 43, 0.12);
+  border-color: rgba(192, 56, 43, 0.35);
+  color: #c0382b;
+}
+html.dark .mem-srs-again, html.oled .mem-srs-again {
+  color: #fc8181;
+}
+
+.mem-srs-good {
+  background: rgba(214, 158, 46, 0.14);
+  border-color: rgba(214, 158, 46, 0.4);
+  color: #975a16;
+}
+html.dark .mem-srs-good, html.oled .mem-srs-good {
+  color: #f6e05e;
+}
+
+.mem-srs-easy {
+  background: rgba(46, 107, 73, 0.15);
+  border-color: rgba(46, 107, 73, 0.4);
+  color: #276749;
+}
+html.dark .mem-srs-easy, html.oled .mem-srs-easy {
+  color: #68d391;
+}
+
+/* ===================== 抽屜彈窗：777 經文總覽 / 基甸會處境指南 / 統計設定 ===================== */
+.mem-drawer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.mem-drawer-modal[hidden] {
+  display: none !important;
+}
+
+.mem-drawer-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(3px);
+}
+
+.mem-drawer-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  max-height: 88dvh;
+  background: var(--bg-alt);
+  border-radius: 24px 24px 0 0;
+  border-top: 1px solid var(--line);
+  box-shadow: var(--sh-4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1;
+  animation: memSlideUp 0.22s var(--ease);
+}
+
+@keyframes memSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.mem-sheet-head {
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--line-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mem-sheet-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mem-sheet-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.mem-sheet-body {
+  padding: 14px 16px calc(20px + var(--mem-safe-bottom));
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* 基甸會 7 大分類卡片格 */
+.mem-gideon-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mem-gideon-card {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.mem-gideon-card:hover, .mem-gideon-card.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.mem-gideon-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.mem-gideon-card-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--fg);
+}
+.mem-gideon-card-sub {
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.mem-gideon-card-desc {
+  font-size: 0.76rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+}
+
+/* 777 經文清單搜尋與列表 */
+.mem-list-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.mem-search-input {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 0.88rem;
+}
+.mem-verse-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mem-verse-row {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line-soft);
+  background: var(--bg);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mem-verse-row.current {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.mem-verse-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+.mem-verse-row-zh {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  color: var(--fg);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 統計儀表板網格 */
+.mem-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.mem-stat-box {
+  padding: 10px 6px;
+  border-radius: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+  text-align: center;
+}
+.mem-stat-num {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+.mem-stat-label {
+  font-size: 0.7rem;
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+
+/* 設定列 */
+.mem-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.mem-setting-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+.mem-chip-group {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.mem-opt-chip {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-dim);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mem-opt-chip.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+</style>
+</head>
+<body class="mem-body">
+
+<div class="mem-app-shell" id="memAppShell">
+
+  <!-- 1. 頂部工具導覽列 -->
+  <header class="mem-topbar">
+    <div class="mem-top-left">
+      <a href="index.html" class="mem-icon-btn" title="返回 Biblia 聖經閱讀器首頁" aria-label="回閱讀器首頁">
+        <span aria-hidden="true">⌂</span>
+      </a>
+      <button type="button" class="mem-brand-pill" id="memOpenGideonBtn" title="基甸會聖經「經文選讀」7 大處境指南">
+        <span aria-hidden="true">🧭</span>
+        <span>基甸會 777 背誦</span>
+        <span aria-hidden="true">▾</span>
+      </button>
+    </div>
+
+    <div class="mem-top-right">
+      <span class="mem-streak-pill" id="memStreakBadge" title="連續背誦打卡天數">🔥 1天</span>
+      <button type="button" class="mem-icon-btn" id="memOpenListBtn" title="開啟 777 節經文總表與搜尋">
+        <span aria-hidden="true">📋</span>
+        <span id="memCounterText">1/111</span>
+      </button>
+      <button type="button" class="mem-icon-btn" id="memAutoPlayBtn" title="連續循環語音伴讀背誦">
+        <span aria-hidden="true">🎧</span>
+      </button>
+      <button type="button" class="mem-icon-btn" id="memOpenSettingsBtn" title="外觀字級、顯示與記憶統計">
+        <span aria-hidden="true">Aa</span>
+      </button>
+      <button type="button" class="mem-icon-btn" id="memFullscreenBtn" title="切換全螢幕沉浸模式 (F)" aria-label="全螢幕">
+        <span aria-hidden="true">⛶</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. 基甸會 7 大處境與學習隊列橫向選擇列 -->
+  <nav class="mem-cat-strip" id="memCatStrip" aria-label="基甸會經文處境分類">
+    <!-- 由 JS 動態渲染：全部(777)、待複習、收藏、以及 7 大基甸會處境主題 -->
+  </nav>
+
+  <!-- 處境子分類與位置指示 -->
+  <div class="mem-subbar">
+    <div class="mem-subbar-left">
+      <span id="memSubcatLabel">面對恐懼與害怕 · 詩篇23篇</span>
+    </div>
+    <div class="mem-subbar-right">
+      <span id="memGlobalIdLabel">#001 / 777</span>
+      <button type="button" id="memShuffleBtn" class="mem-opt-chip" style="padding:1px 7px; font-size:0.7rem;" title="隨機抽卡測驗">🔀 隨機</button>
+    </div>
+  </div>
+
+  <div class="mem-progress-track" role="progressbar" aria-label="當前分類背誦進度">
+    <div class="mem-progress-bar" id="memProgressBar"></div>
+  </div>
+
+  <!-- 3. 全螢幕中央經文背誦卡片舞台 -->
+  <main class="mem-stage" id="memStage">
+    <article class="mem-card" id="memCard">
+      <div class="mem-card-ribbon" id="memCardRibbon"></div>
+
+      <!-- 卡片頂部處境標籤與操作按鈕 -->
+      <header class="mem-card-header">
+        <div class="mem-card-badges">
+          <span class="mem-gideon-tag" id="memCardCatTag">🛡️ 恐懼與平安</span>
+          <span class="mem-group-tag" id="memCardGroupTag">詩篇23篇・好牧人的同在</span>
+        </div>
+        <div class="mem-card-top-actions">
+          <button type="button" class="mem-mini-btn" id="memTtsBtn" title="朗讀此節經文 (空白鍵)" aria-label="語音朗讀">🔊</button>
+          <button type="button" class="mem-mini-btn" id="memStarBtn" title="加入重點背誦收藏 (S)" aria-label="收藏經文">☆</button>
+          <button type="button" class="mem-mini-btn" id="memShareBtn" title="分享或複製經文卡" aria-label="分享經文">↗</button>
+        </div>
+      </header>
+
+      <!-- 經文卷章節標題 -->
+      <div class="mem-ref-bar">
+        <div>
+          <h1 class="mem-ref-title" id="memRefTitle">詩篇 23:4</h1>
+          <div class="mem-ref-en" id="memRefEn">Psalms 23:4 · 中文和合本</div>
+        </div>
+        <span class="mem-srs-badge" id="memSrsBadge">🌱 初學</span>
+      </div>
+
+      <!-- 經文背誦主體區 -->
+      <div class="mem-card-body" id="memCardBody">
+        <div class="mem-verse-zh" id="memVerseZh"></div>
+
+        <!-- 選擇題挖空互動區 (Quiz Mode) -->
+        <div class="mem-quiz-panel" id="memQuizPanel" hidden>
+          <div class="mem-quiz-prompt">
+            <span id="memQuizPromptText">請選出空格處正確的和合本經文詞彙：</span>
+            <span id="memQuizStepText">1 / 2</span>
+          </div>
+          <div class="mem-quiz-grid" id="memQuizGrid"></div>
+        </div>
+
+        <!-- 默寫輸入互動區 (Dictation Mode) -->
+        <div class="mem-dictation-box" id="memDictationBox" hidden>
+          <textarea id="memDictationInput" class="mem-dictation-input" placeholder="請憑記憶默寫本節經文（可忽略標點符號，輸入後自動比對正確率）..."></textarea>
+          <div style="display:flex; gap:8px; justify-content:space-between; align-items:center;">
+            <span id="memDictationScore" style="font-size:0.82rem; font-weight:800; color:var(--accent);">準備默寫</span>
+            <button type="button" class="mem-opt-chip active" id="memDictationCheckBtn">✓ 核對答案</button>
+          </div>
+          <div class="mem-dictation-result" id="memDictationResult" hidden></div>
+        </div>
+
+        <!-- 英文 KJV / 希伯來希臘原文 / Strong 字義輔助層 -->
+        <div class="mem-sub-layers" id="memSubLayers">
+          <div class="mem-en-text" id="memVerseEn"></div>
+          <div class="mem-orig-text" id="memVerseOrig" hidden></div>
+          <div class="mem-strong-pills" id="memStrongPills"></div>
+        </div>
+      </div>
+
+      <!-- 卡片底部：按住偷看全文 + 跳轉完整章節上下文 -->
+      <footer class="mem-card-footer">
+        <button type="button" class="mem-peek-btn" id="memPeekBtn" title="按住或點擊顯示完整和合本經文 (空白鍵/長按)">
+          <span aria-hidden="true">👁️</span>
+          <span id="memPeekBtnText">按住偷看全文 / 點擊翻面</span>
+        </button>
+        <a href="index.html#read/Ps/23" class="mem-card-jump-btn" id="memReadContextBtn" title="在 Biblia 閱讀器中查看整章上下文與逐字 Strong 解析">
+          <span>📖 讀整章</span>
+        </a>
+      </footer>
+    </article>
+  </main>
+
+  <!-- 4. 底部雙層背誦操控塢 -->
+  <footer class="mem-dock">
+    <!-- 遮蔽比例微調列 (僅在漸進遮蔽模式下顯示) -->
+    <div class="mem-mask-subrow" id="memMaskSubrow">
+      <span class="mem-mask-label">遮蔽難度：</span>
+      <div class="mem-mask-pills" id="memMaskPills">
+        <button type="button" class="mem-mask-pill" data-mask="0">0% 全顯</button>
+        <button type="button" class="mem-mask-pill active" data-mask="30">30% 輕遮</button>
+        <button type="button" class="mem-mask-pill" data-mask="60">60% 半遮</button>
+        <button type="button" class="mem-mask-pill" data-mask="100">100% 全默</button>
+      </div>
+    </div>
+
+    <!-- 6 大背誦練習模式切換 -->
+    <div class="mem-mode-row" id="memModeRow" role="tablist" aria-label="背誦練習模式">
+      <button type="button" class="mem-mode-btn" data-mode="read" role="tab">
+        <span class="mode-ico">📖</span><span>熟讀</span>
+      </button>
+      <button type="button" class="mem-mode-btn active" data-mode="mask" role="tab">
+        <span class="mode-ico">🙈</span><span>遮蔽</span>
+      </button>
+      <button type="button" class="mem-mode-btn" data-mode="first" role="tab">
+        <span class="mode-ico">🔤</span><span>首字</span>
+      </button>
+      <button type="button" class="mem-mode-btn" data-mode="tap" role="tab">
+        <span class="mode-ico">👆</span><span>點按</span>
+      </button>
+      <button type="button" class="mem-mode-btn" data-mode="quiz" role="tab">
+        <span class="mode-ico">🧩</span><span>填空</span>
+      </button>
+      <button type="button" class="mem-mode-btn" data-mode="dictation" role="tab">
+        <span class="mode-ico">⌨️</span><span>默寫</span>
+      </button>
+    </div>
+
+    <!-- 導覽與 SRS 記憶評分列 -->
+    <div class="mem-action-row">
+      <button type="button" class="mem-nav-arrow" id="memPrevBtn" title="上一節 (← 或上滑)" aria-label="上一節">◀</button>
+
+      <div class="mem-srs-group">
+        <button type="button" class="mem-srs-btn mem-srs-again" data-srs="again" title="還不熟，稍後再複習 (鍵盤 1)">
+          <span>🔄 還不熟</span>
+          <span class="srs-sub">今日重練</span>
+        </button>
+        <button type="button" class="mem-srs-btn mem-srs-good" data-srs="good" title="有印象，3天後複習 (鍵盤 2)">
+          <span>👍 有印象</span>
+          <span class="srs-sub">間隔推進</span>
+        </button>
+        <button type="button" class="mem-srs-btn mem-srs-easy" data-srs="easy" title="已熟背！標記熟練並進下一節 (鍵盤 3)">
+          <span>✨ 已熟背</span>
+          <span class="srs-sub">熟練掌握</span>
+        </button>
+      </div>
+
+      <button type="button" class="mem-nav-arrow" id="memNextBtn" title="下一節 (→ 或下滑)" aria-label="下一節">▶</button>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ===================== 抽屜 1：基甸會聖經「經文選讀」7 大處境導覽 ===================== -->
+<div class="mem-drawer-modal" id="memGideonModal" hidden role="dialog" aria-modal="true" aria-label="基甸會聖經經文選讀分類">
+  <div class="mem-drawer-overlay" data-close="memGideonModal"></div>
+  <div class="mem-drawer-sheet">
+    <header class="mem-sheet-head">
+      <h2 class="mem-sheet-title">🧭 基甸會聖經「經文選讀」處境導覽</h2>
+      <button type="button" class="mem-sheet-close" data-close="memGideonModal" aria-label="關閉">×</button>
+    </header>
+    <div class="mem-sheet-body">
+      <p style="font-size:0.8rem; color:var(--fg-dim); margin:0 0 12px; line-height:1.5;">
+        參考國際基甸會聖經附錄「經文選讀（Where to Find Help）」，當您在生活中遇到特定情緒、處境或需要指引時，可點擊下方處境立即進入對應的 111 節核心經文背誦與默想（7 × 111 = 777 節）：
+      </p>
+      <div class="mem-gideon-grid" id="memGideonGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 抽屜 2：777 經文清單檢索與篩選 ===================== -->
+<div class="mem-drawer-modal" id="memListModal" hidden role="dialog" aria-modal="true" aria-label="777 經文總表與搜尋">
+  <div class="mem-drawer-overlay" data-close="memListModal"></div>
+  <div class="mem-drawer-sheet">
+    <header class="mem-sheet-head">
+      <h2 class="mem-sheet-title" id="memListSheetTitle">📋 777 經文背誦總表</h2>
+      <button type="button" class="mem-sheet-close" data-close="memListModal" aria-label="關閉">×</button>
+    </header>
+    <div class="mem-sheet-body">
+      <div class="mem-list-controls">
+        <input type="search" id="memListSearchInput" class="mem-search-input" placeholder="🔍 搜尋經文、書卷或處境（如：詩篇 23、懼怕、腓立比）...">
+      </div>
+      <div class="mem-verse-list" id="memVerseListContainer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 抽屜 3：記憶統計、字級外觀與資料備份 ===================== -->
+<div class="mem-drawer-modal" id="memSettingsModal" hidden role="dialog" aria-modal="true" aria-label="背誦統計與外觀設定">
+  <div class="mem-drawer-overlay" data-close="memSettingsModal"></div>
+  <div class="mem-drawer-sheet">
+    <header class="mem-sheet-head">
+      <h2 class="mem-sheet-title">⚙️ 背誦進度統計 ＆ 卡片外觀設定</h2>
+      <button type="button" class="mem-sheet-close" data-close="memSettingsModal" aria-label="關閉">×</button>
+    </header>
+    <div class="mem-sheet-body">
+      <!-- SRS 記憶統計 -->
+      <div class="mem-stats-grid">
+        <div class="mem-stat-box">
+          <div class="mem-stat-num" id="statTotalCount">777</div>
+          <div class="mem-stat-label">總收錄經節</div>
+        </div>
+        <div class="mem-stat-box">
+          <div class="mem-stat-num" id="statMasteredCount" style="color:var(--ok);">0</div>
+          <div class="mem-stat-label">✨ 已熟背</div>
+        </div>
+        <div class="mem-stat-box">
+          <div class="mem-stat-num" id="statLearningCount" style="color:#d69e2e;">0</div>
+          <div class="mem-stat-label">🌱 學習中</div>
+        </div>
+        <div class="mem-stat-box">
+          <div class="mem-stat-num" id="statDueCount" style="color:var(--seal);">0</div>
+          <div class="mem-stat-label">⏰ 今日待複習</div>
+        </div>
+      </div>
+
+      <!-- 卡片字級 -->
+      <div class="mem-setting-row">
+        <span class="mem-setting-label">經文字體大小</span>
+        <div class="mem-chip-group" id="memFontSizeGroup">
+          <button type="button" class="mem-opt-chip" data-fsize="1.18rem">標準</button>
+          <button type="button" class="mem-opt-chip active" data-fsize="1.42rem">舒適</button>
+          <button type="button" class="mem-opt-chip" data-fsize="1.68rem">大字</button>
+          <button type="button" class="mem-opt-chip" data-fsize="1.95rem">特大</button>
+        </div>
+      </div>
+
+      <!-- 和風五大色彩主題 -->
+      <div class="mem-setting-row">
+        <span class="mem-setting-label">護眼色彩主題</span>
+        <div class="mem-chip-group" id="memThemeGroup">
+          <button type="button" class="mem-opt-chip" data-theme="light">☀️ 和紙白</button>
+          <button type="button" class="mem-opt-chip" data-theme="sepia">📜 枯茶</button>
+          <button type="button" class="mem-opt-chip" data-theme="matcha">🍵 若竹</button>
+          <button type="button" class="mem-opt-chip" data-theme="dark">🌙 藍鼠</button>
+          <button type="button" class="mem-opt-chip" data-theme="oled">🖤 墨玄</button>
+        </div>
+      </div>
+
+      <!-- 對照語言開關 -->
+      <div class="mem-setting-row">
+        <span class="mem-setting-label">輔助對照顯示</span>
+        <div class="mem-chip-group">
+          <button type="button" class="mem-opt-chip active" id="memToggleEnBtn">🇬🇧 英文 KJV</button>
+          <button type="button" class="mem-opt-chip" id="memToggleOrigBtn">📜 希伯來/希臘原文</button>
+          <button type="button" class="mem-opt-chip active" id="memToggleStrongBtn">🏷️ Strong 核心字</button>
+        </div>
+      </div>
+
+      <!-- 語音連播設定 -->
+      <div class="mem-setting-row">
+        <span class="mem-setting-label">語音伴讀每節重複次數</span>
+        <div class="mem-chip-group" id="memAudioRepeatGroup">
+          <button type="button" class="mem-opt-chip" data-repeat="1">讀 1 次</button>
+          <button type="button" class="mem-opt-chip active" data-repeat="2">讀 2 次</button>
+          <button type="button" class="mem-opt-chip" data-repeat="3">讀 3 次</button>
+        </div>
+      </div>
+
+      <!-- 匯出與重置 -->
+      <div style="display:flex; gap:8px; margin-top:16px;">
+        <button type="button" class="mem-opt-chip" id="memExportBtn" style="flex:1; padding:9px;">📥 匯出背誦紀錄 (JSON)</button>
+        <label class="mem-opt-chip" style="flex:1; padding:9px; text-align:center;">
+          📤 匯入還原紀錄
+          <input type="file" id="memImportInput" accept=".json" hidden>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="data/memory_777.js?v=34"></script>
+<script src="memory.js?v=34"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
