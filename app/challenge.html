@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fbf9f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
+<title>Biblia 聖經挑戰 — 益智小遊戲 · 猜人名 · 猜地名 · 經文填空 · 十字填字 · 救贖時間線</title>
+<meta name="description" content="寓教於樂的沉浸式聖經益智小遊戲與知識挑戰殿堂。包含猜聖經人名、猜聖經地名、經典經文填空（支援選擇題與填空題雙模式切換）、聖經十字填字遊戲與救贖歷史時間線排序。美感UIUX、原創考證與即時經文研讀。">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script>
+(function () {
+  try {
+    var s = JSON.parse(localStorage.getItem('biblia') || 'null') || {};
+    var sysDark = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = s.theme || (s.dark ? 'dark' : (sysDark ? 'dark' : 'light'));
+    document.documentElement.classList.add(theme);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;600;700;900&display=swap">
+<link rel="stylesheet" href="style.css?v=36">
+<style>
+/* ===================== 聖經挑戰專屬高質感樣式 (Bible Challenge Design System) ===================== */
+:root {
+  --game-safe-top: env(safe-area-inset-top, 0px);
+  --game-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --game-safe-left: env(safe-area-inset-left, 0px);
+  --game-safe-right: env(safe-area-inset-right, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.game-body {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 頂部全寬導覽列 */
+.game-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bar);
+  border-bottom: 1px solid var(--line-soft);
+  padding: calc(8px + var(--game-safe-top)) calc(16px + var(--game-safe-right)) 8px calc(16px + var(--game-safe-left));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--sh-1);
+}
+
+.game-top-left, .game-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.game-brand-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.game-brand-title {
+  font-family: var(--font-cinzel);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.game-brand-sub {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--fg-mute);
+  padding: 2px 8px;
+  background: var(--bg-soft);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-soft);
+}
+
+@media (max-width: 640px) {
+  .game-brand-sub { display: none; }
+}
+
+.game-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.game-nav-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.game-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--ring);
+}
+
+/* 遊戲大廳主框架 */
+.game-main-shell {
+  flex: 1;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 16px calc(32px + var(--game-safe-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 遊戲類別分頁切換列 */
+.game-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+  scrollbar-width: none;
+}
+
+.game-tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.game-nav-tab {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  box-shadow: var(--sh-1);
+}
+
+.game-nav-tab:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.game-nav-tab.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px var(--ring);
+}
+
+/* 問答挑戰卡片 (Quiz Card) */
+.quiz-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  box-shadow: var(--sh-2);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: all var(--t-mid);
+}
+
+@media (max-width: 600px) {
+  .quiz-card {
+    padding: 16px;
+    border-radius: var(--r-lg);
+  }
+}
+
+.quiz-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 12px;
+}
+
+.quiz-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quiz-pill-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.quiz-cat-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--fg-mute);
+}
+
+/* 核心需求：選擇題 vs 填空題 切換開關 */
+.quiz-mode-switch {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--bg-soft);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+}
+
+.mode-switch-btn {
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: var(--r-pill);
+  border: none;
+  background: transparent;
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.mode-switch-btn.active {
+  background: var(--bar);
+  color: var(--accent);
+  box-shadow: var(--sh-1);
+}
+
+/* 提示線索區 (Clues Box) */
+.quiz-prompt-box {
+  background: var(--bg-soft);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  border: 1px solid var(--line-soft);
+}
+
+.clue-list-heading {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin-bottom: 12px;
+}
+
+.clues-ordered-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clue-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.96rem;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.clue-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3px;
+}
+
+/* 經文填空專屬題幹 */
+.verse-prompt-box {
+  text-align: center;
+  padding: 24px 20px;
+}
+
+.verse-ref-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.verse-cloze-text {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  line-height: 1.8;
+  color: var(--fg);
+  margin-bottom: 12px;
+}
+
+.verse-cloze-text strong,
+.quiz-blank-word {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.quiz-clue-hint {
+  font-size: 0.85rem;
+  color: var(--fg-mute);
+}
+
+/* 作答區域 1：選擇題按鈕網格 (4選1) */
+.quiz-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 520px) {
+  .quiz-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quiz-opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 1.02rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--t-fast);
+}
+
+.quiz-opt-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.quiz-opt-btn:active {
+  transform: scale(0.98);
+}
+
+.opt-label {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-soft);
+  color: var(--fg-dim);
+  font-size: 0.84rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quiz-opt-btn.correct {
+  background: rgba(46, 107, 73, 0.16) !important;
+  border-color: var(--ok) !important;
+  color: var(--ok) !important;
+}
+
+.quiz-opt-btn.correct .opt-label {
+  background: var(--ok);
+  color: #fff;
+}
+
+.quiz-opt-btn.wrong {
+  background: rgba(192, 56, 43, 0.14) !important;
+  border-color: var(--seal) !important;
+  color: var(--seal) !important;
+}
+
+.quiz-opt-btn.wrong .opt-label {
+  background: var(--seal);
+  color: #fff;
+}
+
+/* 作答區域 2：填空題輸入框與字磚 (Fill-in) */
+.fill-in-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fill-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.fill-text-input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+
+.fill-text-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.fill-submit-btn {
+  padding: 0 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fill-tools-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fill-tool-chip {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.fill-tool-chip:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.fill-char-bank-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--fg-mute);
+}
+
+.fill-char-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.char-tile-btn {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--sh-1);
+  transition: all var(--t-fast);
+}
+
+.char-tile-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: translateY(-2px);
+}
+
+.char-tile-btn:active {
+  transform: scale(0.92);
+}
+
+/* 詳細回饋與屬靈小百科卡片 (Feedback Card) */
+.quiz-result-feedback {
+  margin-top: 6px;
+  animation: fadeInDown 0.3s var(--ease);
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback-card {
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  border: 1.5px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feedback-card.fb-correct {
+  background: rgba(46, 107, 73, 0.08);
+  border-color: var(--ok);
+}
+
+.feedback-card.fb-wrong {
+  background: rgba(192, 56, 43, 0.08);
+  border-color: var(--seal);
+}
+
+.fb-header {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.fb-target-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 1.05rem;
+}
+
+.fb-target-name {
+  font-size: 1.25rem;
+  color: var(--accent);
+}
+
+.fb-name-meaning {
+  font-size: 0.88rem;
+  color: var(--fg-mute);
+}
+
+.fb-info-row {
+  font-size: 0.9rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+}
+
+.fb-desc-text {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--fg);
+  margin: 4px 0 0;
+}
+
+.fb-verse-box {
+  background: var(--bg-alt);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  margin-top: 4px;
+}
+
+.fb-verse-ref {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.fb-verse-text {
+  font-family: var(--font-serif);
+  font-size: 0.96rem;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.fb-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.fb-read-link {
+  text-decoration: none;
+}
+
+.fb-next-btn {
+  padding: 8px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* ===================== 十字填字遊戲樣式 (Crossword Grid Layout) ===================== */
+.cw-app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cw-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.cw-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.cw-desc {
+  font-size: 0.84rem;
+  color: var(--fg-mute);
+}
+
+.cw-level-select {
+  padding: 6px 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  outline: none;
+}
+
+.cw-tools-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cw-tool-btn {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.cw-tool-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cw-layout-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .cw-layout-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cw-grid-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.cw-board-grid {
+  display: grid;
+  gap: 3px;
+  background: var(--line);
+  padding: 6px;
+  border-radius: var(--r-lg);
+  max-width: 440px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  box-shadow: var(--sh-2);
+}
+
+.cw-cell {
+  position: relative;
+  background: var(--bg-alt);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  aspect-ratio: 1 / 1;
+}
+
+.cw-block-cell {
+  background: var(--bg-soft);
+  opacity: 0.65;
+}
+
+.cw-active-cell {
+  cursor: pointer;
+  transition: background-color var(--t-fast);
+}
+
+.cw-active-cell:hover {
+  background: var(--accent-soft);
+}
+
+.cw-active-cell.cw-word-highlight {
+  background: rgba(212, 155, 56, 0.18);
+}
+
+.cw-active-cell.cw-selected {
+  background: var(--accent) !important;
+  color: var(--accent-ink) !important;
+  box-shadow: 0 0 0 2px var(--accent-hi);
+  z-index: 2;
+}
+
+.cw-active-cell.cw-correct-cell {
+  background: rgba(46, 107, 73, 0.22);
+}
+
+.cw-active-cell.cw-wrong-cell {
+  background: rgba(192, 56, 43, 0.22);
+}
+
+.cell-num {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: var(--fg-mute);
+  line-height: 1;
+}
+
+.cw-selected .cell-num {
+  color: var(--accent-ink);
+}
+
+.cell-letter {
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-family: var(--font-serif);
+}
+
+@media (max-width: 480px) {
+  .cell-letter { font-size: 1.1rem; }
+}
+
+.cw-clues-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.cw-clue-heading {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.cw-clue-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cw-clue-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg-alt);
+  border: 1px solid var(--line-soft);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.cw-clue-item:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.cw-clue-item.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  box-shadow: 0 2px 6px var(--ring);
+}
+
+.cw-clue-badge {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===================== 時間線排序樣式 (Timeline Sorter) ===================== */
+.timeline-app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tl-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tl-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.tl-desc {
+  font-size: 0.84rem;
+  color: var(--fg-mute);
+}
+
+.tl-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tl-event-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: var(--r-lg);
+  border: 1.5px solid var(--line);
+  background: var(--bg-alt);
+  box-shadow: var(--sh-1);
+  transition: all var(--t-fast);
+}
+
+.tl-event-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--sh-2);
+}
+
+.tl-card-order-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tl-card-content {
+  flex: 1;
+}
+
+.tl-event-text {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1.4;
+}
+
+.tl-event-history-info {
+  margin-top: 4px;
+  display: flex;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.tl-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tl-move-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-xs);
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  color: var(--fg-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all var(--t-fast);
+}
+
+.tl-move-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.tl-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.tl-verify-btn {
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.tl-feedback-msg {
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: var(--r-md);
+}
+
+.tl-feedback-msg.ok {
+  background: rgba(46, 107, 73, 0.12);
+  color: var(--ok);
+  border: 1px solid var(--ok);
+}
+
+.tl-feedback-msg.err {
+  background: rgba(192, 56, 43, 0.12);
+  color: var(--seal);
+  border: 1px solid var(--seal);
+}
+
+/* ===================== 成就彈窗樣式 (Achievements Modal) ===================== */
+.ach-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.ach-modal-overlay[hidden] {
+  display: none;
+}
+
+.ach-modal-dialog {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  max-width: 580px;
+  width: 100%;
+  max-height: 85dvh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--sh-4);
+  overflow: hidden;
+}
+
+.ach-modal-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ach-modal-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.ach-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--fg-mute);
+  cursor: pointer;
+}
+
+.ach-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.ach-modal-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ach-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  transition: all var(--t-fast);
+}
+
+.ach-card.unlocked {
+  border-color: var(--hit-line);
+  background: rgba(212, 155, 56, 0.08);
+}
+
+.ach-card.locked {
+  opacity: 0.6;
+  filter: grayscale(1);
+}
+
+.ach-icon {
+  font-size: 1.8rem;
+}
+
+.ach-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--fg);
+}
+
+.ach-desc {
+  font-size: 0.8rem;
+  color: var(--fg-mute);
+  margin-top: 2px;
+}
+
+.ach-ok-badge {
+  font-size: 0.72rem;
+  color: var(--ok);
+  font-weight: 800;
+}
+
+/* 成就動態提示泡泡 (Toast) */
+.game-achievement-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 120;
+  background: var(--bar);
+  border: 1.5px solid var(--hit-line);
+  border-radius: var(--r-lg);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--sh-4);
+  transform: translateY(120%);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-achievement-toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.ach-toast-icon {
+  font-size: 1.8rem;
+}
+
+.ach-toast-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ach-toast-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.ach-toast-desc {
+  font-size: 0.78rem;
+  color: var(--fg-mute);
+}
+
+/* 全螢幕 Canvas 慶祝彩帶粒子 */
+#confettiCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+}
+</style>
+</head>
+
+<body class="game-body">
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- ================= 頂部通用導覽列 ================= -->
+  <header class="game-topbar">
+    <div class="game-top-left">
+      <a href="index.html" class="game-brand-group" title="回到 Biblia 首頁">
+        <span class="game-brand-icon">🎮</span>
+        <span class="game-brand-title">Biblia 挑戰</span>
+        <span class="game-brand-sub">聖經益智與知識堂</span>
+      </a>
+    </div>
+
+    <div class="game-top-right">
+      <div class="game-stat-pill" id="topStreakBadge" title="當前答題連勝">🔥 0</div>
+      <div class="game-stat-pill" id="topScoreBadge" title="累計經驗值積分">0 XP</div>
+      <button type="button" class="game-nav-btn" id="btnAchievements" title="查看榮譽成就">
+        <span>🏅</span> <span class="btn-text">成就</span>
+      </button>
+      <button type="button" class="game-nav-btn" id="soundToggleBtn" title="切換音效">
+        <span>🔊</span>
+      </button>
+      <button type="button" class="game-nav-btn" id="themeToggleBtn" title="切換主題 (白練/枯茶/若竹/藍鼠/墨玄)">
+        <span>◐</span>
+      </button>
+      <a href="index.html" class="game-nav-btn" title="回首頁">
+        <span>⌂</span> <span class="btn-text">首頁</span>
+      </a>
+      <a href="memory.html" class="game-nav-btn" title="777 節經文背誦卡">
+        <span>🧠</span> <span class="btn-text">背誦</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= 遊戲核心大廳框架 ================= -->
+  <main class="game-main-shell">
+
+    <!-- 遊戲分頁切換列 -->
+    <nav class="game-tabs-bar" role="tablist" aria-label="聖經小遊戲模式切換">
+      <button type="button" class="game-nav-tab active" data-tab="char" role="tab" aria-selected="true">
+        <span>👤</span> 猜聖經人名
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="place" role="tab" aria-selected="false">
+        <span>🗺️</span> 猜聖經地名
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="verse" role="tab" aria-selected="false">
+        <span>📜</span> 經典經文填空
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="crossword" role="tab" aria-selected="false">
+        <span>🧩</span> 聖經十字填字
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="timeline" role="tab" aria-selected="false">
+        <span>⏳</span> 救贖年代排序
+      </button>
+    </nav>
+
+    <!-- 1. 猜聖經人名 View -->
+    <section id="viewCharacters" class="game-view-panel">
+      <div id="charQuizContainer">
+        <!-- 由 JS 動態渲染題卡 (選擇題 / 填空題 切換) -->
+      </div>
+    </section>
+
+    <!-- 2. 猜聖經地名 View -->
+    <section id="viewPlaces" class="game-view-panel" hidden>
+      <div id="placeQuizContainer">
+        <!-- 由 JS 動態渲染題卡 (選擇題 / 填空題 切換) -->
+      </div>
+    </section>
+
+    <!-- 3. 經典經文填空 View -->
+    <section id="viewVerses" class="game-view-panel" hidden>
+      <div id="verseQuizContainer">
+        <!-- 由 JS 動態渲染題卡 (選擇題 / 填空題 切換) -->
+      </div>
+    </section>
+
+    <!-- 4. 聖經十字填字遊戲 View -->
+    <section id="viewCrossword" class="game-view-panel" hidden>
+      <div id="crosswordAppContainer">
+        <!-- 由 JS 動態渲染十字網格與橫縱提示 -->
+      </div>
+    </section>
+
+    <!-- 5. 救贖歷史時間線排序 View -->
+    <section id="viewTimeline" class="game-view-panel" hidden>
+      <div id="timelineAppContainer">
+        <!-- 由 JS 動態渲染時間線事件卡片 -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= 榮譽成就彈窗 ================= -->
+  <div id="achievementsModal" class="ach-modal-overlay" hidden role="dialog" aria-modal="true" aria-label="榮譽成就清單">
+    <div class="ach-modal-dialog">
+      <header class="ach-modal-head">
+        <h3 class="ach-modal-title">🏆 聖經挑戰榮譽成就</h3>
+        <button type="button" id="achievementsCloseBtn" class="ach-modal-close" aria-label="關閉">×</button>
+      </header>
+      <div class="ach-modal-body" id="achievementsListContainer">
+        <!-- 動態渲染 8 大成就卡片 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 資料庫與遊戲引擎 Script -->
+  <script src="data/challenge_data.js"></script>
+  <script src="challenge.js"></script>
+
+  <!-- 離線 Service Worker -->
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function (e) {
+        console.warn('SW register fail', e);
+      });
+    });
+  }
+  </script>
+</body>
+</html>
