@@ -78,10 +78,70 @@ def main():
     missing_ids = (js_ids - html_ids) - dynamic_ids
     assert not missing_ids, f"IDs used in memory.js but missing in memory.html: {missing_ids}"
 
+    # Verify Service Worker caches memory assets
+    with io.open(SW_PATH, "r", encoding="utf-8") as fh:
+        sw_text = fh.read()
+    assert "memory.html" in sw_text, "SW missing memory.html"
+    assert "memory.js" in sw_text, "SW missing memory.js"
+    assert "memory_777.js" in sw_text, "SW missing memory_777.js"
+
+    # Verify Quiz Generation capability for all 777 verses
+    stop_words = {
+        "一個", "我們", "你們", "他們", "自己", "甚麼", "這事", "若是", "就是", "因為",
+        "所以", "但是", "然而", "並且", "而且", "也是", "不是", "如此", "那時",
+        "那日", "這日", "那裡", "這裡", "為甚麼", "怎樣", "如何", "不可", "不要",
+        "不能", "可以", "雖然", "凡是", "有的", "沒有"
+    }
+    by_cat_len = {}
+    verse_target_map = {}
+
+    def clean_word(w):
+        return re.sub(r"[，。；：！？、─…「」『』（）\s]", "", w).strip()
+
+    for v in verses:
+        cands = []
+        strong_str = v.get("strong") or ""
+        if strong_str:
+            for it in re.findall(r"\(([^)]+)\)", strong_str):
+                cw = clean_word(it)
+                if 2 <= len(cw) <= 4 and cw in v["zh"] and cw not in stop_words:
+                    cands.append(cw)
+        clauses = re.split(r"[，。；：！？、─…「」『』（）]", v["zh"])
+        for cl in clauses:
+            cl = clean_word(cl)
+            if len(cl) >= 4:
+                for wlen in (2, 3, 4):
+                    for i in range(0, len(cl) - wlen + 1):
+                        sub = cl[i:i+wlen]
+                        if sub not in stop_words and sub not in cands:
+                            cands.append(sub)
+        assert len(cands) > 0, f"No quiz target candidate found for {v['ref']}"
+        target = cands[0]
+        verse_target_map[v["id"]] = target
+        cat = v["cat"]
+        wlen = len(target)
+        by_cat_len.setdefault((cat, wlen), set()).add(target)
+        by_cat_len.setdefault(("all", wlen), set()).add(target)
+
+    # Verify every verse gets 1 answer + 3 distractors
+    for v in verses:
+        target = verse_target_map[v["id"]]
+        cat = v["cat"]
+        wlen = len(target)
+        pool = list(by_cat_len.get((cat, wlen), set()) - {target})
+        if len(pool) < 3:
+            pool += list(by_cat_len.get(("all", wlen), set()) - {target} - set(pool))
+        if len(pool) < 3:
+            pool += list(by_cat_len.get(("all", 2), set()) - {target} - set(pool))
+            pool += list(by_cat_len.get(("all", 3), set()) - {target} - set(pool))
+        assert len(pool) >= 3, f"Quiz generation failed for verse {v['id']} ({v['ref']})"
+
     print("ALL VERIFICATION CHECKS PASSED SUCCESSFULLY!")
     print(f"  - 7 Categories x 111 Verses = {len(verses)} Total Verses")
     print(f"  - All {len(required_refs)} core Gideon benchmark verses verified")
     print(f"  - All {len(js_ids - dynamic_ids)} DOM IDs between memory.html and memory.js verified")
+    print(f"  - 100% of 777 verses verified for quiz question & distractor generation")
+    print(f"  - Service Worker cache integrity verified")
 
 if __name__ == "__main__":
     main()
