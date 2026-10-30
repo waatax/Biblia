@@ -1,19 +1,26 @@
 /**
- * Biblia 聖經挑戰與益智小遊戲核心引擎 (Biblia Challenge & Games Engine)
- * 支援：
- * 1. 猜聖經人名 (Who Am I?) - 支援選擇題 / 填空題(打字+字磚) 即時無縫切換
- * 2. 猜聖經地名 (Where Is It?) - 支援選擇題 / 填空題 即時切換
- * 3. 經典經文填空 (Scripture Cloze) - 支援選擇題 / 填空題 切換
- * 4. 聖經十字填字遊戲 (Crossword Puzzle) - 互動網格、橫豎切換、鍵盤+觸控輸入、檢查與提示
- * 5. 聖經時空歷史排序 (Timeline Sorter) - 上下移動/拖曳排序、歷史考證回饋
- * 6. Web Audio API 合成音效、Canvas 五彩碎紙祝賀、成就系統與 LocalStorage 累計進度
+ * Biblia 聖經挑戰與益智小遊戲核心引擎 (Biblia Challenge & Games Engine v2.0)
+ * 深度優化設計：
+ * 1. Web Speech API 語音朗讀系統 (自然中文語音朗讀題目、選項、答案與解析)
+ * 2. 深度遊戲化 (Gamification) 體系：
+ *    - 6 階屬靈天路客等級階梯與即時經驗條 (Level & XP Progress Bar)
+ *    - 連勝連擊倍率機制 (Combo Multipliers: 1.2x ~ 2.0x XP)
+ *    - 等級晉升榮耀祝賀 (Level-Up Fanfare & Confetti)
+ *    - 12 款精美成就勳章
+ * 3. 錯題複習專區 (Spaced Repetition Mistake Notebook)：
+ *    - 錯誤時提供結構化學習解惑指引（❌ 您的作答、💡 易混淆辨析、🎯 關鍵記憶法）
+ *    - 自動收錄錯題庫，支援專屬「錯題複習」重測，掌握後頒發訂正獎勵
+ * 4. 五大單元內容增加 28% ~ 50%：
+ *    - 猜聖經人名 (32 位)、猜聖經地名 (20 處)、經典經文填空 (24 節)
+ *    - 聖經十字填字 (4 套原創字盤)、救贖年代排序 (4 組大進程)
+ * 5. 全面支援「選擇題 4選1」與「打字/字磚填空題」即時無縫切換
  */
 
 (function (window, document) {
   'use strict';
 
   // ========================================================
-  // 1. Web Audio API 合成音效引擎 (零外部檔案依賴，優雅純淨)
+  // 1. Web Audio API 音效引擎 (零外部檔案依賴，優雅純淨)
   // ========================================================
   var SoundEngine = (function () {
     var ctx = null;
@@ -133,7 +140,165 @@
   })();
 
   // ========================================================
-  // 2. Confetti 五彩碎紙歡慶特效 (HTML5 Canvas 粒子引擎)
+  // 2. Web Speech API 語音朗讀引擎 (自然中文朗讀題目與答案)
+  // ========================================================
+  var SpeechEngine = (function () {
+    var synth = window.speechSynthesis || null;
+    var currentUtterance = null;
+    var autoSpeechEnabled = false;
+    var isSpeakingNow = false;
+
+    function init() {
+      try {
+        var saved = localStorage.getItem('biblia_challenge_autospeech');
+        autoSpeechEnabled = saved === 'true';
+      } catch (e) {
+        autoSpeechEnabled = false;
+      }
+    }
+
+    function isSupported() {
+      return synth !== null;
+    }
+
+    function isAutoSpeech() {
+      return autoSpeechEnabled;
+    }
+
+    function toggleAutoSpeech() {
+      autoSpeechEnabled = !autoSpeechEnabled;
+      try {
+        localStorage.setItem('biblia_challenge_autospeech', String(autoSpeechEnabled));
+      } catch (e) {}
+      return autoSpeechEnabled;
+    }
+
+    function stop() {
+      if (synth) {
+        try {
+          synth.cancel();
+        } catch (e) {}
+      }
+      isSpeakingNow = false;
+      updateSpeechUI(false);
+    }
+
+    function getBestVoice() {
+      if (!synth) return null;
+      var voices = synth.getVoices() || [];
+      // 優先尋找繁體中文 (zh-TW, zh-HK)，其次簡體中文 (zh-CN, zh)
+      var twVoice = voices.find(function (v) { return v.lang === 'zh-TW' || v.lang === 'zh-HK'; });
+      if (twVoice) return twVoice;
+      var cnVoice = voices.find(function (v) { return v.lang && v.lang.indexOf('zh') === 0; });
+      if (cnVoice) return cnVoice;
+      return null;
+    }
+
+    function speak(text, onStart, onEnd) {
+      if (!synth || !text) return;
+
+      stop(); // 停止先前的朗讀
+
+      var utter = new SpeechSynthesisUtterance(text);
+      currentUtterance = utter;
+
+      var voice = getBestVoice();
+      if (voice) utter.voice = voice;
+
+      utter.rate = 0.95; // 舒緩清晰的教學語速
+      utter.pitch = 1.0;
+
+      utter.onstart = function () {
+        isSpeakingNow = true;
+        updateSpeechUI(true);
+        if (typeof onStart === 'function') onStart();
+      };
+
+      utter.onend = function () {
+        isSpeakingNow = false;
+        updateSpeechUI(false);
+        if (typeof onEnd === 'function') onEnd();
+      };
+
+      utter.onerror = function () {
+        isSpeakingNow = false;
+        updateSpeechUI(false);
+        if (typeof onEnd === 'function') onEnd();
+      };
+
+      // 觸發成就統計
+      StateManager.recordAudioListen();
+
+      synth.speak(utter);
+    }
+
+    function speakQuestion(q, currentTab) {
+      if (!q) return;
+
+      var speechText = '';
+      if (currentTab === 'verse') {
+        speechText = '經典經文填空。經文出處：' + q.ref + '。請聽經文：' + q.blankText.replace(/【____+】/g, '某某') + '。靈修提示：' + q.hint + '。';
+      } else {
+        var subject = (currentTab === 'char') ? '聖經人物' : '聖經地名';
+        speechText = '請依循屬靈線索，猜猜看這是哪一個' + subject + '？';
+        q.clues.forEach(function (c, idx) {
+          speechText += '線索' + (idx + 1) + '：' + c + '。';
+        });
+      }
+
+      speak(speechText);
+    }
+
+    function speakAnswer(q, userPick, isCorrect, currentTab) {
+      if (!q) return;
+
+      var targetName = q.name || q.answer;
+      var speechText = '';
+
+      if (isCorrect) {
+        speechText = '恭喜您，完全答對！標準答案是：' + targetName + '。';
+        var meaning = q.nameMeaning ? '原文字義：' + q.nameMeaning + '。' : '';
+        var bio = q.bio || q.notes || q.meaning || '';
+        speechText += meaning + bio;
+        if (q.verseText) speechText += '相關聖經金句：' + q.verseText;
+      } else {
+        speechText = '這題答錯了。您的回答是：' + (userPick || '未填寫') + '。標準答案是：' + targetName + '。';
+        if (q.mistakeExplanation) {
+          speechText += '學習解惑指引：' + q.mistakeExplanation + '。';
+        }
+        var info = q.bio || q.notes || q.meaning || '';
+        speechText += info;
+      }
+
+      speak(speechText);
+    }
+
+    function updateSpeechUI(speaking) {
+      var speakBtns = document.querySelectorAll('.tts-speak-btn');
+      speakBtns.forEach(function (btn) {
+        btn.classList.toggle('speaking', speaking);
+        if (btn.querySelector('.tts-text')) {
+          btn.querySelector('.tts-text').textContent = speaking ? '停止朗讀 ⏹' : '語音念題 🔊';
+        }
+      });
+    }
+
+    init();
+
+    return {
+      isSupported: isSupported,
+      isAutoSpeech: isAutoSpeech,
+      toggleAutoSpeech: toggleAutoSpeech,
+      speak: speak,
+      stop: stop,
+      speakQuestion: speakQuestion,
+      speakAnswer: speakAnswer,
+      isSpeaking: function () { return isSpeakingNow; }
+    };
+  })();
+
+  // ========================================================
+  // 3. Confetti 五彩碎紙歡慶特效 (HTML5 Canvas 粒子引擎)
   // ========================================================
   var ConfettiEngine = (function () {
     var canvas, ctx, particles = [], animationId = null;
@@ -226,10 +391,21 @@
   })();
 
   // ========================================================
-  // 3. 遊戲狀態儲存與統計管理 (State Manager)
+  // 4. 等級與深層遊戲化管理 (Gamification & State Manager)
   // ========================================================
   var StateManager = (function () {
-    var STORAGE_KEY = 'biblia_challenge_state_v1';
+    var STORAGE_KEY = 'biblia_challenge_state_v2';
+
+    // 6 大屬靈天路客階梯等級設定
+    var LEVELS = [
+      { level: 1, name: "🌿 聖經學徒", minXp: 0, maxXp: 300, desc: "初窺真道殿堂，如同新生嬰孩愛慕純淨的靈奶。" },
+      { level: 2, name: "🌱 忠心門徒", minXp: 300, maxXp: 800, desc: "日日在神的話語中扎根生長，立志跟隨主的腳蹤行。" },
+      { level: 3, name: "📜 經學學士", minXp: 800, maxXp: 1600, desc: "按著正意分解真理的道，心竅習練通達，能明辨是非。" },
+      { level: 4, name: "🛡️ 屬靈勇士", minXp: 1600, maxXp: 3000, desc: "拿起聖靈的寶劍，就是神的道，在屬靈爭戰中剛強得勝。" },
+      { level: 5, name: "👑 先知祭司", minXp: 3000, maxXp: 5000, desc: "胸懷聖約真理，體貼神的心腸，為時代呼求禱告守望。" },
+      { level: 6, name: "🕊️ 神學宗師", minXp: 5000, maxXp: 999999, desc: "神的話豐豐富富藏在心裡，活出真理與愛的最高基督品格。" }
+    ];
+
     var state = {
       score: 0,
       streak: 0,
@@ -239,8 +415,11 @@
       charCorrect: 0,
       placeCorrect: 0,
       verseCorrect: 0,
+      mistakesCorrected: 0,
+      audioListenedCount: 0,
       crosswordsSolved: {},
-      achievements: []
+      achievements: [],
+      mistakes: [] // 錯題庫：[{ id, mode, q, userPick, failedAt }]
     };
 
     function load() {
@@ -264,14 +443,67 @@
       } catch (e) {}
     }
 
-    function addScore(points) {
-      state.score += points;
-      save();
-      updateTopBarStats();
-      checkAchievements();
+    function getCurrentLevelInfo() {
+      var score = state.score;
+      for (var i = LEVELS.length - 1; i >= 0; i--) {
+        if (score >= LEVELS[i].minXp) {
+          var cur = LEVELS[i];
+          var next = LEVELS[i + 1] || null;
+          var range = next ? (next.minXp - cur.minXp) : 1000;
+          var currentProgress = next ? (score - cur.minXp) : range;
+          var percent = Math.min(100, Math.max(0, Math.floor((currentProgress / range) * 100)));
+          return {
+            level: cur.level,
+            name: cur.name,
+            desc: cur.desc,
+            currentXp: score,
+            nextXp: next ? next.minXp : 'MAX',
+            percent: percent
+          };
+        }
+      }
+      return { level: 1, name: LEVELS[0].name, desc: LEVELS[0].desc, currentXp: score, nextXp: 300, percent: 0 };
     }
 
-    function recordAnswer(isCorrect, mode) {
+    function getComboMultiplier() {
+      if (state.streak >= 10) return 2.0;
+      if (state.streak >= 5) return 1.5;
+      if (state.streak >= 3) return 1.2;
+      return 1.0;
+    }
+
+    function addScore(basePoints) {
+      var prevLevel = getCurrentLevelInfo().level;
+      var multiplier = getComboMultiplier();
+      var earnedPoints = Math.round(basePoints * multiplier);
+
+      state.score += earnedPoints;
+      save();
+
+      var newLevelInfo = getCurrentLevelInfo();
+      if (newLevelInfo.level > prevLevel) {
+        triggerLevelUp(newLevelInfo);
+      }
+
+      updateTopBarStats();
+      checkAchievements();
+      return earnedPoints;
+    }
+
+    function triggerLevelUp(levelInfo) {
+      SoundEngine.playWin();
+      ConfettiEngine.fire(100);
+
+      var modal = document.getElementById('levelUpModal');
+      var title = document.getElementById('levelUpTitle');
+      var desc = document.getElementById('levelUpDesc');
+
+      if (title) title.textContent = levelInfo.name + ' Lv.' + levelInfo.level;
+      if (desc) desc.textContent = levelInfo.desc;
+      if (modal) modal.hidden = false;
+    }
+
+    function recordAnswer(isCorrect, mode, q, userPick) {
       state.totalAnswered++;
       if (isCorrect) {
         state.totalCorrect++;
@@ -282,11 +514,52 @@
         if (mode === 'char') state.charCorrect++;
         if (mode === 'place') state.placeCorrect++;
         if (mode === 'verse') state.verseCorrect++;
+
+        // 若此題在錯題本中，將其移除並累加訂正數
+        removeMistake(q.id);
       } else {
         state.streak = 0;
+        // 自動收錄至錯題複習專區
+        addMistake(q, mode, userPick);
       }
       save();
       updateTopBarStats();
+      checkAchievements();
+    }
+
+    function addMistake(q, mode, userPick) {
+      if (!state.mistakes) state.mistakes = [];
+      var existing = state.mistakes.find(function (m) { return m.id === q.id; });
+      if (!existing) {
+        state.mistakes.push({
+          id: q.id,
+          mode: mode,
+          q: q,
+          userPick: userPick,
+          failedAt: Date.now()
+        });
+      } else {
+        existing.userPick = userPick;
+        existing.failedAt = Date.now();
+      }
+      save();
+      updateMistakesBadge();
+    }
+
+    function removeMistake(qid) {
+      if (!state.mistakes) return;
+      var idx = state.mistakes.findIndex(function (m) { return m.id === qid; });
+      if (idx !== -1) {
+        state.mistakes.splice(idx, 1);
+        state.mistakesCorrected++;
+        save();
+        updateMistakesBadge();
+      }
+    }
+
+    function recordAudioListen() {
+      state.audioListenedCount++;
+      save();
       checkAchievements();
     }
 
@@ -316,6 +589,10 @@
         if (ach.id === 'ach_verse_master' && state.verseCorrect >= 10) unlock = true;
         if (ach.id === 'ach_cw_solver' && Object.keys(state.crosswordsSolved || {}).length >= 1) unlock = true;
         if (ach.id === 'ach_score2000' && state.score >= 2000) unlock = true;
+        if (ach.id === 'ach_mistake_fixer' && state.mistakesCorrected >= 3) unlock = true;
+        if (ach.id === 'ach_audio_listener' && state.audioListenedCount >= 5) unlock = true;
+        if (ach.id === 'ach_level_master' && getCurrentLevelInfo().level >= 3) unlock = true;
+        if (ach.id === 'ach_crossword_all' && Object.keys(state.crosswordsSolved || {}).length >= 4) unlock = true;
 
         if (unlock) {
           state.achievements.push(ach.id);
@@ -360,34 +637,70 @@
     function updateTopBarStats() {
       var scoreEl = document.getElementById('topScoreBadge');
       var streakEl = document.getElementById('topStreakBadge');
+      var comboEl = document.getElementById('topComboBadge');
+      var levelBadge = document.getElementById('topLevelBadge');
+      var xpFill = document.getElementById('topXpFill');
+      var xpText = document.getElementById('topXpText');
+
       if (scoreEl) scoreEl.textContent = state.score + ' XP';
       if (streakEl) streakEl.textContent = '🔥 ' + state.streak;
+
+      // 連擊倍率
+      var mult = getComboMultiplier();
+      if (comboEl) {
+        if (mult > 1.0) {
+          comboEl.hidden = false;
+          comboEl.textContent = '⚡ ' + mult + 'x 加乘';
+        } else {
+          comboEl.hidden = true;
+        }
+      }
+
+      // 等級與經驗條
+      var lvl = getCurrentLevelInfo();
+      if (levelBadge) levelBadge.textContent = lvl.name;
+      if (xpFill) xpFill.style.width = lvl.percent + '%';
+      if (xpText) xpText.textContent = state.score + ' / ' + lvl.nextXp + ' XP';
+
+      updateMistakesBadge();
+    }
+
+    function updateMistakesBadge() {
+      var badge = document.getElementById('mistakesCountBadge');
+      if (badge) {
+        var count = (state.mistakes || []).length;
+        badge.textContent = count;
+        badge.hidden = (count === 0);
+      }
     }
 
     return {
       load: load,
       get: function () { return state; },
       addScore: addScore,
+      getComboMultiplier: getComboMultiplier,
       recordAnswer: recordAnswer,
+      recordAudioListen: recordAudioListen,
       recordCrosswordSolved: recordCrosswordSolved,
-      updateTopBarStats: updateTopBarStats
+      getCurrentLevelInfo: getCurrentLevelInfo,
+      updateTopBarStats: updateTopBarStats,
+      getMistakes: function () { return state.mistakes || []; }
     };
   })();
 
   // ========================================================
-  // 4. 主遊戲控制器 (Main Challenge Controller)
+  // 5. 主遊戲控制器 (Main Challenge Controller)
   // ========================================================
   var ChallengeApp = (function () {
-    var currentTab = 'char'; // 'char' | 'place' | 'verse' | 'crossword' | 'timeline'
+    var currentTab = 'char'; // 'char' | 'place' | 'verse' | 'crossword' | 'timeline' | 'mistakes'
     var inputMode = 'choice'; // 'choice' (選擇題) | 'fill' (填空題)
     var currentQuestion = null;
     var questionIndex = 0;
     var questionPool = [];
     var isAnswered = false;
     var activeCrossword = null;
-    var activeCwCells = [];
     var cwSelectedCell = null;
-    var cwDirection = 'across'; // 'across' | 'down'
+    var cwDirection = 'across';
 
     // DOM Elements
     var elements = {};
@@ -401,13 +714,13 @@
 
       // Read hash to direct to specific game mode
       var hash = window.location.hash.replace('#', '');
-      if (['char', 'place', 'verse', 'crossword', 'timeline'].indexOf(hash) !== -1) {
+      if (['char', 'place', 'verse', 'crossword', 'timeline', 'mistakes'].indexOf(hash) !== -1) {
         switchTab(hash);
       } else {
         switchTab('char');
       }
 
-      // Check URL parameters (e.g. ?mode=choice or ?mode=fill)
+      // Check URL parameters
       var params = new URLSearchParams(window.location.search);
       if (params.get('type') === 'fill') {
         setInputMode('fill');
@@ -423,13 +736,17 @@
         place: document.getElementById('viewPlaces'),
         verse: document.getElementById('viewVerses'),
         crossword: document.getElementById('viewCrossword'),
-        timeline: document.getElementById('viewTimeline')
+        timeline: document.getElementById('viewTimeline'),
+        mistakes: document.getElementById('viewMistakes')
       };
       elements.soundToggleBtn = document.getElementById('soundToggleBtn');
+      elements.speechToggleBtn = document.getElementById('speechToggleBtn');
       elements.themeToggleBtn = document.getElementById('themeToggleBtn');
       elements.btnAchievements = document.getElementById('btnAchievements');
       elements.achievementsModal = document.getElementById('achievementsModal');
       elements.achievementsCloseBtn = document.getElementById('achievementsCloseBtn');
+      elements.levelUpModal = document.getElementById('levelUpModal');
+      elements.levelUpConfirmBtn = document.getElementById('levelUpConfirmBtn');
     }
 
     function bindEvents() {
@@ -438,6 +755,7 @@
         tab.addEventListener('click', function () {
           var targetTab = this.getAttribute('data-tab');
           SoundEngine.playClick();
+          SpeechEngine.stop();
           switchTab(targetTab);
         });
       });
@@ -451,7 +769,19 @@
         });
       }
 
-      // 主題切換 (支援 light / sepia / matcha / dark / oled)
+      // 語音自動朗讀切換
+      if (elements.speechToggleBtn) {
+        elements.speechToggleBtn.addEventListener('click', function () {
+          var on = SpeechEngine.toggleAutoSpeech();
+          var icon = document.getElementById('speechIcon');
+          var text = document.getElementById('speechStateText');
+          if (icon) icon.textContent = on ? '🗣️' : '🎙️';
+          if (text) text.textContent = on ? '自讀:開' : '語音';
+          SoundEngine.playClick();
+        });
+      }
+
+      // 主題切換
       if (elements.themeToggleBtn) {
         elements.themeToggleBtn.addEventListener('click', function () {
           cycleTheme();
@@ -470,7 +800,15 @@
         });
       }
 
-      // 監聽鍵盤快捷鍵 (1,2,3,4 作為選擇題作答，Enter 送出填空，Space 下一題)
+      // 升級視窗確認按鈕
+      if (elements.levelUpConfirmBtn) {
+        elements.levelUpConfirmBtn.addEventListener('click', function () {
+          if (elements.levelUpModal) elements.levelUpModal.hidden = true;
+          SoundEngine.playClick();
+        });
+      }
+
+      // 監聽鍵盤快捷鍵 (1,2,3,4 作答，Enter 送出，Space 下一題)
       window.addEventListener('keydown', handleGlobalKeydown);
     }
 
@@ -531,11 +869,13 @@
         initCrosswordMode();
       } else if (tabId === 'timeline') {
         initTimelineMode();
+      } else if (tabId === 'mistakes') {
+        initMistakesMode();
       }
     }
 
     // ========================================================
-    // 5. 選擇題與填空題雙模式問答引擎 (Quiz Mode: Char / Place / Verse)
+    // 6. 選擇題與填空題雙模式問答引擎 (Quiz Mode: Char / Place / Verse)
     // ========================================================
     function initQuizMode(mode) {
       var db = window.BIBLIA_CHALLENGE_DATA;
@@ -552,14 +892,58 @@
       loadNextQuestion();
     }
 
+    function initMistakesMode() {
+      var container = document.getElementById('mistakesQuizContainer');
+      if (!container) return;
+
+      var mistakes = StateManager.getMistakes();
+      if (mistakes.length === 0) {
+        renderEmptyMistakes(container);
+        return;
+      }
+
+      // 將錯題池載入
+      questionPool = mistakes.map(function (m) { return m.q; });
+      questionIndex = 0;
+      loadNextQuestion();
+    }
+
+    function renderEmptyMistakes(container) {
+      var html = '<div class="quiz-card" style="text-align:center; padding: 48px 24px;">';
+      html += '  <div style="font-size:3.5rem; margin-bottom: 12px;">🌟</div>';
+      html += '  <h3 style="font-size:1.35rem; font-weight:800; color:var(--ok); margin:0 0 8px;">太棒了！目前沒有任何待複習錯題！</h3>';
+      html += '  <p style="font-size:0.92rem; color:var(--fg-dim); line-height:1.6; max-width:440px; margin:0 auto 24px;">';
+      html += '    在做題過程中遇到任何答錯的題目，系統都會以科學的記憶法自動收錄到這裡，供您反覆練習直到徹底掌握！';
+      html += '  </p>';
+      html += '  <div style="display:flex; justify-content:center; gap:10px;">';
+      html += '    <button type="button" class="btn btn-primary" onclick="window.location.hash=\'char\'; location.reload();">前往猜人名挑戰 →</button>';
+      html += '    <button type="button" class="btn btn-ghost" onclick="window.location.hash=\'verse\'; location.reload();">經文填空挑戰 ↗</button>';
+      html += '  </div>';
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
     function loadNextQuestion() {
-      if (questionPool.length === 0) return;
+      if (questionPool.length === 0) {
+        if (currentTab === 'mistakes') {
+          var container = document.getElementById('mistakesQuizContainer');
+          if (container) renderEmptyMistakes(container);
+        }
+        return;
+      }
       if (questionIndex >= questionPool.length) {
-        questionIndex = 0; // 循環循環題庫
+        questionIndex = 0; // 循環題庫
       }
       currentQuestion = questionPool[questionIndex];
       isAnswered = false;
       renderQuestionCard();
+
+      // 如果開啟了自動語音朗讀，自動念出題目
+      if (SpeechEngine.isAutoSpeech()) {
+        setTimeout(function () {
+          SpeechEngine.speakQuestion(currentQuestion, currentTab);
+        }, 300);
+      }
     }
 
     function setInputMode(mode) {
@@ -574,24 +958,29 @@
       if (currentTab === 'char') container = document.getElementById('charQuizContainer');
       else if (currentTab === 'place') container = document.getElementById('placeQuizContainer');
       else if (currentTab === 'verse') container = document.getElementById('verseQuizContainer');
+      else if (currentTab === 'mistakes') container = document.getElementById('mistakesQuizContainer');
 
       if (!container || !currentQuestion) return;
 
       var q = currentQuestion;
       var qNumberText = '第 ' + (questionIndex + 1) + ' / ' + questionPool.length + ' 題';
       var categoryTag = q.category || q.region || q.ref || '聖經挑戰';
+      if (currentTab === 'mistakes') categoryTag = '📝 錯題訂正專用';
 
       var html = '';
       html += '<div class="quiz-card">';
       
-      // 卡片頂部欄：題號、分類、以及「選擇 / 填空 切換鈕」
+      // 卡片頂部欄：題號、分類、語音念題按鈕、以及「選擇 / 填空 切換鈕」
       html += '<div class="quiz-card-head">';
       html += '  <div class="quiz-meta-info">';
       html += '    <span class="quiz-pill-badge">' + qNumberText + '</span>';
       html += '    <span class="quiz-cat-badge">' + categoryTag + '</span>';
+      html += '    <button type="button" class="tts-speak-btn" id="ttsSpeakQuestionBtn" title="語音念出題目">';
+      html += '      <span>🔊</span> <span class="tts-text">語音念題</span>';
+      html += '    </button>';
       html += '  </div>';
       
-      // 切換開關 (Choice vs Fill-in)
+      // 核心需求：切換開關 (Choice vs Fill-in)
       html += '  <div class="quiz-mode-switch" role="group" aria-label="切換作答方式">';
       html += '    <button type="button" class="mode-switch-btn ' + (inputMode === 'choice' ? 'active' : '') + '" data-mode="choice">選擇題 (4選1)</button>';
       html += '    <button type="button" class="mode-switch-btn ' + (inputMode === 'fill' ? 'active' : '') + '" data-mode="fill">填空題 (拼字/打字)</button>';
@@ -599,7 +988,7 @@
       html += '</div>';
 
       // 題目主體：經文填空 VS 人名/地名線索
-      if (currentTab === 'verse') {
+      if (currentTab === 'verse' || (currentTab === 'mistakes' && q.blankText)) {
         html += '<div class="quiz-prompt-box verse-prompt-box">';
         html += '  <div class="verse-ref-title">📖 ' + q.ref + '</div>';
         html += '  <div class="verse-cloze-text">' + q.blankText + '</div>';
@@ -607,8 +996,9 @@
         html += '</div>';
       } else {
         // 人名或地名：漸進線索清單
+        var promptDesc = (q.category && q.category.indexOf('地') !== -1) ? '哪一個聖經地名' : '哪一位聖經人物';
         html += '<div class="quiz-prompt-box">';
-        html += '  <div class="clue-list-heading">🔎 請依循以下屬靈線索，猜猜看這是' + (currentTab === 'char' ? '哪一位聖經人物' : '哪一個聖經地名') + '？</div>';
+        html += '  <div class="clue-list-heading">🔎 請依循以下屬靈線索，猜猜看這是' + promptDesc + '？</div>';
         html += '  <ol class="clues-ordered-list">';
         q.clues.forEach(function (clue, idx) {
           html += '    <li class="clue-item"><span class="clue-num">' + (idx + 1) + '</span><span class="clue-content">' + clue + '</span></li>';
@@ -677,7 +1067,7 @@
 
       // 生成混淆字元集
       var bankChars = targetAnswer.split('');
-      var distractorPool = ['亞', '以', '利', '撒', '大', '衛', '摩', '西', '約', '書', '各', '他', '伯', '恆', '神', '愛', '恩', '典', '光', '道', '靈', '約', '拿', '但', '保', '羅', '彼', '得'];
+      var distractorPool = ['亞', '以', '利', '撒', '大', '衛', '摩', '西', '約', '書', '各', '他', '伯', '恆', '神', '愛', '恩', '典', '光', '道', '靈', '拿', '但', '保', '羅', '彼', '得', '示', '劍', '心', '信', '望'];
       while (bankChars.length < 12) {
         var rChar = distractorPool[Math.floor(Math.random() * distractorPool.length)];
         if (bankChars.indexOf(rChar) === -1) {
@@ -696,6 +1086,18 @@
     }
 
     function bindQuizCardEvents(container, q) {
+      // 語音朗讀題目
+      var speakBtn = container.querySelector('#ttsSpeakQuestionBtn');
+      if (speakBtn) {
+        speakBtn.addEventListener('click', function () {
+          if (SpeechEngine.isSpeaking()) {
+            SpeechEngine.stop();
+          } else {
+            SpeechEngine.speakQuestion(q, currentTab);
+          }
+        });
+      }
+
       // 模式切換按鈕
       var switchBtns = container.querySelectorAll('.mode-switch-btn');
       switchBtns.forEach(function (btn) {
@@ -811,7 +1213,7 @@
         }
       }
 
-      // 同時將所有選項標記正確答案
+      // 同時將所有選項標記出正確答案
       var allOpts = document.querySelectorAll('.quiz-opt-btn');
       allOpts.forEach(function (b) {
         var optVal = b.getAttribute('data-answer');
@@ -820,36 +1222,71 @@
         }
       });
 
-      // 音效與狀態統計
+      // 狀態統計與積分
+      var earnedPoints = 0;
       if (isCorrect) {
         SoundEngine.playCorrect();
-        StateManager.recordAnswer(true, currentTab);
-        StateManager.addScore(100);
+        StateManager.recordAnswer(true, currentTab, q, userVal);
+        earnedPoints = StateManager.addScore(currentTab === 'mistakes' ? 120 : 100);
+
         if (StateManager.get().streak >= 3) {
           ConfettiEngine.fire(40);
         }
       } else {
         SoundEngine.playWrong();
-        StateManager.recordAnswer(false, currentTab);
+        StateManager.recordAnswer(false, currentTab, q, userVal);
       }
 
-      // 展開詳細屬靈小百科與解析卡片
-      renderFeedbackCard(isCorrect, q);
+      // 展開詳細屬靈小百科與解析卡片（包含錯誤時的學習解說）
+      renderFeedbackCard(isCorrect, q, userVal, earnedPoints);
+
+      // 自動語音朗讀解答與解析
+      if (SpeechEngine.isAutoSpeech()) {
+        setTimeout(function () {
+          SpeechEngine.speakAnswer(q, userVal, isCorrect, currentTab);
+        }, 500);
+      }
     }
 
-    function renderFeedbackCard(isCorrect, q) {
+    function renderFeedbackCard(isCorrect, q, userVal, earnedPoints) {
       var box = document.getElementById('quizFeedbackBox');
       if (!box) return;
 
-      var title = isCorrect ? '🎉 太棒了，完全答對！(+100 XP)' : '💡 差一點點，再接再厲！';
+      var mult = StateManager.getComboMultiplier();
+      var comboBonusText = mult > 1.0 ? ' (含 ' + mult + 'x 連擊加乘)' : '';
+      var title = isCorrect ? 
+        ('🎉 太棒了，完全答對！(+' + earnedPoints + ' XP' + comboBonusText + ')') : 
+        '💡 差了一點點，仔細研讀解惑指引！';
+
       var state = StateManager.get();
       var streakText = state.streak > 1 ? ' · 🔥 ' + state.streak + ' 連勝！' : '';
 
       var html = '';
       html += '<div class="feedback-card ' + (isCorrect ? 'fb-correct' : 'fb-wrong') + '">';
-      html += '  <div class="fb-header">';
+      
+      // 回饋標題列 + 語音朗讀解析按鈕
+      html += '  <div class="fb-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">';
       html += '    <span class="fb-title">' + title + streakText + '</span>';
+      html += '    <button type="button" class="tts-speak-btn" id="ttsSpeakAnswerBtn">';
+      html += '      <span>🔊</span> 朗讀答案與解說';
+      html += '    </button>';
       html += '  </div>';
+
+      // 核心需求：錯誤時的結構化學習解說指引 (Mistake Clarification Guide)
+      if (!isCorrect) {
+        html += '  <div class="mistake-clarify-box">';
+        html += '    <div class="mistake-clarify-title"><span>❌</span> 您的作答：<strong>「' + (userVal || '未填寫') + '」</strong></div>';
+        if (q.mistakeExplanation) {
+          html += '    <div class="mistake-clarify-content"><strong>💡 易混淆辨析：</strong>' + q.mistakeExplanation + '</div>';
+        } else {
+          html += '    <div class="mistake-clarify-content"><strong>💡 學習指引：</strong>請特別留意題目線索中的原文字義、歷史分期與關鍵神蹟，區隔同時代其他人物或事件。</div>';
+        }
+        html += '    <div class="memory-hook-box">';
+        html += '      <div class="memory-hook-title">🎯 正確關鍵記憶點：</div>';
+        html += '      <div>本題正解為<strong>【' + (q.name || q.answer) + '】</strong>。此題已自動收錄至「📝 錯題複習庫」，可隨時反覆重測直到掌握！</div>';
+        html += '    </div>';
+        html += '  </div>';
+      }
 
       // 答案與釋義
       var targetName = q.name || q.answer;
@@ -890,7 +1327,7 @@
 
       html += '  </div>';
 
-      // 底部動作按鈕：Biblia閱讀跳轉 + 下一題
+      // 底部動作按鈕：Biblia 經文閱讀跳轉 + 下一題
       html += '  <div class="fb-actions-row">';
       if (q.bookNo && q.chap) {
         html += '    <a href="index.html#book=' + q.bookNo + '&chap=' + q.chap + '" target="_blank" rel="noopener" class="btn btn-sm btn-ghost fb-read-link">';
@@ -905,12 +1342,25 @@
       box.innerHTML = html;
       box.hidden = false;
 
+      // 語音朗讀答案與解說事件
+      var speakAnsBtn = box.querySelector('#ttsSpeakAnswerBtn');
+      if (speakAnsBtn) {
+        speakAnsBtn.addEventListener('click', function () {
+          if (SpeechEngine.isSpeaking()) {
+            SpeechEngine.stop();
+          } else {
+            SpeechEngine.speakAnswer(q, userVal, isCorrect, currentTab);
+          }
+        });
+      }
+
       // 下一題按鈕事件
       var nextBtn = box.querySelector('#nextQuestionBtn');
       if (nextBtn) {
         nextBtn.focus();
         nextBtn.addEventListener('click', function () {
           SoundEngine.playClick();
+          SpeechEngine.stop();
           questionIndex++;
           loadNextQuestion();
         });
@@ -918,12 +1368,11 @@
     }
 
     function handleGlobalKeydown(e) {
-      // 避免在輸入框打字時觸發快捷鍵
       if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
         return;
       }
 
-      // 1, 2, 3, 4 選擇題作答
+      // 1, 2, 3, 4 選擇題快捷作答
       if (inputMode === 'choice' && !isAnswered && ['1', '2', '3', '4'].indexOf(e.key) !== -1) {
         var idx = parseInt(e.key, 10) - 1;
         var optBtns = document.querySelectorAll('.quiz-opt-btn');
@@ -943,7 +1392,7 @@
     }
 
     // ========================================================
-    // 6. 聖經十字填字遊戲引擎 (Crossword Puzzle Engine)
+    // 7. 聖經十字填字遊戲引擎 (Crossword Puzzle Engine)
     // ========================================================
     function initCrosswordMode() {
       var db = window.BIBLIA_CHALLENGE_DATA;
@@ -952,7 +1401,6 @@
       var container = document.getElementById('crosswordAppContainer');
       if (!container) return;
 
-      // 預設載入第 1 關或當前選中關卡
       if (!activeCrossword) {
         activeCrossword = db.crosswords[0];
       }
@@ -967,7 +1415,7 @@
       var html = '';
       html += '<div class="cw-app-shell">';
       
-      // 關卡切換下拉 / 標籤
+      // 關卡切換下拉
       html += '  <div class="cw-header-bar">';
       html += '    <div class="cw-title-group">';
       html += '      <h3 class="cw-title">🧩 ' + cw.title + '</h3>';
@@ -983,7 +1431,7 @@
       html += '    </div>';
       html += '  </div>';
 
-      // 填字工具列：提示、檢查、解答、重置
+      // 填字工具列
       html += '  <div class="cw-tools-bar">';
       html += '    <button type="button" class="cw-tool-btn" id="cwHintCellBtn">💡 提示目前格子</button>';
       html += '    <button type="button" class="cw-tool-btn" id="cwCheckBtn">🔍 檢查盤面</button>';
@@ -991,15 +1439,13 @@
       html += '    <button type="button" class="cw-tool-btn btn-ghost" id="cwSolveBtn">揭曉解答</button>';
       html += '  </div>';
 
-      // 主版面：左側十字網格，右側提示線索 (橫向 / 縱向)
+      // 主版面：網格與線索
       html += '  <div class="cw-layout-body">';
       
-      // 網格區
       html += '    <div class="cw-grid-wrap">';
       html += renderCrosswordGrid(cw);
       html += '    </div>';
 
-      // 線索提示清單
       html += '    <div class="cw-clues-wrap">';
       html += '      <div class="cw-clues-column">';
       html += '        <h4 class="cw-clue-heading">橫向提示 (Across)</h4>';
@@ -1024,10 +1470,10 @@
       });
       html += '        </ul>';
       html += '      </div>';
-      html += '    </div>'; // End .cw-clues-wrap
+      html += '    </div>';
 
-      html += '  </div>'; // End .cw-layout-body
-      html += '</div>'; // End .cw-app-shell
+      html += '  </div>';
+      html += '</div>';
 
       container.innerHTML = html;
 
@@ -1046,14 +1492,12 @@
         for (var c = 0; c < size; c++) {
           var cell = gridMap[r + '_' + c];
           if (cell && cell.char) {
-            // 可填字格子
             var numHtml = cell.num ? '<span class="cell-num">' + cell.num + '</span>' : '';
             html += '<div class="cw-cell cw-active-cell" data-r="' + r + '" data-c="' + c + '" data-ans="' + cell.char + '">';
             html += numHtml;
             html += '<span class="cell-letter" id="cwCell_' + r + '_' + c + '"></span>';
             html += '</div>';
           } else {
-            // 黑格/空格
             html += '<div class="cw-cell cw-block-cell" data-r="' + r + '" data-c="' + c + '"></div>';
           }
         }
@@ -1063,7 +1507,6 @@
     }
 
     function bindCrosswordEvents(container, cw) {
-      // 關卡切換
       var levelSelect = container.querySelector('#cwLevelSelect');
       if (levelSelect) {
         levelSelect.addEventListener('change', function () {
@@ -1078,7 +1521,6 @@
         });
       }
 
-      // 格子點擊
       var cells = container.querySelectorAll('.cw-active-cell');
       cells.forEach(function (cell) {
         cell.addEventListener('click', function () {
@@ -1088,7 +1530,6 @@
         });
       });
 
-      // 提示線索點擊 -> 自動聚焦並高亮網格對應詞彙
       var clueItems = container.querySelectorAll('.cw-clue-item');
       clueItems.forEach(function (item) {
         item.addEventListener('click', function () {
@@ -1101,14 +1542,12 @@
         });
       });
 
-      // 鍵盤輸入 (打字進格子)
       window.removeEventListener('keypress', handleCwKeyPress);
       window.addEventListener('keypress', handleCwKeyPress);
 
       window.removeEventListener('keydown', handleCwNavKey);
       window.addEventListener('keydown', handleCwNavKey);
 
-      // 工具列按鈕
       var hintBtn = container.querySelector('#cwHintCellBtn');
       if (hintBtn) {
         hintBtn.addEventListener('click', function () {
@@ -1166,14 +1605,12 @@
       var cellEl = document.querySelector('.cw-active-cell[data-r="' + r + '"][data-c="' + c + '"]');
       if (!cellEl) return;
 
-      // 如果點擊已選中的格子，切換方向
       if (cwSelectedCell === cellEl) {
         cwDirection = (cwDirection === 'across') ? 'down' : 'across';
       }
 
       cwSelectedCell = cellEl;
 
-      // 清除所有高亮
       document.querySelectorAll('.cw-active-cell').forEach(function (el) {
         el.classList.remove('cw-selected', 'cw-word-highlight');
       });
@@ -1182,17 +1619,13 @@
       });
 
       cellEl.classList.add('cw-selected');
-
-      // 高亮當前單詞所在的整條格子 (Word Highlighting)
       highlightActiveWord(r, c, cwDirection, cw);
     }
 
     function highlightActiveWord(r, c, dir, cw) {
-      // 沿著方向尋找連通的文字格
       var wordCells = [];
       var startR = r, startC = c;
 
-      // 往回找起點
       if (dir === 'across') {
         while (startC > 0 && document.querySelector('.cw-active-cell[data-r="' + startR + '"][data-c="' + (startC - 1) + '"]')) {
           startC--;
@@ -1221,7 +1654,6 @@
         wEl.classList.add('cw-word-highlight');
       });
 
-      // 同時高亮對應的線索
       var startCell = (dir === 'across') ? 
         document.querySelector('.cw-active-cell[data-r="' + startR + '"][data-c="' + startC + '"]') :
         document.querySelector('.cw-active-cell[data-r="' + startR + '"][data-c="' + startC + '"]');
@@ -1242,7 +1674,6 @@
     function handleCwKeyPress(e) {
       if (currentTab !== 'crossword' || !cwSelectedCell) return;
       var char = e.key;
-      // 排除控制鍵
       if (char.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
 
       var letterEl = cwSelectedCell.querySelector('.cell-letter');
@@ -1363,7 +1794,7 @@
     }
 
     // ========================================================
-    // 7. 聖經歷史時間線排序引擎 (Timeline Sorter Engine)
+    // 8. 聖經歷史時間線排序引擎 (Timeline Sorter Engine)
     // ========================================================
     function initTimelineMode() {
       var db = window.BIBLIA_CHALLENGE_DATA;
@@ -1382,7 +1813,6 @@
       var html = '';
       html += '<div class="timeline-app-shell">';
       
-      // 牌組切換欄
       html += '  <div class="tl-header-bar">';
       html += '    <div class="tl-title-group">';
       html += '      <h3 class="tl-title">⏳ ' + deck.title + '</h3>';
@@ -1398,7 +1828,6 @@
       html += '    </div>';
       html += '  </div>';
 
-      // 拖曳/點擊排序卡片清單 (初始狀態隨機打亂)
       var shuffledEvents = deck.events.slice().sort(function () { return 0.5 - Math.random(); });
 
       html += '  <div class="tl-events-list" id="tlEventsList">';
@@ -1420,7 +1849,6 @@
       });
       html += '  </div>';
 
-      // 提交驗證按鈕與回饋區
       html += '  <div class="tl-actions-bar">';
       html += '    <button type="button" id="tlVerifyBtn" class="btn btn-primary tl-verify-btn">驗證年代順序 ↵</button>';
       html += '    <div id="tlFeedbackMsg" class="tl-feedback-msg" hidden></div>';
@@ -1434,7 +1862,6 @@
     }
 
     function bindTimelineEvents(container, deck) {
-      // 牌組切換
       var deckSelect = container.querySelector('#tlDeckSelect');
       if (deckSelect) {
         deckSelect.addEventListener('change', function () {
@@ -1448,7 +1875,6 @@
         });
       }
 
-      // 上移與下移按鈕
       var list = container.querySelector('#tlEventsList');
       if (list) {
         list.addEventListener('click', function (e) {
@@ -1474,7 +1900,6 @@
         });
       }
 
-      // 驗證按鈕
       var verifyBtn = container.querySelector('#tlVerifyBtn');
       var fbMsg = container.querySelector('#tlFeedbackMsg');
       if (verifyBtn && list) {
@@ -1499,7 +1924,6 @@
             ConfettiEngine.fire(70);
             StateManager.addScore(150);
 
-            // 展開歷史年代與時代細節
             cards.forEach(function (c) {
               c.classList.add('correct');
               var info = c.querySelector('.tl-event-history-info');
@@ -1531,7 +1955,7 @@
     }
 
     // ========================================================
-    // 8. 成就榮譽彈窗 (Achievements Modal)
+    // 9. 成就榮譽彈窗 (Achievements Modal)
     // ========================================================
     function openAchievementsModal() {
       var modal = elements.achievementsModal;

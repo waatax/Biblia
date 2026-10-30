@@ -140,6 +140,153 @@ body.game-body {
   border: 1px solid var(--ring);
 }
 
+/* 等級徽章與經驗值進度條 (Gamification Level & XP Bar) */
+.game-level-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border-radius: var(--r-pill);
+  background: var(--bg-soft);
+  color: var(--accent);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.game-xp-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 90px;
+}
+
+@media (max-width: 768px) {
+  .game-xp-wrap { display: none; }
+}
+
+.game-xp-track {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-soft);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+}
+
+.game-xp-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--hit-line), var(--accent));
+  border-radius: var(--r-pill);
+  transition: width 0.35s ease;
+}
+
+.game-xp-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--fg-mute);
+  text-align: right;
+  line-height: 1;
+}
+
+/* 語音朗讀專屬按鈕與波動波紋 (TTS Speech Waveform) */
+.tts-speak-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--accent);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.tts-speak-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.tts-speak-btn.speaking {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 0 10px var(--ring);
+  animation: pulseSpeaking 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseSpeaking {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* 錯題複習專區與紅點徽章 (Mistakes Review) */
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  border-radius: var(--r-pill);
+  background: var(--seal);
+  color: #fff;
+  margin-left: 4px;
+}
+
+.mistake-clarify-box {
+  background: rgba(192, 56, 43, 0.08);
+  border: 1.5px solid var(--seal);
+  border-radius: var(--r-md);
+  padding: 12px 16px;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mistake-clarify-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--seal);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mistake-clarify-content {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.memory-hook-box {
+  background: rgba(212, 155, 56, 0.12);
+  border-left: 3px solid var(--hit-line);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.memory-hook-title {
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
 /* 遊戲大廳主框架 */
 .game-main-shell {
   flex: 1;
@@ -1179,11 +1326,26 @@ body.game-body {
         <span class="game-brand-title">Biblia 挑戰</span>
         <span class="game-brand-sub">聖經益智與知識堂</span>
       </a>
+
+      <!-- 遊戲化天路客等級徽章與經驗值進度條 -->
+      <div class="game-level-group">
+        <div class="game-level-badge" id="topLevelBadge" title="當前天路客屬靈等級">🌿 聖經學徒 Lv.1</div>
+        <div class="game-xp-wrap" title="升級經驗值進度">
+          <div class="game-xp-track">
+            <div class="game-xp-fill" id="topXpFill" style="width: 0%;"></div>
+          </div>
+          <span class="game-xp-text" id="topXpText">0 / 300 XP</span>
+        </div>
+      </div>
     </div>
 
     <div class="game-top-right">
+      <div class="game-stat-pill" id="topComboBadge" title="連擊經驗值倍率" hidden>⚡ 1.0x</div>
       <div class="game-stat-pill" id="topStreakBadge" title="當前答題連勝">🔥 0</div>
       <div class="game-stat-pill" id="topScoreBadge" title="累計經驗值積分">0 XP</div>
+      <button type="button" class="game-nav-btn" id="speechToggleBtn" title="自動語音朗讀開關 (點擊可切換)">
+        <span id="speechIcon">🎙️</span> <span id="speechStateText" class="btn-text">語音</span>
+      </button>
       <button type="button" class="game-nav-btn" id="btnAchievements" title="查看榮譽成就">
         <span>🏅</span> <span class="btn-text">成就</span>
       </button>
@@ -1222,6 +1384,9 @@ body.game-body {
       <button type="button" class="game-nav-tab" data-tab="timeline" role="tab" aria-selected="false">
         <span>⏳</span> 救贖年代排序
       </button>
+      <button type="button" class="game-nav-tab" data-tab="mistakes" role="tab" aria-selected="false">
+        <span>📝</span> 錯題複習專區 <span class="tab-badge" id="mistakesCountBadge" hidden>0</span>
+      </button>
     </nav>
 
     <!-- 1. 猜聖經人名 View -->
@@ -1258,6 +1423,32 @@ body.game-body {
         <!-- 由 JS 動態渲染時間線事件卡片 -->
       </div>
     </section>
+
+    <!-- 6. 錯題複習專區 View (科學間隔重複學習) -->
+    <section id="viewMistakes" class="game-view-panel" hidden>
+      <div id="mistakesQuizContainer">
+        <!-- 由 JS 動態渲染錯題題卡與訂正反饋 -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= 等級晉升榮耀彈窗 (Level Up Modal) ================= -->
+  <div id="levelUpModal" class="ach-modal-overlay" hidden role="dialog" aria-modal="true" aria-label="榮耀升級">
+    <div class="ach-modal-dialog" style="max-width: 420px; text-align: center;">
+      <div style="padding: 32px 24px;">
+        <div style="font-size: 3.5rem; margin-bottom: 8px;">👑</div>
+        <div style="font-size: 0.85rem; font-weight: 800; color: var(--hit-line); letter-spacing: 0.1em; text-transform: uppercase;">LEVEL UP · 榮耀晉升</div>
+        <h2 id="levelUpTitle" style="font-size: 1.6rem; font-weight: 900; margin: 8px 0; color: var(--accent);">🌱 忠心門徒 Lv.2</h2>
+        <p id="levelUpDesc" style="font-size: 0.92rem; color: var(--fg-dim); line-height: 1.6; margin: 12px 0 24px;">
+          你在神話語的追求與裝備上更進一步！主的道存在你心裡，恩上加恩、力上加力！
+        </p>
+        <button type="button" id="levelUpConfirmBtn" class="btn btn-primary" style="padding: 10px 32px; font-size: 1rem; font-weight: 800;">
+          感謝主，繼續前行！ →
+        </button>
+      </div>
+    </div>
+  </div>
 
   </main>
 
