@@ -6,8 +6,8 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#fbf9f5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
-<title>Biblia 聖經挑戰 — 益智小遊戲 · 猜人名 · 猜地名 · 經文填空 · 十字填字 · 救贖時間線</title>
-<meta name="description" content="寓教於樂的沉浸式聖經益智小遊戲與知識挑戰殿堂。包含猜聖經人名、猜聖經地名、經典經文填空（支援選擇題與填空題雙模式切換）、聖經十字填字遊戲與救贖歷史時間線排序。美感UIUX、原創考證與即時經文研讀。">
+<title>Biblia 聖經挑戰 — 猜人名 · 猜地名 · 經文填空 · 綜合挑戰 · 十字填字 · 年代排序</title>
+<meta name="description" content="用科學又有趣的方法學聖經：漸進線索猜人名地名、和合本經文填空、交錯出題的綜合挑戰、十字填字與救贖年代排序。語音朗讀題目與解答、答錯即時解說、間隔重複錯題本、每日目標與成就，適合任何程度的學習者。">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
 <link rel="apple-touch-icon" href="icons/icon.svg">
@@ -1259,10 +1259,7 @@ body.game-body {
 
 /* 成就動態提示泡泡 (Toast) */
 .game-achievement-toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 120;
+  pointer-events: auto;
   background: var(--bar);
   border: 1.5px solid var(--hit-line);
   border-radius: var(--r-lg);
@@ -1311,6 +1308,1134 @@ body.game-body {
   pointer-events: none;
   z-index: 99;
 }
+
+/* ===================== v3：今日目標、科學學習法、難度與闖關 ===================== */
+.today-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--bg-alt);
+  box-shadow: var(--sh-1);
+}
+
+.today-panel.goal-hit {
+  border-color: var(--ok);
+  background: linear-gradient(90deg, rgba(46, 107, 73, 0.10), var(--bg-alt) 60%);
+}
+
+.today-goal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.today-ring {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+}
+
+.today-ring circle {
+  fill: none;
+  stroke-width: 5;
+}
+
+.today-ring-track { stroke: var(--bg-soft); }
+
+.today-ring-fill {
+  stroke: var(--accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.goal-hit .today-ring-fill { stroke: var(--ok); }
+
+.today-goal-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  min-width: 0;
+}
+
+.today-goal-text strong {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.today-goal-text span {
+  font-size: 0.76rem;
+  color: var(--fg-mute);
+}
+
+.today-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.today-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-soft);
+  background: var(--bg);
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+
+.today-chip.has-due {
+  border-color: var(--seal);
+  color: var(--seal);
+}
+
+.today-goal-pick select {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.today-tips-btn {
+  cursor: pointer;
+  color: var(--accent);
+  border-color: var(--ring);
+  background: var(--accent-soft);
+}
+
+.tips-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--bg-alt);
+  padding: 14px 16px;
+  animation: fadeInDown 0.25s var(--ease);
+}
+
+.tips-intro {
+  font-size: 0.86rem;
+  color: var(--fg-dim);
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.tip-card {
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+}
+
+.tip-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.92rem;
+}
+
+.tip-en {
+  font-size: 0.7rem;
+  color: var(--fg-mute);
+  font-weight: 600;
+}
+
+.tip-card p {
+  margin: 6px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--fg-dim);
+}
+
+.diff-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.diff-bar-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--fg-mute);
+  margin-right: 2px;
+}
+
+.diff-chip {
+  padding: 5px 11px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.diff-chip small {
+  opacity: 0.7;
+  font-weight: 600;
+}
+
+.diff-chip:hover { border-color: var(--accent); color: var(--fg); }
+
+.diff-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.diff-badge, .quiz-type-badge {
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-soft);
+  background: var(--bg);
+  white-space: nowrap;
+}
+
+.diff-badge.diff-1 { color: var(--ok); }
+.diff-badge.diff-2 { color: var(--hit-line); }
+.diff-badge.diff-3 { color: var(--seal); }
+
+.quiz-meta-info { flex-wrap: wrap; }
+
+.round-dots {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.round-dot {
+  width: 22px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--bg-soft);
+  border: 1px solid var(--line-soft);
+}
+
+.round-dot.ok { background: var(--ok); border-color: var(--ok); }
+.round-dot.bad { background: var(--seal); border-color: var(--seal); }
+.round-dot.cur { border-color: var(--accent); background: var(--accent-soft); }
+
+.clue-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.clue-count {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+}
+
+.clue-item.clue-locked {
+  color: var(--fg-mute);
+  font-size: 0.86rem;
+  opacity: 0.75;
+}
+
+.clue-item.clue-locked .clue-num {
+  background: transparent;
+  font-size: 0.8rem;
+}
+
+.clue-item.clue-new {
+  animation: fadeInDown 0.35s var(--ease);
+}
+
+.clue-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.clue-reveal-btn, .clue-reveal-all, .lifeline-btn {
+  padding: 7px 12px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  border-radius: var(--r-md);
+  border: 1px dashed var(--accent);
+  background: var(--bg);
+  color: var(--accent);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.clue-reveal-all {
+  border-style: solid;
+  border-color: var(--line);
+  color: var(--fg-dim);
+}
+
+.clue-reveal-btn:hover, .clue-reveal-all:hover, .lifeline-btn:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.lifeline-btn:disabled, .fill-tool-chip:disabled, .char-tile-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lifeline-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.kbd-hint {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--fg-mute);
+}
+
+@media (hover: none) {
+  .kbd-hint { display: none; }
+}
+
+.quiz-opt-btn.removed {
+  opacity: 0.3;
+  text-decoration: line-through;
+  pointer-events: none;
+}
+
+.quiz-opt-btn:disabled { cursor: default; }
+.quiz-opt-btn:disabled:hover { transform: none; }
+
+.fill-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fill-slot, .cw-slot {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  border: 1.5px dashed var(--line);
+  background: var(--bg);
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.fill-slot.filled, .cw-slot.typed {
+  border-style: solid;
+  border-color: var(--accent);
+}
+
+.cw-slot.known {
+  border-style: solid;
+  border-color: var(--ok);
+  background: rgba(46, 107, 73, 0.10);
+}
+
+.fill-text-input.is-correct { border-color: var(--ok); }
+.fill-text-input.is-wrong { border-color: var(--seal); }
+
+.fill-tool-chip small, .lifeline-btn small, .cw-tool-btn small { opacity: 0.7; }
+
+.xp-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.xp-chip {
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 2px 9px;
+  border-radius: var(--r-pill);
+  background: rgba(46, 107, 73, 0.12);
+  color: var(--ok);
+}
+
+.xp-chip.neg { background: rgba(192, 56, 43, 0.10); color: var(--seal); }
+.xp-chip.combo { background: rgba(212, 155, 56, 0.18); color: var(--accent); }
+
+.contrast-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-alt);
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.contrast-title {
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.review-line {
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+}
+
+.review-line.review-up, .review-line.review-done {
+  border-color: var(--ok);
+  color: var(--ok);
+  background: rgba(46, 107, 73, 0.08);
+}
+
+.review-line.review-added { border-color: var(--hit-line); }
+
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.shake { animation: shakeX 0.4s ease; }
+
+.empty-card {
+  text-align: center;
+  align-items: center;
+}
+
+.empty-icon {
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+/* 一輪結算 */
+.round-summary {
+  text-align: center;
+  align-items: center;
+}
+
+.rs-stars {
+  display: flex;
+  gap: 6px;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.rs-star {
+  color: var(--bg-soft);
+  -webkit-text-stroke: 1px var(--line);
+}
+
+.rs-star.on {
+  color: var(--hit-line);
+  -webkit-text-stroke: 0;
+  animation: fadeInDown 0.4s var(--ease);
+}
+
+.rs-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--fg);
+}
+
+.rs-praise {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--fg-dim);
+}
+
+.rs-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+}
+
+@media (max-width: 480px) {
+  .rs-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+.rs-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 6px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+}
+
+.rs-stat b {
+  font-size: 1.2rem;
+  color: var(--accent);
+}
+
+.rs-stat span {
+  font-size: 0.74rem;
+  color: var(--fg-mute);
+}
+
+.rs-wrong, .rs-tip {
+  width: 100%;
+  max-width: 560px;
+  text-align: left;
+}
+
+.rs-wrong-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--seal);
+  margin-bottom: 6px;
+}
+
+.rs-wrong-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rs-wrong-chip {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--seal);
+  color: var(--seal);
+  background: rgba(192, 56, 43, 0.06);
+}
+
+.rs-tip {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: rgba(212, 155, 56, 0.10);
+  border-left: 3px solid var(--hit-line);
+}
+
+.rs-tip .tip-icon { font-size: 1.4rem; }
+
+.rs-tip p {
+  margin: 2px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+}
+
+.rs-actions, .srs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* 錯題本：間隔重複 */
+.srs-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  box-shadow: var(--sh-2);
+}
+
+.srs-head h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.srs-head h3 small {
+  font-size: 0.78rem;
+  color: var(--fg-mute);
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+.srs-head p {
+  margin: 6px 0 0;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--fg-dim);
+}
+
+.srs-boxes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 560px) {
+  .srs-boxes { grid-template-columns: repeat(2, 1fr); }
+}
+
+.srs-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 6px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-soft);
+  background: var(--bg);
+}
+
+.srs-box-n {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+.srs-box.box-1 .srs-box-n { color: var(--seal); }
+.srs-box.box-done .srs-box-n { color: var(--ok); }
+
+.srs-box-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--fg-mute);
+  text-align: center;
+}
+
+.srs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.srs-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-soft);
+  background: var(--bg);
+  font-size: 0.86rem;
+}
+
+.srs-item.is-due { border-color: var(--seal); }
+
+.srs-item-name {
+  font-weight: 800;
+  flex: 1;
+  min-width: 100px;
+}
+
+.srs-item-box {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.srs-item-box i {
+  width: 14px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+}
+
+.srs-item-box i.on { background: var(--ok); border-color: var(--ok); }
+
+.srs-item-due, .srs-item-wrong {
+  font-size: 0.76rem;
+  color: var(--fg-mute);
+  font-weight: 700;
+}
+
+.srs-item.is-due .srs-item-due { color: var(--seal); }
+
+.srs-empty {
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.srs-empty h4 {
+  margin: 8px 0 4px;
+  font-size: 1.1rem;
+  color: var(--ok);
+}
+
+.srs-empty p {
+  margin: 0 auto 14px;
+  max-width: 420px;
+  font-size: 0.88rem;
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+
+/* 十字填字：作答列 */
+.cw-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cw-progress-track, .coverage-track, .ach-progress {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--bg-soft);
+  border: 1px solid var(--line-soft);
+  overflow: hidden;
+}
+
+.cw-progress-fill, .coverage-fill, .ach-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--hit-line), var(--accent));
+  transition: width 0.4s ease;
+}
+
+.cw-progress-text {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+
+.cw-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.cw-answer-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--r-lg);
+  border: 1.5px solid var(--accent);
+  background: var(--bg-alt);
+  box-shadow: var(--sh-1);
+}
+
+.cw-ab-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cw-ab-dir {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--fg-mute);
+  flex: 1;
+}
+
+.cw-ab-clue {
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.cw-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cw-ab-solved {
+  font-size: 0.9rem;
+  color: var(--ok);
+  line-height: 1.55;
+}
+
+.cw-ab-solved p {
+  margin: 4px 0 0;
+  color: var(--fg-dim);
+}
+
+.cw-ab-msg {
+  min-height: 1.2em;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.cw-ab-msg.ok { color: var(--ok); }
+.cw-ab-msg.err { color: var(--seal); }
+.cw-ab-msg.warn { color: var(--hit-line); }
+
+.cw-ab-empty {
+  font-weight: 800;
+  color: var(--ok);
+}
+
+.cw-cell {
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--fg);
+}
+
+/* 空格透明、可填格加框，盤面形狀一目了然 */
+.cw-board-grid {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  gap: 4px;
+}
+
+.cw-block-cell {
+  background: transparent;
+  opacity: 1;
+}
+
+.cw-active-cell {
+  background: var(--bg-alt);
+  box-shadow: inset 0 0 0 1.5px var(--line);
+}
+
+.cw-level-select { max-width: 100%; }
+
+.cw-active-cell.cw-word-highlight {
+  background: rgba(212, 155, 56, 0.28);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.cw-active-cell.cw-correct-cell { color: var(--ok); }
+.cw-active-cell.cw-revealed-cell { color: var(--hit-line); }
+
+.cw-clue-item.solved .cw-clue-text { color: var(--fg-mute); }
+
+.cw-clue-answer {
+  display: inline-block;
+  margin-left: 6px;
+  font-weight: 800;
+  color: var(--ok);
+}
+
+.cw-complete {
+  margin-top: 6px;
+  padding: 16px;
+  border-radius: var(--r-lg);
+  border: 1.5px solid var(--ok);
+  background: rgba(46, 107, 73, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cw-complete-title {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--ok);
+}
+
+.cw-recap {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--fg-dim);
+}
+
+.tts-speak-btn.tts-compact {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+}
+
+/* 年代排序：點選互換與逐張標示 */
+.tl-howto {
+  font-size: 0.86rem;
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+
+.tl-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+ol.tl-events-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tl-event-card {
+  padding: 0;
+  gap: 0;
+  align-items: stretch;
+}
+
+.tl-card-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+}
+
+/* 作答後鎖定的元素保持清晰（覆寫 style.css 的 button:disabled 半透明） */
+.tl-card-main:disabled,
+.quiz-opt-btn:disabled,
+.fill-submit-btn:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.quiz-opt-btn:disabled:not(.correct):not(.wrong) { opacity: 0.6; }
+.quiz-opt-btn.removed:disabled { opacity: 0.3; }
+
+.tl-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tl-card-actions {
+  justify-content: center;
+  padding: 8px 10px 8px 0;
+}
+
+.tl-move-btn:disabled { opacity: 0.35; cursor: default; }
+
+.tl-event-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+  transform: translateY(-1px);
+}
+
+.tl-event-card.correct {
+  border-color: var(--ok);
+  background: rgba(46, 107, 73, 0.07);
+}
+
+.tl-event-card.misplaced {
+  border-color: var(--seal);
+  background: rgba(192, 56, 43, 0.05);
+}
+
+.tl-mark-hint {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--seal);
+}
+
+.tl-ok-tick {
+  margin-left: auto;
+  font-weight: 900;
+  color: var(--ok);
+}
+
+.tl-event-note {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+}
+
+.tl-actions-bar { flex-wrap: wrap; }
+.tl-feedback-msg { flex-basis: 100%; }
+
+.tl-feedback-msg.info {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--ring);
+}
+
+/* 學習儀表板 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 560px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-soft);
+  background: var(--bg);
+}
+
+.stat-icon { font-size: 1.2rem; }
+
+.stat-card b {
+  font-size: 0.98rem;
+  color: var(--fg);
+}
+
+.stat-card span:last-child {
+  font-size: 0.72rem;
+  color: var(--fg-mute);
+}
+
+.modal-section-title {
+  margin: 4px 0 10px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.coverage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.coverage-row {
+  display: grid;
+  grid-template-columns: 7.5em 1fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+}
+
+.coverage-row b {
+  font-size: 0.8rem;
+  color: var(--fg-dim);
+}
+
+.ach-progress {
+  margin-top: 6px;
+  height: 6px;
+}
+
+.ach-progress-text {
+  font-size: 0.7rem;
+  color: var(--fg-mute);
+  margin-top: 2px;
+}
+
+.ach-body { flex: 1; min-width: 0; }
+
+/* Toast 堆疊 */
+.toast-stack {
+  position: fixed;
+  right: calc(16px + var(--game-safe-right));
+  bottom: calc(16px + var(--game-safe-bottom));
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: none;
+  max-width: calc(100vw - 32px);
+}
+
+.game-toast {
+  pointer-events: auto;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: var(--bar);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  box-shadow: var(--sh-4);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.5;
+  max-width: 420px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.game-toast.toast-ok { border-color: var(--ok); }
+.game-toast.toast-warn { border-color: var(--seal); }
+
+.game-nav-btn.is-on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.game-nav-btn, .game-stat-pill, .game-level-badge { white-space: nowrap; }
+
+@media (max-width: 1180px) {
+  .game-brand-sub { display: none; }
+  .game-top-right .btn-text { display: none; }
+}
+
+@media (max-width: 720px) {
+  .game-topbar { flex-wrap: wrap; }
+  .game-top-right { flex-wrap: wrap; justify-content: flex-end; }
+}
+
+/* 手機：頂列收成兩行以內（首頁可點左上品牌回去） */
+@media (max-width: 520px) {
+  .game-topbar { gap: 6px; padding-top: calc(6px + var(--game-safe-top)); padding-bottom: 6px; }
+  .game-top-right { gap: 4px; width: 100%; justify-content: space-between; }
+  .game-nav-btn { padding: 5px 8px; }
+  .game-stat-pill { padding: 3px 8px; font-size: 0.76rem; }
+  #topComboBadge { display: none !important; }
+  .game-top-right a.game-nav-btn { display: none; }
+  .game-brand-title { font-size: 1rem; }
+  .today-panel { padding: 10px 12px; }
+  .today-chips { gap: 4px; }
+  .today-chip { padding: 4px 8px; font-size: 0.74rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 </style>
 </head>
 
@@ -1343,8 +2468,11 @@ body.game-body {
       <div class="game-stat-pill" id="topComboBadge" title="連擊經驗值倍率" hidden>⚡ 1.0x</div>
       <div class="game-stat-pill" id="topStreakBadge" title="當前答題連勝">🔥 0</div>
       <div class="game-stat-pill" id="topScoreBadge" title="累計經驗值積分">0 XP</div>
-      <button type="button" class="game-nav-btn" id="speechToggleBtn" title="自動語音朗讀開關 (點擊可切換)">
-        <span id="speechIcon">🎙️</span> <span id="speechStateText" class="btn-text">語音</span>
+      <button type="button" class="game-nav-btn" id="speechToggleBtn" title="自動朗讀：出題與解答自動念出來（點擊切換）" aria-pressed="false">
+        <span id="speechIcon">🎙️</span> <span id="speechStateText" class="btn-text">自動朗讀</span>
+      </button>
+      <button type="button" class="game-nav-btn" id="speechRateBtn" title="朗讀語速（點擊切換）">
+        <span>▶️</span> <span class="btn-text">標準</span>
       </button>
       <button type="button" class="game-nav-btn" id="btnAchievements" title="查看榮譽成就">
         <span>🏅</span> <span class="btn-text">成就</span>
@@ -1367,6 +2495,39 @@ body.game-body {
   <!-- ================= 遊戲核心大廳框架 ================= -->
   <main class="game-main-shell">
 
+    <!-- 今日學習目標面板 -->
+    <section class="today-panel" id="todayPanel" aria-label="今日學習進度">
+      <div class="today-goal">
+        <svg class="today-ring" viewBox="0 0 44 44" aria-hidden="true">
+          <circle class="today-ring-track" cx="22" cy="22" r="18"></circle>
+          <circle class="today-ring-fill" id="todayRingFill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
+        </svg>
+        <div class="today-goal-text">
+          <strong id="todayGoalText">今日目標 0 / 10</strong>
+          <span id="todayGoalSub">答對題目、解出填字或排好年代都算</span>
+        </div>
+      </div>
+      <div class="today-chips">
+        <span class="today-chip" id="todayStreakChip">📅 連續 0 天</span>
+        <span class="today-chip" id="todayAccChip">🎯 正確率 —</span>
+        <span class="today-chip" id="todayDueChip">📝 待複習 0</span>
+        <label class="today-chip today-goal-pick">目標
+          <select id="dailyGoalSelect" aria-label="每日目標題數">
+            <option value="5">5 題</option>
+            <option value="10" selected>10 題</option>
+            <option value="20">20 題</option>
+            <option value="30">30 題</option>
+          </select>
+        </label>
+        <button type="button" class="today-chip today-tips-btn" id="todayTipsBtn" aria-expanded="false" aria-controls="tipsPanel">💡 科學學習法</button>
+      </div>
+    </section>
+
+    <section class="tips-panel" id="tipsPanel" hidden aria-label="科學學習法">
+      <div class="tips-intro">這裡的每個設計都根據認知科學的研究：主動回想、間隔複習、交錯練習與即時回饋，能讓記憶更持久。</div>
+      <div class="tips-grid" id="tipsGrid"></div>
+    </section>
+
     <!-- 遊戲分頁切換列 -->
     <nav class="game-tabs-bar" role="tablist" aria-label="聖經小遊戲模式切換">
       <button type="button" class="game-nav-tab active" data-tab="char" role="tab" aria-selected="true">
@@ -1377,6 +2538,9 @@ body.game-body {
       </button>
       <button type="button" class="game-nav-tab" data-tab="verse" role="tab" aria-selected="false">
         <span>📜</span> 經典經文填空
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="mixed" role="tab" aria-selected="false">
+        <span>🎲</span> 綜合挑戰
       </button>
       <button type="button" class="game-nav-tab" data-tab="crossword" role="tab" aria-selected="false">
         <span>🧩</span> 聖經十字填字
@@ -1408,6 +2572,11 @@ body.game-body {
       <div id="verseQuizContainer">
         <!-- 由 JS 動態渲染題卡 (選擇題 / 填空題 切換) -->
       </div>
+    </section>
+
+    <!-- 綜合挑戰 View（人物、地名、經文交錯出題） -->
+    <section id="viewMixed" class="game-view-panel" hidden>
+      <div id="mixedQuizContainer"></div>
     </section>
 
     <!-- 4. 聖經十字填字遊戲 View -->
@@ -1450,20 +2619,20 @@ body.game-body {
     </div>
   </div>
 
-  </main>
-
-  <!-- ================= 榮譽成就彈窗 ================= -->
-  <div id="achievementsModal" class="ach-modal-overlay" hidden role="dialog" aria-modal="true" aria-label="榮譽成就清單">
+  <!-- ================= 學習儀表板與榮譽成就彈窗 ================= -->
+  <div id="achievementsModal" class="ach-modal-overlay" hidden role="dialog" aria-modal="true" aria-label="學習儀表板與榮譽成就">
     <div class="ach-modal-dialog">
       <header class="ach-modal-head">
-        <h3 class="ach-modal-title">🏆 聖經挑戰榮譽成就</h3>
+        <h3 class="ach-modal-title">📊 學習儀表板與榮譽成就</h3>
         <button type="button" id="achievementsCloseBtn" class="ach-modal-close" aria-label="關閉">×</button>
       </header>
       <div class="ach-modal-body" id="achievementsListContainer">
-        <!-- 動態渲染 8 大成就卡片 -->
+        <!-- 動態渲染學習統計、題庫掌握度與成就卡片 -->
       </div>
     </div>
   </div>
+
+  <div id="toastStack" class="toast-stack" aria-live="polite"></div>
 
   <!-- 資料庫與遊戲引擎 Script -->
   <script src="data/challenge_data.js"></script>
