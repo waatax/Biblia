@@ -106,7 +106,7 @@ DOSSIER_INTERTEXT_OT_PART2 = {
             "writingPeriod": "波斯統治回歸時期由文士以斯拉完成 (約主前 450–400 年)",
             "geopoliticalContext": "從所羅門王國榮耀、歷代猶大列王復興與墮落，歷經巴比倫被擄七十年，到波斯帝國居魯士大帝登基",
             "primaryLiteraryGenre": "神學歷史敘事、聖殿復興記實（希西家、約西亞宗教改革）、居魯士復興敕令",
-            "covenantAnchor": "聖殿禱告應許：「這稱為我名下的子民若自卑、禱告、尋求我的面、轉離他們的惡行」 (代下 7:14)",
+            "covenantAnchor": "聖殿禱告應許：「這稱為我名下的子民，若是自卑、禱告，尋求我的面，轉離他們的惡行」 (代下 7:14)",
             "christologicalArchetype": "毀壞三日重建的真聖殿基督 (約 2:19)、居魯士下詔救贖者（彌賽亞受膏牧者）、全舊約以「上去建殿」盼望結束"
         },
         "canonicalIntertextuality": {
@@ -284,7 +284,7 @@ DOSSIER_INTERTEXT_OT_PART2 = {
             "geopoliticalContext": "古代近東國際宮廷智慧交流繁盛期（埃及阿曼尼摩比箴言等同時代背景對照）",
             "primaryLiteraryGenre": "短警句格言 (Mashal)、擬人化智慧長詩、兩條道路倫理對比（愚蒙與智慧、淫婦與才德婦人）",
             "covenantAnchor": "西奈盟約倫理在世俗日常、家庭、職場與言語中的細緻具現化（「敬畏耶和華是智慧的開端」）(箴 1:7, 9:10)",
-            "christologicalArchetype": "創世以前神身旁的擬人化先在「神聖智慧」(8:22-31)、道成肉身成全神的智慧（林前 1:30「神使基督成為我們的智慧」）"
+            "christologicalArchetype": "創世以前神身旁的擬人化先在「神聖智慧」(8:22-31)、道成肉身成全神的智慧（林前 1:30「神又使他成為我們的智慧」）"
         },
         "canonicalIntertextuality": {
             "tableTitle": "箴言正典互文與新約引用成全對照表",
@@ -315,7 +315,7 @@ DOSSIER_INTERTEXT_OT_PART2 = {
             "writingPeriod": "所羅門王晚年撰寫 (約主前 935 年)",
             "geopoliticalContext": "以色列全盛繁華期，世俗財富、知識、享樂與權力達到頂點，卻看透日光之下的極致虛空",
             "primaryLiteraryGenre": "自傳式哲學反思剖析、批判性智慧散文、哀歌格言、存在主義反轉認信",
-            "covenantAnchor": "終極審判信仰：「敬畏神，謹守祂的誡命，這是人所當盡的本分，因為人所做的事連一切隱藏的事神都必審問」 (傳 12:13-14)",
+            "covenantAnchor": "終極審判信仰：「敬畏神，謹守他的誡命，這是人所當盡的本分。因為人所做的事，連一切隱藏的事，無論是善是惡，神都必審問」 (傳 12:13-14)",
             "christologicalArchetype": "打破「日光之下虛空」的唯一日光之上主宰基督、唯一的好牧人 (12:11)、賦予短暫生命永恆重量的復活者"
         },
         "canonicalIntertextuality": {

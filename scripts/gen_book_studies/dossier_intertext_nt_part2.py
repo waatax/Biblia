@@ -53,7 +53,7 @@ DOSSIER_INTERTEXT_NT_PART2 = {
             "writingPeriod": "羅馬馬梅爾定陰暗死牢 (約主後 67 年殉道前夕)",
             "geopoliticalContext": "尼祿皇帝暴虐血腥統治下羅馬死囚刑場，亞西亞眾人離棄保羅，同工分散",
             "primaryLiteraryGenre": "使徒臨別遺言 (Testamentary Letter)、受苦精兵訓勉手冊、聖經神聖默示憲章 (3:16-17)",
-            "covenantAnchor": "神信實聖約：「我們縱然失信，祂仍是可信的，因為祂不能背乎自己」 (提後 2:13)",
+            "covenantAnchor": "神信實聖約：「我們縱然失信，他仍是可信的，因為他不能背乎自己」 (提後 2:13)",
             "christologicalArchetype": "破除死亡將不能壞的生命彰顯出來的救主 (1:10)、大衛後裔從死裡復活的基督 (2:8)、公義審判的賞賜者 (4:8)"
         },
         "canonicalIntertextuality": {
@@ -380,7 +380,7 @@ DOSSIER_INTERTEXT_NT_PART2 = {
             "writingPeriod": "愛琴海拔摩海島採石場流放監獄 (約主後 95–96 年)",
             "geopoliticalContext": "羅馬帝國強迫萬民崇拜皇帝為神（Dominus et Deus），小亞細亞七教會在妥協與殉道邊緣",
             "primaryLiteraryGenre": "啟示文學 (Apocalyptic)、先知神諭 (Prophecy)、使徒巡迴公函 (Epistle) 三合一宏偉巨著、宇宙終末大交響詩",
-            "covenantAnchor": "【新耶路撒冷神人永居聖約】：「看哪神的帳幕在人間，祂要與人同住，他們要作祂的子民」 (啟 21:3)",
+            "covenantAnchor": "【新耶路撒冷神人永居聖約】：「看哪，神的帳幕在人間。他要與人同住，他們要作他的子民」 (啟 21:3)",
             "christologicalArchetype": "阿拉法和俄梅戛 (1:8)、行走在金燈台中的榮耀人子 (1:13)、猶大支派獅子被殺的羔羊 (5:5-6)、騎白馬萬王之王萬主之主 (19:16)、明亮的晨星 (22:16)"
         },
         "canonicalIntertextuality": {

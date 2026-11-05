@@ -94,7 +94,7 @@ DOSSIER_INTERTEXT_OT_PART3 = {
             "writingPeriod": "聖城陷落浩劫後第一時間由先知耶利米親筆哀悼 (約主前 586–585 年)",
             "geopoliticalContext": "巴比倫大軍屠城撤離後的耶路撒冷斷壁殘垣、汲淪溪廢墟、民不聊生人相食悲劇",
             "primaryLiteraryGenre": "希伯來離合字母哀歌（Acrostic Lament, 1, 2, 4, 5章各22節，3章66節）、哀歌節奏 (Qinoth 3:2拍律)",
-            "covenantAnchor": "公義審判深淵中之恩典堅信：「我們不致消滅是出於耶和華諸般的慈愛，每早晨這都是新的」 (哀 3:22-24)",
+            "covenantAnchor": "公義審判深淵中之恩典堅信：「我們不致消滅，是出於耶和華諸般的慈愛…每早晨，這都是新的」 (哀 3:22-24)",
             "christologicalArchetype": "客西馬尼與十字架上為耶路撒冷哀哭的基督 (路 19:41)、在神烈怒杖下替罪人承擔極致痛苦的受苦者"
         },
         "canonicalIntertextuality": {
@@ -153,7 +153,7 @@ DOSSIER_INTERTEXT_OT_PART3 = {
             "writingPeriod": "波斯統治初期由宰相但以理親手完成 (約主前 535 年)",
             "geopoliticalContext": "巴比倫帝國宮廷（尼布甲尼撒、伯沙撒）與瑪代波斯帝國中樞（大利烏、居魯士）",
             "primaryLiteraryGenre": "希伯來文（1章, 8-12章）與亞蘭文（2:4-7:28國際公文）雙語寫作、法庭傳奇敘事、宏大末世啟示文學、七十個七歷史密碼",
-            "covenantAnchor": "天國永存聖約：「神必另立一國永不敗壞，要打碎滅絕那一切國，這國卻要存到永遠」 (但 2:44, 7:14)",
+            "covenantAnchor": "天國永存聖約：「神必另立一國，永不敗壞…卻要打碎滅絕那一切國，這國必存到永遠」 (但 2:44, 7:14)",
             "christologicalArchetype": "非人手鑿出的砸碎巨像房角石 (2:34-35)、火窯中同在面貌如「神子」的第四人 (3:25)、「駕雲而來的人子得永遠權柄」(7:13-14)、七十個七受膏者被剪除 (9:26)"
         },
         "canonicalIntertextuality": {
@@ -185,7 +185,7 @@ DOSSIER_INTERTEXT_OT_PART3 = {
             "writingPeriod": "北國滅亡前後由何西阿完成 (約主前 715 年)",
             "geopoliticalContext": "北國以色列軍事政變頻繁（四王遭暗殺）、拜金牛犢巴力偶像、向埃及亞述兩面搖擺",
             "primaryLiteraryGenre": "先知生活先知性悲劇婚姻象徵行動（娶淫婦歌篾生三子）、法庭訴訟神諭、深情父子慈愛挽歌",
-            "covenantAnchor": "【堅定不移的盟約之愛 Hesed】：「我聘你永遠歸我為妻，以仁義、公平、慈愛、憐憫聘你歸我」 (何 2:19-20)",
+            "covenantAnchor": "【堅定不移的盟約之愛 Hesed】：「我必聘你永遠歸我為妻，以仁義、公平、慈愛、憐憫聘你歸我」 (何 2:19-20)",
             "christologicalArchetype": "重價買回背叛淫婦的救贖者丈夫基督、第三天叫我們復起生活、神子由埃及召出來"
         },
         "canonicalIntertextuality": {
@@ -249,7 +249,7 @@ DOSSIER_INTERTEXT_OT_PART3 = {
             "writingPeriod": "提哥亞鄉間牧人受差赴北國伯特利傳講後筆錄 (約主前 750 年)",
             "geopoliticalContext": "北國經濟極度奢靡、貧富嚴重分化、宗教形式主義猖獗，北臨強悍新興亞述帝國",
             "primaryLiteraryGenre": "列邦審判連環套詩（「三番四次犯罪」）、五大災難異象（蝗蟲、烈火、準繩、夏果、祭壇傾塌）、大衛倒塌帳幕復興歌",
-            "covenantAnchor": "公義正道盟約：「唯願公平如大水滾滾，使公義如江河滔滔」 (摩 5:24)",
+            "covenantAnchor": "公義正道盟約：「惟願公平如大水滾滾，使公義如江河滔滔」 (摩 5:24)",
             "christologicalArchetype": "獅子吼叫主掌審判、大衛倒塌帳幕之重新修造立起（耶路撒冷大會外邦歸主樞紐）(9:11-12)"
         },
         "canonicalIntertextuality": {
@@ -330,7 +330,7 @@ DOSSIER_INTERTEXT_OT_PART3 = {
             "writingPeriod": "希西家王宗教改革期間寫成 (約主前 705–700 年)",
             "geopoliticalContext": "猶大山地非利士平原交界鄉村摩利沙，親歷亞述西拿基立大軍踐踏猶大各城慘狀",
             "primaryLiteraryGenre": "公義法庭訴訟神諭、地名雙關諷刺哀歌、審判與復興交錯結構、行公義好憐憫金律箴言",
-            "covenantAnchor": "亞伯拉罕與雅各應許之信實：「你向雅各發誠實，向亞伯拉罕施慈愛」 (彌 7:20)",
+            "covenantAnchor": "亞伯拉罕與雅各應許之信實：「向雅各發誠實，向亞伯拉罕施慈愛」 (彌 7:20)",
             "christologicalArchetype": "彌賽亞降生猶大伯利恆以法他 (5:2)、其根源從亙古從太初就有、掌權牧養群羊的和平君王"
         },
         "canonicalIntertextuality": {
@@ -362,7 +362,7 @@ DOSSIER_INTERTEXT_OT_PART3 = {
             "writingPeriod": "猶大伊勒歌斯先知拿鴻寫就 (約主前 640 年)",
             "geopoliticalContext": "暴虐殘忍的新亞述帝國（亞述巴尼拔盛極而衰），殘酷剝削列邦",
             "primaryLiteraryGenre": "神聖戰士神顯威嚴長詩 (Theophany)、軍事攻城陷落現場直擊戰歌、血腥流血之城葬禮諷刺哀歌",
-            "covenantAnchor": "受壓迫選民之安慰恩約：「耶和華本為善，在患難的日子作人的避難所，並且認得那些投靠祂的人」 (鴻 1:7)",
+            "covenantAnchor": "受壓迫選民之安慰恩約：「耶和華本為善，在患難的日子為人的保障，並且認得那些投靠他的人」 (鴻 1:7)",
             "christologicalArchetype": "報佳音傳平安者的腳蹤登山 (1:15)、審判粉碎地上殘暴強權的公義得勝基督"
         },
         "canonicalIntertextuality": {
@@ -389,7 +389,7 @@ DOSSIER_INTERTEXT_OT_PART3 = {
             "writingPeriod": "巴比倫首次圍攻耶路撒冷前夕 (約主前 605 年)",
             "geopoliticalContext": "殘暴殘酷的迦勒底騎兵狂風捲地席捲古代近東，行將滅亡猶大",
             "primaryLiteraryGenre": "先知與神的兩次雙向靈魂問答辯論、五重「禍哉」諷刺哀歌、提幔紅海西奈神顯壯麗讚美琴歌 (第3章)",
-            "covenantAnchor": "因信稱義信仰憲章：「唯義人因信得生」 (哈 2:4)",
+            "covenantAnchor": "因信稱義信仰憲章：「惟義人因信得生」 (哈 2:4)",
             "christologicalArchetype": "義人因信得生磐石基督、即便無花果樹不發旺仍因救我的神歡欣喜樂 (3:17-18)"
         },
         "canonicalIntertextuality": {

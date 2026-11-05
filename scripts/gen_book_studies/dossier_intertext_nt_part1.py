@@ -41,7 +41,7 @@ DOSSIER_INTERTEXT_NT_PART1 = {
                 {
                     "sourceRef": "太 2:15",
                     "targetRef": "何 11:1, 出 4:22",
-                    "theologicalEcho": "【從埃及召出真神子】：耶穌避難埃及再回迦南，應驗「我從埃及召出我的兒子來」，基督親自代表並成全真以色列"
+                    "theologicalEcho": "【從埃及召出真神子】：耶穌避難埃及再回迦南，應驗「就從埃及召出我的兒子來」，基督親自代表並成全真以色列"
                 },
                 {
                     "sourceRef": "太 26:28",

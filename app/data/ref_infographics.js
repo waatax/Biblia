@@ -278,7 +278,7 @@
       ]) +
       gantt({
         axis: ax, ticks: [-900, -800, -700, -600],
-        markers: [{ y: -722, label: '722 北國亡' }, { y: -586, label: '586 南國亡' }],
+        markers: [{ y: -722, label: '722' }, { y: -586, label: '586' }],
         rows: kingRows(j, '南國猶大').concat(kingRows(n, '北國以色列'))
       }) +
     '</div><p class="ig-note">' + esc(c.note) + '</p>';

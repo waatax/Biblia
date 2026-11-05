@@ -66,7 +66,7 @@ BOOKS_GENERAL_REV = [
             {"original": "Ἐφάπαξ", "transliteration": "Ephapax", "meaning": "一次永遠完全 (Once for all)", "strongs": "G2178", "explanation": "來 7:27, 9:12, 10:10，基督的獻祭具有終極、不可重複、永遠完全的神聖功效。"}
         ],
         "interpretiveIssues": [
-            {"issue": "希伯來書 6:4-6「蒙了光照嘗過天恩...若離棄道理就不能重新懊悔」是否意味著真信徒會失去救恩？", "views": "阿民念主義失去救恩論 vs 假信徒暫時外在體驗論 vs 假設性強烈護欄警告 (Hypothetical Means of Perseverance).", "reformedConsensus": "歸正救贖神學（Owen, Calvin, Piper）指出：1. 經文描繪的是猶太社群中那些「在外在層面體驗了神蹟天恩但未曾真正重生得救」的掛名信徒（呼應 6:9「我們卻深信你們有更好的事，必得救」）；2. 警告是神用以保守選民「必然堅忍到底」(Perseverance of the Saints) 的主權恩典工具，真信徒聽聞警告必戰兢悔改緊緊抓住基督。"}
+            {"issue": "希伯來書 6:4-6「已經蒙了光照、嘗過天恩的滋味…若是離棄道理，就不能叫他們重新懊悔了」是否意味著真信徒會失去救恩？", "views": "阿民念主義失去救恩論 vs 假信徒暫時外在體驗論 vs 假設性強烈護欄警告 (Hypothetical Means of Perseverance).", "reformedConsensus": "歸正救贖神學（Owen, Calvin, Piper）指出：1. 經文描繪的是猶太社群中那些「在外在層面體驗了神蹟天恩但未曾真正重生得救」的掛名信徒（呼應 6:9「我們卻深信你們有更好的事，必得救」）；2. 警告是神用以保守選民「必然堅忍到底」(Perseverance of the Saints) 的主權恩典工具，真信徒聽聞警告必戰兢悔改緊緊抓住基督。"}
         ],
         "pastoralApplications": [
             {"area": "克服屬靈疲憊與退縮", "principle": "仰望為信心創始成終的耶穌 (Heb 12:1-2)", "application": "遭遇長期壓力逼迫時，不可退回世俗麻木中，當卸下罪惡重擔，定睛於十字架上受苦得勝的耶穌。"},
@@ -209,7 +209,7 @@ BOOKS_GENERAL_REV = [
             {"original": "Βασίλειον ἱεράτευμα", "transliteration": "Basileion hierateuma", "meaning": "君尊的祭司體系 (Royal Priesthood)", "strongs": "G0934 / G2406", "explanation": "彼前 2:9，新約全體信徒享有直接進到神施恩座前、奉獻屬靈祭物的君王祭司尊榮。"}
         ],
         "interpretiveIssues": [
-            {"issue": "彼得前書 3:19-20「藉這靈曾去宣道給那些在監獄裡的靈聽」的神學奧祕", "views": "基督在死後降入陰間向舊約亡靈傳道 (Harrowing of Hell) vs 基督藉聖靈在挪亞時代藉挪亞向當時不信的世人傳道（而那些人如今在監獄拘留中）。", "reformedConsensus": "歸正福音派（Calvin, Grudem）主流解經指出：希臘原文動詞意為基督藉聖靈「在古時挪亞建造方舟時代」(3:20)，透過挪亞這位義道先知向那時代悖逆的罪人宣告審判與悔改；那些拒絕悔改的人如今靈魂被拘禁在陰間等待末日審判；此節絕非支持死後有「第二次得救機會」的煉獄或普救假說。"}
+            {"issue": "彼得前書 3:19-20「他藉這靈曾去傳道給那些在監獄裡的靈聽」的神學奧祕", "views": "基督在死後降入陰間向舊約亡靈傳道 (Harrowing of Hell) vs 基督藉聖靈在挪亞時代藉挪亞向當時不信的世人傳道（而那些人如今在監獄拘留中）。", "reformedConsensus": "歸正福音派（Calvin, Grudem）主流解經指出：希臘原文動詞意為基督藉聖靈「在古時挪亞建造方舟時代」(3:20)，透過挪亞這位義道先知向那時代悖逆的罪人宣告審判與悔改；那些拒絕悔改的人如今靈魂被拘禁在陰間等待末日審判；此節絕非支持死後有「第二次得救機會」的煉獄或普救假說。"}
         ],
         "pastoralApplications": [
             {"area": "克服焦慮與恐懼", "principle": "將一切憂慮卸給神 (1 Pet 5:7)", "application": "面對迫害、經濟困境或健康威脅，將重擔藉禱告完全投擲給天父，深信祂無微不至的看顧與護理。"},

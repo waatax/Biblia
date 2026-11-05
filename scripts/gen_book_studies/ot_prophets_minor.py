@@ -45,7 +45,7 @@ BOOKS_PROPHETS_MINOR = [
                 {"title": "對神的認識 (Knowledge of God, Da'at Elohim)", "desc": "真信仰不是外在獻祭，乃是與神親密的生命關係。"},
                 {"title": "不死的聖約慈愛 (Hesed)", "desc": "神聖恩典超越人的背叛，以愛贖回。"}
             ],
-            "christology": "何西阿以代價贖回淫婦預表基督用寶血買贖背道罪人；何 11:1「我從埃及召出我的兒子來」在新約應驗於耶穌基督逃往埃及與歸回（太 2:15）；何 6:2「過兩天祂必使我們甦醒，第三天祂必使我們興起」指向基督第三天復活；何 13:14「死亡啊，你的災害在哪裡」在新約宣告基督勝過死亡（林前 15:55）。"
+            "christology": "何西阿以代價贖回淫婦預表基督用寶血買贖背道罪人；何 11:1「就從埃及召出我的兒子來」在新約應驗於耶穌基督逃往埃及與歸回（太 2:15）；何 6:2「過兩天他必使我們甦醒，第三天他必使我們興起」指向基督第三天復活；何 13:14「死亡啊，你的災害在哪裡」在新約宣告基督勝過死亡（林前 15:55）。"
         },
         "literaryStructure": {
             "genre": "先知象徵性傳記婚姻敘事與情感激越的希伯來先知詩歌。",
@@ -247,7 +247,7 @@ BOOKS_PROPHETS_MINOR = [
             "evangelicalRebuttal": "先知俄巴底亞親身經歷聖城陷落浩劫，神諭語氣如電閃雷鳴，其獨立性與正典權威被歷代教會一致確認。"
         },
         "theologyAndChrist": {
-            "covenantLocation": "亞伯拉罕之約「為你祝福的我必賜福與他，咒詛你的我必咒詛他」(創 12:3) 在以東身上的具體應驗。",
+            "covenantLocation": "亞伯拉罕之約「為你祝福的，我必賜福與他；那咒詛你的，我必咒詛他」(創 12:3) 在以東身上的具體應驗。",
             "majorThemes": [
                 {"title": "自誇驕傲的必被降卑 (Pride goes before destruction)", "desc": "自恃地理地勢險要與智慧（以東提幔以智慧聞名）者，在神面前如塵埃。"},
                 {"title": "落井下石之罪 (Gloat over brother's disaster)", "desc": "神極其痛恨在弟兄遭難時冷眼旁觀、趁火打劫的殘忍行徑。"},
@@ -265,11 +265,11 @@ BOOKS_PROPHETS_MINOR = [
             ]
         },
         "keyWordsOriginal": [
-            {"original": "גָּאוֹן", "transliteration": "Ga'on", "meaning": "狂傲 / 驕傲 (Pride / Arrogance)", "strongs": "H1347", "explanation": "俄 1:3「你心裡的狂傲自欺」，以東覆滅的根本靈性毒根。"},
+            {"original": "גָּאוֹן", "transliteration": "Ga'on", "meaning": "狂傲 / 驕傲 (Pride / Arrogance)", "strongs": "H1347", "explanation": "俄 1:3「你因狂傲自欺」，以東覆滅的根本靈性毒根。"},
             {"original": "וְהָיְתָה לַיהוָה הַמְּלוּכָה", "transliteration": "Vehaytah L'YHWH Hammelukhah", "meaning": "國度就歸耶和華了 (The Kingdom shall be the LORD's)", "strongs": "H4410", "explanation": "俄 1:21 全書壓軸巔峰神諭，宣告神國度的終極全勝。"}
         ],
         "interpretiveIssues": [
-            {"issue": "以東民族在歷史中的最終結局", "views": "如何歷史性地驗證俄巴底亞預言？", "reformedConsensus": "以東人在主前 6 世紀被巴比倫與阿拉伯納巴泰人趕出西珥山，遷至猶大南部成為「以土買人」(Idumeans)；大希律王雖為以土買人，但在公元 70 年羅馬毀滅耶路撒冷後，以東民族在歷史長河中徹底滅絕消亡，分毫不差地應驗了「以掃家無一人存留」(俄 1:18) 的神諭。"}
+            {"issue": "以東民族在歷史中的最終結局", "views": "如何歷史性地驗證俄巴底亞預言？", "reformedConsensus": "以東人在主前 6 世紀被巴比倫與阿拉伯納巴泰人趕出西珥山，遷至猶大南部成為「以土買人」(Idumeans)；大希律王雖為以土買人，但在公元 70 年羅馬毀滅耶路撒冷後，以東民族在歷史長河中徹底滅絕消亡，分毫不差地應驗了「以掃家必無餘剩的」(俄 1:18) 的神諭。"}
         ],
         "pastoralApplications": [
             {"area": "克服驕傲與安全感假象", "principle": "拒絕磐石穴中的自欺 (Obad 1:3)", "application": "不可將安全感建立在財富、學歷、社會地位等「屬世磐石」上，唯獨投靠至高真神。"},
@@ -406,7 +406,7 @@ BOOKS_PROPHETS_MINOR = [
             {"original": "הַצְנֵעַ לֶכֶת", "transliteration": "Hatsnea Lekhet", "meaning": "存謙卑的心同行 (Walk humbly)", "strongs": "H6800 / H1980", "explanation": "彌 6:8，指毫無自誇驕傲、全心順服依賴神引導的生活態度。"}
         ],
         "interpretiveIssues": [
-            {"issue": "彌迦書 5:2「其根源從亙古，從太初就有」對基督神人二性的神學印證", "views": "古代大衛譜系淵源 vs 基督永恆自存的神性。", "reformedConsensus": "希伯來原文「Mimey Olam」(從永恆的日子) 與箴言 8:22-23、約翰福音 1:1 完全一致；正統教會歷代公認此節不僅預言基督降生伯利恆的完全人性，更啟示了聖子在永恆中與父同在的完全神性。"}
+            {"issue": "彌迦書 5:2「他的根源從亙古，從太初就有」對基督神人二性的神學印證", "views": "古代大衛譜系淵源 vs 基督永恆自存的神性。", "reformedConsensus": "希伯來原文「Mimey Olam」(從永恆的日子) 與箴言 8:22-23、約翰福音 1:1 完全一致；正統教會歷代公認此節不僅預言基督降生伯利恆的完全人性，更啟示了聖子在永恆中與父同在的完全神性。"}
         ],
         "pastoralApplications": [
             {"area": "基督徒行事為人總綱", "principle": "行公義、好憐憫、謙卑同行 (Mic 6:8)", "application": "信仰絕非空洞宗教儀式，當在日常工作中實踐公義、對困苦人滿懷憐憫，並在神面前一生謙卑同行。"},
@@ -471,7 +471,7 @@ BOOKS_PROPHETS_MINOR = [
         },
         "keyWordsOriginal": [
             {"original": "אֵל קַנּוֹא", "transliteration": "El Qanno", "meaning": "忌邪的神 (Jealous God)", "strongs": "H0410 / H7072", "explanation": "鴻 1:2，神對祂的榮耀與祂的立約百姓懷有神聖排他的熱烈護衛之愛。"},
-            {"original": "מָעוֹז", "transliteration": "Maoz", "meaning": "避難所 / 堅固堡壘 (Stronghold / Refuge)", "strongs": "H4581", "explanation": "鴻 1:7「在患難的日子作人的避難所」，神是屬祂之人唯一的安全保障。"}
+            {"original": "מָעוֹז", "transliteration": "Maoz", "meaning": "避難所 / 堅固堡壘 (Stronghold / Refuge)", "strongs": "H4581", "explanation": "鴻 1:7「在患難的日子為人的保障」，神是屬祂之人唯一的安全保障。"}
         ],
         "interpretiveIssues": [
             {"issue": "那鴻書看似充滿對仇敵毀滅的殘酷描寫與歡呼，是否違背基督徒「愛仇敵」的倫理？", "views": "舊約殘忍報復 vs 神聖公義與受害者終極安慰。", "reformedConsensus": "那鴻書不是個人私怨的宣洩，乃是先知代表歷代受極端殘暴屠殺、剝皮凌辱的無辜受害者向至高審判官呼求公義伸張；尼尼微的覆滅證明全宇宙存在絕對道德秩序，強暴惡徒絕不能永遠橫行，這對受苦聖徒是最大的神聖安慰。"}
@@ -611,7 +611,7 @@ BOOKS_PROPHETS_MINOR = [
             {"original": "יָגִיל עָלַיִךְ בְּרִנָּה", "transliteration": "Yagil alayikh b'rinnah", "meaning": "因你喜樂歌唱 (Rejoice over you with singing)", "strongs": "H1523 / H7440", "explanation": "番 3:17，描寫神對祂救贖兒女迸發出的狂喜雀躍之歌。"}
         ],
         "interpretiveIssues": [
-            {"issue": "西番雅書 3:9「賜給萬民清潔的言語」(Pure Language) 的神學應驗", "views": "希伯來語復興 vs 巴別塔口音混亂的屬靈逆轉與福音聖靈合一。", "reformedConsensus": "歸正福音派一致指出：此處預告創世記 11 章巴別塔罪孽口音混亂的徹底逆轉；在五旬節聖靈降臨（徒 2 章）與普世各族各方歸向基督（啟 7:9）中成全，萬國萬民以純潔的嘴唇同聲頌揚主耶穌基督。"}
+            {"issue": "西番雅書 3:9「我必使萬民用清潔的言語」(Pure Language) 的神學應驗", "views": "希伯來語復興 vs 巴別塔口音混亂的屬靈逆轉與福音聖靈合一。", "reformedConsensus": "歸正福音派一致指出：此處預告創世記 11 章巴別塔罪孽口音混亂的徹底逆轉；在五旬節聖靈降臨（徒 2 章）與普世各族各方歸向基督（啟 7:9）中成全，萬國萬民以純潔的嘴唇同聲頌揚主耶穌基督。"}
         ],
         "pastoralApplications": [
             {"area": "靈命自滿的警戒", "principle": "打破「神不降福也不降禍」的實用無神論 (Zeph 1:12)", "application": "不可在信仰上不冷不熱、陷入世俗麻木，當以敬畏戰兢的心過每日生活。"},
@@ -659,7 +659,7 @@ BOOKS_PROPHETS_MINOR = [
         "theologyAndChrist": {
             "covenantLocation": "大衛王族印戒的重戴與萬國歸順聖殿的聖約推進。",
             "majorThemes": [
-                {"title": "國度優先次序 (Priority of the Kingdom)", "desc": "「先求神的國和祂的義」（太 6:33），不可本末倒置。"},
+                {"title": "國度優先次序 (Priority of the Kingdom)", "desc": "「你們要先求他的國和他的義」（太 6:33），不可本末倒置。"},
                 {"title": "省察自己的行為 (Consider Your Ways)", "desc": "明白生活中遭遇的虧損匱乏背後屬靈的警誡信號。"},
                 {"title": "後殿的榮耀大過前殿", "desc": "物質外貌雖不如所羅門殿，但神聖彌賽亞親自降臨使其榮耀無限。"}
             ],
@@ -751,7 +751,7 @@ BOOKS_PROPHETS_MINOR = [
             {"original": "קֹדֶשׁ לַיהוָה", "transliteration": "Qodesh L'YHWH", "meaning": "歸耶和華為聖 (HOLY UNTO THE LORD)", "strongs": "H6944 / H3068", "explanation": "亞 14:20-21，昔日僅刻於大祭司金牌的至聖之言，末世將普及於全受造界每一件器物。"}
         ],
         "interpretiveIssues": [
-            {"issue": "撒迦利亞書 14:4「祂的腳必站在橄欖山上，山必從中間分裂」的終末詮釋", "views": "字面基督再臨地質大裂谷 vs 基督福音衝破障礙開闢拯救坦途的屬靈啟示。", "reformedConsensus": "使徒行傳 1:11 宣告「你們見祂怎樣往天上去，祂還要怎樣來」（從橄欖山升天並再臨）；歸正神學肯定基督將帶著榮耀可見的肉身榮耀再臨，徹底平定仇敵、更新天地，並帶來生命活水湧流萬國。"}
+            {"issue": "撒迦利亞書 14:4「他的腳必站在耶路撒冷前面朝東的橄欖山上。這山必從中間分裂」的終末詮釋", "views": "字面基督再臨地質大裂谷 vs 基督福音衝破障礙開闢拯救坦途的屬靈啟示。", "reformedConsensus": "使徒行傳 1:11 宣告「你們見祂怎樣往天上去，祂還要怎樣來」（從橄欖山升天並再臨）；歸正神學肯定基督將帶著榮耀可見的肉身榮耀再臨，徹底平定仇敵、更新天地，並帶來生命活水湧流萬國。"}
         ],
         "pastoralApplications": [
             {"area": "事工得勝的秘訣", "principle": "非靠勢力才能，乃靠聖靈 (Zech 4:6)", "application": "服事與教會建造切忌迷信屬世的管理學、資金或權謀，當在禱告中完全倚靠聖靈的超自然動工。"},

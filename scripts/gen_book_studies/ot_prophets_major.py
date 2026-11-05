@@ -195,7 +195,7 @@ BOOKS_PROPHETS_MAJOR = [
                 {"title": "承認神的公義審判 (God's Righteous Judgment)", "desc": "痛苦不是命運無常，乃是百姓背約犯罪招致的公義報應。"},
                 {"title": "在絕境深淵中的信心轉化 (Hope in Despair)", "desc": "第 3 章中心宣告神不變的恩典慈愛與誠實。"}
             ],
-            "christology": "耶利米哀歌 1:12「你們一切過路的人哪，這事你們不介意嗎？你們要觀看：有何等痛苦像臨到我的痛苦」(O vos omnes) 歷代被普世教會視為受難日彌賽亞在十字架上受苦的直接預表；主耶穌是親身背負選民一切咒詛與哀傷的「憂患之子」(賽 53:3)。"
+            "christology": "耶利米哀歌 1:12「你們一切過路的人哪，這事你們不介意嗎？你們要觀看：有像這臨到我的痛苦沒有」(O vos omnes) 歷代被普世教會視為受難日彌賽亞在十字架上受苦的直接預表；主耶穌是親身背負選民一切咒詛與哀傷的「常經憂患」(賽 53:3)。"
         },
         "literaryStructure": {
             "genre": "希伯來離合字母哀歌 (Alphabetic Acrostic Funeral Dirges) 與哀悼祈禱詩。",

@@ -7,7 +7,7 @@
  *                採 cache-first、永不背景重抓，且外殼改版時「不」清除，
  *                讀過的書卷與預存的和合本一直留著。經文資料真的重建時才改它的版號。
  */
-const SHELL_CACHE = 'biblia-shell-v40';
+const SHELL_CACHE = 'biblia-shell-v41';
 const DATA_CACHE = 'biblia-data-v1';
 const FONT_CACHE = 'biblia-fonts-v1';
 const KEEP = [SHELL_CACHE, DATA_CACHE, FONT_CACHE];
@@ -43,7 +43,14 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(SHELL_CACHE)
       // cache: 'reload' 繞過瀏覽器 HTTP 快取，確保存進來的是這一版的檔案
-      .then((cache) => cache.addAll(SHELL_ASSETS.map((u) => new Request(u, { cache: 'reload' }))))
+      .then(async (cache) => {
+        // 逐檔存入：網路不穩時單一檔案失敗不可讓整個更新作廢，否則使用者會一直停在舊版
+        await Promise.allSettled(SHELL_ASSETS.map(async (u) => {
+          const req = new Request(u, { cache: 'reload' });
+          const res = await fetch(req);
+          if (res.ok) await cache.put(u, res);
+        }));
+      })
       .then(() => self.skipWaiting())
   );
 });
@@ -77,8 +84,20 @@ async function cacheFirst(cacheName, req) {
   return putIfOk(cacheName, req, await fetch(req));
 }
 
+/* 頁面（HTML）網路優先：連得上就一定是最新版；逾時或離線才用快取 */
+async function networkFirstPage(req) {
+  const timeout = new Promise((resolve) => setTimeout(() => resolve(null), 4000));
+  const network = fetch(req, { cache: 'no-cache' }).then((res) => putIfOk(SHELL_CACHE, req, res)).catch(() => null);
+  const res = await Promise.race([network, timeout]);
+  if (res) return res;
+  const hit = await caches.match(req, { ignoreSearch: true }) || await caches.match('./index.html');
+  if (hit) return hit;
+  return (await network) || Response.error();
+}
+
 async function staleWhileRevalidate(req, event) {
-  const hit = await caches.match(req, { ignoreSearch: true });
+  // 帶版本號的檔案只接受同版本快取；離線時才退回任何版本
+  const hit = await caches.match(req, { ignoreSearch: !new URL(req.url).searchParams.has('v') });
   const network = fetch(req).then((res) => putIfOk(SHELL_CACHE, req, res));
   if (hit) {
     event.waitUntil(network.catch(() => {}));
@@ -87,6 +106,8 @@ async function staleWhileRevalidate(req, event) {
   try {
     return await network;
   } catch (err) {
+    const anyVersion = await caches.match(req, { ignoreSearch: true });
+    if (anyVersion) return anyVersion;
     if (req.mode === 'navigate') {
       const shell = await caches.match('./index.html');
       if (shell) return shell;
@@ -104,7 +125,7 @@ self.addEventListener('fetch', (event) => {
     if (DATA_PATH.test(url.pathname)) {
       event.respondWith(cacheFirst(DATA_CACHE, req));
     } else {
-      event.respondWith(staleWhileRevalidate(req, event));
+      event.respondWith(req.mode === 'navigate' ? networkFirstPage(req) : staleWhileRevalidate(req, event));
     }
     return;
   }

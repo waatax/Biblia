@@ -354,10 +354,10 @@ BOOKS_PAULINE = [
         },
         "keyWordsOriginal": [
             {"original": "Ἐν Χριστῷ", "transliteration": "En Christō", "meaning": "在基督裡 (In Christ)", "strongs": "G1722 / G5547", "explanation": "以弗所書的總靈魂短語，信徒所有的屬天地位、福氣、救贖與生命完全植根於與基督的聯合。"},
-            {"original": "Ποίημα", "transliteration": "Poiēma", "meaning": "傑作 / 詩篇工藝品 (Masterpiece / Workmanship)", "strongs": "G4161", "explanation": "弗 2:10「我們原是祂的傑作(Poiema)」，信徒是神在基督裡精雕細琢的藝術極品。"}
+            {"original": "Ποίημα", "transliteration": "Poiēma", "meaning": "傑作 / 詩篇工藝品 (Masterpiece / Workmanship)", "strongs": "G4161", "explanation": "弗 2:10「我們原是他的工作(Poiema)」，信徒是神在基督裡精雕細琢的藝術極品。"}
         ],
         "interpretiveIssues": [
-            {"issue": "以弗所書 1:4-5「預定揀選」(Predestination / Election) 的神學本質", "views": "預知信心的有條件揀選 vs 創世以前神主權無條件的恩典揀選。", "reformedConsensus": "正統歸正聖約神學（如 Calvin, Hodge, Warfield）堅定確立：神在「創立世界以前」揀選我們，完全是出於神自己純全主權的美意與浩瀚大愛（弗 1:5「按著自己意旨所喜悅的」），絕非預見人的德行功德；揀選的目的是使我們成為聖潔、使祂榮耀的恩典得著稱讚。"}
+            {"issue": "以弗所書 1:4-5「預定揀選」(Predestination / Election) 的神學本質", "views": "預知信心的有條件揀選 vs 創世以前神主權無條件的恩典揀選。", "reformedConsensus": "正統歸正聖約神學（如 Calvin, Hodge, Warfield）堅定確立：神在「創立世界以前」揀選我們，完全是出於神自己純全主權的美意與浩瀚大愛（弗 1:5「按著自己的意旨所喜悅的」），絕非預見人的德行功德；揀選的目的是使我們成為聖潔、使祂榮耀的恩典得著稱讚。"}
         ],
         "pastoralApplications": [
             {"area": "基督徒夫妻婚姻神聖性", "principle": "婚姻反映基督與教會的捨己之愛 (Eph 5:25-32)", "application": "丈夫當效法基督對教會的捨命之愛，捨己呵護妻子；妻子當以敬重與順服支持丈夫，共同彰顯福音奧祕。"},
