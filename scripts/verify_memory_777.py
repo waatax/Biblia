@@ -51,7 +51,7 @@ def main():
         cnt = len(by_cat.get(c["id"], []))
         assert cnt == 111, f"Category {c['id']} has {cnt} verses, expected 111"
 
-    # Verify all user-requested Gideon passages are present
+    # Verify all core benchmark passages are present
     required_refs = [
         # 當你遇到恐懼、害怕時：詩篇 23:4, 詩篇 56:3-4, 以賽亞書 41:10, 約翰一書 4:18
         (19, 23, 4), (19, 56, 3), (19, 56, 4), (23, 41, 10), (62, 4, 18),
@@ -63,7 +63,7 @@ def main():
         (20, 3, 5), (20, 3, 6), (45, 12, 1), (45, 12, 2)
     ]
     for req in required_refs:
-        assert req in seen_refs, f"Required Gideon verse missing: {req}"
+        assert req in seen_refs, f"Required core verse missing: {req}"
 
     # Verify HTML IDs referenced in memory.js exist in memory.html
     with io.open(MEM_HTML_PATH, "r", encoding="utf-8") as fh:
@@ -138,7 +138,7 @@ def main():
 
     print("ALL VERIFICATION CHECKS PASSED SUCCESSFULLY!")
     print(f"  - 7 Categories x 111 Verses = {len(verses)} Total Verses")
-    print(f"  - All {len(required_refs)} core Gideon benchmark verses verified")
+    print(f"  - All {len(required_refs)} core benchmark verses verified")
     print(f"  - All {len(js_ids - dynamic_ids)} DOM IDs between memory.html and memory.js verified")
     print(f"  - 100% of 777 verses verified for quiz question & distractor generation")
     print(f"  - Service Worker cache integrity verified")

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Build 777 Bible Memory Verses Database (app/data/memory_777.js)
-Based on Gideons International Bible "Where to Find Help" (基甸會聖經「經文選讀 / 需要幫助的時候」)
+Organised by life situation (處境選讀): 7 situations x 111 verses
 and classical scripture memorization systems, using Chinese Union Version (和合本 zh_unv) + KJV + Original (WLC/WH).
 """
 import io
@@ -91,17 +91,17 @@ CATEGORIES = [
         "id": "fear",
         "num": 1,
         "title": "恐懼與平安",
-        "gideonTitle": "當你遇到恐懼、害怕、驚慌或孤單時",
+        "situation": "當你遇到恐懼、害怕、驚慌或孤單時",
         "enTitle": "Overcoming Fear, Loneliness & Finding Peace",
         "icon": "🛡️",
         "color": "#2b6cb0",
-        "desc": "基甸會聖經首推安慰經文：在黑暗、懼怕、未知與孤單中，經歷神同在的盾牌與出人意外的平安。"
+        "desc": "最安慰人心的應許：在黑暗、懼怕、未知與孤單中，經歷神同在的盾牌與出人意外的平安。"
     },
     {
         "id": "anxiety",
         "num": 2,
         "title": "憂慮與交託",
-        "gideonTitle": "當你感到憂慮、焦躁、重擔或疲乏時",
+        "situation": "當你感到憂慮、焦躁、重擔或疲乏時",
         "enTitle": "Relief from Anxiety, Worry & Weariness",
         "icon": "🕊️",
         "color": "#2f855a",
@@ -111,7 +111,7 @@ CATEGORIES = [
         "id": "revival",
         "num": 3,
         "title": "靈性復興與悔改",
-        "gideonTitle": "當你覺得靈性冷淡、軟弱、認罪與恢復時",
+        "situation": "當你覺得靈性冷淡、軟弱、認罪與恢復時",
         "enTitle": "Spiritual Revival, Repentance & Abiding in Christ",
         "icon": "🌿",
         "color": "#38a169",
@@ -121,7 +121,7 @@ CATEGORIES = [
         "id": "guidance",
         "num": 4,
         "title": "人生方向與智慧",
-        "gideonTitle": "當你需要人生方向、重大抉擇與智慧指引時",
+        "situation": "當你需要人生方向、重大抉擇與智慧指引時",
         "enTitle": "Life Guidance, Wisdom & God's Word",
         "icon": "🧭",
         "color": "#d69e2e",
@@ -131,7 +131,7 @@ CATEGORIES = [
         "id": "suffering",
         "num": 5,
         "title": "患難安慰與盼望",
-        "gideonTitle": "當你遭遇患難、悲傷、疾病、挫折或試探時",
+        "situation": "當你遭遇患難、悲傷、疾病、挫折或試探時",
         "enTitle": "Comfort in Suffering, Temptation & Eternal Hope",
         "icon": "🔥",
         "color": "#c53030",
@@ -141,17 +141,17 @@ CATEGORIES = [
         "id": "salvation",
         "num": 6,
         "title": "救恩確據與信心",
-        "gideonTitle": "認識救恩道路、罪得赦免、因信稱義與永生確據",
+        "situation": "認識救恩道路、罪得赦免、因信稱義與永生確據",
         "enTitle": "Assurance of Salvation, Grace & Faith",
         "icon": "✝️",
         "color": "#9b2c2c",
-        "desc": "基甸會福音核心：神愛世人、十字架的救贖、因信稱義的恩典，以及在基督裡永遠穩固的生命確據。"
+        "desc": "福音的核心：神愛世人、十字架的救贖、因信稱義的恩典，以及在基督裡永遠穩固的生命確據。"
     },
     {
         "id": "virtues",
         "num": 7,
         "title": "愛心美德與頌讚",
-        "gideonTitle": "基督徒品格美德、饒恕和睦、家庭職場與禱告讚美",
+        "situation": "基督徒品格美德、饒恕和睦、家庭職場與禱告讚美",
         "enTitle": "Christian Virtues, Love, Forgiveness & Praise",
         "icon": "👑",
         "color": "#805ad5",
@@ -231,8 +231,8 @@ CURATED_PASSAGES = [
     ("suffering", "永恆榮耀的盼望", "擦去一切的眼淚", r(43, 11, 25, 26) + r(52, 4, 13, 14) + r(52, 4, 16, 18) + r(66, 21, 3, 7) + r(66, 22, 1, 5) + r(45, 15, 13)),
 
     # ==================== 6. 救恩確據與信心 (salvation) ====================
-    ("salvation", "基甸會福音核心・神的愛與救贖", "神愛世人賜下獨生子", r(43, 3, 14, 18) + r(43, 3, 36) + r(43, 1, 1, 5) + r(43, 1, 12, 14) + r(43, 1, 29)),
-    ("salvation", "基甸會福音核心・神的愛與救贖", "世人都犯了罪與白白稱義", r(45, 1, 16, 17) + r(45, 3, 20, 26) + r(45, 5, 1, 2) + r(45, 5, 6, 11) + r(45, 6, 23)),
+    ("salvation", "福音核心・神的愛與救贖", "神愛世人賜下獨生子", r(43, 3, 14, 18) + r(43, 3, 36) + r(43, 1, 1, 5) + r(43, 1, 12, 14) + r(43, 1, 29)),
+    ("salvation", "福音核心・神的愛與救贖", "世人都犯了罪與白白稱義", r(45, 1, 16, 17) + r(45, 3, 20, 26) + r(45, 5, 1, 2) + r(45, 5, 6, 11) + r(45, 6, 23)),
     ("salvation", "十架代贖與復活大能", "以賽亞書53章・受苦的僕人", r(23, 53, 1, 12)),
     ("salvation", "十架代贖與復活大能", "口裡認耶穌心裡信神叫他復活", r(45, 8, 1, 2) + r(45, 8, 11) + r(45, 10, 9, 13) + r(45, 10, 17) + r(44, 4, 12) + r(44, 16, 31)),
     ("salvation", "恩典稱義與新造的人", "本乎恩也因著信", r(49, 1, 3, 7) + r(49, 1, 13, 14) + r(49, 2, 4, 10) + r(56, 3, 4, 7)),
@@ -313,7 +313,7 @@ def main():
     out_path = os.path.join(APP_DATA_DIR, "memory_777.js")
     payload = {
         "meta": {
-            "title": "Biblia 777 經文背誦與基甸會處境選讀庫",
+            "title": "Biblia 777 經文背誦與處境選讀庫",
             "total": 777,
             "perCategory": 111,
             "categoriesCount": 7,
@@ -323,7 +323,7 @@ def main():
         "verses": all_records
     }
     js_content = (
-        "/* Biblia — 777 節經文背誦與基甸會聖經「經文選讀」資料庫 (7 大處境主題 × 111 節 = 777 節)\n"
+        "/* Biblia — 777 節經文背誦與「處境選讀」資料庫 (7 大處境主題 × 111 節 = 777 節)\n"
         " * 由 scripts/build_memory_777.py 自 parsed/*.json 驗證產出，一字不差對應和合本與 KJV、希伯來/希臘原文。\n"
         " */\n"
         "window.BIBLIA_MEMORY_777 = " + json.dumps(payload, ensure_ascii=False, indent=2) + ";\n"

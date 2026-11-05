@@ -1,9 +1,9 @@
-/* Biblia — 777 節經文背誦與基甸會聖經處境練習 ＆ 填空測驗挑戰系統 (app/memory.js)
+/* Biblia — 777 節經文背誦與處境選讀練習 ＆ 填空測驗挑戰系統 (app/memory.js)
  *
  * 核心功能：
  * 1. 雙視圖架構：
  *    - VIEW A: 🎴 經文背誦記憶卡（支援手機直橫式全螢幕自適應、6 大記憶模式、SRS 間隔記憶、偷看全文、語音伴讀）
- *    - VIEW B: 🎯 經文填空測驗 Section（基甸會 7 大生命處境自選、全書 777 節綜合闖關、4 選 1 智慧干擾項、即時對錯音效、成績單結算與錯題特訓）
+ *    - VIEW B: 🎯 經文填空測驗 Section（7 大生命處境自選、全書 777 節綜合闖關、4 選 1 智慧干擾項、即時對錯音效、成績單結算與錯題特訓）
  * 2. 777 節和合本智慧挖空與高擬真同處境干擾項生成器
  * 3. Web Audio API 免外部依賴的合成提示音效（答對升音和弦 / 答錯提示音）
  * 4. 手機全螢幕 (Fullscreen API) 與直式/橫式雙欄自適應
@@ -404,23 +404,20 @@
       if ((r.reps > 0 && r.level < 4 && r.nextDue <= now) || r.wrongCount > 0) dueCount++;
     });
 
+    function chip(id, label, count) {
+      var isAct = state.cat === id;
+      return '<button type="button" class="mem-cat-chip' + (isAct ? ' active' : '') + '" data-cat="' + id + '"' +
+        (isAct ? ' aria-current="true"' : '') + '>' +
+        '<span>' + label + '</span><span class="chip-count">' + count + '</span></button>';
+    }
+
     var html = '';
-    CATEGORIES.forEach(function (c) {
-      var isAct = state.cat === c.id;
-      html += '<button type="button" class="mem-cat-chip' + (isAct ? ' active' : '') + '" data-cat="' + c.id + '">' +
-        '<span>' + c.icon + ' ' + c.title + '</span>' +
-        '<span class="chip-count">111</span>' +
-        '</button>';
-    });
-
-    html += '<button type="button" class="mem-cat-chip' + (state.cat === 'all' ? ' active' : '') + '" data-cat="all">' +
-      '<span>📚 全部經文</span><span class="chip-count">777</span></button>';
-
-    html += '<button type="button" class="mem-cat-chip' + (state.cat === 'due' ? ' active' : '') + '" data-cat="due">' +
-      '<span>⏰ 待複習</span><span class="chip-count">' + dueCount + '</span></button>';
-
-    html += '<button type="button" class="mem-cat-chip' + (state.cat === 'starred' ? ' active' : '') + '" data-cat="starred">' +
-      '<span>⭐ 重點收藏</span><span class="chip-count">' + starCount + '</span></button>';
+    // 有待複習時放最前面：回訪時最該做的事不應藏在滑軌尾端
+    if (dueCount > 0 || state.cat === 'due') html += chip('due', '⏰ 待複習', dueCount);
+    CATEGORIES.forEach(function (c) { html += chip(c.id, c.icon + ' ' + c.title, 111); });
+    html += chip('all', '📚 全部經文', 777);
+    if (!(dueCount > 0 || state.cat === 'due')) html += chip('due', '⏰ 待複習', dueCount);
+    html += chip('starred', '⭐ 重點收藏', starCount);
 
     strip.innerHTML = html;
 
@@ -433,9 +430,11 @@
         buildDeck();
         saveState();
         renderAll();
-        btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       });
     });
+
+    var activeChip = strip.querySelector('.mem-cat-chip.active');
+    if (activeChip) strip.scrollLeft = activeChip.offsetLeft - (strip.clientWidth - activeChip.offsetWidth) / 2;
   }
 
   /* ---------- 記憶卡渲染 (VIEW A) ---------- */
@@ -454,7 +453,7 @@
     if (streakEl) streakEl.textContent = '🔥 ' + (state.streak.count || 1) + '天';
 
     var subcatEl = document.getElementById('memSubcatLabel');
-    if (subcatEl) subcatEl.textContent = v.subcat + ' · ' + v.group;
+    if (subcatEl) subcatEl.textContent = v.group;
 
     var globalIdEl = document.getElementById('memGlobalIdLabel');
     var padId = v.id < 10 ? '00' + v.id : (v.id < 100 ? '0' + v.id : '' + v.id);
@@ -479,6 +478,7 @@
     if (starBtn) {
       starBtn.textContent = rec.starred ? '★' : '☆';
       starBtn.classList.toggle('is-starred', !!rec.starred);
+      starBtn.setAttribute('aria-pressed', rec.starred ? 'true' : 'false');
     }
 
     var refTitle = document.getElementById('memRefTitle');
@@ -510,6 +510,12 @@
     var bodyEl = document.getElementById('memCardBody');
     if (bodyEl) {
       bodyEl.classList.toggle('is-long', v.zh.length > 65 || state.mode === 'quiz' || state.mode === 'dictation');
+      // 換節或換模式時回到頂端；按住偷看等同節重繪則不跳動
+      var viewKey = v.id + '|' + state.mode;
+      if (bodyEl.getAttribute('data-view-key') !== viewKey) {
+        bodyEl.scrollTop = 0;
+        bodyEl.setAttribute('data-view-key', viewKey);
+      }
     }
 
     renderVerseByMode(v);
@@ -888,6 +894,11 @@
   function switchView(viewName) {
     state.view = viewName;
     saveState();
+    document.body.setAttribute('data-view', viewName);
+    var segCardEl = document.getElementById('segCardBtn');
+    var segQuizEl = document.getElementById('segQuizBtn');
+    if (segCardEl) segCardEl.setAttribute('aria-selected', viewName === 'quiz' ? 'false' : 'true');
+    if (segQuizEl) segQuizEl.setAttribute('aria-selected', viewName === 'quiz' ? 'true' : 'false');
     var viewCard = document.getElementById('memViewCard');
     var viewQuiz = document.getElementById('memViewQuiz');
     var segCard = document.getElementById('segCardBtn');
@@ -932,21 +943,21 @@
     var html = '';
     CATEGORIES.forEach(function (c) {
       var isSel = quizRunState.cat === c.id;
-      html += '<div class="quiz-cat-card' + (isSel ? ' active' : '') + '" data-qcat="' + c.id + '">' +
+      html += '<button type="button" class="quiz-cat-card' + (isSel ? ' active' : '') + '" data-qcat="' + c.id + '" aria-pressed="' + isSel + '">' +
         '<span class="quiz-cat-name">' + c.icon + ' ' + c.title + '</span>' +
         '<span class="quiz-cat-badge">111 節</span>' +
-      '</div>';
+      '</button>';
     });
 
-    html += '<div class="quiz-cat-card' + (quizRunState.cat === 'all' ? ' active' : '') + '" data-qcat="all">' +
-      '<span class="quiz-cat-name">🌟 全書 777 節大綜合</span>' +
+    html += '<button type="button" class="quiz-cat-card' + (quizRunState.cat === 'all' ? ' active' : '') + '" data-qcat="all" aria-pressed="' + (quizRunState.cat === 'all') + '">' +
+      '<span class="quiz-cat-name">🌟 777 節大綜合</span>' +
       '<span class="quiz-cat-badge">777 節</span>' +
-    '</div>';
+    '</button>';
 
-    html += '<div class="quiz-cat-card' + (quizRunState.cat === 'wrong' ? ' active' : '') + '" data-qcat="wrong">' +
-      '<span class="quiz-cat-name">🔥 錯題特訓隊列</span>' +
+    html += '<button type="button" class="quiz-cat-card' + (quizRunState.cat === 'wrong' ? ' active' : '') + '" data-qcat="wrong" aria-pressed="' + (quizRunState.cat === 'wrong') + '">' +
+      '<span class="quiz-cat-name">🔥 錯題特訓</span>' +
       '<span class="quiz-cat-badge">' + wrongCount + ' 節</span>' +
-    '</div>';
+    '</button>';
 
     grid.innerHTML = html;
 
@@ -1204,9 +1215,33 @@
     }
   }
 
-  /* ---------- 抽屜 1: 基甸會處境指南 ---------- */
-  function renderGideonModal() {
-    var grid = document.getElementById('memGideonGrid');
+  /* ---------- 抽屜共用：開關、Esc、焦點留在抽屜內，關閉後還原 ---------- */
+  var drawerReturnFocus = null;
+
+  function openDrawer(id) {
+    var modal = document.getElementById(id);
+    if (!modal) return;
+    drawerReturnFocus = document.activeElement;
+    modal.hidden = false;
+    var closeBtn = modal.querySelector('.mem-sheet-close');
+    if (closeBtn) closeBtn.focus({ preventScroll: true });
+  }
+
+  function closeDrawer(id) {
+    var modal = document.getElementById(id);
+    if (!modal || modal.hidden) return;
+    modal.hidden = true;
+    if (drawerReturnFocus && document.contains(drawerReturnFocus)) drawerReturnFocus.focus({ preventScroll: true });
+    drawerReturnFocus = null;
+  }
+
+  function getOpenDrawer() {
+    return document.querySelector('.mem-drawer-modal:not([hidden])');
+  }
+
+  /* ---------- 抽屜 1: 處境選讀指南 ---------- */
+  function renderSituationModal() {
+    var grid = document.getElementById('memSituationGrid');
     if (!grid) return;
 
     var html = '';
@@ -1218,26 +1253,27 @@
       }).length;
 
       var isAct = state.cat === c.id;
-      html += '<div class="mem-gideon-card' + (isAct ? ' active' : '') + '" data-gcat="' + c.id + '">' +
-        '<div class="mem-gideon-card-top">' +
-          '<span class="mem-gideon-card-title">' + c.icon + ' ' + c.num + '. ' + escapeHtml(c.title) + '</span>' +
-          '<span style="font-size:0.75rem;font-weight:800;color:var(--ok);">熟背 ' + mastered + ' / 111 節</span>' +
-        '</div>' +
-        '<div class="mem-gideon-card-sub">📍 ' + escapeHtml(c.gideonTitle) + '</div>' +
-        '<div class="mem-gideon-card-desc">' + escapeHtml(c.desc) + '</div>' +
-      '</div>';
+      var pct = Math.round(mastered / 111 * 100);
+      html += '<button type="button" class="mem-situation-card' + (isAct ? ' active' : '') + '" data-scat="' + c.id + '"' + (isAct ? ' aria-current="true"' : '') + '>' +
+        '<span class="mem-situation-card-top">' +
+          '<span class="mem-situation-card-title">' + c.icon + ' ' + escapeHtml(c.title) + '</span>' +
+        '</span>' +
+        '<strong class="mem-situation-card-sub">' + escapeHtml(c.situation) + '</strong>' +
+        '<span class="mem-situation-card-desc">' + escapeHtml(c.desc) + '</span>' +
+        '<span class="mem-situation-progress"><span class="mem-situation-progress-track"><span style="width:' + pct + '%"></span></span><span>已熟背 ' + mastered + ' / 111</span></span>' +
+      '</button>';
     });
     grid.innerHTML = html;
 
-    grid.querySelectorAll('.mem-gideon-card').forEach(function (card) {
+    grid.querySelectorAll('.mem-situation-card').forEach(function (card) {
       card.addEventListener('click', function () {
-        var cid = card.getAttribute('data-gcat');
+        var cid = card.getAttribute('data-scat');
         state.cat = cid;
         state.idx = 0;
         buildDeck();
         saveState();
         switchView('card');
-        document.getElementById('memGideonModal').hidden = true;
+        closeDrawer('memSituationModal');
       });
     });
   }
@@ -1269,13 +1305,13 @@
       var r = getRecord(v.id);
       var statusBadge = r.level >= 4 ? '✨ 已熟背' : (r.reps > 0 ? '🌿 練習中' : '');
       var isCur = curV && curV.id === v.id;
-      html += '<div class="mem-verse-row' + (isCur ? ' current' : '') + '" data-vid="' + v.id + '">' +
-        '<div class="mem-verse-row-top">' +
+      html += '<button type="button" class="mem-verse-row' + (isCur ? ' current' : '') + '" data-vid="' + v.id + '"' + (isCur ? ' aria-current="true"' : '') + '>' +
+        '<span class="mem-verse-row-top">' +
           '<span>#' + v.id + ' · ' + escapeHtml(v.ref) + ' <small style="color:var(--fg-mute);font-weight:600;">(' + escapeHtml(v.subcat) + ')</small></span>' +
           '<span>' + (r.starred ? '★ ' : '') + statusBadge + '</span>' +
-        '</div>' +
-        '<div class="mem-verse-row-zh">' + escapeHtml(v.zh) + '</div>' +
-      '</div>';
+        '</span>' +
+        '<span class="mem-verse-row-zh">' + escapeHtml(v.zh) + '</span>' +
+      '</button>';
     });
     if (filtered.length > 200) {
       html += '<div style="text-align:center;padding:10px;font-size:0.78rem;color:var(--fg-mute);">僅顯示前 200 筆，請輸入關鍵字縮小範圍</div>';
@@ -1326,7 +1362,9 @@
 
   function syncToolbarButtons() {
     document.querySelectorAll('#memModeRow .mem-mode-btn').forEach(function (btn) {
-      btn.classList.toggle('active', btn.getAttribute('data-mode') === state.mode);
+      var isMode = btn.getAttribute('data-mode') === state.mode;
+      btn.classList.toggle('active', isMode);
+      btn.setAttribute('aria-selected', isMode ? 'true' : 'false');
     });
     document.querySelectorAll('#memMaskPills .mem-mask-pill').forEach(function (btn) {
       btn.classList.toggle('active', parseInt(btn.getAttribute('data-mask'), 10) === state.maskRate);
@@ -1488,7 +1526,7 @@
     document.getElementById('memShareBtn').addEventListener('click', function () {
       var v = deck[state.idx];
       if (!v) return;
-      var text = '【' + v.ref + '】\n「' + v.zh + '」\n' + (v.en ? v.en + '\n' : '') + '—— Biblia 777 基甸會處境經文背誦 (' + v.subcat + ')';
+      var text = '【' + v.ref + '】\n「' + v.zh + '」\n' + (v.en ? v.en + '\n' : '') + '—— Biblia 777 處境選讀 (' + v.subcat + ')';
       if (navigator.share) {
         navigator.share({ title: v.ref + ' 經文背誦卡', text: text }).catch(function () {});
       } else if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1573,16 +1611,16 @@
     });
 
     // 抽屜控制
-    document.getElementById('memOpenGideonBtn').addEventListener('click', function () {
-      renderGideonModal();
-      document.getElementById('memGideonModal').hidden = false;
+    document.getElementById('memOpenSituationBtn').addEventListener('click', function () {
+      renderSituationModal();
+      openDrawer('memSituationModal');
     });
 
     document.getElementById('memOpenListBtn').addEventListener('click', function () {
       var sInp = document.getElementById('memListSearchInput');
       if (sInp) sInp.value = '';
       renderListModal('');
-      document.getElementById('memListModal').hidden = false;
+      openDrawer('memListModal');
     });
 
     var listSearch = document.getElementById('memListSearchInput');
@@ -1595,14 +1633,12 @@
     document.getElementById('memOpenSettingsBtn').addEventListener('click', function () {
       renderStatsModal();
       syncToolbarButtons();
-      document.getElementById('memSettingsModal').hidden = false;
+      openDrawer('memSettingsModal');
     });
 
     document.querySelectorAll('[data-close]').forEach(function (el) {
       el.addEventListener('click', function () {
-        var targetId = el.getAttribute('data-close');
-        var modal = document.getElementById(targetId);
-        if (modal) modal.hidden = true;
+        closeDrawer(el.getAttribute('data-close'));
       });
     });
 
@@ -1724,7 +1760,30 @@
 
     // 鍵盤快捷鍵
     window.addEventListener('keydown', function (e) {
-      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      var openModal = getOpenDrawer();
+      if (openModal) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeDrawer(openModal.id);
+        } else if (e.key === 'Tab') {
+          var focusables = Array.prototype.filter.call(
+            openModal.querySelectorAll('a[href], button:not([disabled]), input:not([type="file"]), textarea, select'),
+            function (n) { return n.offsetParent !== null; }
+          );
+          if (focusables.length) {
+            var first = focusables[0];
+            var last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
+        }
+        return; // 抽屜開啟時不觸發背誦/測驗快捷鍵
+      }
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) return;
+      // 焦點在按鈕或連結上時，空白鍵/Enter 留給該控制項本身
+      var onControl = e.target && e.target.closest && e.target.closest('button, a[href]');
+      if (onControl && (e.key === ' ' || e.key === 'Enter')) return;
       if (state.view === 'card') {
         if (e.key === 'ArrowLeft') { e.preventDefault(); prevCard(); }
         else if (e.key === 'ArrowRight') { e.preventDefault(); nextCard(); }
@@ -1749,10 +1808,7 @@
       }
     });
 
-    // 監聽橫直式螢幕旋轉
-    window.addEventListener('resize', function () {
-      if (state.view === 'card') renderCard();
-    });
+    // 版面全由 CSS 處理；不在 resize 重繪，否則手機鍵盤彈出時會清掉默寫內容與已翻開的字
   }
 
   /* ---------- URL Hash 支援 ---------- */
@@ -1765,7 +1821,7 @@
     }
     if (h.indexOf('cat=') === 0) {
       var cid = h.slice(4);
-      if (CATEGORIES.some(function (c) { return c.id === cid; }) || cid === 'all') {
+      if (CATEGORIES.some(function (c) { return c.id === cid; }) || cid === 'all' || cid === 'due' || cid === 'starred') {
         state.cat = cid;
         state.idx = 0;
       }

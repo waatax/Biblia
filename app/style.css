@@ -13533,3 +13533,118 @@ body.fullscreen-active .bar {
     transform: rotate(90deg);
   }
 }
+
+/* ==========================================================================
+ * v39 全站 UX 校正
+ * ========================================================================== */
+a.btn, a.btn:hover, a.start-chip-btn { text-decoration: none; }
+
+/* 閱讀頁頂欄（手機）：☰ 不可被擠到橫向捲動區外；工作台、全螢幕、背誦、挑戰都已收進 ☰ */
+@media (max-width: 599px) {
+  #readerBar .workbench-nav-btn,
+  #readerBar .fullscreen-nav-btn,
+  #readerBar .memory-nav-btn,
+  #readerBar .challenge-nav-btn { display: none; }
+}
+
+/* 首頁快捷入口 */
+.start-quick {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.start-quick-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 66px;
+  padding: 8px 4px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  font-size: .84rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: border-color .15s ease, transform .12s ease;
+}
+.start-quick-tile > span:first-child { font-size: 1.3rem; line-height: 1.2; }
+.start-quick-tile:hover { border-color: var(--accent); color: var(--accent); }
+.start-quick-tile:active { transform: scale(.97); }
+@media (min-width: 900px) {
+  .start-quick-tile { flex-direction: row; gap: 8px; min-height: 52px; font-size: .94rem; }
+}
+#startPickCard { scroll-margin-top: 12px; }
+
+/* 金句卡：主動作最醒目，次要動作並排 */
+@media (max-width: 599px) {
+  .daily-actions { width: 100%; }
+  .daily-actions .btn { flex: 1 1 calc(50% - 8px); justify-content: center; min-height: 42px; }
+  .daily-actions .go-daily-verse { flex-basis: 100%; order: -1; }
+  /* 窄螢幕先讓使用者直接讀經，背誦卡排在閱讀之後 */
+  #startPickCard { order: -1; }
+}
+
+/* 首頁背誦卡 */
+.start-memory-card .start-plan-actions { margin-top: 14px; }
+.start-memory-card .start-plan-body { flex: 1; }
+.start-memory-lead { font-size: .875rem; color: var(--fg-dim); line-height: 1.6; margin: 0 0 12px; }
+.start-situations {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.start-situation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: .86rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+.start-situation:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.start-memory-status { margin: 12px 0 0; font-size: .82rem; font-weight: 700; color: var(--ok); }
+.start-memory-status[hidden] { display: none; }
+
+/* 閱讀卡：版本與外觀預設收合（省下大量捲動，也讓兩欄高度接近） */
+.pick-more { margin-top: 12px; border-top: 1px solid var(--line-soft); }
+.pick-more-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 0;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--fg-dim);
+  cursor: pointer;
+  list-style: none;
+}
+.pick-more-summary::-webkit-details-marker { display: none; }
+.pick-more-summary::after { content: '▾'; margin-left: auto; transition: transform .15s ease; }
+.pick-more[open] > .pick-more-summary::after { transform: rotate(180deg); }
+.pick-more[open] > .pick-more-summary { color: var(--accent); }
+
+/* 閱讀卡（手機）：書卷、章、閱讀鈕同一列，一眼可完成選章 */
+@media (max-width: 599px) {
+  .pick:not(.pick-block) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 84px auto;
+    align-items: center;
+    gap: 6px 8px;
+  }
+  .pick:not(.pick-block) > .pick-label { grid-column: 1 / -1; }
+  .pick:not(.pick-block) > select { width: 100%; }
+  .pick:not(.pick-block) > .go { min-height: 44px; white-space: nowrap; }
+  .start-btn-group .btn { font-size: .86rem; padding-left: 8px; padding-right: 8px; white-space: nowrap; }
+}

@@ -689,7 +689,7 @@ var BIBLIA = (function () {
       'appearanceCloseBtn', 'aaSizeText', 'aaFontSlider', 'aaFontDown', 'aaFontUp',
       'aaLhControls', 'aaFontControls', 'aaThemeControls', 'aaInterlinearSwitch', 'aaLargeVnSwitch',
       'mobileMenuBtn', 'mobileMenuModal', 'mobileMenuOverlay', 'mobileMenuCloseBtn',
-      'mobSearchBtn', 'mobStudyBtn', 'mobPlanBtn', 'mobRefBtn', 'mobAudioBtn', 'mobVersionBtn', 'mobZenBtn', 'mobAaBtn', 'mobThemeBtn', 'mobHomeBtn',
+      'mobSearchBtn', 'mobStudyBtn', 'mobPlanBtn', 'mobRefBtn', 'mobAudioBtn', 'mobVersionBtn', 'mobWorkbenchBtn', 'mobFullscreenBtn', 'mobZenBtn', 'mobAaBtn', 'mobThemeBtn', 'mobHomeBtn',
       'startThemeGroup', 'startSizeGroup', 'themeBtn'
     ].forEach(function (id) { el[id] = document.getElementById(id); });
   }
@@ -2493,6 +2493,14 @@ var BIBLIA = (function () {
     if (el.mobVersionBtn) el.mobVersionBtn.addEventListener('click', function() {
       closeMobileMenu();
       openVersionModal();
+    });
+    if (el.mobWorkbenchBtn) el.mobWorkbenchBtn.addEventListener('click', function() {
+      closeMobileMenu();
+      if (el.workbenchToggleBtn) el.workbenchToggleBtn.click();
+    });
+    if (el.mobFullscreenBtn) el.mobFullscreenBtn.addEventListener('click', function() {
+      closeMobileMenu();
+      if (el.fullscreenToggleBtn) el.fullscreenToggleBtn.click();
     });
     if (el.mobZenBtn) el.mobZenBtn.addEventListener('click', function() { closeMobileMenu(); toggleZen(); });
     if (el.mobAaBtn) el.mobAaBtn.addEventListener('click', function() { closeMobileMenu(); openAppearanceModal(); });

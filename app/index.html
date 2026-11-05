@@ -45,7 +45,7 @@
 })();
 </script>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;700&display=swap"></noscript>
-<link rel="stylesheet" href="style.css?v=33">
+<link rel="stylesheet" href="style.css?v=39">
 <script>
 /* 直接開啟經文網址（#read/書卷/章）時，趁 reader.js 還在下載就先抓這一卷的和合本。 */
 (function () {
@@ -98,6 +98,14 @@
       <div class="start-recent" id="startRecent" hidden></div>
     </div>
 
+    <!-- 四大功能快捷入口：不必捲過長頁面就能到達 -->
+    <nav class="start-quick" aria-label="主要功能">
+      <a href="#startPickCard" class="start-quick-tile"><span aria-hidden="true">📖</span><span>讀經</span></a>
+      <a href="memory.html" class="start-quick-tile"><span aria-hidden="true">🧠</span><span>背誦</span></a>
+      <a href="challenge.html" class="start-quick-tile"><span aria-hidden="true">🎮</span><span>挑戰</span></a>
+      <a href="schedule.html" class="start-quick-tile"><span aria-hidden="true">📅</span><span>進度</span></a>
+    </nav>
+
     <!-- 每日精選金句卡片 -->
     <div class="start-card start-daily-card" id="startDailyVerseCard">
       <div class="daily-card-head">
@@ -126,46 +134,40 @@
           <button id="dailyVerseReadBtn" type="button" class="btn btn-sm btn-primary go-daily-verse">
             <span aria-hidden="true">📖</span> 在經文中閱讀
           </button>
-          <a href="memory.html" class="btn btn-sm btn-primary-light" title="開啟手機全螢幕 777 節經文背誦與基甸會處境練習">
-            <span aria-hidden="true">🧠</span> 777 經文背誦卡
-          </a>
-          <a href="challenge.html" class="btn btn-sm btn-primary-light" title="開啟聖經挑戰小遊戲（猜人名、猜地名、經文填空、十字填字）">
-            <span aria-hidden="true">🎮</span> 聖經挑戰遊戲
-          </a>
         </div>
       </div>
     </div>
 
     <div class="start-grid">
 
-      <!-- ===================== 基甸會 777 節經文背誦練習入口卡片 ===================== -->
-      <div class="start-card start-memory-card" id="startMemoryCard" style="border-top: 4px solid var(--accent);">
+      <!-- ===================== 777 節經文背誦與處境選讀入口卡片 ===================== -->
+      <div class="start-card start-memory-card" id="startMemoryCard">
         <div class="start-plan-header">
           <div class="start-plan-icon" aria-hidden="true">🧠</div>
           <div class="start-plan-heading">
-            <h2 class="start-plan-title">777 經文背誦 ＆ 基甸會處境選讀</h2>
-            <span class="start-plan-subtitle">中文和合本 · 手機全螢幕記憶卡 · 7 大生命處境 × 111 節</span>
+            <h2 class="start-plan-title">777 經文背誦 ＆ 處境選讀</h2>
+            <span class="start-plan-subtitle">7 大生命處境 × 111 節 · 中文和合本</span>
           </div>
         </div>
 
         <div class="start-plan-body">
-          <p style="font-size:0.86rem; color:var(--fg-dim); margin:0 0 10px; line-height:1.55;">
-            參考<strong>國際基甸會聖經「經文選讀（Where to Find Help）」</strong>分類，當您在生活中遇到特定情緒、處境或需要指引時，立即抽取對應處境經文並透過<strong>漸進遮蔽、首字提示、逐句點按、挖空填空、打字默寫与語音伴讀</strong>熟記神的話：
-          </p>
-          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
-            <a href="memory.html#cat=fear" class="start-chip-btn" style="text-decoration:none;">🛡️ 遇到恐懼害怕時 (詩23:4 / 賽41:10)</a>
-            <a href="memory.html#cat=anxiety" class="start-chip-btn" style="text-decoration:none;">🕊️ 感到憂慮焦躁時 (太6:25-34 / 腓4:6-7)</a>
-            <a href="memory.html#cat=revival" class="start-chip-btn" style="text-decoration:none;">🌿 靈性冷淡軟弱時 (詩51篇 / 約15章)</a>
-            <a href="memory.html#cat=guidance" class="start-chip-btn" style="text-decoration:none;">🧭 需要人生方向時 (箴3:5-6 / 羅12:1-2)</a>
-            <a href="memory.html#cat=suffering" class="start-chip-btn" style="text-decoration:none;">🔥 患難試探與盼望 (林前10:13 / 羅8:28)</a>
-            <a href="memory.html#cat=salvation" class="start-chip-btn" style="text-decoration:none;">✝️ 救恩確據與信心 (約3:16 / 賽53章)</a>
-            <a href="memory.html#cat=virtues" class="start-chip-btn" style="text-decoration:none;">👑 愛心美德與頌讚 (林前13章 / 太5章)</a>
+          <p class="start-memory-lead">遇到特定情緒、處境或需要指引時，選一個處境開始背誦，用遮蔽、首字、填空、默寫與語音伴讀熟記神的話。</p>
+          <div class="start-situations">
+            <a href="memory.html#cat=fear" class="start-situation" title="詩 23:4、賽 41:10"><span aria-hidden="true">🛡️</span>恐懼害怕時</a>
+            <a href="memory.html#cat=anxiety" class="start-situation" title="太 6:25-34、腓 4:6-7"><span aria-hidden="true">🕊️</span>憂慮焦躁時</a>
+            <a href="memory.html#cat=revival" class="start-situation" title="詩 51 篇、約 15 章"><span aria-hidden="true">🌿</span>靈性軟弱時</a>
+            <a href="memory.html#cat=guidance" class="start-situation" title="箴 3:5-6、羅 12:1-2"><span aria-hidden="true">🧭</span>需要方向時</a>
+            <a href="memory.html#cat=suffering" class="start-situation" title="林前 10:13、羅 8:28"><span aria-hidden="true">🔥</span>患難試探時</a>
+            <a href="memory.html#cat=salvation" class="start-situation" title="約 3:16、賽 53 章"><span aria-hidden="true">✝️</span>救恩與信心</a>
+            <a href="memory.html#cat=virtues" class="start-situation" title="林前 13 章、太 5 章"><span aria-hidden="true">👑</span>愛心與頌讚</a>
+            <a href="memory.html#cat=all" class="start-situation" title="全部 777 節"><span aria-hidden="true">📚</span>全部 777 節</a>
           </div>
+          <p class="start-memory-status" id="startMemoryStatus" hidden></p>
         </div>
 
         <div class="start-plan-actions">
-          <a href="memory.html" class="btn btn-primary btn-block" style="text-decoration:none; text-align:center;">
-            <span aria-hidden="true">📱</span> 進入手機全螢幕 777 經文背誦練習 →
+          <a href="memory.html" class="btn btn-primary btn-block" id="startMemoryCta" style="text-align:center;">
+            <span aria-hidden="true">🧠</span> <span id="startMemoryCtaText">開始背誦</span> →
           </a>
         </div>
       </div>
@@ -192,7 +194,8 @@
           <button id="ntGo" type="button" class="btn btn-primary go">閱讀</button>
         </div>
 
-        <hr class="pick-sep">
+        <details class="pick-more" id="startPickMore">
+        <summary class="pick-more-summary"><span aria-hidden="true">⚙️</span> 版本、主題與字級</summary>
 
         <div class="pick pick-block">
           <span class="pick-label">版本</span>
@@ -235,10 +238,11 @@
             <button type="button" class="start-chip-btn" data-size="32">32px</button>
           </div>
         </div>
+        </details>
 
         <div class="start-btn-group">
           <button id="startSearchBtn" type="button" class="btn btn-primary go-search">
-            <span aria-hidden="true">🔍</span> 搜尋經文 / Strong 號碼
+            <span aria-hidden="true">🔍</span> 搜尋經文 / Strong
           </button>
           <button id="startStudyCenterBtn" type="button" class="btn go-study">
             <span aria-hidden="true">🔖</span> 研經筆記與書籤
@@ -438,7 +442,7 @@
         <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
       </button>
 
-      <a href="memory.html" class="btn memory-nav-btn" title="777 節經文背誦與基甸會處境記憶卡" style="text-decoration:none;">
+      <a href="memory.html" class="btn memory-nav-btn" title="777 節經文背誦與處境選讀" style="text-decoration:none;">
         <span aria-hidden="true">🧠</span><span class="btn-text">777背誦</span>
       </a>
 
@@ -959,7 +963,7 @@
         <span aria-hidden="true">📅</span> 讀經計畫
       </button>
       <a href="memory.html" class="btn btn-block mobile-menu-item" style="text-decoration:none;">
-        <span aria-hidden="true">🧠</span> 777 經文背誦與基甸會選讀
+        <span aria-hidden="true">🧠</span> 777 經文背誦與處境選讀
       </a>
       <a href="challenge.html" class="btn btn-block mobile-menu-item" style="text-decoration:none;">
         <span aria-hidden="true">🎮</span> 聖經挑戰與益智小遊戲
@@ -973,6 +977,12 @@
       </button>
       <button id="mobVersionBtn" type="button" class="btn btn-block mobile-menu-item">
         <span aria-hidden="true">📖</span> 聖經譯本與對照選單
+      </button>
+      <button id="mobWorkbenchBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">🖥️</span> 研經工作台
+      </button>
+      <button id="mobFullscreenBtn" type="button" class="btn btn-block mobile-menu-item">
+        <span aria-hidden="true">⛶</span> 全螢幕
       </button>
       <button id="mobZenBtn" type="button" class="btn btn-block mobile-menu-item">
         <span aria-hidden="true">🍵</span> 專注模式
@@ -1723,13 +1733,44 @@
 <!-- 首屏只載入必要的小檔（defer：不阻擋畫面、依序執行）。
      研經導讀、時間軸等約 2 MB 參考資料改在進入「聖經補充資料」時才載入；
      經文依「版本 × 書卷」分檔按需載入；Strong 索引只在 Strong 搜尋時載入。 -->
-<script defer src="data/plan_2026_q4.js?v=33"></script>
-<script defer src="data/plan_2026_q3.js?v=33"></script>
-<script defer src="data/plan_su101_2026.js?v=33"></script>
-<script defer src="data/golden_verses.js?v=33"></script>
-<script defer src="data/morph_codes.js?v=33"></script>
-<script defer src="reader.js?v=33"></script>
-<script defer src="data/books.js?v=33"></script>
+<script defer src="data/plan_2026_q4.js?v=39"></script>
+<script defer src="data/plan_2026_q3.js?v=39"></script>
+<script defer src="data/plan_su101_2026.js?v=39"></script>
+<script defer src="data/golden_verses.js?v=39"></script>
+<script defer src="data/morph_codes.js?v=39"></script>
+<script defer src="reader.js?v=39"></script>
+<script>
+/* 首頁背誦卡：顯示個人進度 */
+(function () {
+  function ready() {
+    try {
+      var raw = JSON.parse(localStorage.getItem('biblia_memory_777_v2') || 'null');
+      var recs = (raw && raw.records) || {};
+      var ids = Object.keys(recs);
+      var now = Date.now();
+      var mastered = 0, due = 0, started = 0;
+      ids.forEach(function (id) {
+        var r = recs[id] || {};
+        if (r.level >= 4) mastered++;
+        if (r.reps > 0) started++;
+        if ((r.reps > 0 && r.level < 4 && r.nextDue <= now) || r.wrongCount > 0) due++;
+      });
+      if (!started && !due) return;
+      var st = document.getElementById('startMemoryStatus');
+      if (st) {
+        st.textContent = '已熟背 ' + mastered + ' / 777 節' + (due ? '・待複習 ' + due + ' 節' : '');
+        st.hidden = false;
+      }
+      var cta = document.getElementById('startMemoryCta');
+      var ctaText = document.getElementById('startMemoryCtaText');
+      if (ctaText) ctaText.textContent = due ? '複習 ' + due + ' 節待複習經文' : '繼續背誦';
+      if (cta && due) cta.href = 'memory.html#cat=due';
+    } catch (e) {}
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
+})();
+</script>
+<script defer src="data/books.js?v=39"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
