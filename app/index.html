@@ -45,7 +45,7 @@
 })();
 </script>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;700&display=swap"></noscript>
-<link rel="stylesheet" href="style.css?v=39">
+<link rel="stylesheet" href="style.css?v=40">
 <script>
 /* 直接開啟經文網址（#read/書卷/章）時，趁 reader.js 還在下載就先抓這一卷的和合本。 */
 (function () {
@@ -1228,7 +1228,7 @@
         <span aria-hidden="true">📅</span><span class="btn-text">讀經計畫</span>
       </button>
 
-      <span class="bar-title">聖經研經知識網</span>
+      <span class="bar-title">聖經補充資料</span>
 
       <span class="bar-spacer"></span>
 
@@ -1243,59 +1243,34 @@
 
   <main class="ref-main" id="refMain">
     <div class="ref-hero">
-      <div class="ref-hero-content">
-        <h1 class="ref-main-title">Biblia 聖經研經知識網</h1>
-        <p class="ref-subtitle">66卷正典導讀 · 救贖歷史總覽 · 彌賽亞預言 · 聖經地理動線 · 核心神學詞庫 · 聖約信經</p>
-      </div>
+      <h1 class="ref-main-title">聖經補充資料</h1>
+      <p class="ref-subtitle">書卷導讀、年代編排、地理路線與主題研究</p>
     </div>
 
-    <!-- 頁籤導覽 (Tab Switcher) -->
+    <!-- 頁籤導覽：依用途分四組 -->
     <div class="ref-nav-tabs" id="refNavTabs" role="tablist" aria-label="資料庫分頁選擇">
-      <button type="button" class="ref-tab-btn active" data-reftab="intros" role="tab" aria-selected="true">
-        <span aria-hidden="true">📖</span> 66 卷簡介
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="book_study" role="tab" aria-selected="false">
-        <span aria-hidden="true">🏛️</span> 66 卷深度導讀
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="ot_survey" role="tab" aria-selected="false">
-        <span aria-hidden="true">📜</span> 舊約總覽
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="nt_survey" role="tab" aria-selected="false">
-        <span aria-hidden="true">✝️</span> 新約總覽
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="prophecy" role="tab" aria-selected="false">
-        <span aria-hidden="true">🌟</span> 彌賽亞預言應驗
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="geography" role="tab" aria-selected="false">
-        <span aria-hidden="true">🗺️</span> 聖經地理與動線
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="characters" role="tab" aria-selected="false">
-        <span aria-hidden="true">👥</span> 關鍵人物志
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="word_study" role="tab" aria-selected="false">
-        <span aria-hidden="true">🔤</span> 原文神學詞庫
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="apologetics" role="tab" aria-selected="false">
-        <span aria-hidden="true">💡</span> 研經難題與護教
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="covenants_creeds" role="tab" aria-selected="false">
-        <span aria-hidden="true">📜</span> 聖約矩陣與信經
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="su101" role="tab" aria-selected="false">
-        <span aria-hidden="true">📑</span> 每日研經釋義
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="rev_study" role="tab" aria-selected="false">
-        <span aria-hidden="true">👑</span> 啟示錄深度導論
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="timeline" role="tab" aria-selected="false">
-        <span aria-hidden="true">⏳</span> 歷史時間表
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="reader_guide" role="tab" aria-selected="false">
-        <span aria-hidden="true">🎓</span> 研經教學指南
-      </button>
-      <button type="button" class="ref-tab-btn" data-reftab="audio" role="tab" aria-selected="false">
-        <span aria-hidden="true">🎧</span> 有聲聖經庫
-      </button>
+      <span class="ref-tab-group">書卷</span>
+      <button type="button" class="ref-tab-btn active" data-reftab="intros" role="tab" aria-selected="true"><span aria-hidden="true">📖</span> 66 卷簡介</button>
+      <button type="button" class="ref-tab-btn" data-reftab="book_study" role="tab" aria-selected="false"><span aria-hidden="true">🏛️</span> 深度導讀</button>
+      <button type="button" class="ref-tab-btn" data-reftab="ot_survey" role="tab" aria-selected="false"><span aria-hidden="true">📜</span> 舊約總覽</button>
+      <button type="button" class="ref-tab-btn" data-reftab="nt_survey" role="tab" aria-selected="false"><span aria-hidden="true">✝️</span> 新約總覽</button>
+      <button type="button" class="ref-tab-btn" data-reftab="rev_study" role="tab" aria-selected="false"><span aria-hidden="true">👑</span> 啟示錄導論</button>
+      <span class="ref-tab-break" aria-hidden="true"></span>
+      <span class="ref-tab-group">年代與地理</span>
+      <button type="button" class="ref-tab-btn" data-reftab="timeline" role="tab" aria-selected="false"><span aria-hidden="true">⏳</span> 年代與圖表</button>
+      <button type="button" class="ref-tab-btn" data-reftab="geography" role="tab" aria-selected="false"><span aria-hidden="true">🗺️</span> 地理路線</button>
+      <button type="button" class="ref-tab-btn" data-reftab="characters" role="tab" aria-selected="false"><span aria-hidden="true">👥</span> 關鍵人物</button>
+      <span class="ref-tab-break row" aria-hidden="true"></span>
+      <span class="ref-tab-group">主題研究</span>
+      <button type="button" class="ref-tab-btn" data-reftab="prophecy" role="tab" aria-selected="false"><span aria-hidden="true">🌟</span> 彌賽亞預言</button>
+      <button type="button" class="ref-tab-btn" data-reftab="covenants_creeds" role="tab" aria-selected="false"><span aria-hidden="true">🤝</span> 聖約與信經</button>
+      <button type="button" class="ref-tab-btn" data-reftab="word_study" role="tab" aria-selected="false"><span aria-hidden="true">🔤</span> 原文詞庫</button>
+      <button type="button" class="ref-tab-btn" data-reftab="apologetics" role="tab" aria-selected="false"><span aria-hidden="true">💡</span> 難題與護教</button>
+      <span class="ref-tab-break" aria-hidden="true"></span>
+      <span class="ref-tab-group">資源</span>
+      <button type="button" class="ref-tab-btn" data-reftab="su101" role="tab" aria-selected="false"><span aria-hidden="true">📑</span> 每日研經釋義</button>
+      <button type="button" class="ref-tab-btn" data-reftab="reader_guide" role="tab" aria-selected="false"><span aria-hidden="true">🎓</span> 研經教學</button>
+      <button type="button" class="ref-tab-btn" data-reftab="audio" role="tab" aria-selected="false"><span aria-hidden="true">🎧</span> 有聲聖經</button>
     </div>
 
     <!-- Tab Content Panels -->
@@ -1733,12 +1708,12 @@
 <!-- 首屏只載入必要的小檔（defer：不阻擋畫面、依序執行）。
      研經導讀、時間軸等約 2 MB 參考資料改在進入「聖經補充資料」時才載入；
      經文依「版本 × 書卷」分檔按需載入；Strong 索引只在 Strong 搜尋時載入。 -->
-<script defer src="data/plan_2026_q4.js?v=39"></script>
-<script defer src="data/plan_2026_q3.js?v=39"></script>
-<script defer src="data/plan_su101_2026.js?v=39"></script>
-<script defer src="data/golden_verses.js?v=39"></script>
-<script defer src="data/morph_codes.js?v=39"></script>
-<script defer src="reader.js?v=39"></script>
+<script defer src="data/plan_2026_q4.js?v=40"></script>
+<script defer src="data/plan_2026_q3.js?v=40"></script>
+<script defer src="data/plan_su101_2026.js?v=40"></script>
+<script defer src="data/golden_verses.js?v=40"></script>
+<script defer src="data/morph_codes.js?v=40"></script>
+<script defer src="reader.js?v=40"></script>
 <script>
 /* 首頁背誦卡：顯示個人進度 */
 (function () {
@@ -1770,7 +1745,7 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
 })();
 </script>
-<script defer src="data/books.js?v=39"></script>
+<script defer src="data/books.js?v=40"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {

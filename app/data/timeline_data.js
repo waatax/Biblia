@@ -3,7 +3,7 @@ window.BIBLIA_TIMELINE_DATA = {
     {
       "id": "creation",
       "name": "遠古與族長時代 (Creation & Patriarchs)",
-      "period": "約公元前 2000 年以前 - 1800 年",
+      "period": "太古 - 約公元前 1876 年",
       "books": [
         "創世記 1-50",
         "約伯記"
@@ -15,20 +15,33 @@ window.BIBLIA_TIMELINE_DATA = {
           "event": "上帝創造天地、人類墮落、諾亞大洪水、巴別塔"
         },
         {
-          "year": "約 BC 2000",
+          "year": "約 BC 2091",
           "event": "亞伯拉罕蒙召離開吾珥，前往迦南應許之地"
         },
         {
-          "year": "約 BC 1900",
-          "event": "以撒生雅各，雅各改名以色列，十二支派祖先"
+          "year": "約 BC 2006",
+          "event": "以撒生雅各（後改名以色列），為十二支派的祖先"
         },
         {
-          "year": "約 BC 1875",
-          "event": "約瑟被賣至埃及作宰相，雅各全家 70 人下埃及避荒"
+          "year": "約 BC 1899-1876",
+          "event": "約瑟被賣到埃及，後作宰相；雅各全家 70 人下埃及避荒"
         }
       ]
     },
     {
+            "id": "sojourn",
+            "name": "寄居埃及時期 (Sojourn in Egypt)",
+            "period": "約公元前 1876 年 - 1446 年",
+            "books": ["創世記 46-50", "出埃及記 1-2"],
+            "summary": "雅各一家在歌珊地蒙福，人數繁增。約瑟死後，興起不認識約瑟的法老，以色列人受苦作奴隸，寄居埃及共 430 年（出 12:40）。",
+            "events": [
+                {"year": "約 BC 1876", "event": "雅各全家定居歌珊地"},
+                {"year": "約 BC 1805", "event": "約瑟去世，囑咐將他的骸骨帶回應許之地"},
+                {"year": "約 BC 1526", "event": "摩西出生，被法老的女兒收養"},
+                {"year": "約 BC 1486", "event": "摩西逃往米甸，牧羊四十年"}
+            ]
+        },
+        {
       "id": "exodus",
       "name": "出埃及與曠野時代 (Exodus & Wilderness)",
       "period": "約公元前 1446 年 - 1406 年",
@@ -38,7 +51,7 @@ window.BIBLIA_TIMELINE_DATA = {
         "民數記",
         "申命記"
       ],
-      "summary": "以色列人在埃及受苦400年後，上帝興起摩西降十災、過紅海、西奈山立約賜十誡與會幕，因不信在曠野漂流40年。",
+      "summary": "上帝興起摩西降十災、過紅海，在西奈山立約、賜十誡與會幕；百姓因不信，在曠野漂流 40 年。",
       "events": [
         {
           "year": "約 BC 1446",
@@ -134,16 +147,18 @@ window.BIBLIA_TIMELINE_DATA = {
         "歷代志下 10-36",
         "以賽亞書",
         "耶利米書",
+        "耶利米哀歌",
         "何西阿書",
         "約珥書",
         "阿摩司書",
         "俄巴底亞書",
+        "約拿書",
         "彌迦書",
         "那鴻書",
         "哈巴谷書",
         "西番雅書"
       ],
-      "summary": "王國分裂為北國以色列（首都撒瑪利亞，19王皆惡，BC 722 亡於亞述）與南國猶大（首都耶路撒冷，大衛後裔，BC 586 亡於巴比倫）。先知興起警告悔改。",
+      "summary": "王國分裂為北國以色列（首都撒馬利亞，19王皆惡，BC 722 亡於亞述）與南國猶大（首都耶路撒冷，大衛後裔，BC 586 亡於巴比倫）。先知興起警告悔改。",
       "events": [
         {
           "year": "BC 931",
@@ -163,7 +178,7 @@ window.BIBLIA_TIMELINE_DATA = {
         },
         {
           "year": "BC 722",
-          "event": "北國以色列首都撒瑪利亞陷落，北國亡於亞述帝國，百姓被拋散"
+          "event": "北國以色列首都撒馬利亞陷落，北國亡於亞述帝國，百姓被拋散"
         },
         {
           "year": "BC 622",
@@ -225,14 +240,14 @@ window.BIBLIA_TIMELINE_DATA = {
         },
         {
           "year": "BC 430-400",
-          "event": "瑪拉基先知事工，舊約聖經正典告成，進入兩約中間400年沉默期"
+          "event": "瑪拉基先知事工，舊約最後一卷先知書寫成，其後進入約 400 年的兩約之間"
         }
       ]
     },
     {
       "id": "intertestamental",
       "name": "兩約中間時代 (Intertestamental Silent Period)",
-      "period": "公元前 400 年 - 公元前 4 年",
+      "period": "公元前 400 年 - 公元前 5 年",
       "books": [
         "死海古卷、次經、馬加比傳（歷史背景）"
       ],
@@ -240,7 +255,7 @@ window.BIBLIA_TIMELINE_DATA = {
       "events": [
         {
           "year": "BC 332",
-          "event": "亞歷山大大帝征服波斯，希臘文化與希臘文普及（七十士譯本 SEPTUAGINT 誕生）"
+          "event": "亞歷山大大帝征服波斯，希臘文化與希臘文普及（其後約 BC 250 起，七十士譯本在亞歷山大城陸續譯成）"
         },
         {
           "year": "BC 167",
@@ -256,14 +271,14 @@ window.BIBLIA_TIMELINE_DATA = {
         },
         {
           "year": "BC 37",
-          "event": "大希律王被羅馬元老院立為猶太人之王，擴建第二聖殿"
+          "event": "大希律（BC 40 獲羅馬元老院立為猶太人的王）實際掌權，後來擴建第二聖殿"
         }
       ]
     },
     {
       "id": "new_testament",
       "name": "新約基督與使徒時代 (Christ & New Testament Church)",
-      "period": "公元前 4 年 - 公元 100 年",
+      "period": "公元前 5 年 - 公元 100 年",
       "books": [
         "馬太福音",
         "馬可福音",
@@ -311,7 +326,7 @@ window.BIBLIA_TIMELINE_DATA = {
         },
         {
           "year": "約 AD 95-96",
-          "event": "使徒約翰被流放拔摩島，見異象撰寫啟示錄，新約聖經正典完滿成書"
+          "event": "使徒約翰被流放拔摩島，見異象寫下啟示錄，新約最後的書卷約在此時完成"
         }
       ]
     }
@@ -319,7 +334,7 @@ window.BIBLIA_TIMELINE_DATA = {
   "prophetic_periods": [
     {
       "era": "亞述帝國時期 (Assyrian Period)",
-      "time": "公元前 8 世紀 - 7 世紀初",
+      "time": "公元前 9 世紀末 - 7 世紀初",
       "bg": "亞述帝國崛起強盛，北方十支派陷入嚴重邪淫拜金牛犢與社會不公，最終於 BC 722 亡於亞述。",
       "prophets": [
         {
@@ -454,7 +469,7 @@ window.BIBLIA_TIMELINE_DATA = {
     },
     {
       "month_no": 3,
-      "jewish_name": "西番月 (Sivan)",
+      "jewish_name": "西彎月 (Sivan)",
       "civil_no": 9,
       "gregorian": "5月-6月",
       "feasts": "6日七七節 / 五旬節 (Pentecost/Feast of Weeks)",
@@ -486,7 +501,7 @@ window.BIBLIA_TIMELINE_DATA = {
     },
     {
       "month_no": 7,
-      "jewish_name": "以他尼月/提斯利月 (Ethanim/Tishrei)",
+      "jewish_name": "以他念月/提斯利月 (Ethanim/Tishrei)",
       "civil_no": 1,
       "gregorian": "9月-10月",
       "feasts": "1日吹角節 (Rosh Hashanah)、10日贖罪日 (Yom Kippur)、15-21日住棚節 (Tabernacles)",

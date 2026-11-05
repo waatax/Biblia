@@ -363,6 +363,8 @@ var BIBLIA = (function () {
     'data/book_studies_nt.js',
     'data/book_guide_renderer.js',
     'data/timeline_data.js',
+    'data/bible_chronology.js',
+    'data/ref_infographics.js',
     'data/reader_tutorial.js',
     'data/knowledge_base.js'
   ];
@@ -2547,6 +2549,7 @@ var BIBLIA = (function () {
       stateObj = { view: 'plan', planId: currentP ? currentP.id : null, month: planFilterState.month };
     } else if (el.refView && !el.refView.hidden) {
       var refHash = '#ref' + (refState && refState.activeTab ? '/' + refState.activeTab : '');
+      if (refState && refState.activeTab === 'timeline') refHash += '/' + refState.timelineTab;
       if (refState && refState.activeTab === 'book_study' && refState.currentBookStudyNo) {
         refHash += '/' + refState.currentBookStudyNo;
       }
@@ -2624,6 +2627,9 @@ var BIBLIA = (function () {
         var refTab = parts[1] || 'intros';
         if (refTab === 'book_study' && parts[2]) {
           refState.currentBookStudyNo = parseInt(parts[2], 10) || 1;
+        }
+        if (refTab === 'timeline' && parts[2]) {
+          refState.timelineTab = parts[2] === 'eras' ? 'overview' : parts[2];
         }
         showRef(refTab, { fromHash: true });
         return;
@@ -4080,7 +4086,7 @@ var BIBLIA = (function () {
     introsCategory: 'all',
     introsSearch: '',
     revStudyTab: 'all',       // 'all' | 'intro' | 'approaches' | 'traditions' | 'heresy' | 'exposition' | 'millennium' | 'biblio'
-    timelineTab: 'eras',      // 'eras' | 'prophets' | 'calendar' | 'charts'
+    timelineTab: 'overview',  // 見 BibliaInfographics.TIMELINE_TABS
     prophecyCategory: 'all',
     prophecySearch: '',
     geoSearch: '',
@@ -4424,14 +4430,18 @@ var BIBLIA = (function () {
       { key: '小先知書', label: '小先知書 (12卷)' },
       { key: '福音書', label: '福音書 (4卷)' },
       { key: '保羅書信', label: '保羅書信 (13卷)' },
-      { key: '通用書信', label: '通用與預言 (9卷)' }
+      { key: '通用書信', label: '普通書信與啟示錄 (9卷)' }
     ];
 
     var filtered = intros.filter(function (b) {
       if (refState.introsCategory === 'ot' && b.testament !== 'OT') return false;
       if (refState.introsCategory === 'nt' && b.testament !== 'NT') return false;
       if (refState.introsCategory !== 'all' && refState.introsCategory !== 'ot' && refState.introsCategory !== 'nt') {
-        if (b.category !== refState.introsCategory && !(refState.introsCategory === '通用書信' && (b.category === '通用書信' || b.category === '預言書' || b.category === '監獄書信' || b.category === '教牧書信'))) return false;
+        var catMembers = {
+          '保羅書信': ['保羅書信', '監獄書信', '教牧書信'],
+          '通用書信': ['通用書信', '預言書']
+        }[refState.introsCategory] || [refState.introsCategory];
+        if (catMembers.indexOf(b.category) === -1) return false;
       }
 
       if (refState.introsSearch) {
@@ -4446,7 +4456,15 @@ var BIBLIA = (function () {
       return true;
     });
 
-    var htmlStr = '<div class="ref-sub-header">' +
+    var igI = window.BibliaInfographics;
+    if (igI && refState.introsSort && refState.introsSort !== 'canon') {
+      var chronoOrder = {};
+      igI.sortBooks(window.BIBLIA_CHRONOLOGY.books, refState.introsSort).forEach(function (c, i) { chronoOrder[c.no] = i; });
+      filtered = filtered.slice().sort(function (x, y) { return chronoOrder[x.no] - chronoOrder[y.no]; });
+    }
+
+    var htmlStr = (igI ? igI.shelfHtml(refInfographicCtx(renderRefPanelIntros)) : '') +
+      '<div class="ref-sub-header">' +
       '<div class="ref-surveys-feature-banner">' +
         '<div class="survey-feature-card ot" data-survey="ot_survey">' +
           '<div class="sf-icon">📜</div>' +
@@ -4476,7 +4494,13 @@ var BIBLIA = (function () {
     });
 
     htmlStr += '</div>' +
-      '<div class="ref-count-bar">共顯示 ' + filtered.length + ' 卷聖經書卷簡介</div>' +
+      '<div class="ref-count-bar ig-count-row"><span>共顯示 ' + filtered.length + ' 卷聖經書卷簡介</span>' +
+        '<span class="ig-seg" id="refIntrosSort" role="group" aria-label="排序方式">' +
+          [['canon', '正典順序'], ['written', '寫作先後'], ['history', '歷史先後']].map(function (o) {
+            var on = (refState.introsSort || 'canon') === o[0];
+            return '<button type="button" class="ig-seg-btn' + (on ? ' active' : '') + '" data-sort="' + o[0] + '" aria-pressed="' + on + '">' + o[1] + '</button>';
+          }).join('') +
+        '</span></div>' +
     '</div>';
 
     htmlStr += '<div class="book-intros-grid">';
@@ -4501,6 +4525,7 @@ var BIBLIA = (function () {
             '<span>✍️ <strong>作者：</strong>' + escapeHtml(b.author) + '</span>' +
             '<span>📅 <strong>年代：</strong>' + escapeHtml(b.date) + '</span>' +
           '</div>' +
+          (igI ? igI.miniBarHtml(b.no) : '') +
 
           '<div class="book-intro-box theme-box">' +
             '<strong>🎯 核心主題：</strong>' + escapeHtml(b.theme) +
@@ -4565,6 +4590,14 @@ var BIBLIA = (function () {
         renderRefPanelIntros();
       });
     }
+
+    if (igI) igI.bind(container, refInfographicCtx(renderRefPanelIntros));
+    container.querySelectorAll('#refIntrosSort .ig-seg-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        refState.introsSort = btn.getAttribute('data-sort');
+        renderRefPanelIntros();
+      });
+    });
 
     var pillsRow = container.querySelector('#refIntrosCategoryPills');
     if (pillsRow) {
@@ -4742,7 +4775,9 @@ var BIBLIA = (function () {
     if (!container) return;
 
     if (typeof window.renderSurveyGuideHtml === 'function') {
-      container.innerHTML = window.renderSurveyGuideHtml('ot_survey', { isStandalone: false });
+      var igSOT = window.BibliaInfographics;
+      container.innerHTML = (igSOT ? igSOT.compositionHtml(refInfographicCtx(function () {}), 'OT') : '') + window.renderSurveyGuideHtml('ot_survey', { isStandalone: false });
+      if (igSOT) igSOT.bind(container, refInfographicCtx(function () {}));
 
       container.querySelectorAll('.guide-btn-back').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
@@ -4786,7 +4821,9 @@ var BIBLIA = (function () {
     if (!container) return;
 
     if (typeof window.renderSurveyGuideHtml === 'function') {
-      container.innerHTML = window.renderSurveyGuideHtml('nt_survey', { isStandalone: false });
+      var igSNT = window.BibliaInfographics;
+      container.innerHTML = (igSNT ? igSNT.compositionHtml(refInfographicCtx(function () {}), 'NT') : '') + window.renderSurveyGuideHtml('nt_survey', { isStandalone: false });
+      if (igSNT) igSNT.bind(container, refInfographicCtx(function () {}));
 
       container.querySelectorAll('.guide-btn-back').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
@@ -4868,45 +4905,26 @@ var BIBLIA = (function () {
 
     var data = window.BIBLIA_TIMELINE_DATA || {};
 
-    var subTabs = [
-      { key: 'eras', label: '⏳ 聖經大歷史年表' },
-      { key: 'prophets', label: '📜 先知書歷史分期表' },
-      { key: 'calendar', label: '🗓️ 猶太神聖曆與節期表' },
-      { key: 'charts', label: '📊 結構對稱圖與年代圖表' }
-    ];
+    var ig = window.BibliaInfographics;
+    var subTabs = ig ? ig.TIMELINE_TABS : [];
+    var igCtx = refInfographicCtx(renderRefPanelTimeline);
 
     var htmlStr = '<div class="ref-sub-header">' +
-      '<div class="ref-pills-row" id="refTimelineSubTabs">';
+      '<div class="ref-pills-row ig-subtabs" id="refTimelineSubTabs">';
 
     subTabs.forEach(function (tab) {
       var activeClass = refState.timelineTab === tab.key ? 'active' : '';
-      htmlStr += '<button type="button" class="ref-pill-btn ' + activeClass + '" data-sub="' + tab.key + '">' + tab.label + '</button>';
+      htmlStr += '<button type="button" class="ref-pill-btn ' + activeClass + '" data-sub="' + tab.key + '" aria-pressed="' + (refState.timelineTab === tab.key) + '">' + tab.label + '</button>';
     });
 
     htmlStr += '</div></div>';
 
-    if (refState.timelineTab === 'eras') {
-      htmlStr += '<div class="timeline-eras-list">';
-      (data.eras || []).forEach(function (era, idx) {
-        htmlStr += '<div class="timeline-era-card">' +
-          '<div class="era-card-head">' +
-            '<span class="era-no-badge">Phase ' + (idx + 1) + '</span>' +
-            '<h3 class="era-title">' + escapeHtml(era.name) + '</h3>' +
-            '<span class="era-period-badge">' + escapeHtml(era.period) + '</span>' +
-          '</div>' +
-          '<div class="era-books-bar"><strong>📖 對應書卷：</strong>' + escapeHtml((era.books || []).join('、')) + '</div>' +
-          '<p class="era-summary">' + escapeHtml(era.summary) + '</p>' +
-          '<div class="era-events-timeline">' +
-            '<span class="era-events-title">📍 關鍵歷史里程碑：</span>' +
-            '<ul class="era-events-list">';
-        (era.events || []).forEach(function (ev) {
-          htmlStr += '<li><span class="ev-year">' + escapeHtml(ev.year) + '</span><span class="ev-text">' + escapeHtml(ev.event) + '</span></li>';
-        });
-        htmlStr += '</ul></div></div>';
-      });
-      htmlStr += '</div>';
+    if (ig) htmlStr += ig.timelineChartHtml(refState.timelineTab, igCtx);
+
+    if (refState.timelineTab === 'overview' || refState.timelineTab === 'books' || refState.timelineTab === 'kings' || refState.timelineTab === 'apostolic') {
+      // 全由資訊圖表呈現
     } else if (refState.timelineTab === 'prophets') {
-      htmlStr += '<div class="timeline-table-wrap">' +
+      htmlStr += '<h3 class="ig-table-title">先知分期詳表</h3><div class="timeline-table-wrap">' +
         '<table class="ref-data-table">' +
           '<thead>' +
             '<tr><th>歷史時期</th><th>先知</th><th>主要對象</th><th>年代</th><th>核心信息與審判焦點</th></tr>' +
@@ -4930,7 +4948,7 @@ var BIBLIA = (function () {
       });
       htmlStr += '</tbody></table></div>';
     } else if (refState.timelineTab === 'calendar') {
-      htmlStr += '<div class="timeline-table-wrap">' +
+      htmlStr += '<h3 class="ig-table-title">十二個月詳表</h3><div class="timeline-table-wrap">' +
         '<table class="ref-data-table calendar-table">' +
           '<thead>' +
             '<tr><th>神聖曆</th><th>民政曆</th><th>猶太月份名稱</th><th>對應公曆</th><th>主要節期與神聖日子</th><th>氣候與農業收割</th></tr>' +
@@ -4959,18 +4977,12 @@ var BIBLIA = (function () {
           htmlStr += '<div class="chart-vector-wrap">' + ch.vector_html + '</div>';
         }
 
-        if (ch.img) {
-          htmlStr += '<div class="chart-img-wrap">' +
-            '<img src="' + escapeHtml(ch.img) + '" alt="' + escapeHtml(ch.title) + '" loading="lazy" class="chart-img" onerror="this.parentElement.style.display=\'none\'">' +
-          '</div>';
-        }
-
         htmlStr += '<div class="chart-card-body">' +
             '<p>' + escapeHtml(ch.desc) + '</p>';
 
         if (ch.img) {
           htmlStr += '<a href="' + escapeHtml(ch.img) + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">' +
-            '🔍 檢視歷史掃描原圖檔 ↗</a>';
+            '🔍 檢視來源原圖 ↗</a>';
         }
 
         htmlStr += '</div></div>';
@@ -4986,9 +4998,48 @@ var BIBLIA = (function () {
         btn.addEventListener('click', function () {
           refState.timelineTab = btn.getAttribute('data-sub');
           renderRefPanelTimeline();
+          updateHash();
         });
       });
+      var activeSub = subRow.querySelector('.ref-pill-btn.active');
+      if (activeSub && subRow.scrollWidth > subRow.clientWidth) {
+        subRow.scrollLeft = activeSub.offsetLeft - subRow.offsetLeft - (subRow.clientWidth - activeSub.offsetWidth) / 2;
+      }
     }
+    if (ig) ig.bind(container, igCtx);
+  }
+
+  /* 資訊圖表共用的資料與導覽動作 */
+  function refInfographicCtx(rerender) {
+    return {
+      books: state.index || [],
+      intros: window.BIBLIA_BOOK_INTROS || [],
+      tdata: window.BIBLIA_TIMELINE_DATA || {},
+      kb: window.BIBLIA_KNOWLEDGE_BASE || {},
+      rerender: rerender,
+      jump: jumpToScriptureRef,
+      openBook: function (no) { showReader(no, 1); },
+      openStudy: function (no) {
+        refState.currentBookStudyNo = no;
+        refState.activeTab = 'book_study';
+        renderRefView();
+        updateHash();
+        window.scrollTo(0, 0);
+      },
+      openIntro: function (no) {
+        refState.activeTab = 'intros';
+        refState.introsCategory = 'all';
+        refState.introsSearch = '';
+        renderRefView();
+        updateHash();
+        var card = document.getElementById('refIntroBook_' + no);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          card.classList.add('ig-flash');
+          setTimeout(function () { card.classList.remove('ig-flash'); }, 2000);
+        }
+      }
+    };
   }
 
   function renderRefPanelReaderGuide() {
@@ -5275,7 +5326,9 @@ var BIBLIA = (function () {
       return true;
     });
 
-    var html = '<div class="kb-sub-header">' +
+    var igG = window.BibliaInfographics;
+    var igGCtx = refInfographicCtx(renderRefPanelGeography);
+    var html = (igG ? igG.mapHtml(igGCtx) : '') + '<div class="kb-sub-header">' +
       '<div class="kb-search-row">' +
         '<input type="search" id="geoSearchInput" class="kb-search-input" placeholder="🔍 搜尋聖經路線或地點（如：出埃及、迦南、巴比倫、加利利、保羅、羅馬）..." value="' + escapeHtml(refState.geoSearch) + '">' +
       '</div>' +
@@ -5293,7 +5346,7 @@ var BIBLIA = (function () {
           '</div>' +
           '<div class="geo-route-flow">' +
             '<span class="geo-route-label">🚩 核心動線：</span>' +
-            '<span>' + escapeHtml(g.routePoints) + '</span>' +
+            '<span class="geo-route-steps">' + g.routePoints.split(/\s*➔\s*/).map(function (pt) { return '<span>' + escapeHtml(pt) + '</span>'; }).join('<i aria-hidden="true">›</i>') + '</span>' +
           '</div>' +
           '<div><strong>📖 核心經文：</strong><span class="ref-scripture-jump" data-ref="' + escapeHtml(g.keyScriptures.split(';')[0]) + '">' + escapeHtml(g.keyScriptures) + '</span></div>' +
           '<p class="geo-desc-text">' + escapeHtml(g.description) + '</p>' +
@@ -5312,10 +5365,13 @@ var BIBLIA = (function () {
       sInput.addEventListener('input', function () {
         refState.geoSearch = sInput.value;
         renderRefPanelGeography();
+        var again = el.refPanelGeography.querySelector('#geoSearchInput');
+        if (again) { again.focus(); again.setSelectionRange(again.value.length, again.value.length); }
       });
     }
 
     bindScriptureJumpLinks(container);
+    if (igG) igG.bind(container, igGCtx);
   }
 
   /* ===================== 3. 聖經 50 位關鍵人物志面板 ===================== */
@@ -5343,7 +5399,9 @@ var BIBLIA = (function () {
       return true;
     });
 
-    var html = '<div class="kb-sub-header">' +
+    var igP = window.BibliaInfographics;
+    var igPCtx = refInfographicCtx(renderRefPanelCharacters);
+    var html = (igP ? igP.peopleHtml(igPCtx) : '') + '<div class="kb-sub-header">' +
       '<div class="kb-search-row">' +
         '<input type="search" id="charSearchInput" class="kb-search-input" placeholder="🔍 搜尋聖經人物（如：亞伯拉罕、摩西、大衛、彼得、保羅、路得）..." value="' + escapeHtml(refState.charSearch) + '">' +
       '</div>' +
@@ -5402,6 +5460,7 @@ var BIBLIA = (function () {
     }
 
     bindScriptureJumpLinks(container);
+    if (igP) igP.bind(container, igPCtx);
   }
 
   /* ===================== 4. 希伯來文與希臘文核心神學字詞庫面板 ===================== */
@@ -5587,7 +5646,8 @@ var BIBLIA = (function () {
     var covs = kb.covenants || [];
     var creeds = kb.creeds || [];
 
-    var html = '<div class="kb-sub-header">' +
+    var igV = window.BibliaInfographics;
+    var html = (igV && refState.covTab === 'covenants' ? igV.covenantChainHtml(refInfographicCtx(renderRefPanelCovenantsCreeds)) : '') + '<div class="kb-sub-header">' +
       '<div class="kb-filter-pills" id="covCreedNavTabs">' +
         '<button type="button" class="kb-pill-btn ' + (refState.covTab === 'covenants' ? 'active' : '') + '" data-tab="covenants">📜 六大聖約神學立體矩陣</button>' +
         '<button type="button" class="kb-pill-btn ' + (refState.covTab === 'creeds' ? 'active' : '') + '" data-tab="creeds">🏛️ 歷代大公信經 (使徒/尼西亞/迦克敦)</button>' +

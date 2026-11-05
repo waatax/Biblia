@@ -13648,3 +13648,240 @@ a.btn, a.btn:hover, a.start-chip-btn { text-decoration: none; }
   .pick:not(.pick-block) > .go { min-height: 44px; white-space: nowrap; }
   .start-btn-group .btn { font-size: .86rem; padding-left: 8px; padding-right: 8px; white-space: nowrap; }
 }
+
+/* ==========================================================================
+ * v40 聖經補充資料：分頁導覽與資訊圖表
+ * 分類色取自已驗證的 8 色序列（淺色／深色各一組），順序固定不循環
+ * ========================================================================== */
+:root {
+  --ig-s1: #2a78d6; --ig-s2: #eb6834; --ig-s3: #1baf7a; --ig-s4: #eda100;
+  --ig-s5: #e87ba4; --ig-s6: #008300; --ig-s7: #6250d6; --ig-s8: #e34948;
+  --ig-sea: #cfe0ea; --ig-land: #efe9dc; --ig-river: #8fb6cc;
+  --ig-good: #2e7d4f; --ig-mixed: #c98500; --ig-evil: #c0382b;
+  --ig-label: 112px;
+}
+html.dark, body.dark, html.oled, body.oled {
+  --ig-s1: #3987e5; --ig-s2: #d95926; --ig-s3: #199e70; --ig-s4: #c98500;
+  --ig-s5: #d55181; --ig-s6: #008300; --ig-s7: #9085e9; --ig-s8: #e66767;
+  --ig-sea: #1c2a36; --ig-land: #262b33; --ig-river: #34505f;
+  --ig-good: #4caf7a; --ig-mixed: #d9a22e; --ig-evil: #e66767;
+}
+html.sepia, body.sepia { --ig-sea: #d6d8c8; --ig-land: #ece1c9; }
+html.matcha, body.matcha { --ig-sea: #cfe3df; --ig-land: #e6efe0; }
+@media (min-width: 700px) { :root { --ig-label: 172px; } }
+
+/* --- 頁首與分頁 --- */
+.ref-hero { padding: 18px var(--pad-x); margin-bottom: 14px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.ref-main-title { font-size: 1.4rem; }
+.ref-nav-tabs { flex-wrap: wrap; flex-direction: row; gap: 4px; padding: 8px 10px; align-items: center; margin-bottom: 18px; scrollbar-width: none; }
+.ref-nav-tabs::-webkit-scrollbar { display: none; }
+.ref-tab-btn { flex: 0 0 auto; width: auto; min-width: 0; padding: 7px 12px; font-size: .88rem; min-height: 38px; justify-content: center; }
+.ref-tab-group { flex: 0 0 auto; font-size: .72rem; font-weight: 800; color: var(--fg-mute); min-width: 66px; }
+.ref-tab-break { flex-basis: 100%; height: 0; }
+@media (max-width: 899px) {
+  .ref-nav-tabs { flex-wrap: nowrap; overflow-x: auto; }
+  .ref-tab-break { flex-basis: 10px; height: 18px; flex-shrink: 0; border-left: 1px solid var(--line); margin-left: 6px; }
+  .ref-tab-group { min-width: 0; white-space: nowrap; }
+}
+
+/* --- 卡片與控制項 --- */
+.ig-card { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 18px; margin-bottom: 16px; box-shadow: var(--sh-1); }
+.ig-title { margin: 0 0 6px; font-size: 1.08rem; font-weight: 800; color: var(--fg); }
+.ig-lead { margin: 0 0 12px; font-size: .88rem; line-height: 1.65; color: var(--fg-dim); max-width: 760px; }
+.ig-note { font-size: .78rem; line-height: 1.6; color: var(--fg-mute); margin: 8px 2px 16px; }
+.ig-table-title { font-size: 1rem; font-weight: 800; margin: 20px 2px 10px; }
+.ig-subtabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.ig-subtabs::-webkit-scrollbar { display: none; }
+.ig-subtabs .ref-pill-btn { flex-shrink: 0; white-space: nowrap; }
+.ig-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.ig-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: var(--bg-soft); border: 1px solid var(--line-soft); max-width: 100%; }
+.ig-seg-scroll { display: flex; overflow-x: auto; scrollbar-width: none; margin-bottom: 12px; }
+.ig-seg-scroll::-webkit-scrollbar { display: none; }
+.ig-seg-btn { flex-shrink: 0; border: 0; background: transparent; color: var(--fg-dim); font: inherit; font-size: .82rem; font-weight: 700; padding: 6px 11px; border-radius: 8px; cursor: pointer; white-space: nowrap; min-height: 34px; }
+.ig-seg-btn.active { background: var(--bg-alt); color: var(--accent); box-shadow: var(--sh-1); }
+.ig-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 8px; font-size: .76rem; color: var(--fg-dim); }
+.ig-legend-item { display: inline-flex; align-items: center; gap: 5px; }
+.ig-swatch { display: inline-block; width: 12px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.ig-swatch-setting { background: color-mix(in srgb, var(--fg-dim) 35%, transparent); }
+.ig-swatch-written { background: var(--fg-dim); }
+.ig-swatch-feast { border-radius: 50%; width: 10px; background: var(--fg); }
+.ig-swatch.ig-good { background: var(--ig-good); } .ig-swatch.ig-mixed { background: var(--ig-mixed); } .ig-swatch.ig-evil { background: var(--ig-evil); }
+
+.ig-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+@media (max-width: 699px) { .ig-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } }
+.ig-tile { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; }
+.ig-tile strong { display: block; font-size: 1.12rem; font-weight: 800; color: var(--fg); line-height: 1.3; }
+.ig-tile span { font-size: .74rem; color: var(--fg-dim); line-height: 1.4; display: block; margin-top: 2px; }
+
+/* --- 歷史色帶 --- */
+.ig-ribbon { position: relative; height: 22px; border-radius: 6px; background: var(--bg-soft); margin: 8px 0 2px; overflow: hidden; }
+.ig-ribbon-seg { position: absolute; top: 0; bottom: 0; background: var(--accent); opacity: .85; border-right: 2px solid var(--bg-alt); }
+.ig-ribbon-seg.alt { opacity: .5; }
+.ig-ribbon-dot { position: absolute; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--bg-alt); box-shadow: 0 0 0 1.5px var(--fg); }
+.ig-ribbon-ends { display: flex; justify-content: space-between; font-size: .7rem; color: var(--fg-mute); margin-bottom: 12px; }
+
+/* --- 甘特圖 --- */
+.ig-gantt { position: relative; }
+.ig-axis { display: flex; position: sticky; top: var(--bar-h, 54px); z-index: 3; background: var(--bg-alt); border-bottom: 1px solid var(--line); padding: 4px 0; }
+.ig-axis-gap { flex: 0 0 var(--ig-label); }
+.ig-axis-track { flex: 1; position: relative; height: 16px; min-width: 0; }
+.ig-tick { position: absolute; transform: translateX(-50%); font-size: .66rem; color: var(--fg-mute); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ig-gantt-body { position: relative; }
+.ig-grid { position: absolute; inset: 0 0 0 var(--ig-label); pointer-events: none; }
+.ig-grid-inner { position: relative; height: 100%; }
+.ig-gridline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line-soft); }
+.ig-marker { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1.5px dashed var(--ig-evil); z-index: 1; }
+.ig-marker b { position: sticky; top: calc(var(--bar-h, 54px) + 26px); display: inline-block; margin-left: 3px; font-size: .62rem; font-weight: 800; color: var(--ig-evil); background: var(--bg-alt); padding: 0 2px; white-space: nowrap; }
+.ig-row-heading { position: relative; display: flex; align-items: center; gap: 6px; padding: 12px 0 4px; font-size: .78rem; font-weight: 800; color: var(--fg); background: var(--bg-alt); z-index: 1; }
+.ig-row { position: relative; display: flex; align-items: center; width: 100%; min-height: 40px; padding: 3px 0; border: 0; border-bottom: 1px solid var(--line-soft); background: transparent; color: inherit; font: inherit; text-align: left; }
+button.ig-row { cursor: pointer; }
+button.ig-row:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.ig-row-wrap.open > .ig-row { background: var(--accent-soft); }
+.ig-label { flex: 0 0 var(--ig-label); min-width: 0; padding-right: 8px; display: grid; grid-template-columns: auto 1fr; column-gap: 4px; align-items: baseline; line-height: 1.25; }
+.ig-label > span { font-size: .84rem; font-weight: 700; color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; grid-column: 2; }
+.ig-label > small { font-size: .66rem; color: var(--fg-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; grid-column: 2; font-variant-numeric: tabular-nums; }
+.ig-mark { font-style: normal; font-size: .78rem; font-weight: 800; grid-row: 1; grid-column: 1; }
+.ig-mark.ig-good { color: var(--ig-good); } .ig-mark.ig-mixed { color: var(--ig-mixed); } .ig-mark.ig-evil { color: var(--ig-evil); }
+.ig-track { flex: 1; position: relative; height: 16px; min-width: 0; }
+.ig-bar { position: absolute; top: 3px; height: 10px; min-width: 5px; border-radius: 4px; }
+.ig-bar-era { top: 1px; height: 14px; background: var(--accent); opacity: .85; }
+.ig-bar-empire { background: var(--fg-mute); opacity: .55; }
+.ig-bar-solid { top: 2px; height: 12px; }
+.ig-bar-setting { opacity: .32; top: 1px; height: 14px; }
+.ig-bar-written { top: 4px; height: 8px; box-shadow: 0 0 0 1.5px var(--bg-alt); }
+.ig-bar-king { top: 2px; height: 12px; }
+.ig-bar-king.ig-good { background: var(--ig-good); } .ig-bar-king.ig-mixed { background: var(--ig-mixed); } .ig-bar-king.ig-evil { background: var(--ig-evil); }
+.ig-compact .ig-row { min-height: 36px; }
+.ig-row-detail { padding: 12px 14px; background: var(--bg-soft); border-bottom: 1px solid var(--line); font-size: .86rem; line-height: 1.65; color: var(--fg); position: relative; z-index: 2; }
+.ig-row-detail[hidden] { display: none; }
+.ig-row-detail p { margin: 0 0 8px; }
+.ig-detail-note { font-size: .78rem; color: var(--fg-dim); margin: 0 0 8px; }
+.ig-dl { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 8px; }
+.ig-dl dt { font-size: .7rem; font-weight: 800; color: var(--fg-mute); }
+.ig-dl dd { margin: 0; font-size: .85rem; font-weight: 600; }
+.ig-dl-col { flex-direction: column; }
+.ig-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.ig-link-btn, .ig-chip { border: 1px solid var(--line); background: var(--bg-alt); color: var(--fg); font: inherit; font-size: .8rem; font-weight: 700; border-radius: 8px; padding: 5px 10px; min-height: 34px; cursor: pointer; }
+.ig-link-btn:hover, button.ig-chip:hover { border-color: var(--accent); color: var(--accent); }
+.ig-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.ig-chip-plain { display: inline-flex; align-items: center; cursor: default; font-weight: 600; color: var(--fg-dim); }
+.ig-events { list-style: none; margin: 0; padding: 0; }
+.ig-events li { display: grid; grid-template-columns: 104px 1fr; gap: 8px; padding: 5px 0; border-top: 1px dashed var(--line); font-size: .82rem; }
+.ig-events li > span:first-child { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; font-size: .76rem; }
+
+/* --- 大事清單 --- */
+.ig-miles { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0 18px; }
+.ig-mile { display: grid; grid-template-columns: 84px 1fr; column-gap: 8px; width: 100%; border: 0; border-bottom: 1px solid var(--line-soft); background: transparent; color: inherit; font: inherit; text-align: left; padding: 8px 2px; cursor: pointer; align-items: baseline; }
+.ig-mile:hover .ig-mile-t { color: var(--accent); }
+.ig-mile-y { font-size: .74rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+.ig-mile-t { font-size: .86rem; font-weight: 700; }
+.ig-mile small { grid-column: 2; font-size: .7rem; color: var(--fg-mute); }
+
+/* --- 曆法圓盤 --- */
+.ig-cal-wrap { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 20px; align-items: center; }
+@media (max-width: 699px) { .ig-cal-wrap { grid-template-columns: minmax(0, 1fr); } }
+.ig-cal { width: 100%; height: auto; display: block; }
+.ig-month { cursor: pointer; outline: none; }
+.ig-month path { opacity: .28; transition: opacity .15s ease; stroke: var(--bg-alt); stroke-width: 2px; }
+.ig-month:hover path, .ig-month:focus-visible path { opacity: .5; }
+.ig-month.active path { opacity: .85; }
+.ig-month-name { text-anchor: middle; font-size: 15px; font-weight: 800; fill: var(--fg); pointer-events: none; }
+.ig-month-sub { text-anchor: middle; font-size: 11px; fill: var(--fg-dim); pointer-events: none; }
+.ig-feast-dot { fill: var(--fg); stroke: var(--bg-alt); stroke-width: 2px; }
+.ig-cal-c1 { text-anchor: middle; font-size: 22px; font-weight: 800; fill: var(--fg); }
+.ig-cal-c2 { text-anchor: middle; font-size: 13px; fill: var(--fg-dim); }
+.ig-cal-detail { background: var(--bg-soft); border-radius: var(--r-md); padding: 16px; }
+.ig-cal-detail h4 { margin: 2px 0; font-size: 1.1rem; font-weight: 800; }
+.ig-cal-no { font-size: .74rem; font-weight: 800; color: var(--accent); }
+.ig-cal-greg { font-size: .84rem; color: var(--fg-dim); margin: 0 0 10px; }
+
+/* --- 地圖 --- */
+.ig-map-frame { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); margin-bottom: 10px; max-width: 880px; }
+.ig-map { display: block; width: 100%; height: auto; }
+.ig-land, .ig-land-fill { fill: var(--ig-land); }
+.ig-sea { fill: var(--ig-sea); }
+.ig-river { fill: none; stroke: var(--ig-river); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+.ig-path { fill: none; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; opacity: .9; }
+.ig-stop { stroke: var(--bg-alt); stroke-width: 3; }
+.ig-stop-no { text-anchor: middle; font-size: 17px; font-weight: 800; fill: #fff; pointer-events: none; font-family: var(--font-ui); }
+.ig-stop-label { font-size: 24px; font-weight: 800; fill: var(--fg); paint-order: stroke; stroke: var(--ig-land); stroke-width: 5px; stroke-linejoin: round; pointer-events: none; font-family: var(--font-ui); }
+.ig-map-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; margin-bottom: 8px; font-size: .9rem; }
+.ig-map-meta span { font-size: .78rem; color: var(--fg-dim); }
+.ig-leg { margin-bottom: 10px; }
+.ig-leg-head { display: flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 800; margin-bottom: 5px; }
+.ig-stops { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.ig-stops b { color: var(--accent); }
+.ig-stop-via { font-size: .74rem; color: var(--fg-mute); }
+.geo-route-steps { display: inline-flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
+.geo-route-steps > span { background: var(--bg-alt); border: 1px solid var(--line-soft); border-radius: 6px; padding: 1px 7px; font-size: .84rem; }
+.geo-route-steps > i { font-style: normal; color: var(--fg-mute); }
+
+/* --- 書架 --- */
+.ig-shelf { margin-top: 10px; }
+.ig-shelf-head { display: flex; gap: 8px; align-items: baseline; font-size: .84rem; margin-bottom: 4px; }
+.ig-shelf-head span { font-size: .72rem; color: var(--fg-mute); }
+.ig-shelf-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 2px; padding-bottom: 6px; border-bottom: 3px solid var(--line); }
+.ig-spine { width: 23px; min-width: 23px; padding: 0; border: 0; border-radius: 3px 3px 1px 1px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; transition: transform .12s ease; }
+.ig-spine:hover, .ig-spine:focus-visible { transform: translateY(-3px); }
+.ig-spine span { font-size: 11px; font-weight: 800; color: #fff; line-height: 1; padding-bottom: 4px; text-shadow: 0 1px 1px rgba(0,0,0,.35); }
+.book-intro-card.ig-flash { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* --- 卡片年代定位條 --- */
+.ig-mini { margin: 2px 0 12px; }
+.ig-mini-track { position: relative; height: 12px; border-radius: 4px; background: var(--bg-soft); overflow: hidden; }
+.ig-mini-track i { position: absolute; min-width: 4px; border-radius: 3px; }
+.ig-mini-track .ig-bar-setting { top: 0; height: 12px; opacity: .32; }
+.ig-mini-track .ig-bar-written { top: 3px; height: 6px; box-shadow: 0 0 0 1.5px var(--bg-alt); }
+.ig-mini-axis { display: flex; justify-content: space-between; gap: 6px; font-size: .64rem; color: var(--fg-mute); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.ig-count-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+
+/* --- 組成比例 --- */
+.ig-stack { display: flex; gap: 2px; height: 20px; margin: 8px 0 10px; }
+.ig-stack i:first-child { border-radius: 4px 0 0 4px; } .ig-stack i:last-child { border-radius: 0 4px 4px 0; }
+.ig-stack-legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 16px; font-size: .82rem; }
+.ig-stack-legend li { display: flex; align-items: center; gap: 6px; }
+.ig-stack-legend li > span:last-child { color: var(--fg-dim); font-size: .76rem; }
+
+/* --- 聖約鏈 --- */
+.ig-covs { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; position: relative; }
+.ig-cov { position: relative; background: var(--bg-soft); border-radius: var(--r-md); padding: 12px 10px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ig-cov.final { background: var(--accent-soft); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.ig-cov-no { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: .74rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+.ig-cov-year { font-size: .7rem; font-weight: 700; color: var(--fg-mute); }
+.ig-cov strong { font-size: .88rem; line-height: 1.35; }
+.ig-cov small { font-size: .74rem; color: var(--fg-dim); line-height: 1.45; }
+@media (max-width: 899px) {
+  .ig-covs { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .ig-cov { display: grid; grid-template-columns: 28px 1fr; column-gap: 8px; padding: 10px; }
+  .ig-cov-no { grid-row: 1 / 4; }
+}
+
+.ig-tooltip { position: fixed; z-index: 400; display: none; pointer-events: none; max-width: 300px; padding: 5px 9px; border-radius: 7px; background: rgba(24, 22, 20, .94); color: #fff; font-size: .76rem; line-height: 1.4; box-shadow: 0 4px 14px rgba(0, 0, 0, .25); }
+.vchart-badge { white-space: nowrap; }
+@media (hover: none) { .ig-tooltip { display: none !important; } }
+@media print {
+  .ig-axis { position: static; }
+  .ig-row-detail[hidden] { display: none; }
+}
+
+/* --- v40 校正 --- */
+.ref-tab-group { min-width: 0; padding: 0 2px 0 4px; }
+.ref-tab-break { flex-basis: auto; width: 0; height: 18px; border-left: 1px solid var(--line); margin: 0 6px; }
+.ref-tab-break.row { flex-basis: 100%; width: 100%; height: 0; border: 0; margin: 0; }
+@media (max-width: 899px) { .ref-tab-break.row { flex-basis: auto; width: 0; height: 18px; border-left: 1px solid var(--line); margin: 0 6px; flex-shrink: 0; } }
+@media (max-width: 599px) {
+  .ref-hero { display: none; }
+  .ig-tick:nth-child(even) { display: none; }
+  .ig-card { padding: 14px 12px; }
+}
+.ig-grid { z-index: 2; }
+.ig-row-heading { background: transparent; }
+.ig-row-detail { z-index: 3; }
+.ig-marker b { position: absolute; top: 2px; left: 3px; margin: 0; }
+.ig-marker.flip b { left: auto; right: 3px; }
+.ig-map-body { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 899px) { .ig-map-body { grid-template-columns: minmax(0, 1fr); } }
+.ig-map-frame { max-width: none; margin-bottom: 0; }
+.ig-leader { stroke: var(--fg-mute); stroke-width: 1.5; }
+.ig-spine.ink span { color: #1a1a19; text-shadow: none; }
+
