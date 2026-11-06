@@ -366,7 +366,8 @@ var BIBLIA = (function () {
     'data/bible_chronology.js',
     'data/ref_infographics.js',
     'data/reader_tutorial.js',
-    'data/knowledge_base.js'
+    'data/knowledge_base.js',
+    'data/challenge_data.js'
   ];
 
   function ensureRefData(cb) {
@@ -2625,11 +2626,29 @@ var BIBLIA = (function () {
       if (hash.indexOf('#ref') === 0) {
         var parts = hash.split('/');
         var refTab = parts[1] || 'intros';
-        if (refTab === 'book_study' && parts[2]) {
-          refState.currentBookStudyNo = parseInt(parts[2], 10) || 1;
+        var subParam = parts[2] ? decodeURIComponent(parts.slice(2).join('/')) : '';
+        if (refTab === 'book_study' && subParam) {
+          refState.currentBookStudyNo = parseInt(subParam, 10) || 1;
         }
-        if (refTab === 'timeline' && parts[2]) {
-          refState.timelineTab = parts[2] === 'eras' ? 'overview' : parts[2];
+        if (refTab === 'timeline' && subParam) {
+          refState.timelineTab = subParam === 'eras' ? 'overview' : subParam;
+        }
+        if (refTab === 'characters' && subParam) {
+          refState.charCategory = 'all';
+          refState.charSearch = subParam;
+        }
+        if (refTab === 'geography' && subParam) {
+          refState.geoSearch = subParam;
+        }
+        if (refTab === 'intros' && subParam) {
+          refState.introsCategory = 'all';
+          var introBookNo = /^\d+$/.test(subParam) ? parseInt(subParam, 10) : 0;
+          if (introBookNo) {
+            refState.introsSearch = '';
+            refState.pendingScrollIntroNo = introBookNo;
+          } else {
+            refState.introsSearch = subParam;
+          }
         }
         showRef(refTab, { fromHash: true });
         return;
@@ -4679,6 +4698,18 @@ var BIBLIA = (function () {
         });
       });
     });
+    if (refState.pendingScrollIntroNo) {
+      var targetIntroNo = refState.pendingScrollIntroNo;
+      refState.pendingScrollIntroNo = 0;
+      setTimeout(function () {
+        var card = document.getElementById('refIntroBook_' + targetIntroNo);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          card.classList.add('ig-flash');
+          setTimeout(function () { card.classList.remove('ig-flash'); }, 2200);
+        }
+      }, 120);
+    }
   }
 
   var INTRO_PANES = {
@@ -5313,7 +5344,9 @@ var BIBLIA = (function () {
     if (!container) return;
 
     var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
+    var chData = window.BIBLIA_CHALLENGE_DATA || {};
     var allItems = kb.geography || [];
+    var allPlaces = chData.places || [];
 
     var filtered = allItems.filter(function (g) {
       if (refState.geoSearch) {
@@ -5326,18 +5359,26 @@ var BIBLIA = (function () {
       return true;
     });
 
+    var filteredPlaces = allPlaces.filter(function (p) {
+      if (refState.geoSearch) {
+        var q = refState.geoSearch.toLowerCase().trim();
+        var hay = [p.name, (p.aliases || []).join(' '), p.nameMeaning, p.region, p.notes, p.verseRef, (p.clues || []).join(' ')].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+
     var igG = window.BibliaInfographics;
     var igGCtx = refInfographicCtx(renderRefPanelGeography);
     var html = (igG ? igG.mapHtml(igGCtx) : '') + '<div class="kb-sub-header">' +
-      '<div class="kb-search-row">' +
-        '<input type="search" id="geoSearchInput" class="kb-search-input" placeholder="🔍 搜尋聖經路線或地點（如：出埃及、迦南、巴比倫、加利利、保羅、羅馬）..." value="' + escapeHtml(refState.geoSearch) + '">' +
+      '<div class="kb-search-row" style="display:flex;gap:8px;align-items:center;">' +
+        '<input type="search" id="geoSearchInput" class="kb-search-input" style="flex:1;" placeholder="🔍 搜尋聖經路線或地點（如：伯利恆、耶路撒冷、西奈山、加利利海、出埃及、保羅、羅馬）..." value="' + escapeHtml(refState.geoSearch) + '">' +
+        (refState.geoSearch ? '<button type="button" id="geoClearSearchBtn" class="kb-pill-btn">✕ 顯示全部 (' + allPlaces.length + ' 處地標)</button>' : '') +
       '</div>' +
     '</div>';
 
-    if (!filtered.length) {
-      html += '<p class="placeholder">無符合搜尋條件之聖經地理路線。</p>';
-    } else {
-      html += '<div class="geo-grid">';
+    if (filtered.length) {
+      html += '<h3 class="ig-table-title" style="margin:12px 0 8px;">🚩 聖經七大歷史與宣教動線 (' + filtered.length + ')</h3><div class="geo-grid">';
       filtered.forEach(function (g) {
         html += '<div class="geo-card">' +
           '<div class="geo-card-head">' +
@@ -5358,6 +5399,39 @@ var BIBLIA = (function () {
       html += '</div>';
     }
 
+    if (filteredPlaces.length) {
+      html += '<h3 class="ig-table-title" style="margin:22px 0 10px;">📍 聖經關鍵城市與地標百科圖鑑 (' + filteredPlaces.length + ' 處)</h3>' +
+        '<div class="character-grid">';
+      filteredPlaces.forEach(function (p) {
+        var bMeta = state.byNo && state.byNo[p.bookNo];
+        var bName = bMeta ? bMeta.zh : ('書卷 #' + p.bookNo);
+        html += '<div class="character-card" id="kbPlace_' + escapeHtml(p.id) + '">' +
+          '<div class="char-header">' +
+            '<div>' +
+              '<h3 class="char-name">📍 ' + escapeHtml(p.name) + (p.aliases && p.aliases.length ? ' <small style="font-weight:normal;color:var(--fg-mute);">（' + escapeHtml(p.aliases.join('、')) + '）</small>' : '') + '</h3>' +
+              '<div class="char-meaning">字義：' + escapeHtml(p.nameMeaning || '') + ' · 🧭 ' + escapeHtml(p.region || '') + '</div>' +
+            '</div>' +
+            '<span class="char-category-badge">《' + escapeHtml(bName) + '》</span>' +
+          '</div>' +
+          '<div class="char-keyverse"><span class="ref-scripture-jump" data-ref="' + escapeHtml((p.verseRef || '').split('/')[0].trim()) + '">📖 ' + escapeHtml(p.verseRef || '') + '</span>「' + escapeHtml(p.verseText || '') + '」</div>' +
+          '<div class="char-body">' +
+            '<div><strong>🏛️ 歷史事蹟：</strong>' + escapeHtml((p.clues || []).slice(1, 4).join(' ')) + '</div>' +
+            '<div><strong>🌟 屬靈意義：</strong>' + escapeHtml(p.notes || '') + '</div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">' +
+              '<a href="book_guide.html?book=' + p.bookNo + '" class="kb-pill-btn" style="text-decoration:none;font-size:0.78rem;">📘《' + escapeHtml(bName) + '》深度導讀</a>' +
+              '<a href="#read/' + p.bookNo + '/' + (p.chap || 1) + '" class="kb-pill-btn" style="text-decoration:none;font-size:0.78rem;">📖 閱讀 ' + escapeHtml(bName) + ' ' + (p.chap || 1) + ' 章</a>' +
+              '<a href="challenge.html#place" class="kb-pill-btn" style="text-decoration:none;font-size:0.78rem;">🎮 挑戰地名問答</a>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    if (!filtered.length && !filteredPlaces.length) {
+      html += '<p class="placeholder">無符合搜尋條件之聖經地理路線或城市地標。</p>';
+    }
+
     container.innerHTML = html;
 
     var sInput = container.querySelector('#geoSearchInput');
@@ -5369,18 +5443,58 @@ var BIBLIA = (function () {
         if (again) { again.focus(); again.setSelectionRange(again.value.length, again.value.length); }
       });
     }
+    var clearBtn = container.querySelector('#geoClearSearchBtn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        refState.geoSearch = '';
+        renderRefPanelGeography();
+      });
+    }
 
     bindScriptureJumpLinks(container);
     if (igG) igG.bind(container, igGCtx);
   }
 
-  /* ===================== 3. 聖經 50 位關鍵人物志面板 ===================== */
+  /* ===================== 3. 聖經關鍵人物志面板 ===================== */
   function renderRefPanelCharacters() {
     var container = el.refPanelCharacters;
     if (!container) return;
 
     var kb = window.BIBLIA_KNOWLEDGE_BASE || {};
-    var allItems = kb.characters || [];
+    var chData = window.BIBLIA_CHALLENGE_DATA || {};
+    var baseChars = kb.characters || [];
+    var extraChars = chData.characters || [];
+
+    // 合併知識庫人物與挑戰題庫 74 位人物，確保任何人物連結皆有完整百科卡片
+    var seenNames = {};
+    var allItems = [];
+    baseChars.forEach(function (c) {
+      var shortName = (c.name || '').split(' (')[0].trim();
+      seenNames[shortName] = c;
+      allItems.push(c);
+    });
+    extraChars.forEach(function (ch) {
+      if (seenNames[ch.name]) {
+        seenNames[ch.name].bookNo = seenNames[ch.name].bookNo || ch.bookNo;
+        seenNames[ch.name].chap = seenNames[ch.name].chap || ch.chap;
+        return;
+      }
+      var bMeta = state.byNo && state.byNo[ch.bookNo];
+      var bName = bMeta ? bMeta.zh : ('書卷 #' + ch.bookNo);
+      allItems.push({
+        id: ch.id,
+        name: ch.name + (ch.aliases && ch.aliases.length ? ' (' + ch.aliases[0] + ')' : ''),
+        nameMeaning: ch.nameMeaning || '',
+        category: ch.category || '聖經人物',
+        era: ch.era || '',
+        keyVerse: (ch.verseRef ? ch.verseRef + ' ' : '') + '「' + (ch.verseText || '') + '」',
+        books: bName + (ch.chap ? ' 第 ' + ch.chap + ' 章' : '') + (ch.verseRef ? '（' + ch.verseRef + '）' : ''),
+        typologyAndRole: (ch.clues || []).slice(0, 3).join(' '),
+        spiritualLegacy: ch.bio || (ch.clues && ch.clues[3]) || '',
+        bookNo: ch.bookNo,
+        chap: ch.chap
+      });
+    });
 
     var catsMap = {};
     allItems.forEach(function (c) {
@@ -5393,8 +5507,9 @@ var BIBLIA = (function () {
         var q = refState.charSearch.toLowerCase().trim();
         var matchName = (c.name || '').toLowerCase().includes(q);
         var matchBooks = (c.books || '').toLowerCase().includes(q);
+        var matchRole = (c.typologyAndRole || '').toLowerCase().includes(q);
         var matchLegacy = (c.spiritualLegacy || '').toLowerCase().includes(q);
-        if (!matchName && !matchBooks && !matchLegacy) return false;
+        if (!matchName && !matchBooks && !matchRole && !matchLegacy) return false;
       }
       return true;
     });
@@ -5402,8 +5517,9 @@ var BIBLIA = (function () {
     var igP = window.BibliaInfographics;
     var igPCtx = refInfographicCtx(renderRefPanelCharacters);
     var html = (igP ? igP.peopleHtml(igPCtx) : '') + '<div class="kb-sub-header">' +
-      '<div class="kb-search-row">' +
-        '<input type="search" id="charSearchInput" class="kb-search-input" placeholder="🔍 搜尋聖經人物（如：亞伯拉罕、摩西、大衛、彼得、保羅、路得）..." value="' + escapeHtml(refState.charSearch) + '">' +
+      '<div class="kb-search-row" style="display:flex;gap:8px;align-items:center;">' +
+        '<input type="search" id="charSearchInput" class="kb-search-input" style="flex:1;" placeholder="🔍 搜尋聖經人物（共 ' + allItems.length + ' 位，如：亞伯拉罕、摩西、大衛、路得、以斯帖、彼得、保羅）..." value="' + escapeHtml(refState.charSearch) + '">' +
+        (refState.charSearch ? '<button type="button" id="charClearSearchBtn" class="kb-pill-btn">✕ 顯示全部 (' + allItems.length + ')</button>' : '') +
       '</div>' +
       '<div class="kb-filter-pills" id="charFilterPills">' +
         '<button type="button" class="kb-pill-btn ' + (refState.charCategory === 'all' ? 'active' : '') + '" data-cat="all">全部 (' + allItems.length + ')</button>';
@@ -5420,10 +5536,12 @@ var BIBLIA = (function () {
     } else {
       html += '<div class="character-grid">';
       filtered.forEach(function (c) {
+        var bMeta = c.bookNo && state.byNo ? state.byNo[c.bookNo] : null;
+        var bName = bMeta ? bMeta.zh : '';
         html += '<div class="character-card">' +
           '<div class="char-header">' +
             '<div>' +
-              '<h3 class="char-name">' + escapeHtml(c.name) + '</h3>' +
+              '<h3 class="char-name">👤 ' + escapeHtml(c.name) + '</h3>' +
               '<div class="char-meaning">名義原意：' + escapeHtml(c.nameMeaning) + ' · ⏳ ' + escapeHtml(c.era) + '</div>' +
             '</div>' +
             '<span class="char-category-badge">' + escapeHtml(c.category) + '</span>' +
@@ -5431,8 +5549,15 @@ var BIBLIA = (function () {
           '<div class="char-keyverse">' + escapeHtml(c.keyVerse) + '</div>' +
           '<div class="char-body">' +
             '<div><strong>📜 記載書卷：</strong>' + escapeHtml(c.books) + '</div>' +
-            '<div><strong>👑 基督預表與角色：</strong>' + escapeHtml(c.typologyAndRole) + '</div>' +
+            '<div><strong>👑 事蹟與基督預表：</strong>' + escapeHtml(c.typologyAndRole) + '</div>' +
             '<div><strong>🌟 屬靈傳承與操練：</strong>' + escapeHtml(c.spiritualLegacy) + '</div>' +
+            (c.bookNo ? (
+              '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">' +
+                '<a href="book_guide.html?book=' + c.bookNo + '" class="kb-pill-btn" style="text-decoration:none;font-size:0.78rem;">📘《' + escapeHtml(bName || ('書卷#' + c.bookNo)) + '》深度導讀</a>' +
+                '<a href="#read/' + c.bookNo + '/' + (c.chap || 1) + '" class="kb-pill-btn" style="text-decoration:none;font-size:0.78rem;">📖 閱讀經文</a>' +
+                '<a href="challenge.html#char" class="kb-pill-btn" style="text-decoration:none;font-size:0.78rem;">🎮 挑戰人物問答</a>' +
+              '</div>'
+            ) : '') +
           '</div>' +
         '</div>';
       });
@@ -5445,6 +5570,15 @@ var BIBLIA = (function () {
     if (sInput) {
       sInput.addEventListener('input', function () {
         refState.charSearch = sInput.value;
+        renderRefPanelCharacters();
+        var again = el.refPanelCharacters.querySelector('#charSearchInput');
+        if (again) { again.focus(); again.setSelectionRange(again.value.length, again.value.length); }
+      });
+    }
+    var clearCharBtn = container.querySelector('#charClearSearchBtn');
+    if (clearCharBtn) {
+      clearCharBtn.addEventListener('click', function () {
+        refState.charSearch = '';
         renderRefPanelCharacters();
       });
     }

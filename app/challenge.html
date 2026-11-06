@@ -24,7 +24,7 @@
 })();
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;600;700;900&display=swap">
-<link rel="stylesheet" href="style.css?v=41">
+<link rel="stylesheet" href="style.css?v=42">
 <style>
 /* ===================== 聖經挑戰專屬高質感樣式 (Bible Challenge Design System) ===================== */
 :root {
@@ -2436,6 +2436,354 @@ ol.tl-events-list {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ================= 聖經百科圖鑑卡片與探索專區 (Encyclopedia Cards & Explorer) ================= */
+.ency-link-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: var(--r-lg);
+  border: 1.5px solid var(--hit-line, #d49b38);
+  background: linear-gradient(135deg, var(--bg-alt), var(--bg));
+  box-shadow: var(--sh-1);
+}
+
+.ency-card-visual {
+  flex: 0 0 96px;
+  width: 96px;
+}
+
+.ency-illus-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.1));
+}
+
+.ency-card-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ency-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.ency-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: var(--r-pill);
+  font-size: 0.74rem;
+  font-weight: 800;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--ring);
+}
+
+.ency-book-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--fg-mute);
+}
+
+.ency-card-title {
+  font-size: 0.96rem;
+  color: var(--fg);
+  line-height: 1.45;
+}
+
+.ency-card-title small {
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  font-weight: 600;
+}
+
+.ency-related-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.ency-rel-label {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--fg-mute);
+}
+
+.ency-rel-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--bg-soft);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  transition: all 0.18s ease;
+}
+
+.ency-rel-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.ency-links-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 2px;
+}
+
+.ency-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 11px;
+  border-radius: var(--r-md);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-decoration: none;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ency-action-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.ency-action-link.primary-ency-link {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.ency-mini-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+/* 聖經百科圖鑑探索專區 */
+.ency-explorer-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ency-explorer-head {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 18px 20px;
+  box-shadow: var(--sh-1);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ency-explorer-title {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--fg);
+}
+
+.ency-explorer-sub {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--fg-dim);
+}
+
+.ency-explorer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ency-cat-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ency-cat-btn {
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-dim);
+  font-size: 0.86rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ency-cat-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.ency-cat-btn small {
+  opacity: 0.85;
+  margin-left: 3px;
+}
+
+.ency-search-wrap {
+  flex: 1;
+  min-width: 220px;
+  max-width: 360px;
+}
+
+.ency-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.88rem;
+}
+
+.ency-explorer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 560px) {
+  .ency-link-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+  }
+  .ency-card-visual {
+    width: 88px;
+    flex: 0 0 auto;
+  }
+  .ency-explorer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ency-item-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 14px;
+  box-shadow: var(--sh-1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.ency-item-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.ency-item-card.is-solved {
+  border-left: 4px solid var(--ok);
+}
+
+.ency-item-top {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ency-item-svg {
+  flex: 0 0 78px;
+  width: 78px;
+}
+
+.ency-item-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.ency-item-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+
+.ency-era-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: var(--bg-soft);
+  color: var(--fg-dim);
+}
+
+.ency-solved-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: rgba(46, 107, 73, 0.14);
+  color: var(--ok);
+}
+
+.ency-item-name {
+  margin: 0 0 4px;
+  font-size: 1.04rem;
+  font-weight: 900;
+  color: var(--fg);
+}
+
+.ency-item-name small {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--fg-mute);
+}
+
+.ency-item-bio {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+}
+
+.ency-item-verse {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  border-left: 3px solid var(--hit-line, #d49b38);
+  color: var(--fg-dim);
+}
+
+.ency-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
 </style>
 </head>
 
@@ -2551,6 +2899,9 @@ ol.tl-events-list {
       <button type="button" class="game-nav-tab" data-tab="mistakes" role="tab" aria-selected="false">
         <span>📝</span> 錯題複習專區 <span class="tab-badge" id="mistakesCountBadge" hidden>0</span>
       </button>
+      <button type="button" class="game-nav-tab" data-tab="encyclopedia" role="tab" aria-selected="false">
+        <span>🎨</span> 聖經百科圖鑑
+      </button>
     </nav>
 
     <!-- 1. 猜聖經人名 View -->
@@ -2600,6 +2951,13 @@ ol.tl-events-list {
       </div>
     </section>
 
+    <!-- 7. 聖經百科圖鑑探索專區 View (插圖介紹與深度連結回聖經百科) -->
+    <section id="viewEncyclopedia" class="game-view-panel" hidden>
+      <div id="encyclopediaAppContainer">
+        <!-- 由 JS 動態渲染 74 位人物、49 處地名、66 卷書卷插圖百科卡片 -->
+      </div>
+    </section>
+
   </main>
 
   <!-- ================= 等級晉升榮耀彈窗 (Level Up Modal) ================= -->
@@ -2635,8 +2993,8 @@ ol.tl-events-list {
   <div id="toastStack" class="toast-stack" aria-live="polite"></div>
 
   <!-- 資料庫與遊戲引擎 Script -->
-  <script src="data/challenge_data.js"></script>
-  <script src="challenge.js"></script>
+  <script src="data/challenge_data.js?v=42"></script>
+  <script src="challenge.js?v=42"></script>
 
   <!-- 離線 Service Worker -->
   <script>

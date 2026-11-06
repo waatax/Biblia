@@ -90,6 +90,358 @@
     return '';
   }
 
+  // 從經文字串解析書卷編號與名稱（例如「路得記 1:16」→ { bookNo: 8, bookName: '路得記', chap: 1, sec: 16 }）
+  function parseRefBook(refStr, fallbackBookNo, fallbackChap) {
+    if (refStr) {
+      var first = String(refStr).split('/')[0].trim();
+      var m = first.match(/^(.+?)\s*(\d+)(?::(\d+))?/);
+      if (m) {
+        var bName = m[1].trim();
+        var no = BOOK_NAMES.indexOf(bName) + 1;
+        if (no > 0) {
+          return {
+            bookNo: no,
+            bookName: bName,
+            chap: parseInt(m[2], 10) || 1,
+            sec: m[3] ? parseInt(m[3], 10) : 1
+          };
+        }
+      }
+      for (var i = 0; i < BOOK_NAMES.length; i++) {
+        if (refStr.indexOf(BOOK_NAMES[i]) !== -1) {
+          return {
+            bookNo: i + 1,
+            bookName: BOOK_NAMES[i],
+            chap: fallbackChap || 1,
+            sec: 1
+          };
+        }
+      }
+    }
+    if (fallbackBookNo && fallbackBookNo >= 1 && fallbackBookNo <= 66) {
+      return {
+        bookNo: fallbackBookNo,
+        bookName: BOOK_NAMES[fallbackBookNo - 1],
+        chap: fallbackChap || 1,
+        sec: 1
+      };
+    }
+    return null;
+  }
+
+  function bookSectionInfo(bookNo) {
+    if (!bookNo) return { section: '聖經書卷', testament: 'OT', color: '#b48a3e', bg: '#fdf8ee', icon: '📜' };
+    if (bookNo <= 5) return { section: '摩西五經（律法書）', testament: 'OT', color: '#8f5b28', bg: '#fbf3e8', icon: '📜' };
+    if (bookNo <= 17) return { section: '舊約歷史書', testament: 'OT', color: '#9c4130', bg: '#fcedea', icon: '👑' };
+    if (bookNo <= 22) return { section: '詩歌智慧書', testament: 'OT', color: '#2b6e56', bg: '#ebf6f1', icon: '🎵' };
+    if (bookNo <= 27) return { section: '大先知書', testament: 'OT', color: '#5c4384', bg: '#f2eef9', icon: '🔥' };
+    if (bookNo <= 39) return { section: '十二小先知書', testament: 'OT', color: '#7a5230', bg: '#f9f2eb', icon: '📯' };
+    if (bookNo <= 43) return { section: '四福音書', testament: 'NT', color: '#9e382b', bg: '#fdedea', icon: '✝️' };
+    if (bookNo === 44) return { section: '教會歷史（使徒行傳）', testament: 'NT', color: '#c4622d', bg: '#fdf1ea', icon: '🕊️' };
+    if (bookNo <= 57) return { section: '保羅書信', testament: 'NT', color: '#285a84', bg: '#ebf2f9', icon: '✉️' };
+    if (bookNo <= 65) return { section: '普通書信', testament: 'NT', color: '#2d6a5e', bg: '#ecf6f4', icon: '🌿' };
+    return { section: '啟示預言（啟示錄）', testament: 'NT', color: '#8c6218', bg: '#fcf6e6', icon: '👑' };
+  }
+
+  // 找出題目文字中關聯的其他聖經人物與地名
+  function findRelatedEntities(q) {
+    var t = typeOf(q);
+    var text = [
+      q.name || '', q.answer || '', q.bio || '', q.notes || '', q.meaning || '',
+      q.fullText || '', q.verseText || '', (q.clues || []).join(' ')
+    ].join(' ');
+    var chars = [];
+    var places = [];
+    var selfName = answerOf(q);
+
+    listOf('char').forEach(function (c) {
+      if (t === 'char' && c.name === selfName) return;
+      if (c.name && c.name.length >= 2 && text.indexOf(c.name) !== -1) {
+        if (chars.indexOf(c.name) === -1) chars.push(c.name);
+      }
+    });
+    listOf('place').forEach(function (p) {
+      if (t === 'place' && p.name === selfName) return;
+      if (p.name && p.name.length >= 2 && text.indexOf(p.name) !== -1) {
+        if (places.indexOf(p.name) === -1) places.push(p.name);
+      }
+    });
+
+    return {
+      chars: chars.slice(0, 4),
+      places: places.slice(0, 4)
+    };
+  }
+
+  // 產生精美的聖經古卷手繪風格 SVG 插圖（支援人物、地名、書卷）
+  function getBiblicalIllustrationSvg(item, kind) {
+    var title = '';
+    var themeColor = '#9b6b24';
+    var accentColor = '#d49b38';
+    var bgStart = '#fdf7ea';
+    var bgEnd = '#f3e3c3';
+    var motif = 'scroll';
+
+    if (kind === 'char') {
+      title = item.name || '';
+      var cat = item.category || '';
+      if (/君王|王后|大衛|所羅門|希西家|約西亞|掃羅|以斯帖/.test(cat + title)) {
+        motif = /大衛/.test(title) ? 'harp' : 'crown';
+        themeColor = '#8e3b2e'; accentColor = '#d69e2e'; bgStart = '#fdf2ee'; bgEnd = '#f5dec9';
+      } else if (/挪亞/.test(title)) {
+        motif = 'ark';
+        themeColor = '#285e78'; accentColor = '#5da4c4'; bgStart = '#eef7fb'; bgEnd = '#d6eaf3';
+      } else if (/摩西|亞倫/.test(title)) {
+        motif = 'tablet';
+        themeColor = '#7d4e24'; accentColor = '#c98a3e'; bgStart = '#fbf4ea'; bgEnd = '#edd9bd';
+      } else if (/先知|以利亞|以利沙|以賽亞|耶利米|以西結|但以理/.test(cat + title)) {
+        motif = 'flame';
+        themeColor = '#613c78'; accentColor = '#b87cd9'; bgStart = '#f6effb'; bgEnd = '#e4d4f2';
+      } else if (/使徒|門徒|保羅|彼得|約翰|提摩太|巴拿巴/.test(cat + title)) {
+        motif = /保羅/.test(title) ? 'scroll' : 'cross';
+        themeColor = '#265985'; accentColor = '#4a8ec2'; bgStart = '#eef5fb'; bgEnd = '#d6e6f5';
+      } else if (/士師|領袖|約書亞|基甸|參孫/.test(cat + title)) {
+        motif = 'shield';
+        themeColor = '#7a4726'; accentColor = '#c27938'; bgStart = '#fcf3ec'; bgEnd = '#efd9c6';
+      } else if (/族長|創世|亞伯拉罕|以撒|雅各|約瑟/.test(cat + title)) {
+        motif = 'star';
+        themeColor = '#2e5948'; accentColor = '#5aa888'; bgStart = '#edf7f2'; bgEnd = '#d3ebe0';
+      } else {
+        motif = item.bookNo > 39 ? 'dove' : 'tree';
+        themeColor = '#2e6b4e'; accentColor = '#66b38e'; bgStart = '#eef8f3'; bgEnd = '#d5ece0';
+      }
+    } else if (kind === 'place') {
+      title = item.name || '';
+      var ptext = title + (item.region || '') + (item.notes || '');
+      if (/山|嶺|毗斯迦|西乃|迦密|橄欖|摩利亞|黑門|希伯崙/.test(ptext)) {
+        motif = 'mountain';
+        themeColor = '#4b5d43'; accentColor = '#84a375'; bgStart = '#f1f6ee'; bgEnd = '#dae7d4';
+      } else if (/河|海|水|池|約旦|加利利|紅海|死海|西羅亞|基順|雅博/.test(ptext)) {
+        motif = 'sea';
+        themeColor = '#245d7a'; accentColor = '#4fa3cc'; bgStart = '#ecf6fb'; bgEnd = '#d0e8f4';
+      } else if (/耶路撒冷|錫安|聖殿|示羅|伯特利/.test(ptext)) {
+        motif = 'temple';
+        themeColor = '#8c5820'; accentColor = '#d49b38'; bgStart = '#fdf7eb'; bgEnd = '#f2dfc0';
+      } else if (/伯利恆|拿撒勒/.test(ptext)) {
+        motif = 'star';
+        themeColor = '#7d4427'; accentColor = '#d49438'; bgStart = '#fcf5eb'; bgEnd = '#f0dec4';
+      } else {
+        motif = 'compass';
+        themeColor = '#6e5233'; accentColor = '#b88b58'; bgStart = '#faf4ed'; bgEnd = '#eadbc8';
+      }
+    } else {
+      var bInfo = bookSectionInfo(item.bookNo);
+      title = item.bookName || BOOK_NAMES[(item.bookNo || 1) - 1] || '聖經書卷';
+      themeColor = bInfo.color;
+      accentColor = '#d49b38';
+      bgStart = bInfo.bg;
+      bgEnd = '#eddcb9';
+      if (item.bookNo <= 5) motif = 'tablet';
+      else if (item.bookNo <= 17) motif = 'crown';
+      else if (item.bookNo <= 22) motif = 'harp';
+      else if (item.bookNo <= 39) motif = 'flame';
+      else if (item.bookNo <= 43) motif = 'cross';
+      else if (item.bookNo === 44) motif = 'dove';
+      else if (item.bookNo === 66) motif = 'crown';
+      else motif = 'scroll';
+    }
+
+    var art = '';
+    if (motif === 'crown') {
+      art = '<path d="M26 70 L32 42 L48 56 L60 34 L72 56 L88 42 L94 70 Z" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+            '<rect x="26" y="72" width="68" height="8" rx="3" fill="' + themeColor + '"/>' +
+            '<circle cx="60" cy="30" r="4" fill="' + themeColor + '"/><circle cx="31" cy="38" r="3.5" fill="' + themeColor + '"/><circle cx="89" cy="38" r="3.5" fill="' + themeColor + '"/>' +
+            '<circle cx="48" cy="63" r="3" fill="#fff"/><circle cx="60" cy="61" r="3.5" fill="#fff"/><circle cx="72" cy="63" r="3" fill="#fff"/>';
+    } else if (motif === 'harp') {
+      art = '<path d="M38 30 C34 52 38 74 52 80 L78 80 C82 70 84 52 76 36 C70 42 62 42 54 34 Z" fill="none" stroke="' + themeColor + '" stroke-width="4" stroke-linecap="round"/>' +
+            '<line x1="48" y1="38" x2="54" y2="78" stroke="' + accentColor + '" stroke-width="2"/>' +
+            '<line x1="56" y1="40" x2="60" y2="78" stroke="' + accentColor + '" stroke-width="2"/>' +
+            '<line x1="64" y1="41" x2="66" y2="78" stroke="' + accentColor + '" stroke-width="2"/>' +
+            '<line x1="71" y1="40" x2="72" y2="78" stroke="' + accentColor + '" stroke-width="2"/>' +
+            '<circle cx="42" cy="32" r="4" fill="' + accentColor + '"/>';
+    } else if (motif === 'ark') {
+      art = '<path d="M22 62 L98 62 L86 78 L34 78 Z" fill="' + themeColor + '"/>' +
+            '<rect x="34" y="44" width="52" height="18" rx="3" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="2"/>' +
+            '<path d="M30 44 L60 30 L90 44 Z" fill="' + themeColor + '"/>' +
+            '<path d="M18 83 Q30 78 42 83 T66 83 T90 83 T104 83" fill="none" stroke="' + accentColor + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<path d="M24 30 A38 38 0 0 1 96 30" fill="none" stroke="' + accentColor + '" stroke-width="2.5" stroke-dasharray="4 3"/>';
+    } else if (motif === 'tablet') {
+      art = '<path d="M30 40 A14 14 0 0 1 58 40 L58 78 L30 78 Z" fill="#fffdf8" stroke="' + themeColor + '" stroke-width="2.5"/>' +
+            '<path d="M62 40 A14 14 0 0 1 90 40 L90 78 L62 78 Z" fill="#fffdf8" stroke="' + themeColor + '" stroke-width="2.5"/>' +
+            '<line x1="36" y1="46" x2="52" y2="46" stroke="' + accentColor + '" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<line x1="36" y1="54" x2="52" y2="54" stroke="' + accentColor + '" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<line x1="36" y1="62" x2="50" y2="62" stroke="' + accentColor + '" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<line x1="68" y1="46" x2="84" y2="46" stroke="' + accentColor + '" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<line x1="68" y1="54" x2="84" y2="54" stroke="' + accentColor + '" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<line x1="68" y1="62" x2="82" y2="62" stroke="' + accentColor + '" stroke-width="2.2" stroke-linecap="round"/>';
+    } else if (motif === 'flame') {
+      art = '<path d="M60 24 C74 42 82 54 74 70 C68 80 52 80 46 70 C38 56 48 42 60 24 Z" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="2.2"/>' +
+            '<path d="M60 42 C67 52 70 60 65 70 C61 76 55 75 53 69 C50 61 54 52 60 42 Z" fill="#fff6d6"/>' +
+            '<rect x="38" y="76" width="44" height="7" rx="3" fill="' + themeColor + '"/>';
+    } else if (motif === 'cross') {
+      art = '<circle cx="60" cy="52" r="24" fill="#fffdf7" stroke="' + accentColor + '" stroke-width="2"/>' +
+            '<path d="M60 24 L60 82 M40 44 L80 44" stroke="' + themeColor + '" stroke-width="6" stroke-linecap="round"/>' +
+            '<circle cx="60" cy="44" r="4" fill="' + accentColor + '"/>';
+    } else if (motif === 'dove') {
+      art = '<path d="M32 62 C42 46 56 42 70 46 C76 36 86 32 94 34 C88 44 82 52 76 56 C82 62 86 68 88 74 C74 72 64 68 56 64 C46 68 38 68 32 62 Z" fill="#fffdf9" stroke="' + themeColor + '" stroke-width="2.4" stroke-linejoin="round"/>' +
+            '<path d="M32 60 Q24 54 20 48 M25 54 L20 56 M28 57 L23 60" stroke="#2e6b4e" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<circle cx="44" cy="54" r="2.2" fill="' + themeColor + '"/>';
+    } else if (motif === 'mountain') {
+      art = '<circle cx="80" cy="36" r="9" fill="' + accentColor + '" opacity="0.85"/>' +
+            '<path d="M16 80 L46 36 L72 72 L84 52 L104 80 Z" fill="' + accentColor + '" opacity="0.45"/>' +
+            '<path d="M22 80 L54 32 L86 80 Z" fill="' + themeColor + '"/>' +
+            '<path d="M54 32 L44 48 L52 45 L56 50 L64 47 Z" fill="#fffdf8"/>';
+    } else if (motif === 'sea') {
+      art = '<circle cx="60" cy="36" r="10" fill="' + accentColor + '" opacity="0.85"/>' +
+            '<path d="M20 56 Q34 48 48 56 T76 56 T104 56" fill="none" stroke="' + themeColor + '" stroke-width="3.5" stroke-linecap="round"/>' +
+            '<path d="M16 68 Q32 60 48 68 T80 68 T106 68" fill="none" stroke="' + accentColor + '" stroke-width="3" stroke-linecap="round"/>' +
+            '<path d="M22 79 Q38 72 54 79 T86 79" fill="none" stroke="' + accentColor + '" stroke-width="2.5" stroke-linecap="round"/>';
+    } else if (motif === 'temple') {
+      art = '<path d="M26 44 L60 26 L94 44 Z" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="2.2" stroke-linejoin="round"/>' +
+            '<rect x="30" y="44" width="60" height="6" fill="' + themeColor + '"/>' +
+            '<rect x="35" y="50" width="7" height="24" fill="#fffdf8" stroke="' + themeColor + '" stroke-width="1.8"/>' +
+            '<rect x="56.5" y="50" width="7" height="24" fill="#fffdf8" stroke="' + themeColor + '" stroke-width="1.8"/>' +
+            '<rect x="78" y="50" width="7" height="24" fill="#fffdf8" stroke="' + themeColor + '" stroke-width="1.8"/>' +
+            '<rect x="24" y="74" width="72" height="7" rx="2" fill="' + themeColor + '"/>';
+    } else if (motif === 'star') {
+      art = '<polygon points="60,22 67,44 90,44 71,57 78,79 60,65 42,79 49,57 30,44 53,44" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="2" stroke-linejoin="round"/>' +
+            '<circle cx="60" cy="53" r="5" fill="#fffdf8"/>';
+    } else if (motif === 'shield') {
+      art = '<path d="M60 24 L88 34 L88 54 C88 70 75 80 60 86 C45 80 32 70 32 54 L32 34 Z" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+            '<path d="M60 34 L60 74 M44 50 L76 50" stroke="#fffdf8" stroke-width="3.5" stroke-linecap="round"/>';
+    } else if (motif === 'compass') {
+      art = '<circle cx="60" cy="54" r="26" fill="#fffdf8" stroke="' + themeColor + '" stroke-width="2.5"/>' +
+            '<polygon points="60,30 66,50 86,54 66,58 60,78 54,58 34,54 54,50" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="1.5"/>' +
+            '<circle cx="60" cy="54" r="3.5" fill="' + themeColor + '"/>';
+    } else if (motif === 'tree') {
+      art = '<circle cx="60" cy="44" r="18" fill="' + accentColor + '" opacity="0.85"/>' +
+            '<circle cx="48" cy="50" r="13" fill="' + themeColor + '" opacity="0.75"/>' +
+            '<circle cx="72" cy="50" r="13" fill="' + themeColor + '" opacity="0.75"/>' +
+            '<path d="M56 80 L56 56 L64 56 L64 80 Z" fill="#6e4726"/>' +
+            '<path d="M40 80 Q60 75 80 80" stroke="#6e4726" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    } else {
+      art = '<rect x="32" y="32" width="56" height="44" rx="4" fill="#fffdf7" stroke="' + themeColor + '" stroke-width="2.2"/>' +
+            '<rect x="27" y="29" width="8" height="50" rx="4" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="2"/>' +
+            '<rect x="85" y="29" width="8" height="50" rx="4" fill="' + accentColor + '" stroke="' + themeColor + '" stroke-width="2"/>' +
+            '<line x1="42" y1="43" x2="78" y2="43" stroke="' + themeColor + '" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<line x1="42" y1="53" x2="78" y2="53" stroke="' + themeColor + '" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<line x1="42" y1="63" x2="68" y2="63" stroke="' + themeColor + '" stroke-width="2.2" stroke-linecap="round"/>';
+    }
+
+    var uid = norm(title).slice(0, 6) + '_' + kind;
+    return '<svg class="ency-illus-svg" viewBox="0 0 120 112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + esc(title) + ' 插圖">' +
+      '<defs>' +
+        '<linearGradient id="bg_' + uid + '" x1="0" y1="0" x2="1" y2="1">' +
+          '<stop offset="0%" stop-color="' + bgStart + '"/>' +
+          '<stop offset="100%" stop-color="' + bgEnd + '"/>' +
+        '</linearGradient>' +
+      '</defs>' +
+      '<rect x="2" y="2" width="116" height="108" rx="14" fill="url(#bg_' + uid + ')" stroke="' + accentColor + '" stroke-width="2"/>' +
+      '<rect x="7" y="7" width="106" height="98" rx="10" fill="none" stroke="' + themeColor + '" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.45"/>' +
+      '<circle cx="60" cy="54" r="32" fill="#ffffff" opacity="0.55"/>' +
+      art +
+      '<rect x="12" y="86" width="96" height="18" rx="9" fill="' + themeColor + '"/>' +
+      '<text x="60" y="98.5" text-anchor="middle" fill="#fffdf8" font-size="10.5" font-weight="800" font-family="sans-serif">' + esc(title.slice(0, 7)) + '</text>' +
+    '</svg>';
+  }
+
+  // 渲染題目解答下方的「聖經百科圖鑑與書卷導覽」卡片（含插圖與深度連結回聖經資料頁）
+  function renderEncyclopediaCardHtml(q) {
+    var t = typeOf(q);
+    var target = answerOf(q);
+    var refStr = t === 'verse' ? q.ref : q.verseRef;
+    var parsed = parseRefBook(refStr, q.bookNo, q.chap);
+    var bookNo = parsed ? parsed.bookNo : (q.bookNo || 1);
+    var bookName = parsed ? parsed.bookName : (BOOK_NAMES[bookNo - 1] || '創世記');
+    var bSec = bookSectionInfo(bookNo);
+    var rel = findRelatedEntities(q);
+
+    var illusKind = t === 'verse' ? 'book' : t;
+    var illusItem = t === 'verse' ? { bookNo: bookNo, bookName: bookName } : q;
+    var svgHtml = getBiblicalIllustrationSvg(illusItem, illusKind);
+
+    var html = '<div class="ency-link-card">';
+    html += '  <div class="ency-card-visual">' + svgHtml + '</div>';
+    html += '  <div class="ency-card-content">';
+    html += '    <div class="ency-card-head">';
+    html += '      <span class="ency-badge">' + bSec.icon + ' 聖經百科圖鑑連結</span>';
+    html += '      <span class="ency-book-tag">《' + esc(bookName) + '》· ' + esc(bSec.section) + '</span>';
+    html += '    </div>';
+
+    if (t === 'char') {
+      html += '    <div class="ency-card-title">👤 人物百科：<strong>' + esc(target) + '</strong>' + (q.nameMeaning ? ' <small>（' + esc(q.nameMeaning) + '）</small>' : '') + '</div>';
+    } else if (t === 'place') {
+      html += '    <div class="ency-card-title">🗺️ 聖經地理百科：<strong>' + esc(target) + '</strong>' + (q.region ? ' <small>（' + esc(q.region) + '）</small>' : '') + '</div>';
+    } else {
+      html += '    <div class="ency-card-title">📘 書卷與經文百科：<strong>《' + esc(bookName) + '》</strong> <small>（' + esc(q.ref || '') + '）</small></div>';
+    }
+
+    if (rel.chars.length || rel.places.length) {
+      html += '    <div class="ency-related-row">';
+      html += '      <span class="ency-rel-label">關聯探索：</span>';
+      rel.chars.forEach(function (cName) {
+        html += '<a href="index.html#ref/characters/' + encodeURIComponent(cName) + '" target="_blank" rel="noopener" class="ency-rel-chip char-chip" title="前往人物百科查看「' + esc(cName) + '」">👤 ' + esc(cName) + ' ↗</a>';
+      });
+      rel.places.forEach(function (pName) {
+        html += '<a href="index.html#ref/geography/' + encodeURIComponent(pName) + '" target="_blank" rel="noopener" class="ency-rel-chip place-chip" title="前往聖經地理百科查看「' + esc(pName) + '」">🗺️ ' + esc(pName) + ' ↗</a>';
+      });
+      html += '    </div>';
+    }
+
+    html += '    <div class="ency-links-grid">';
+    if (t === 'char') {
+      html += '      <a href="index.html#ref/characters/' + encodeURIComponent(target) + '" target="_blank" rel="noopener" class="ency-action-link primary-ency-link">👤 「' + esc(target) + '」人物百科圖解 ↗</a>';
+    } else if (t === 'place') {
+      html += '      <a href="index.html#ref/geography/' + encodeURIComponent(target) + '" target="_blank" rel="noopener" class="ency-action-link primary-ency-link">🗺️ 「' + esc(target) + '」地圖與地理百科 ↗</a>';
+    }
+    html += '      <a href="book_guide.html?book=' + bookNo + '" target="_blank" rel="noopener" class="ency-action-link' + (t === 'verse' ? ' primary-ency-link' : '') + '">📘 《' + esc(bookName) + '》深度導讀百科 ↗</a>';
+    html += '      <a href="index.html#ref/intros/' + bookNo + '" target="_blank" rel="noopener" class="ency-action-link">🏛️ 《' + esc(bookName) + '》結構與大綱 ↗</a>';
+    var rLink = readerLink(q);
+    if (rLink) {
+      html += '      <a href="' + rLink + '" target="_blank" rel="noopener" class="ency-action-link">📖 閱讀經文上下文 ↗</a>';
+    }
+    html += '    </div>';
+    html += '  </div>';
+    html += '</div>';
+    return html;
+  }
+
+  // 填字遊戲與年代排序的單筆百科快速連結產生器
+  function renderMiniEncyLinks(answerOrText, infoOrNote) {
+    var combined = (answerOrText || '') + ' ' + (infoOrNote || '');
+    var links = [];
+    var matchedChar = findByName(answerOrText, 'char');
+    var matchedPlace = findByName(answerOrText, 'place');
+
+    if (matchedChar) {
+      links.push('<a href="index.html#ref/characters/' + encodeURIComponent(matchedChar.name) + '" target="_blank" rel="noopener" class="ency-rel-chip char-chip">👤 ' + esc(matchedChar.name) + ' 人物百科 ↗</a>');
+    } else {
+      listOf('char').forEach(function (c) {
+        if (links.length < 3 && c.name.length >= 2 && combined.indexOf(c.name) !== -1) {
+          links.push('<a href="index.html#ref/characters/' + encodeURIComponent(c.name) + '" target="_blank" rel="noopener" class="ency-rel-chip char-chip">👤 ' + esc(c.name) + ' ↗</a>');
+        }
+      });
+    }
+
+    if (matchedPlace) {
+      links.push('<a href="index.html#ref/geography/' + encodeURIComponent(matchedPlace.name) + '" target="_blank" rel="noopener" class="ency-rel-chip place-chip">🗺️ ' + esc(matchedPlace.name) + ' 地理百科 ↗</a>');
+    } else {
+      listOf('place').forEach(function (p) {
+        if (links.length < 4 && p.name.length >= 2 && combined.indexOf(p.name) !== -1) {
+          links.push('<a href="index.html#ref/geography/' + encodeURIComponent(p.name) + '" target="_blank" rel="noopener" class="ency-rel-chip place-chip">🗺️ ' + esc(p.name) + ' ↗</a>');
+        }
+      });
+    }
+
+    var parsed = parseRefBook(combined, matchedChar ? matchedChar.bookNo : (matchedPlace ? matchedPlace.bookNo : null), 1);
+    if (parsed) {
+      links.push('<a href="book_guide.html?book=' + parsed.bookNo + '" target="_blank" rel="noopener" class="ency-rel-chip book-chip">📘 《' + esc(parsed.bookName) + '》導讀 ↗</a>');
+      links.push('<a href="index.html#read/' + parsed.bookNo + '/' + parsed.chap + '/' + parsed.sec + '" target="_blank" rel="noopener" class="ency-rel-chip read-chip">📖 讀經文 ↗</a>');
+    }
+    if (!links.length) return '';
+    return '<div class="ency-mini-links">' + links.join('') + '</div>';
+  }
+
   function testament(q) {
     return q && q.bookNo ? (q.bookNo <= 39 ? 'OT' : 'NT') : '';
   }
@@ -887,7 +1239,11 @@
       ach_timeline_all: function (s) { return count(s.timelineSolved); },
       ach_mastered5: function (s) { return s.masteredCount; },
       ach_mixed_master: function (s) { return s.mixedCorrect; },
-      ach_clue_sharp: function (s) { return s.firstClueWins; }
+      ach_clue_sharp: function (s) { return s.firstClueWins; },
+      ach_char_30: function (s) { return s.charCorrect; },
+      ach_geo_25: function (s) { return s.placeCorrect; },
+      ach_verse_30: function (s) { return s.verseCorrect; },
+      ach_cw_10: function (s) { return count(s.crosswordsSolved); }
     };
 
     function achProgress(ach) {
@@ -990,7 +1346,7 @@
   // 6. 主遊戲控制器 (Main Challenge Controller)
   // ========================================================
   var ChallengeApp = (function () {
-    var TABS = ['char', 'place', 'verse', 'mixed', 'crossword', 'timeline', 'mistakes'];
+    var TABS = ['char', 'place', 'verse', 'mixed', 'crossword', 'timeline', 'mistakes', 'encyclopedia'];
     var QUIZ_CONTAINERS = {
       char: 'charQuizContainer',
       place: 'placeQuizContainer',
@@ -1039,7 +1395,8 @@
         mixed: document.getElementById('viewMixed'),
         crossword: document.getElementById('viewCrossword'),
         timeline: document.getElementById('viewTimeline'),
-        mistakes: document.getElementById('viewMistakes')
+        mistakes: document.getElementById('viewMistakes'),
+        encyclopedia: document.getElementById('viewEncyclopedia')
       };
       elements.soundToggleBtn = document.getElementById('soundToggleBtn');
       elements.speechToggleBtn = document.getElementById('speechToggleBtn');
@@ -1210,6 +1567,7 @@
       if (tabId === 'crossword') initCrosswordMode();
       else if (tabId === 'timeline') initTimelineMode();
       else if (tabId === 'mistakes') renderMistakesHome();
+      else if (tabId === 'encyclopedia') renderEncyclopediaView();
       else resumeOrStart(tabId);
     }
 
@@ -1869,35 +2227,39 @@
         html += '<div class="mistake-clarify-box">';
         html += '  <div class="mistake-clarify-title"><span>❌</span> 你的作答：<strong>「' + esc(userVal || '未填寫') + '」</strong>　✅ 正確答案：<strong>「' + esc(target) + '」</strong></div>';
         html += '  <div class="mistake-clarify-content"><strong>💡 易混淆辨析：</strong>' + esc(q.mistakeExplanation || '請留意線索中的原文字義、歷史時代與關鍵事蹟，區分同時代的其他人物或事件。') + '</div>';
-        var other = t !== 'verse' ? findByName(userVal, t) : null;
-        if (other && other !== q && testament(other) === testament(q)) {
-          html += '  <div class="contrast-card">';
-          html += '    <div class="contrast-title">🔁 對照記憶：你選的「' + esc(answerOf(other)) + '」是誰／哪裡？</div>';
-          html += '    <div class="contrast-body"><strong>' + esc(answerOf(other)) + '</strong>' + (other.nameMeaning ? '（' + esc(other.nameMeaning) + '）' : '') + '：' + esc(other.clues[0]) + '</div>';
-          html += '  </div>';
-        }
-        html += '  <div class="memory-hook-box"><div class="memory-hook-title">🎯 記憶鉤</div><div>' + esc(memoryHook(q)) + '</div></div>';
-        html += '</div>';
+      var other = t !== 'verse' ? findByName(userVal, t) : null;
+      if (other && other !== q && testament(other) === testament(q)) {
+        var otherEncyHash = t === 'char' ? 'index.html#ref/characters/' + encodeURIComponent(answerOf(other)) : 'index.html#ref/geography/' + encodeURIComponent(answerOf(other));
+        html += '  <div class="contrast-card">';
+        html += '    <div class="contrast-title">🔁 對照記憶：你選的「' + esc(answerOf(other)) + '」是誰／哪裡？ <a href="' + otherEncyHash + '" target="_blank" rel="noopener" class="ency-rel-chip" style="margin-left:6px;">查看百科 ↗</a></div>';
+        html += '    <div class="contrast-body"><strong>' + esc(answerOf(other)) + '</strong>' + (other.nameMeaning ? '（' + esc(other.nameMeaning) + '）' : '') + '：' + esc(other.clues[0]) + '</div>';
+        html += '  </div>';
       }
-
-      html += reviewLine(res);
-
-      html += '<div class="fb-body">';
-      html += '  <div class="fb-target-row"><span class="fb-label">標準答案：</span><strong class="fb-target-name">' + esc(target) + '</strong>';
-      if (q.nameMeaning) html += '<span class="fb-name-meaning">（' + esc(q.nameMeaning) + '）</span>';
-      html += '  </div>';
-      if (q.era) html += '  <div class="fb-info-row"><span class="fb-label">歷史時代：</span>' + esc(q.era) + '</div>';
-      if (q.region) html += '  <div class="fb-info-row"><span class="fb-label">地理位置：</span>' + esc(q.region) + '</div>';
-      var descText = q.bio || q.notes || q.meaning || '';
-      if (descText) html += '  <p class="fb-desc-text">' + esc(descText) + '</p>';
-      if (t === 'verse') {
-        html += '  <div class="fb-verse-box"><div class="fb-verse-ref">📜 ' + esc(q.ref) + '</div><div class="fb-verse-text">「' + esc(q.fullText) + '」</div></div>';
-      } else if (q.verseRef && q.verseText) {
-        html += '  <div class="fb-verse-box"><div class="fb-verse-ref">📜 ' + esc(q.verseRef) + '</div><div class="fb-verse-text">「' + esc(q.verseText) + '」</div></div>';
-      }
+      html += '  <div class="memory-hook-box"><div class="memory-hook-title">🎯 記憶鉤</div><div>' + esc(memoryHook(q)) + '</div></div>';
       html += '</div>';
+    }
 
-      var roundDone = session.round.results.length >= session.round.size;
+    html += reviewLine(res);
+
+    html += '<div class="fb-body">';
+    html += '  <div class="fb-target-row"><span class="fb-label">標準答案：</span><strong class="fb-target-name">' + esc(target) + '</strong>';
+    if (q.nameMeaning) html += '<span class="fb-name-meaning">（' + esc(q.nameMeaning) + '）</span>';
+    html += '  </div>';
+    if (q.era) html += '  <div class="fb-info-row"><span class="fb-label">歷史時代：</span>' + esc(q.era) + '</div>';
+    if (q.region) html += '  <div class="fb-info-row"><span class="fb-label">地理位置：</span>' + esc(q.region) + '</div>';
+    var descText = q.bio || q.notes || q.meaning || '';
+    if (descText) html += '  <p class="fb-desc-text">' + esc(descText) + '</p>';
+    if (t === 'verse') {
+      html += '  <div class="fb-verse-box"><div class="fb-verse-ref">📜 ' + esc(q.ref) + '</div><div class="fb-verse-text">「' + esc(q.fullText) + '」</div></div>';
+    } else if (q.verseRef && q.verseText) {
+      html += '  <div class="fb-verse-box"><div class="fb-verse-ref">📜 ' + esc(q.verseRef) + '</div><div class="fb-verse-text">「' + esc(q.verseText) + '」</div></div>';
+    }
+    html += '</div>';
+
+    // 聖經百科插圖與深度連結卡（人物／地名／書卷）
+    html += renderEncyclopediaCardHtml(q);
+
+    var roundDone = session.round.results.length >= session.round.size;
       html += '<div class="fb-actions-row">';
       var link = readerLink(q);
       if (link) {
@@ -2305,7 +2667,7 @@
       });
       html += '</div>';
       if (solved) {
-        html += '<div class="cw-ab-solved">✓ 已解出：<strong>' + esc(w.answer) + '</strong><p>📖 ' + esc(w.info) + '</p></div>';
+        html += '<div class="cw-ab-solved">✓ 已解出：<strong>' + esc(w.answer) + '</strong><p>📖 ' + esc(w.info) + '</p>' + renderMiniEncyLinks(w.answer, w.info) + '</div>';
         html += '<button type="button" class="btn btn-sm btn-primary" id="cwNextWordBtn">下一個未解的詞 →</button>';
         return html;
       }
@@ -2570,7 +2932,7 @@
       if (bonusText) html += '<div class="review-line review-done">' + bonusText + '</div>';
       html += '<ul class="cw-recap">';
       cw.level.words.forEach(function (w) {
-        html += '<li><strong>' + esc(w.answer) + '</strong>：' + esc(w.info) + '</li>';
+        html += '<li><strong>' + esc(w.answer) + '</strong>：' + esc(w.info) + renderMiniEncyLinks(w.answer, w.info) + '</li>';
       });
       html += '</ul>';
       html += '<div class="rs-actions">';
@@ -2659,6 +3021,7 @@
         if (finished) {
           html += '<span class="tl-event-history-info"><span class="tl-history-year">📅 ' + esc(ev.year) + '</span><span class="tl-history-era">🏷️ ' + esc(ev.era) + '</span></span>';
           if (ev.note) html += '<span class="tl-event-note">' + esc(ev.note) + '</span>';
+          html += renderMiniEncyLinks(ev.text, ev.note);
         } else if (mark && mark !== 'ok') {
           html += '<span class="tl-mark-hint">' + (mark === 'up' ? '↑ 應該更早一點' : '↓ 應該更晚一點') + '</span>';
         }
@@ -2830,6 +3193,242 @@
       SoundEngine.playWrong();
       renderTimeline();
       tlFeedback('💡 ' + correct.length + ' 件中有 <b>' + okCount + '</b> 件位置正確（綠色 ✓）。紅色卡片上的箭頭告訴你該往前或往後移。' + (tl.attempts >= 2 ? '真的卡住了，可以按「揭曉正確順序」。' : ''), 'err');
+    }
+
+    // ========================================================
+    // 12B. 聖經百科圖鑑探索專區 (Illustrated Encyclopedia Explorer)
+    // ========================================================
+    var encyState = { filter: 'char', q: '' };
+
+    function renderEncyclopediaView() {
+      var container = document.getElementById('encyclopediaAppContainer');
+      if (!container) return;
+      var s = StateManager.get();
+      var chars = listOf('char');
+      var places = listOf('place');
+
+      var html = '<div class="ency-explorer-shell">';
+      html += '<div class="ency-explorer-head">';
+      html += '  <div class="ency-explorer-title-wrap">';
+      html += '    <h3 class="ency-explorer-title">🎨 聖經百科圖鑑與書卷導覽</h3>';
+      html += '    <p class="ency-explorer-sub">收錄挑戰題庫全部 <b>' + chars.length + ' 位聖經人物</b>、<b>' + places.length + ' 處聖經地名</b>與 <b>66 卷聖經書卷</b>插圖介紹，點擊可直達聖經百科頁面、書卷深度導讀、原文經文閱讀，或直接對該主題進行單題挑戰！</p>';
+      html += '  </div>';
+      html += '  <div class="ency-explorer-controls">';
+      html += '    <div class="ency-cat-tabs" role="group" aria-label="百科分類">';
+      html += '      <button type="button" class="ency-cat-btn' + (encyState.filter === 'char' ? ' active' : '') + '" data-efilter="char">👤 聖經人物 <small>' + chars.length + '</small></button>';
+      html += '      <button type="button" class="ency-cat-btn' + (encyState.filter === 'place' ? ' active' : '') + '" data-efilter="place">🗺️ 聖經地名 <small>' + places.length + '</small></button>';
+      html += '      <button type="button" class="ency-cat-btn' + (encyState.filter === 'book' ? ' active' : '') + '" data-efilter="book">📘 66卷書卷 <small>66</small></button>';
+      html += '    </div>';
+      html += '    <div class="ency-search-wrap">';
+      html += '      <input type="search" id="encySearchInput" class="fill-text-input ency-search-input" placeholder="🔍 搜尋人物、地名、書卷、時代或經文關鍵字…" value="' + esc(encyState.q) + '">';
+      html += '    </div>';
+      html += '  </div>';
+      html += '</div>';
+      html += '<div id="encyExplorerGrid" class="ency-explorer-grid"></div>';
+      html += '</div>';
+
+      container.innerHTML = html;
+      renderEncyGridItems();
+
+      container.querySelectorAll('.ency-cat-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          SoundEngine.playClick();
+          encyState.filter = this.getAttribute('data-efilter');
+          container.querySelectorAll('.ency-cat-btn').forEach(function (b) {
+            b.classList.toggle('active', b === btn);
+          });
+          renderEncyGridItems();
+        });
+      });
+
+      var searchIn = container.querySelector('#encySearchInput');
+      if (searchIn) {
+        searchIn.addEventListener('input', function () {
+          encyState.q = this.value.trim();
+          renderEncyGridItems();
+        });
+      }
+    }
+
+    function renderEncyGridItems() {
+      var grid = document.getElementById('encyExplorerGrid');
+      if (!grid) return;
+      var s = StateManager.get();
+      var kw = encyState.q.toLowerCase();
+      var html = '';
+
+      if (encyState.filter === 'char') {
+        var chars = listOf('char').filter(function (c) {
+          if (!kw) return true;
+          var blob = [c.name, c.nameMeaning, c.era, c.category, c.bio, c.verseRef, (c.clues || []).join(' ')].join(' ').toLowerCase();
+          return blob.indexOf(kw) !== -1;
+        });
+        if (!chars.length) {
+          grid.innerHTML = '<div class="quiz-card empty-card"><div class="empty-icon">🔍</div><p>找不到符合「' + esc(encyState.q) + '」的人物條目。</p></div>';
+          return;
+        }
+        chars.forEach(function (c) {
+          var solved = s.qStats[c.id] && s.qStats[c.id].c > 0;
+          var parsed = parseRefBook(c.verseRef, c.bookNo, c.chap);
+          var bookNo = parsed ? parsed.bookNo : (c.bookNo || 1);
+          var bookName = BOOK_NAMES[bookNo - 1] || '聖經';
+          var rLink = readerLink(c);
+          html += '<article class="ency-item-card' + (solved ? ' is-solved' : '') + '">';
+          html += '  <div class="ency-item-top">';
+          html += '    <div class="ency-item-svg">' + getBiblicalIllustrationSvg(c, 'char') + '</div>';
+          html += '    <div class="ency-item-meta">';
+          html += '      <div class="ency-item-badges">';
+          html += '        <span class="quiz-cat-badge">' + esc(c.category || '人物') + '</span>';
+          if (c.era) html += '        <span class="ency-era-badge">' + esc(c.era) + '</span>';
+          if (solved) html += '        <span class="ency-solved-badge">✓ 已答對</span>';
+          html += '      </div>';
+          html += '      <h4 class="ency-item-name">' + esc(c.name) + (c.nameMeaning ? ' <small>（' + esc(c.nameMeaning) + '）</small>' : '') + '</h4>';
+          html += '      <p class="ency-item-bio">' + esc(c.bio || c.clues[0] || '') + '</p>';
+          html += '    </div>';
+          html += '  </div>';
+          if (c.verseRef) {
+            html += '  <div class="ency-item-verse">📜 <strong>' + esc(c.verseRef) + '</strong>' + (c.verseText ? '：「' + esc(c.verseText) + '」' : '') + '</div>';
+          }
+          html += '  <div class="ency-item-actions">';
+          html += '    <a href="index.html#ref/characters/' + encodeURIComponent(c.name) + '" target="_blank" rel="noopener" class="ency-action-link primary-ency-link">👤 人物百科圖解 ↗</a>';
+          html += '    <a href="book_guide.html?book=' + bookNo + '" target="_blank" rel="noopener" class="ency-action-link">📘 《' + esc(bookName) + '》導讀 ↗</a>';
+          if (rLink) html += '    <a href="' + rLink + '" target="_blank" rel="noopener" class="ency-action-link">📖 讀經文 ↗</a>';
+          html += '    <button type="button" class="ency-action-link ency-play-btn" data-play-type="char" data-play-id="' + c.id + '">🎮 挑戰此題</button>';
+          html += '  </div>';
+          html += '</article>';
+        });
+      } else if (encyState.filter === 'place') {
+        var places = listOf('place').filter(function (p) {
+          if (!kw) return true;
+          var blob = [p.name, p.region, p.notes, p.verseRef, (p.clues || []).join(' ')].join(' ').toLowerCase();
+          return blob.indexOf(kw) !== -1;
+        });
+        if (!places.length) {
+          grid.innerHTML = '<div class="quiz-card empty-card"><div class="empty-icon">🔍</div><p>找不到符合「' + esc(encyState.q) + '」的地名條目。</p></div>';
+          return;
+        }
+        places.forEach(function (p) {
+          var solved = s.qStats[p.id] && s.qStats[p.id].c > 0;
+          var parsed = parseRefBook(p.verseRef, p.bookNo, p.chap);
+          var bookNo = parsed ? parsed.bookNo : (p.bookNo || 1);
+          var bookName = BOOK_NAMES[bookNo - 1] || '聖經';
+          var rLink = readerLink(p);
+          html += '<article class="ency-item-card' + (solved ? ' is-solved' : '') + '">';
+          html += '  <div class="ency-item-top">';
+          html += '    <div class="ency-item-svg">' + getBiblicalIllustrationSvg(p, 'place') + '</div>';
+          html += '    <div class="ency-item-meta">';
+          html += '      <div class="ency-item-badges">';
+          if (p.region) html += '        <span class="ency-era-badge">📍 ' + esc(p.region) + '</span>';
+          if (solved) html += '        <span class="ency-solved-badge">✓ 已答對</span>';
+          html += '      </div>';
+          html += '      <h4 class="ency-item-name">' + esc(p.name) + '</h4>';
+          html += '      <p class="ency-item-bio">' + esc(p.notes || p.clues[0] || '') + '</p>';
+          html += '    </div>';
+          html += '  </div>';
+          if (p.verseRef) {
+            html += '  <div class="ency-item-verse">📜 <strong>' + esc(p.verseRef) + '</strong>' + (p.verseText ? '：「' + esc(p.verseText) + '」' : '') + '</div>';
+          }
+          html += '  <div class="ency-item-actions">';
+          html += '    <a href="index.html#ref/geography/' + encodeURIComponent(p.name) + '" target="_blank" rel="noopener" class="ency-action-link primary-ency-link">🗺️ 地圖與地理百科 ↗</a>';
+          html += '    <a href="book_guide.html?book=' + bookNo + '" target="_blank" rel="noopener" class="ency-action-link">📘 《' + esc(bookName) + '》導讀 ↗</a>';
+          if (rLink) html += '    <a href="' + rLink + '" target="_blank" rel="noopener" class="ency-action-link">📖 讀經文 ↗</a>';
+          html += '    <button type="button" class="ency-action-link ency-play-btn" data-play-type="place" data-play-id="' + p.id + '">🎮 挑戰此題</button>';
+          html += '  </div>';
+          html += '</article>';
+        });
+      } else {
+        // 66 卷聖經書卷
+        var allChars = listOf('char');
+        var allPlaces = listOf('place');
+        var allVerses = listOf('verse');
+        var books = BOOK_NAMES.map(function (name, i) {
+          var no = i + 1;
+          var sec = bookSectionInfo(no);
+          var bChars = allChars.filter(function (c) { return c.bookNo === no; });
+          var bPlaces = allPlaces.filter(function (p) { return p.bookNo === no; });
+          var bVerses = allVerses.filter(function (v) {
+            var pr = parseRefBook(v.ref, v.bookNo, 1);
+            return pr && pr.bookNo === no;
+          });
+          return { bookNo: no, bookName: name, sec: sec, chars: bChars, places: bPlaces, verses: bVerses };
+        }).filter(function (b) {
+          if (!kw) return true;
+          var blob = [b.bookName, b.sec.section, b.chars.map(function (x) { return x.name; }).join(' '), b.places.map(function (x) { return x.name; }).join(' ')].join(' ').toLowerCase();
+          return blob.indexOf(kw) !== -1;
+        });
+
+        if (!books.length) {
+          grid.innerHTML = '<div class="quiz-card empty-card"><div class="empty-icon">🔍</div><p>找不到符合「' + esc(encyState.q) + '」的書卷。</p></div>';
+          return;
+        }
+        books.forEach(function (b) {
+          html += '<article class="ency-item-card">';
+          html += '  <div class="ency-item-top">';
+          html += '    <div class="ency-item-svg">' + getBiblicalIllustrationSvg(b, 'book') + '</div>';
+          html += '    <div class="ency-item-meta">';
+          html += '      <div class="ency-item-badges">';
+          html += '        <span class="quiz-cat-badge">第 ' + b.bookNo + ' 卷 · ' + (b.bookNo <= 39 ? '舊約' : '新約') + '</span>';
+          html += '        <span class="ency-era-badge">' + esc(b.sec.section) + '</span>';
+          html += '      </div>';
+          html += '      <h4 class="ency-item-name">《' + esc(b.bookName) + '》</h4>';
+          html += '      <div class="ency-related-row" style="margin-top:6px;">';
+          if (b.chars.length) {
+            b.chars.slice(0, 4).forEach(function (c) {
+              html += '<a href="index.html#ref/characters/' + encodeURIComponent(c.name) + '" target="_blank" rel="noopener" class="ency-rel-chip char-chip">👤 ' + esc(c.name) + '</a>';
+            });
+          }
+          if (b.places.length) {
+            b.places.slice(0, 3).forEach(function (p) {
+              html += '<a href="index.html#ref/geography/' + encodeURIComponent(p.name) + '" target="_blank" rel="noopener" class="ency-rel-chip place-chip">🗺️ ' + esc(p.name) + '</a>';
+            });
+          }
+          if (!b.chars.length && !b.places.length) {
+            html += '<span style="font-size:0.8rem;color:var(--fg-mute);">點擊下方導讀與大綱深入了解本書卷背景、結構與核心神學信息。</span>';
+          }
+          html += '      </div>';
+          html += '    </div>';
+          html += '  </div>';
+          html += '  <div class="ency-item-actions">';
+          html += '    <a href="book_guide.html?book=' + b.bookNo + '" target="_blank" rel="noopener" class="ency-action-link primary-ency-link">📘 《' + esc(b.bookName) + '》深度導讀百科 ↗</a>';
+          html += '    <a href="index.html#ref/intros/' + b.bookNo + '" target="_blank" rel="noopener" class="ency-action-link">🏛️ 書卷結構圖表 ↗</a>';
+          html += '    <a href="index.html#read/' + b.bookNo + '/1" target="_blank" rel="noopener" class="ency-action-link">📖 閱讀經文 ↗</a>';
+          html += '  </div>';
+          html += '</article>';
+        });
+      }
+
+      grid.innerHTML = html;
+
+      grid.querySelectorAll('.ency-play-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var pType = this.getAttribute('data-play-type');
+          var pId = this.getAttribute('data-play-id');
+          var targetQ = QINDEX[pId];
+          if (!targetQ) return;
+          SoundEngine.playClick();
+          var others = shuffle(listOf(pType).filter(function (x) { return x.id !== pId; }));
+          var pool = [targetQ].concat(others);
+          session = {
+            mode: pType,
+            review: false,
+            pool: pool,
+            idx: 0,
+            round: newRound(Math.min(ROUND_SIZE, pool.length))
+          };
+          sessions[pType] = session;
+          qs = {
+            q: targetQ,
+            revealed: 1,
+            choices: shuffle(targetQ.options),
+            removed: [],
+            answered: false,
+            hintUsed: false,
+            fiftyUsed: false
+          };
+          session.qs = qs;
+          switchTab(pType);
+        });
+      });
     }
 
     // ========================================================

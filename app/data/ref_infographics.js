@@ -588,7 +588,7 @@
   /* ---------- 11. 人物生平 ---------- */
   function peopleHtml(ctx) {
     var c = C();
-    var list = (ctx.kb && ctx.kb.characters) || [];
+    var list = ((ctx.kb && ctx.kb.characters) || []).filter(function (p) { return c.people && c.people[p.id]; });
     var rows = list.map(function (p) {
       var r = c.people[p.id];
       return {
