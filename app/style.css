@@ -13577,15 +13577,24 @@ a.btn, a.btn:hover, a.start-chip-btn { text-decoration: none; }
 @media (min-width: 900px) {
   .start-quick-tile { flex-direction: row; gap: 8px; min-height: 52px; font-size: .94rem; }
 }
+/* 首頁頂部閱讀經文直選卡片 */
+.start-pick-card {
+  border-top: 4px solid var(--accent);
+  margin-bottom: clamp(16px, 2.2vw, 24px);
+  box-shadow: var(--sh-2);
+}
 #startPickCard { scroll-margin-top: 12px; }
+
+/* 首頁今日讀經卡片獨立下間距 */
+#startPlanCard {
+  margin-bottom: clamp(16px, 2.2vw, 24px);
+}
 
 /* 金句卡：主動作最醒目，次要動作並排 */
 @media (max-width: 599px) {
   .daily-actions { width: 100%; }
   .daily-actions .btn { flex: 1 1 calc(50% - 8px); justify-content: center; min-height: 42px; }
   .daily-actions .go-daily-verse { flex-basis: 100%; order: -1; }
-  /* 窄螢幕先讓使用者直接讀經，背誦卡排在閱讀之後 */
-  #startPickCard { order: -1; }
 }
 
 /* 首頁背誦卡 */
