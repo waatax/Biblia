@@ -61,7 +61,11 @@
   var TYPE_META = {
     char: { icon: '👤', label: '人物', ask: '哪一位聖經人物' },
     place: { icon: '🗺️', label: '地名', ask: '哪一個聖經地名' },
-    verse: { icon: '📜', label: '經文', ask: '' }
+    verse: { icon: '📜', label: '經文', ask: '' },
+    quote: { icon: '💬', label: '名言', ask: '這句話是誰說的' },
+    trivia: { icon: '🔢', label: '奧祕', ask: '這個聖經奧祕的正確答案' },
+    parable: { icon: '🕊️', label: '比喻與神蹟', ask: '這是哪一個比喻或神蹟' },
+    books: { icon: '📚', label: '書卷', ask: '這是哪一卷聖經書卷' }
   };
 
   var DIFF_META = {
@@ -458,7 +462,15 @@
   var QINDEX = {};
   function prepareData() {
     var d = db();
-    [['characters', 'char'], ['places', 'place'], ['verses', 'verse']].forEach(function (pair) {
+    [
+      ['characters', 'char'],
+      ['places', 'place'],
+      ['verses', 'verse'],
+      ['quotes', 'quote'],
+      ['trivia', 'trivia'],
+      ['parables', 'parable'],
+      ['books', 'books']
+    ].forEach(function (pair) {
       (d[pair[0]] || []).forEach(function (q) {
         q._type = pair[1];
         QINDEX[q.id] = q;
@@ -471,6 +483,10 @@
     if (type === 'char') return d.characters || [];
     if (type === 'place') return d.places || [];
     if (type === 'verse') return d.verses || [];
+    if (type === 'quote') return d.quotes || [];
+    if (type === 'trivia') return d.trivia || [];
+    if (type === 'parable') return d.parables || [];
+    if (type === 'books') return d.books || [];
     return [];
   }
 
@@ -973,6 +989,10 @@
         placeCorrect: 0,
         verseCorrect: 0,
         mixedCorrect: 0,
+        quoteCorrect: 0,
+        triviaCorrect: 0,
+        parableCorrect: 0,
+        booksCorrect: 0,
         mistakesCorrected: 0,
         masteredCount: 0,
         audioListenedCount: 0,
@@ -981,6 +1001,8 @@
         crosswordsSolved: {},
         cwProgress: {},
         timelineSolved: {},
+        scrambleSolved: {},
+        matchSolved: {},
         achievements: [],
         mistakes: [],
         qStats: {},
@@ -1170,6 +1192,10 @@
         if (t === 'char') state.charCorrect++;
         else if (t === 'place') state.placeCorrect++;
         else if (t === 'verse') state.verseCorrect++;
+        else if (t === 'quote') state.quoteCorrect = (state.quoteCorrect || 0) + 1;
+        else if (t === 'trivia') state.triviaCorrect = (state.triviaCorrect || 0) + 1;
+        else if (t === 'parable') state.parableCorrect = (state.parableCorrect || 0) + 1;
+        else if (t === 'books') state.booksCorrect = (state.booksCorrect || 0) + 1;
         if (opts.mixed) state.mixedCorrect++;
         if (opts.firstClue) state.firstClueWins++;
         res.review = reviewSuccess(q.id);
@@ -1208,6 +1234,24 @@
       return first;
     }
 
+    function recordScrambleSolved(scrambleId) {
+      if (!state.scrambleSolved) state.scrambleSolved = {};
+      var first = !state.scrambleSolved[scrambleId];
+      state.scrambleSolved[scrambleId] = Date.now();
+      save();
+      checkAchievements();
+      return first;
+    }
+
+    function recordMatchSolved(matchId) {
+      if (!state.matchSolved) state.matchSolved = {};
+      var first = !state.matchSolved[matchId];
+      state.matchSolved[matchId] = Date.now();
+      save();
+      checkAchievements();
+      return first;
+    }
+
     function recordPerfectRound() {
       state.perfectRounds++;
       save();
@@ -1218,7 +1262,7 @@
       return Object.keys(obj || {}).length;
     }
 
-    // 各成就目前的進度值（與資料檔中的 req 比較）
+    // 各成就目前的進度值（與資料檔中的 req 比較，共 48 項成就）
     var ACH_VALUE = {
       ach_first: function (s) { return s.totalCorrect; },
       ach_streak5: function (s) { return s.maxStreak; },
@@ -1243,7 +1287,33 @@
       ach_char_30: function (s) { return s.charCorrect; },
       ach_geo_25: function (s) { return s.placeCorrect; },
       ach_verse_30: function (s) { return s.verseCorrect; },
-      ach_cw_10: function (s) { return count(s.crosswordsSolved); }
+      ach_cw_10: function (s) { return count(s.crosswordsSolved); },
+
+      // 24 個全新成就
+      ach_streak20: function (s) { return s.maxStreak || 0; },
+      ach_streak30: function (s) { return s.maxStreak || 0; },
+      ach_char_75: function (s) { return s.charCorrect || 0; },
+      ach_char_120: function (s) { return s.charCorrect || 0; },
+      ach_geo_60: function (s) { return s.placeCorrect || 0; },
+      ach_geo_90: function (s) { return s.placeCorrect || 0; },
+      ach_verse_60: function (s) { return s.verseCorrect || 0; },
+      ach_verse_100: function (s) { return s.verseCorrect || 0; },
+      ach_quote_20: function (s) { return s.quoteCorrect || 0; },
+      ach_trivia_20: function (s) { return s.triviaCorrect || 0; },
+      ach_parable_20: function (s) { return s.parableCorrect || 0; },
+      ach_book_20: function (s) { return s.booksCorrect || 0; },
+      ach_scramble_10: function (s) { return count(s.scrambleSolved); },
+      ach_scramble_25: function (s) { return count(s.scrambleSolved); },
+      ach_match_10: function (s) { return count(s.matchSolved); },
+      ach_match_20: function (s) { return count(s.matchSolved); },
+      ach_cw_20: function (s) { return count(s.crosswordsSolved); },
+      ach_timeline_20: function (s) { return count(s.timelineSolved); },
+      ach_day_streak14: function (s) { return s.bestDayStreak || 0; },
+      ach_day_streak30: function (s) { return s.bestDayStreak || 0; },
+      ach_total300: function (s) { return s.totalCorrect || 0; },
+      ach_total500: function (s) { return s.totalCorrect || 0; },
+      ach_xp10000: function (s) { return s.score || 0; },
+      ach_crown: function (s) { return (s.achievements || []).length; }
     };
 
     function achProgress(ach) {
@@ -1327,6 +1397,8 @@
       recordAudioListen: recordAudioListen,
       recordCrosswordSolved: recordCrosswordSolved,
       recordTimelineSolved: recordTimelineSolved,
+      recordScrambleSolved: recordScrambleSolved,
+      recordMatchSolved: recordMatchSolved,
       recordPerfectRound: recordPerfectRound,
       bumpDaily: bumpDaily,
       getCurrentLevelInfo: getCurrentLevelInfo,
@@ -1346,11 +1418,18 @@
   // 6. 主遊戲控制器 (Main Challenge Controller)
   // ========================================================
   var ChallengeApp = (function () {
-    var TABS = ['char', 'place', 'verse', 'mixed', 'crossword', 'timeline', 'mistakes', 'encyclopedia'];
+    var TABS = [
+      'char', 'place', 'verse', 'quote', 'trivia', 'parable', 'books',
+      'scramble', 'match', 'mixed', 'crossword', 'timeline', 'mistakes', 'encyclopedia'
+    ];
     var QUIZ_CONTAINERS = {
       char: 'charQuizContainer',
       place: 'placeQuizContainer',
       verse: 'verseQuizContainer',
+      quote: 'quoteQuizContainer',
+      trivia: 'triviaQuizContainer',
+      parable: 'parableQuizContainer',
+      books: 'booksQuizContainer',
       mixed: 'mixedQuizContainer',
       mistakes: 'mistakesQuizContainer'
     };
@@ -1392,6 +1471,12 @@
         char: document.getElementById('viewCharacters'),
         place: document.getElementById('viewPlaces'),
         verse: document.getElementById('viewVerses'),
+        quote: document.getElementById('viewQuotes'),
+        trivia: document.getElementById('viewTrivia'),
+        parable: document.getElementById('viewParables'),
+        books: document.getElementById('viewBooks'),
+        scramble: document.getElementById('viewScramble'),
+        match: document.getElementById('viewMatch'),
         mixed: document.getElementById('viewMixed'),
         crossword: document.getElementById('viewCrossword'),
         timeline: document.getElementById('viewTimeline'),
@@ -1566,6 +1651,8 @@
 
       if (tabId === 'crossword') initCrosswordMode();
       else if (tabId === 'timeline') initTimelineMode();
+      else if (tabId === 'scramble') initScrambleMode();
+      else if (tabId === 'match') initMatchMode();
       else if (tabId === 'mistakes') renderMistakesHome();
       else if (tabId === 'encyclopedia') renderEncyclopediaView();
       else resumeOrStart(tabId);
@@ -1659,7 +1746,16 @@
     // 8. 問答引擎：人物／地名／經文／綜合／錯題複習
     // ========================================================
     function poolFor(mode) {
-      var list = mode === 'mixed' ? listOf('char').concat(listOf('place'), listOf('verse')) : listOf(mode);
+      var list = mode === 'mixed'
+        ? listOf('char').concat(
+            listOf('place'),
+            listOf('verse'),
+            listOf('quote'),
+            listOf('trivia'),
+            listOf('parable'),
+            listOf('books')
+          )
+        : listOf(mode);
       var diff = StateManager.get().settings.difficulty;
       if (diff) list = list.filter(function (q) { return (q.difficulty || 2) === diff; });
       return list;
@@ -1751,7 +1847,16 @@
     function renderDiffBar(mode) {
       if (mode === 'mistakes') return '';
       var cur = StateManager.get().settings.difficulty;
-      var all = mode === 'mixed' ? listOf('char').concat(listOf('place'), listOf('verse')) : listOf(mode);
+      var all = mode === 'mixed'
+        ? listOf('char').concat(
+            listOf('place'),
+            listOf('verse'),
+            listOf('quote'),
+            listOf('trivia'),
+            listOf('parable'),
+            listOf('books')
+          )
+        : listOf(mode);
       var counts = { 1: 0, 2: 0, 3: 0 };
       all.forEach(function (q) { counts[q.difficulty || 2]++; });
       var html = '<div class="diff-bar" role="group" aria-label="選擇難度">';
@@ -3196,6 +3301,444 @@
     }
 
     // ========================================================
+    // 11B. 經文重組大師 (Verse Scramble Game Engine)
+    // ========================================================
+    var scrambleState = null;
+
+    function initScrambleMode(levelId) {
+      var scrambles = db().scrambles || [];
+      if (!scrambles.length) return;
+      var s = StateManager.get();
+      var id = levelId || (scrambleState && scrambleState.level.id) || s.settings.lastScramble;
+      var lvl = scrambles.filter(function (x) { return x.id === id; })[0];
+      if (!lvl) lvl = scrambles.filter(function (x) { return !(s.scrambleSolved && s.scrambleSolved[x.id]); })[0] || scrambles[0];
+      StateManager.setSetting('lastScramble', lvl.id);
+
+      var tokensWithId = lvl.tokens.map(function (tok, idx) {
+        return { uid: 'tok_' + idx, text: tok, correctIdx: idx };
+      });
+
+      scrambleState = {
+        level: lvl,
+        available: shuffle(tokensWithId),
+        placed: [],
+        solved: !!(s.scrambleSolved && s.scrambleSolved[lvl.id]),
+        error: false
+      };
+      renderScrambleUI();
+    }
+
+    function renderScrambleUI() {
+      var container = document.getElementById('scrambleAppContainer');
+      if (!container || !scrambleState) return;
+      var scrambles = db().scrambles || [];
+      var s = StateManager.get();
+      var lvl = scrambleState.level;
+      var solved = scrambleState.solved;
+
+      var html = '<div class="scramble-app-shell">';
+      html += '<div class="tl-header-bar">';
+      html += '  <div class="tl-title-group"><h3 class="tl-title">🔤 經文重組大師：' + esc(lvl.ref) + '</h3>';
+      html += '  <span class="tl-desc">主題：' + esc(lvl.theme) + ' · 難度：' + (DIFF_META[lvl.difficulty] ? DIFF_META[lvl.difficulty].stars + ' ' + DIFF_META[lvl.difficulty].label : '標準') + '</span></div>';
+      html += '  <div class="tl-deck-selector"><select id="scrambleLevelSelect" class="cw-level-select" aria-label="選擇經文重組關卡">';
+      scrambles.forEach(function (item, idx) {
+        var isSol = !!(s.scrambleSolved && s.scrambleSolved[item.id]);
+        html += '<option value="' + item.id + '"' + (item.id === lvl.id ? ' selected' : '') + '>' + (isSol ? '✓ ' : '') + '關卡 ' + (idx + 1) + '：' + esc(item.ref) + ' (' + esc(item.theme) + ')</option>';
+      });
+      html += '  </select></div>';
+      html += '</div>';
+
+      html += '<div class="tl-howto">' + (solved ? '🎉 本關已完成重組！請品味這句金句的豐富涵義。' : '👆 點擊下方<b>經文詞組</b>依正確順序放入句子中；點擊上方已排詞組可退回。全部排好後按「檢查重組」。') + '</div>';
+
+      // 放置區 (Target Slot Zone)
+      html += '<div class="quiz-card" style="padding: 16px 20px;">';
+      html += '  <div style="font-size:0.85rem; font-weight:700; color:var(--fg-dim); margin-bottom:8px;">📝 已排經文句子：</div>';
+      html += '  <div class="scramble-target-zone' + (scrambleState.placed.length ? ' is-active' : '') + '" id="scrambleTargetZone">';
+      if (!scrambleState.placed.length) {
+        html += '<div class="scramble-target-placeholder">點擊下方詞組卡片，在此重組出完整聖經金句</div>';
+      } else {
+        scrambleState.placed.forEach(function (tok, idx) {
+          html += '<button type="button" class="scramble-chip placed" data-uid="' + tok.uid + '" title="點擊退回">' + (idx + 1) + '. ' + esc(tok.text) + '</button>';
+        });
+      }
+      html += '  </div>';
+      html += '</div>';
+
+      // 詞組候選區 (Available Pool)
+      if (!solved) {
+        html += '<div class="quiz-card" style="padding: 16px 20px;">';
+        html += '  <div style="font-size:0.85rem; font-weight:700; color:var(--fg-dim); margin-bottom:8px;">🧩 待選經文詞組：</div>';
+        html += '  <div class="scramble-pool-zone" id="scramblePoolZone">';
+        if (!scrambleState.available.length) {
+          html += '<span style="font-size:0.85rem; color:var(--fg-mute);">所有詞組已放入上方，請按下方「檢查重組」按鈕！</span>';
+        } else {
+          scrambleState.available.forEach(function (tok) {
+            html += '<button type="button" class="scramble-chip" data-uid="' + tok.uid + '">' + esc(tok.text) + '</button>';
+          });
+        }
+        html += '  </div>';
+        html += '</div>';
+      }
+
+      // 控制列
+      html += '<div class="tl-tools" style="justify-content: space-between; flex-wrap: wrap;">';
+      html += '  <div style="display:flex; gap:8px;">';
+      html += ttsButton('scrambleTtsBtn', '朗讀全句');
+      if (!solved) {
+        html += '<button type="button" class="cw-tool-btn" id="scrambleResetBtn">🔄 重置清空</button>';
+        html += '<button type="button" class="cw-tool-btn" id="scrambleShuffleBtn">🔀 重新洗牌</button>';
+      }
+      html += '  </div>';
+      if (!solved) {
+        html += '<button type="button" class="btn btn-primary" id="scrambleCheckBtn" style="padding: 8px 24px; font-weight:800;">✅ 檢查重組</button>';
+      } else {
+        html += '<button type="button" class="btn btn-primary" id="scrambleNextBtn" style="padding: 8px 24px; font-weight:800;">下一關 →</button>';
+      }
+      html += '</div>';
+
+      // 成功或錯誤回饋
+      html += '<div id="scrambleFeedbackZone">';
+      if (solved) {
+        var rLink = readerLink({ ref: lvl.ref, bookNo: 0 });
+        html += '<div class="scramble-success-banner">';
+        html += '  <div style="font-size:1.15rem; font-weight:800; color:var(--ok);">🎉 經文重組大獲全勝！</div>';
+        html += '  <div style="font-size:1.1rem; font-family:var(--font-serif); line-height:1.7; margin:6px 0;">「' + esc(lvl.fullText) + '」</div>';
+        html += '  <div style="font-size:0.88rem; color:var(--fg-dim);">📖 經文出處：' + esc(lvl.ref) + '</div>';
+        if (rLink) {
+          html += '  <div style="margin-top:6px;"><a href="' + rLink + '" target="_blank" rel="noopener" class="ency-action-link primary-ency-link" style="display:inline-flex;">📖 在聖經閱讀器中開啟 ↗</a></div>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+
+      html += '</div>';
+
+      container.innerHTML = html;
+      bindScrambleEvents(container);
+    }
+
+    function bindScrambleEvents(container) {
+      var sel = container.querySelector('#scrambleLevelSelect');
+      if (sel) {
+        sel.addEventListener('change', function () {
+          initScrambleMode(this.value);
+        });
+      }
+
+      var poolZone = container.querySelector('#scramblePoolZone');
+      if (poolZone) {
+        poolZone.querySelectorAll('.scramble-chip').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var uid = this.getAttribute('data-uid');
+            var item = scrambleState.available.filter(function (x) { return x.uid === uid; })[0];
+            if (!item) return;
+            SoundEngine.playClick();
+            scrambleState.available = scrambleState.available.filter(function (x) { return x.uid !== uid; });
+            scrambleState.placed.push(item);
+            renderScrambleUI();
+          });
+        });
+      }
+
+      var targetZone = container.querySelector('#scrambleTargetZone');
+      if (targetZone) {
+        targetZone.querySelectorAll('.scramble-chip.placed').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var uid = this.getAttribute('data-uid');
+            var item = scrambleState.placed.filter(function (x) { return x.uid === uid; })[0];
+            if (!item) return;
+            SoundEngine.playClick();
+            scrambleState.placed = scrambleState.placed.filter(function (x) { return x.uid !== uid; });
+            scrambleState.available.push(item);
+            renderScrambleUI();
+          });
+        });
+      }
+
+      var resetBtn = container.querySelector('#scrambleResetBtn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+          SoundEngine.playClick();
+          scrambleState.available = scrambleState.available.concat(scrambleState.placed);
+          scrambleState.placed = [];
+          renderScrambleUI();
+        });
+      }
+
+      var shuffleBtn = container.querySelector('#scrambleShuffleBtn');
+      if (shuffleBtn) {
+        shuffleBtn.addEventListener('click', function () {
+          SoundEngine.playClick();
+          scrambleState.available = shuffle(scrambleState.available);
+          renderScrambleUI();
+        });
+      }
+
+      var checkBtn = container.querySelector('#scrambleCheckBtn');
+      if (checkBtn) {
+        checkBtn.addEventListener('click', function () {
+          verifyScramble();
+        });
+      }
+
+      var nextBtn = container.querySelector('#scrambleNextBtn');
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          SoundEngine.playClick();
+          var scrambles = db().scrambles || [];
+          var curIdx = scrambles.findIndex(function (x) { return x.id === scrambleState.level.id; });
+          var nextLvl = scrambles[(curIdx + 1) % scrambles.length];
+          initScrambleMode(nextLvl.id);
+        });
+      }
+
+      var ttsBtn = container.querySelector('#scrambleTtsBtn');
+      if (ttsBtn) {
+        ttsBtn.addEventListener('click', function () {
+          SpeechEngine.toggle(scrambleState.level.fullText, this);
+        });
+      }
+    }
+
+    function verifyScramble() {
+      var lvl = scrambleState.level;
+      if (scrambleState.placed.length < lvl.tokens.length) {
+        Toast.show('請先將所有詞組放入上方句子中！', 'err');
+        SoundEngine.playWrong();
+        return;
+      }
+      var isCorrect = scrambleState.placed.every(function (item, idx) {
+        return item.correctIdx === idx;
+      });
+      if (isCorrect) {
+        scrambleState.solved = true;
+        var first = StateManager.recordScrambleSolved(lvl.id);
+        var xp = StateManager.addScore(first ? 60 : 30, true);
+        var goal = StateManager.bumpDaily(true);
+        SoundEngine.playWin();
+        ConfettiEngine.fire(80);
+        renderScrambleUI();
+        Toast.show('🎉 經文重組完全正確！獲得 +' + xp + ' XP', 'ok');
+        if (goal) setTimeout(celebrateGoal, 700);
+      } else {
+        SoundEngine.playWrong();
+        Toast.show('❌ 詞組順序有誤，再試一次看看！', 'err');
+      }
+    }
+
+    // ========================================================
+    // 11C. 奇妙聖經配對 (Bible Connections Match Game Engine)
+    // ========================================================
+    var matchState = null;
+
+    function initMatchMode(levelId) {
+      var matches = db().matches || [];
+      if (!matches.length) return;
+      var s = StateManager.get();
+      var id = levelId || (matchState && matchState.level.id) || s.settings.lastMatch;
+      var lvl = matches.filter(function (x) { return x.id === id; })[0];
+      if (!lvl) lvl = matches.filter(function (x) { return !(s.matchSolved && s.matchSolved[x.id]); })[0] || matches[0];
+      StateManager.setSetting('lastMatch', lvl.id);
+
+      var leftItems = lvl.pairs.map(function (p, idx) {
+        return { uid: 'L_' + idx, text: p.left, pairIdx: idx, explanation: p.explanation };
+      });
+      var rightItems = lvl.pairs.map(function (p, idx) {
+        return { uid: 'R_' + idx, text: p.right, pairIdx: idx, explanation: p.explanation };
+      });
+
+      matchState = {
+        level: lvl,
+        leftItems: shuffle(leftItems),
+        rightItems: shuffle(rightItems),
+        selectedLeft: null,
+        selectedRight: null,
+        matchedPairs: {}, // pairIdx -> true
+        solved: !!(s.matchSolved && s.matchSolved[lvl.id]),
+        lastExplanation: ''
+      };
+
+      if (matchState.solved) {
+        lvl.pairs.forEach(function (p, idx) {
+          matchState.matchedPairs[idx] = true;
+        });
+      }
+
+      renderMatchUI();
+    }
+
+    function renderMatchUI() {
+      var container = document.getElementById('matchAppContainer');
+      if (!container || !matchState) return;
+      var matches = db().matches || [];
+      var s = StateManager.get();
+      var lvl = matchState.level;
+      var solved = matchState.solved;
+
+      var html = '<div class="match-app-shell">';
+      html += '<div class="tl-header-bar">';
+      html += '  <div class="tl-title-group"><h3 class="tl-title">🔗 奇妙聖經配對：' + esc(lvl.title) + '</h3>';
+      html += '  <span class="tl-desc">' + esc(lvl.hint) + '</span></div>';
+      html += '  <div class="tl-deck-selector"><select id="matchLevelSelect" class="cw-level-select" aria-label="選擇配對關卡">';
+      matches.forEach(function (item, idx) {
+        var isSol = !!(s.matchSolved && s.matchSolved[item.id]);
+        html += '<option value="' + item.id + '"' + (item.id === lvl.id ? ' selected' : '') + '>' + (isSol ? '✓ ' : '') + '關卡 ' + (idx + 1) + '：' + esc(item.title) + '</option>';
+      });
+      html += '  </select></div>';
+      html += '</div>';
+
+      html += '<div class="tl-howto">' + (solved ? '🎉 恭喜！本關 4 組聖經關聯卡片皆已成功配對！' : '👆 點選左欄一張卡片，再點選右欄一張卡片進行配對；配對成功將鎖定並揭示其歷史意義。') + '</div>';
+
+      // 雙欄配對網格 (Two-column Match Grid)
+      html += '<div class="match-grid-container">';
+
+      // 左欄
+      html += '<div class="match-col">';
+      matchState.leftItems.forEach(function (item) {
+        var isMatched = !!matchState.matchedPairs[item.pairIdx];
+        var isSelected = matchState.selectedLeft && matchState.selectedLeft.uid === item.uid;
+        var cls = 'match-card';
+        if (isMatched) cls += ' locked';
+        else if (isSelected) cls += ' selected';
+        html += '<button type="button" class="' + cls + '" data-side="left" data-uid="' + item.uid + '"' + (isMatched ? ' disabled' : '') + '>';
+        html += (isMatched ? '✓ ' : '') + esc(item.text);
+        html += '</button>';
+      });
+      html += '</div>';
+
+      // 右欄
+      html += '<div class="match-col">';
+      matchState.rightItems.forEach(function (item) {
+        var isMatched = !!matchState.matchedPairs[item.pairIdx];
+        var isSelected = matchState.selectedRight && matchState.selectedRight.uid === item.uid;
+        var cls = 'match-card';
+        if (isMatched) cls += ' locked';
+        else if (isSelected) cls += ' selected';
+        html += '<button type="button" class="' + cls + '" data-side="right" data-uid="' + item.uid + '"' + (isMatched ? ' disabled' : '') + '>';
+        html += (isMatched ? '✓ ' : '') + esc(item.text);
+        html += '</button>';
+      });
+      html += '</div>';
+
+      html += '</div>'; // match-grid-container
+
+      // 解說橫幅
+      if (matchState.lastExplanation) {
+        html += '<div class="match-explanation-banner">💡 <b>配對成功！</b> ' + esc(matchState.lastExplanation) + '</div>';
+      }
+
+      // 控制與下一關
+      html += '<div class="tl-tools" style="justify-content: space-between; margin-top: 10px;">';
+      html += '  <div style="font-size:0.9rem; font-weight:700; color:var(--fg-dim);">';
+      var matchCount = Object.keys(matchState.matchedPairs).length;
+      html += '配對進度：' + matchCount + ' / ' + lvl.pairs.length;
+      html += '  </div>';
+      if (solved) {
+        html += '<button type="button" class="btn btn-primary" id="matchNextBtn" style="padding: 8px 24px; font-weight:800;">下一關 →</button>';
+      } else {
+        html += '<button type="button" class="cw-tool-btn" id="matchResetBtn">🔄 重置此關</button>';
+      }
+      html += '</div>';
+
+      html += '</div>'; // match-app-shell
+
+      container.innerHTML = html;
+      bindMatchEvents(container);
+    }
+
+    function bindMatchEvents(container) {
+      var sel = container.querySelector('#matchLevelSelect');
+      if (sel) {
+        sel.addEventListener('change', function () {
+          initMatchMode(this.value);
+        });
+      }
+
+      container.querySelectorAll('.match-card:not(.locked)').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var side = this.getAttribute('data-side');
+          var uid = this.getAttribute('data-uid');
+          SoundEngine.playClick();
+          if (side === 'left') {
+            var item = matchState.leftItems.filter(function (x) { return x.uid === uid; })[0];
+            matchState.selectedLeft = (matchState.selectedLeft && matchState.selectedLeft.uid === uid) ? null : item;
+          } else {
+            var item = matchState.rightItems.filter(function (x) { return x.uid === uid; })[0];
+            matchState.selectedRight = (matchState.selectedRight && matchState.selectedRight.uid === uid) ? null : item;
+          }
+          checkMatchPair();
+        });
+      });
+
+      var resetBtn = container.querySelector('#matchResetBtn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+          SoundEngine.playClick();
+          matchState.matchedPairs = {};
+          matchState.selectedLeft = null;
+          matchState.selectedRight = null;
+          matchState.lastExplanation = '';
+          renderMatchUI();
+        });
+      }
+
+      var nextBtn = container.querySelector('#matchNextBtn');
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          SoundEngine.playClick();
+          var matches = db().matches || [];
+          var curIdx = matches.findIndex(function (x) { return x.id === matchState.level.id; });
+          var nextLvl = matches[(curIdx + 1) % matches.length];
+          initMatchMode(nextLvl.id);
+        });
+      }
+    }
+
+    function checkMatchPair() {
+      if (!matchState.selectedLeft || !matchState.selectedRight) {
+        renderMatchUI();
+        return;
+      }
+
+      var left = matchState.selectedLeft;
+      var right = matchState.selectedRight;
+
+      if (left.pairIdx === right.pairIdx) {
+        // MATCH!
+        matchState.matchedPairs[left.pairIdx] = true;
+        matchState.lastExplanation = left.text + ' 🔗 ' + right.text + ' — ' + left.explanation;
+        matchState.selectedLeft = null;
+        matchState.selectedRight = null;
+        SoundEngine.playCorrect();
+
+        var totalPairs = matchState.level.pairs.length;
+        if (Object.keys(matchState.matchedPairs).length === totalPairs) {
+          matchState.solved = true;
+          var first = StateManager.recordMatchSolved(matchState.level.id);
+          var xp = StateManager.addScore(first ? 80 : 40, true);
+          var goal = StateManager.bumpDaily(true);
+          SoundEngine.playWin();
+          ConfettiEngine.fire(90);
+          Toast.show('🎉 4 組聖經配對全數正確！獲得 +' + xp + ' XP', 'ok');
+          if (goal) setTimeout(celebrateGoal, 700);
+        }
+        renderMatchUI();
+      } else {
+        // MISMATCH!
+        SoundEngine.playWrong();
+        Toast.show('❌ 配對不吻合，請再想一想！', 'err');
+        renderMatchUI();
+        var cards = document.querySelectorAll('.match-card.selected');
+        cards.forEach(function (c) { c.classList.add('shake'); });
+        setTimeout(function () {
+          matchState.selectedLeft = null;
+          matchState.selectedRight = null;
+          renderMatchUI();
+        }, 500);
+      }
+    }
+
+    // ========================================================
     // 12B. 聖經百科圖鑑探索專區 (Illustrated Encyclopedia Explorer)
     // ========================================================
     var encyState = { filter: 'char', q: '' };
@@ -3457,6 +4000,9 @@
         ['📅', StateManager.currentDayStreak() + ' 天', '連續達標（最佳 ' + s.bestDayStreak + '）'],
         ['🧠', s.masteredCount, '錯題已掌握'],
         ['🧩', Object.keys(s.crosswordsSolved || {}).length + ' / ' + (db().crosswords || []).length, '填字完成'],
+        ['⏳', Object.keys(s.timelineSolved || {}).length + ' / ' + (db().timelineDecks || []).length, '年代完成'],
+        ['🔤', Object.keys(s.scrambleSolved || {}).length + ' / ' + (db().scrambles || []).length, '經文重組'],
+        ['🔗', Object.keys(s.matchSolved || {}).length + ' / ' + (db().matches || []).length, '聖經配對'],
         ['🎧', s.audioListenedCount, '語音朗讀次數']
       ].forEach(function (x) {
         html += '<div class="stat-card"><span class="stat-icon">' + x[0] + '</span><b>' + esc(x[1]) + '</b><span>' + esc(x[2]) + '</span></div>';
@@ -3464,7 +4010,15 @@
       html += '</div>';
 
       html += '<h4 class="modal-section-title">📚 題庫掌握度（至少答對一次）</h4><div class="coverage-list">';
-      [['char', '👤 聖經人物'], ['place', '🗺️ 聖經地名'], ['verse', '📜 經文填空']].forEach(function (x) {
+      [
+        ['char', '👤 聖經人物'],
+        ['place', '🗺️ 聖經地名'],
+        ['verse', '📜 經文填空'],
+        ['quote', '💬 誰說這句話'],
+        ['trivia', '🔢 聖經奧祕'],
+        ['parable', '🕊️ 比喻與神蹟'],
+        ['books', '📚 書卷正典']
+      ].forEach(function (x) {
         var c = coverage(x[0]);
         var pct = c.total ? Math.round(c.n / c.total * 100) : 0;
         html += '<div class="coverage-row"><span>' + x[1] + '</span><div class="coverage-track"><div class="coverage-fill" style="width:' + pct + '%"></div></div><b>' + c.n + ' / ' + c.total + '</b></div>';

@@ -1,0 +1,202 @@
+// scripts/data_expansion/verify_all_cws.js
+const fs = require('fs');
+const path = require('path');
+
+const CROSSWORDS = [
+  // cw_11
+  {
+    id: "cw_11",
+    title: "第十一關：士師時代與信心勇士",
+    desc: "從俄陀聶、基甸、底波拉到參孫，認識士師黑暗時代神施行的奇妙拯救",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "底波拉", r: 0, c: 1, dir: "across", clue: "在棕樹下判斷以色列事、與巴拉同行的女先知兼士師", info: "士師記 4–5 章。" },
+      { answer: "波阿斯", r: 0, c: 2, dir: "down", clue: "伯利恆的大富戶，恩待摩押女子路得並娶她為妻的至親救贖者", info: "路得記 2–4 章；大衛的曾祖父。" },
+      { answer: "阿摩司", r: 1, c: 2, dir: "across", clue: "宣告「惟願公平如大水滾滾，使公義如江河滔滔」的牧羊人先知", info: "阿摩司書 5:24。" },
+      { answer: "司提反", r: 1, c: 4, dir: "down", clue: "初代教會滿有聖靈與智慧的執事，殉道前看見天開了耶穌站在神的右邊", info: "使徒行傳 6–7 章。" },
+      { answer: "反叛", r: 3, c: 4, dir: "across", clue: "士師時代以色列人屢次離棄神侍奉巴力的背道行徑", info: "士師記 2:11。" },
+      { answer: "基甸", r: 4, c: 0, dir: "across", clue: "率領三百勇士持號角火把擊潰米甸大軍的士師", info: "士師記 6–8 章；又名耶路巴力。" },
+      { answer: "俄陀聶", r: 6, c: 1, dir: "across", clue: "迦勒兄弟基納斯的兒子，擊敗美索不達米亞王、以色列第一位士師", info: "士師記 3:9-11。" },
+      { answer: "巴拉", r: 4, c: 6, dir: "down", clue: "拿弗他利統帥，隨底波拉出征破西西拉九百輛鐵車", info: "士師記 4:6。" },
+      { answer: "拉比", r: 5, c: 6, dir: "across", clue: "猶太人尊稱教師的稱號「拉比，你從哪裡來」", info: "約翰福音 1:38。" }
+    ]
+  },
+  // cw_12
+  {
+    id: "cw_12",
+    title: "第十二關：大衛王朝與英勇傳奇",
+    desc: "從牧羊少年受膏、戰勝歌利亞，到約拿單盟約與晚年恩典",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "大衛", r: 0, c: 1, dir: "across", clue: "耶西幼子，牧羊少年擊殺歌利亞，以色列合神心意的君王", info: "撒母耳記上 16–17 章。" },
+      { answer: "約拿單", r: 1, c: 0, dir: "across", clue: "掃羅王長子，與大衛結盟、愛大衛如自己性命的英勇王子", info: "撒母耳記上 18:1-3。" },
+      { answer: "拿單", r: 1, c: 1, dir: "down", clue: "以富戶搶窮人母羊比喻嚴厲斥責大衛奪妻殺夫之罪的先知", info: "撒母耳記下 12 章。" },
+      { answer: "押沙龍", r: 3, c: 1, dir: "across", clue: "大衛美貌出眾叛亂稱王的愛子，長髮纏橡樹陣亡", info: "撒母耳記下 14–18 章。" },
+      { answer: "拔示巴", r: 5, c: 0, dir: "across", clue: "烏利亞之妻，後為大衛王后，生下智慧之王所羅門", info: "撒母耳記下 11 章。" },
+      { answer: "示每", r: 5, c: 1, dir: "down", clue: "大衛逃避押沙龍時在山旁扔石頭咒罵大衛的便雅憫人", info: "撒母耳記下 16:5。" },
+      { answer: "巴拿巴", r: 5, c: 2, dir: "down", clue: "初代教會「勸慰子」，賣田獻銀並提拔引導保羅一同宣教", info: "使徒行傳 4:36。" },
+      { answer: "拿撒勒", r: 6, c: 2, dir: "across", clue: "主耶穌幼年生活成長並被稱為「拿撒勒人」的加利利小鎮", info: "馬太福音 2:23。" }
+    ]
+  },
+  // cw_13
+  {
+    id: "cw_13",
+    title: "第十三關：先知烈火與以利亞神蹟",
+    desc: "從迦密山降天火決戰巴力，到旋風升天與以利亞的雙倍恩膏",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "以利亞", r: 0, c: 0, dir: "across", clue: "提斯比人先知，叫天三年不下雨，在迦密山禱告降天火", info: "列王紀上 17–18 章。" },
+      { answer: "亞哈", r: 0, c: 2, dir: "down", clue: "北國行惡最甚之王，娶耶洗別引進巴力偶像", info: "列王紀上 16:30。" },
+      { answer: "迦密山", r: 2, c: 0, dir: "across", clue: "以利亞與四百五十巴力假先知決戰、天降烈火降服全地之聖山", info: "列王紀上 18:20-39。" },
+      { answer: "迦百農", r: 2, c: 0, dir: "down", clue: "耶穌在加利利傳道的大本營", info: "馬太福音 4:13。" },
+      { answer: "以利沙", r: 0, c: 4, dir: "down", clue: "以利亞接班人，得著雙倍恩膏施行眾多神蹟", info: "列王紀下 2 章。" },
+      { answer: "耶洗別", r: 4, c: 2, dir: "across", clue: "西頓王女，亞哈王后，殘害神的先知奪葡萄園", info: "列王紀上 21 章。" },
+      { answer: "別迦摩", r: 4, c: 4, dir: "down", clue: "啟示錄七教會之一，有撒但座位之處", info: "啟示錄 2:12。" },
+      { answer: "基立溪", r: 6, c: 0, dir: "across", clue: "以利亞藏身處，早晚烏鴉叼餅供養", info: "列王紀上 17:3-6。" },
+      { answer: "乃縵", r: 0, c: 6, dir: "down", clue: "亞蘭國元帥，約旦河沐浴七次大痲瘋得潔淨", info: "列王紀下 5 章。" }
+    ]
+  },
+  // cw_14
+  {
+    id: "cw_14",
+    title: "第十四關：被擄歲月與歸回重修",
+    desc: "從但以理獅子坑、所羅巴伯建殿，到以斯帖救族與尼希米修城牆",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "但以理", r: 0, c: 0, dir: "across", clue: "巴比倫宮廷立志不沾王膳的先知，解巨像夢、獅坑獲保全", info: "但以理書 1–6 章。" },
+      { answer: "以斯拉", r: 0, c: 1, dir: "down", clue: "精通摩西律法的文士祭司，率百姓歸回講解律法", info: "以斯拉記 7–10 章。" },
+      { answer: "尼希米", r: 2, c: 3, dir: "across", clue: "波斯酒政，回鄉率百姓五十二天修竣耶路撒冷城牆", info: "尼希米記 1–6 章。" },
+      { answer: "米利暗", r: 2, c: 5, dir: "down", clue: "摩西與亞倫的姐姐，過紅海後擊鼓跳舞歌頌神", info: "出埃及記 15:20。" },
+      { answer: "以斯帖", r: 0, c: 4, dir: "across", clue: "波斯王后，「死就死吧」冒死覲見國王瓦解哈曼滅族陰謀", info: "以斯帖記 4:16。" },
+      { answer: "末底改", r: 4, c: 1, dir: "across", clue: "以斯帖堂兄，朝門不拜哈曼，被封為波斯宰相", info: "以斯帖記 2–10 章。" },
+      { answer: "書珊城", r: 6, c: 2, dir: "across", clue: "波斯帝國冬宮京都，但以理見異象、以斯帖救族處", info: "以斯帖記 1:2。" },
+      { answer: "城牆", r: 6, c: 4, dir: "down", clue: "尼希米修復的耶路撒冷聖城石壁", info: "尼希米記 6:15。" }
+    ]
+  },
+  // cw_15
+  {
+    id: "cw_15",
+    title: "第十五關：智慧箴言與生命之道",
+    desc: "從所羅門箴言、約伯苦難辯證，到傳道書日光之下的敬畏智慧",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "所羅門", r: 0, c: 0, dir: "across", clue: "大衛之子，求智慧蒙神大悅，建造第一聖殿，著箴言傳道書雅歌", info: "列王紀上 3–10 章。" },
+      { answer: "所羅巴伯", r: 0, c: 0, dir: "down", clue: "猶大省長，率首批百姓歸回奠定重建聖殿之基", info: "以斯拉記 3:8。" },
+      { answer: "伯利恆", r: 3, c: 0, dir: "across", clue: "大衛故鄉，意為糧食之家，主耶穌基督降生聖城", info: "路加福音 2:4。" },
+      { answer: "利未", r: 3, c: 1, dir: "down", clue: "雅各第三子，祭司支派始祖，新約使徒馬太希伯來原名", info: "創世記 29:34。" },
+      { answer: "約伯", r: 1, c: 3, dir: "across", clue: "烏斯地完全正直人，受大試煉「賞賜的是耶和華，收取的也是耶和華」", info: "約伯記 1:21。" },
+      { answer: "約書亞", r: 1, c: 3, dir: "down", clue: "摩西幫手，接棒統帥百姓渡過約旦河攻取應許之地", info: "約書亞記 1 章。" },
+      { answer: "箴言", r: 5, c: 0, dir: "across", clue: "「敬畏耶和華是智慧的開端；認識至聖者便是聰明」", info: "箴言 9:10。" },
+      { answer: "言語", r: 5, c: 1, dir: "down", clue: "「一句話說得合宜，就如金蘋果在銀網子裡」", info: "箴言 25:11。" },
+      { answer: "虛空", r: 5, c: 4, dir: "across", clue: "傳道書名言「虛空的虛空，凡事都是虛空」", info: "傳道書 1:2。" },
+      { answer: "公義", r: 7, c: 2, dir: "across", clue: "「公義使邦國高舉；罪惡是人民的羞辱」", info: "箴言 14:34。" }
+    ]
+  },
+  // cw_16
+  {
+    id: "cw_16",
+    title: "第十六關：加利利海邊的呼召與神蹟",
+    desc: "從捨網跟從、水變為酒，到海面行走與提比哩亞炭火重逢",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "彼得", r: 0, c: 0, dir: "across", clue: "原名西門，加利利漁夫，宣告「你是基督是永生神的兒子」", info: "馬太福音 16:16。" },
+      { answer: "彼西底", r: 0, c: 0, dir: "down", clue: "保羅宣告「我們轉向外邦人去」的安提阿所在行省高地", info: "使徒行傳 13:14。" },
+      { answer: "迦百農", r: 2, c: 2, dir: "across", clue: "耶穌在加利利傳道的大本營，醫治百夫長僕人與癱子之地", info: "馬太福音 4:13。" },
+      { answer: "迦拿", r: 2, c: 2, dir: "down", clue: "加利利小村，耶穌在此娶親筵席變六缸水為上等好酒", info: "約翰福音 2:1-11。" },
+      { answer: "拿但業", r: 3, c: 2, dir: "across", clue: "在無花果樹下被主看見，主稱「真以色列人，心無詭詐」", info: "約翰福音 1:47。" },
+      { answer: "撒迦利亞", r: 2, c: 5, dir: "down", clue: "歸回先知，宣告「不是倚靠勢力乃是倚靠我的靈」並預言基督謙遜騎驢", info: "撒迦利亞書 4:6、9:9。" },
+      { answer: "迦南", r: 3, c: 5, dir: "across", clue: "神應許給亞伯拉罕後裔流奶與蜜的美地", info: "創世記 12:7。" },
+      { answer: "提比哩亞", r: 5, c: 1, dir: "across", clue: "加利利西岸名城，復活之主在此海邊預備炭火早餐", info: "約翰福音 21:1。" },
+      { answer: "安得烈", r: 7, c: 0, dir: "across", clue: "彼得兄弟，將五餅二魚孩童領到耶穌面前的使徒", info: "約翰福音 6:8。" }
+    ]
+  },
+  // cw_17
+  {
+    id: "cw_17",
+    title: "第十七關：基督耶穌的七個「我是」",
+    desc: "在約翰福音中認識基督神聖本質：生命之糧、世界之光、好牧人與真葡萄樹",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "生命的糧", r: 0, c: 0, dir: "across", clue: "耶穌宣告「我就是生命的糧，到我這裡來的必定不餓」", info: "約翰福音 6:35。" },
+      { answer: "生出", r: 0, c: 0, dir: "down", clue: "「私慾既懷了胎，就生出罪來；罪既長成，就生出死來」", info: "雅各書 1:15。" },
+      { answer: "世界之光", r: 2, c: 0, dir: "across", clue: "耶穌宣告「我是世上的光，跟從我的就不在黑暗裡走」", info: "約翰福音 8:12。" },
+      { answer: "界線", r: 2, c: 1, dir: "down", clue: "神為滄海定出不得越過的疆界", info: "箴言 8:29。" },
+      { answer: "好牧人", r: 4, c: 1, dir: "across", clue: "「我是好牧人；好牧人為羊捨命」，羊認得他的聲音", info: "約翰福音 10:11。" },
+      { answer: "好樹", r: 4, c: 1, dir: "down", clue: "「好樹結好果子；惟獨壞樹結壞果子」", info: "馬太福音 7:17。" },
+      { answer: "真葡萄樹", r: 6, c: 0, dir: "across", clue: "「我是真葡萄樹，我父是栽培的人；常在我裡面的，我也常在他裡面」", info: "約翰福音 15:1-5。" },
+      { answer: "葡萄", r: 6, c: 1, dir: "down", clue: "聖經描繪神所栽種的純美果樹與美果", info: "詩篇 80:8。" }
+    ]
+  },
+  // cw_18
+  {
+    id: "cw_18",
+    title: "第十八關：保羅宣教腳蹤與歐亞名城",
+    desc: "從安提阿啟程、特羅亞馬其頓呼聲，到雅典亞略巴古與羅馬戴鎖鏈傳道",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "安提阿", r: 0, c: 1, dir: "across", clue: "敘利亞首善大城，門徒稱為基督徒自此起，差派保羅宣教母會", info: "使徒行傳 11:26。" },
+      { answer: "安得烈", r: 0, c: 1, dir: "down", clue: "彼得兄弟，常把人帶到耶穌面前的使徒", info: "約翰福音 1:41。" },
+      { answer: "腓立比", r: 1, c: 2, dir: "across", clue: "馬其頓頭一個城，歐洲福音第一站，呂底亞與禁卒全家信主", info: "使徒行傳 16 章。" },
+      { answer: "立約", r: 1, c: 3, dir: "down", clue: "耶穌在最後晚餐舉杯「這杯是用我血所立的新約」", info: "路加福音 22:20。" },
+      { answer: "以弗所", r: 3, c: 0, dir: "across", clue: "亞細亞行省首都，保羅長住三年推喇奴學房講道建立強大教會", info: "使徒行傳 19 章。" },
+      { answer: "所羅門", r: 3, c: 2, dir: "down", clue: "大衛之子，建造第一聖殿之智慧王", info: "列王紀上 6 章。" },
+      { answer: "哥林多", r: 6, c: 1, dir: "across", clue: "亞該亞省商業大都，保羅同百基拉亞居拉織帳棚傳道一年半", info: "使徒行傳 18:1-11。" },
+      { answer: "多加", r: 6, c: 3, dir: "down", clue: "約帕女徒，廣行善事多施賙濟，死後蒙彼得禱告復活", info: "使徒行傳 9:36。" }
+    ]
+  },
+  // cw_19
+  {
+    id: "cw_19",
+    title: "第十九關：獄中書信與屬天品格",
+    desc: "以弗所書的奧祕、腓立比書的喜樂、歌羅西書的元首與腓利門書的饒恕",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "腓立比書", r: 0, c: 0, dir: "across", clue: "保羅獄中書信中最喜樂的信件，十六次提到喜樂，「靠主常常喜樂」", info: "腓立比書 4:4。" },
+      { answer: "腓利門", r: 0, c: 0, dir: "down", clue: "歌羅西富紳信徒，阿尼西母主人，保羅勸他接納逃奴為親愛弟兄", info: "腓利門書 1:16。" },
+      { answer: "利未記", r: 1, c: 2, dir: "across", clue: "摩西五經第三卷，詳載五大祭禮與聖潔條例「你們要聖潔」", info: "利未記 19:2。" },
+      { answer: "未曾", r: 1, c: 3, dir: "down", clue: "「神為愛他的人所預備的，是眼睛未曾看見，耳朵未曾聽見」", info: "哥林多前書 2:9。" },
+      { answer: "以弗所書", r: 3, c: 0, dir: "across", clue: "論基督為教會元首、兩下合而為一、全副軍裝抵擋仇敵的崇高書信", info: "以弗所書 1–6 章。" },
+      { answer: "歌羅西書", r: 5, c: 1, dir: "across", clue: "論基督超越一切萬有、在萬有之上居首位、萬有靠他而立的基督論書信", info: "歌羅西書 1:15-18。" },
+      { answer: "西面", r: 5, c: 3, dir: "down", clue: "在聖殿抱起嬰孩耶穌稱頌神「我的眼睛已經看見你的救恩」的公義老人", info: "路加福音 2:25-32。" }
+    ]
+  },
+  // cw_20
+  {
+    id: "cw_20",
+    title: "第二十關：新天新地與榮耀啟示",
+    desc: "拔摩島神聖啟示、七印七號七碗、新耶路撒冷自天而降與主必快來",
+    rows: 8, cols: 8,
+    words: [
+      { answer: "拔摩海島", r: 0, c: 0, dir: "across", clue: "使徒約翰為神的道並耶穌見證被流放之愛琴海小島，看見天上大異象", info: "啟示錄 1:9。" },
+      { answer: "拔示巴", r: 0, c: 0, dir: "down", clue: "大衛王后，所羅門母親", info: "撒母耳記下 12 章。" },
+      { answer: "猶大獅子", r: 2, c: 1, dir: "across", clue: "長老安慰約翰不要哭「看哪，猶大支派中的獅子已得勝能開那書卷」", info: "啟示錄 5:5。" },
+      { answer: "大馬士革", r: 1, c: 6, dir: "down", clue: "掃羅在路上見天上大光撲倒悔改得救之敘利亞名城", info: "使徒行傳 9 章。" },
+      { answer: "新耶路撒冷", r: 4, c: 0, dir: "across", clue: "聖城由神那裡從天而降，如新婦妝飾整齊等候丈夫，不再有死亡悲哀哭號", info: "啟示錄 21:2。" },
+      { answer: "耶穌", r: 4, c: 1, dir: "down", clue: "「主耶穌啊，我願你來！」", info: "啟示錄 22:20。" },
+      { answer: "生命樹", r: 6, c: 1, dir: "across", clue: "城內街道當中一道生命水河兩岸所長、結十二樣果子的神聖美樹", info: "啟示錄 22:2。" }
+    ]
+  }
+];
+
+CROSSWORDS.forEach(c => {
+  const m = {};
+  for (const w of c.words) {
+    for (let k = 0; k < w.answer.length; k++) {
+      const r = w.dir === 'down' ? w.r + k : w.r;
+      const cIdx = w.dir === 'across' ? w.c + k : w.c;
+      const ch = w.answer[k];
+      const key = `${r}_${cIdx}`;
+      if (r < 0 || r >= c.rows || cIdx < 0 || cIdx >= c.cols) {
+        throw new Error(`[${c.id}] Out of bounds: ${w.answer} at (${r},${cIdx})`);
+      }
+      if (m[key] && m[key] !== ch) {
+        throw new Error(`[${c.id}] Conflict at (${r},${cIdx}): "${m[key]}" vs "${ch}" in "${w.answer}"`);
+      }
+      m[key] = ch;
+    }
+  }
+  console.log(`PASS: ${c.id} - ${c.title} (${c.words.length} words, valid!)`);
+});
+
+fs.writeFileSync(path.join(__dirname, 'new_crosswords.json'), JSON.stringify(CROSSWORDS, null, 2), 'utf8');
+console.log('SUCCESS! Wrote new_crosswords.json');

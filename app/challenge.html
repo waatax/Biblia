@@ -6,8 +6,8 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#fbf9f5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
-<title>Biblia 聖經挑戰 — 猜人名 · 猜地名 · 經文填空 · 綜合挑戰 · 十字填字 · 年代排序</title>
-<meta name="description" content="用科學又有趣的方法學聖經：漸進線索猜人名地名、和合本經文填空、交錯出題的綜合挑戰、十字填字與救贖年代排序。語音朗讀題目與解答、答錯即時解說、間隔重複錯題本、每日目標與成就，適合任何程度的學習者。">
+<title>Biblia 聖經挑戰旗艦版 — 12大益智遊戲 · 600+海量題庫 · 猜人名地名 · 經文重組 · 聖經配對 · 十字填字 · 年代排序</title>
+<meta name="description" content="用科學又有趣的方法學聖經：150位聖經人物、100處聖經地名、130節金句填空、誰說這句話、聖經數字奧祕、比喻神蹟、書卷解密、經文重組、奇妙配對、十字填字與年代排序。語音朗讀、答錯即時解說、間隔重複錯題本、48項榮譽成就。">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
 <link rel="apple-touch-icon" href="icons/icon.svg">
@@ -24,7 +24,7 @@
 })();
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;600;700;900&display=swap">
-<link rel="stylesheet" href="style.css?v=42">
+<link rel="stylesheet" href="style.css?v=43">
 <style>
 /* ===================== 聖經挑戰專屬高質感樣式 (Bible Challenge Design System) ===================== */
 :root {
@@ -2784,6 +2784,151 @@ ol.tl-events-list {
   gap: 6px;
   margin-top: auto;
 }
+
+/* 經文重組大師專屬樣式 (Verse Scramble CSS) */
+.scramble-app-shell, .match-app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.scramble-target-zone {
+  min-height: 84px;
+  padding: 16px;
+  background: var(--bg);
+  border: 2px dashed var(--line);
+  border-radius: var(--r-xl);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  transition: all var(--t-fast);
+}
+.scramble-target-zone.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.scramble-target-placeholder {
+  color: var(--fg-mute);
+  font-size: 0.95rem;
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+}
+.scramble-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 1.05rem;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  box-shadow: var(--sh-1);
+  user-select: none;
+}
+.scramble-chip:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--sh-2);
+}
+.scramble-chip.placed {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.scramble-pool-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 4px;
+}
+.scramble-success-banner {
+  padding: 16px 20px;
+  background: rgba(46, 107, 73, 0.1);
+  border: 1px solid var(--ok);
+  border-radius: var(--r-lg);
+  color: var(--fg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 奇妙聖經配對專屬樣式 (Bible Connections Match CSS) */
+.match-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 600px) {
+  .match-grid-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+}
+.match-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.match-card {
+  padding: 14px 16px;
+  background: var(--bg-alt);
+  border: 2px solid var(--line);
+  border-radius: var(--r-xl);
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  box-shadow: var(--sh-1);
+  user-select: none;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.match-card:hover:not(.locked) {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--sh-2);
+}
+.match-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+.match-card.locked {
+  border-color: var(--ok);
+  background: rgba(46, 107, 73, 0.1);
+  color: var(--ok);
+  cursor: default;
+}
+.match-card.shake {
+  animation: cardShake 0.4s ease-in-out;
+  border-color: var(--seal);
+  background: rgba(192, 56, 43, 0.1);
+}
+@keyframes cardShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.match-explanation-banner {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--fg);
+}
 </style>
 </head>
 
@@ -2887,8 +3032,26 @@ ol.tl-events-list {
       <button type="button" class="game-nav-tab" data-tab="verse" role="tab" aria-selected="false">
         <span>📜</span> 經典經文填空
       </button>
+      <button type="button" class="game-nav-tab" data-tab="quote" role="tab" aria-selected="false">
+        <span>💬</span> 誰說這句話
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="trivia" role="tab" aria-selected="false">
+        <span>🔢</span> 聖經數字奧祕
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="parable" role="tab" aria-selected="false">
+        <span>🕊️</span> 耶穌比喻神蹟
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="books" role="tab" aria-selected="false">
+        <span>📚</span> 書卷正典解密
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="scramble" role="tab" aria-selected="false">
+        <span>🔤</span> 經文重組大師
+      </button>
+      <button type="button" class="game-nav-tab" data-tab="match" role="tab" aria-selected="false">
+        <span>🔗</span> 奇妙聖經配對
+      </button>
       <button type="button" class="game-nav-tab" data-tab="mixed" role="tab" aria-selected="false">
-        <span>🎲</span> 綜合挑戰
+        <span>🎲</span> 全能綜合挑戰
       </button>
       <button type="button" class="game-nav-tab" data-tab="crossword" role="tab" aria-selected="false">
         <span>🧩</span> 聖經十字填字
@@ -2925,36 +3088,66 @@ ol.tl-events-list {
       </div>
     </section>
 
-    <!-- 綜合挑戰 View（人物、地名、經文交錯出題） -->
+    <!-- 4. 誰說了這句話 View -->
+    <section id="viewQuotes" class="game-view-panel" hidden>
+      <div id="quoteQuizContainer"></div>
+    </section>
+
+    <!-- 5. 聖經數字與奧祕 View -->
+    <section id="viewTrivia" class="game-view-panel" hidden>
+      <div id="triviaQuizContainer"></div>
+    </section>
+
+    <!-- 6. 耶穌比喻與神蹟 View -->
+    <section id="viewParables" class="game-view-panel" hidden>
+      <div id="parableQuizContainer"></div>
+    </section>
+
+    <!-- 7. 聖經書卷正典解密 View -->
+    <section id="viewBooks" class="game-view-panel" hidden>
+      <div id="booksQuizContainer"></div>
+    </section>
+
+    <!-- 8. 經文重組大師 View -->
+    <section id="viewScramble" class="game-view-panel" hidden>
+      <div id="scrambleAppContainer"></div>
+    </section>
+
+    <!-- 9. 奇妙聖經配對 View -->
+    <section id="viewMatch" class="game-view-panel" hidden>
+      <div id="matchAppContainer"></div>
+    </section>
+
+    <!-- 10. 全能綜合挑戰 View（人物、地名、經文、名言、奧祕、比喻、書卷全題庫出題） -->
     <section id="viewMixed" class="game-view-panel" hidden>
       <div id="mixedQuizContainer"></div>
     </section>
 
-    <!-- 4. 聖經十字填字遊戲 View -->
+    <!-- 11. 聖經十字填字遊戲 View -->
     <section id="viewCrossword" class="game-view-panel" hidden>
       <div id="crosswordAppContainer">
         <!-- 由 JS 動態渲染十字網格與橫縱提示 -->
       </div>
     </section>
 
-    <!-- 5. 救贖歷史時間線排序 View -->
+    <!-- 12. 救贖歷史時間線排序 View -->
     <section id="viewTimeline" class="game-view-panel" hidden>
       <div id="timelineAppContainer">
         <!-- 由 JS 動態渲染時間線事件卡片 -->
       </div>
     </section>
 
-    <!-- 6. 錯題複習專區 View (科學間隔重複學習) -->
+    <!-- 13. 錯題複習專區 View (科學間隔重複學習) -->
     <section id="viewMistakes" class="game-view-panel" hidden>
       <div id="mistakesQuizContainer">
         <!-- 由 JS 動態渲染錯題題卡與訂正反饋 -->
       </div>
     </section>
 
-    <!-- 7. 聖經百科圖鑑探索專區 View (插圖介紹與深度連結回聖經百科) -->
+    <!-- 14. 聖經百科圖鑑探索專區 View (插圖介紹與深度連結回聖經百科) -->
     <section id="viewEncyclopedia" class="game-view-panel" hidden>
       <div id="encyclopediaAppContainer">
-        <!-- 由 JS 動態渲染 74 位人物、49 處地名、66 卷書卷插圖百科卡片 -->
+        <!-- 由 JS 動態渲染 150 位人物、100 處地名、66 卷書卷插圖百科卡片 -->
       </div>
     </section>
 
@@ -2993,8 +3186,8 @@ ol.tl-events-list {
   <div id="toastStack" class="toast-stack" aria-live="polite"></div>
 
   <!-- 資料庫與遊戲引擎 Script -->
-  <script src="data/challenge_data.js?v=42"></script>
-  <script src="challenge.js?v=42"></script>
+  <script src="data/challenge_data.js?v=43"></script>
+  <script src="challenge.js?v=43"></script>
 
   <!-- 離線 Service Worker -->
   <script>
