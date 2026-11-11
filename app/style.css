@@ -13894,3 +13894,1247 @@ button.ig-row:hover { background: color-mix(in srgb, var(--accent) 7%, transpare
 .ig-leader { stroke: var(--fg-mute); stroke-width: 1.5; }
 .ig-spine.ink span { color: #1a1a19; text-shadow: none; }
 
+/* ===================== 四重時間聖經詮釋學 & 研經法專區 (Hermeneutics & Fourfold Time) ===================== */
+
+/* --- 66 卷深度導讀內建「四重時間」卡片 --- */
+.biblia-fourfold-time-box {
+  margin: 1.5rem 0 2rem;
+  padding: 1.5rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+.biblia-fourfold-time-box.compact {
+  padding: 1rem;
+}
+.fourfold-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.fourfold-header-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.fourfold-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(217, 119, 6, 0.12);
+  color: #d97706;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.fourfold-header-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.fourfold-ext-btn, .fourfold-hub-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.fourfold-ext-btn {
+  background: var(--bg-soft);
+  color: var(--fg);
+  border: 1px solid var(--line);
+}
+.fourfold-ext-btn:hover {
+  background: var(--line-soft);
+}
+.fourfold-hub-btn {
+  background: #d97706;
+  color: #fff;
+}
+.fourfold-hub-btn:hover {
+  background: #b45309;
+}
+.fourfold-header-title {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+  color: var(--fg);
+  font-weight: 800;
+}
+.fourfold-header-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+}
+.fourfold-times-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-bottom: 1.5rem;
+}
+.fourfold-time-card {
+  padding: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--ft-accent, #d97706);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ft-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+.ft-time-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ft-accent, #d97706);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.ft-trinity-tag {
+  font-size: 0.72rem;
+  color: var(--fg-mute);
+}
+.ft-card-title {
+  margin: 0;
+  font-size: 0.96rem;
+  color: var(--fg);
+  font-weight: 700;
+}
+.ft-scene-anchor {
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  background: var(--bg-soft);
+  padding: 6px 8px;
+  border-radius: 6px;
+  line-height: 1.45;
+}
+.ft-card-desc {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--fg);
+  flex-grow: 1;
+}
+.ft-reflection-box {
+  margin-top: 4px;
+  padding: 8px 10px;
+  background: rgba(217, 119, 6, 0.07);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--fg);
+  line-height: 1.45;
+}
+.fourfold-prism-section {
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--line);
+}
+.prism-sec-head {
+  margin-bottom: 12px;
+}
+.prism-sec-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  color: var(--fg);
+  font-weight: 700;
+}
+.prism-sec-sub {
+  font-size: 0.82rem;
+  color: var(--fg-mute);
+}
+.fourfold-prism-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+.fourfold-prism-card {
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+  border-radius: 7px;
+}
+.prism-card-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+.prism-card-body {
+  font-size: 0.8rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+}
+
+/* --- 正統研經法指南專區 (#refPanelHermeneutics) --- */
+.herm-guide-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+.herm-hero-header {
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.12), rgba(37, 99, 235, 0.08));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.herm-hero-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #d97706;
+  color: #fff;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.herm-hero-title {
+  margin: 0 0 8px;
+  font-size: 1.85rem;
+  color: var(--fg);
+  font-weight: 900;
+}
+.herm-hero-subtitle {
+  margin: 0 auto 1.25rem;
+  max-width: 780px;
+  font-size: 0.95rem;
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+.herm-hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.herm-btn-ext, .herm-btn-books {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.herm-btn-ext {
+  background: #d97706;
+  color: #fff;
+}
+.herm-btn-ext:hover {
+  background: #b45309;
+}
+.herm-btn-books {
+  background: var(--bg-alt);
+  color: var(--fg);
+  border: 1px solid var(--line);
+}
+.herm-btn-books:hover {
+  background: var(--bg-soft);
+}
+
+.herm-nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--line-soft);
+  justify-content: center;
+}
+.herm-pill {
+  padding: 8px 15px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.herm-pill:hover {
+  background: var(--bg-soft);
+  color: var(--fg);
+}
+.herm-pill.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.herm-panel {
+  display: none;
+}
+.herm-panel.active {
+  display: block;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+.herm-group-title {
+  font-size: 1.35rem;
+  color: var(--fg);
+  font-weight: 800;
+  margin: 1.75rem 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Tab 1 Intro Card */
+.herm-section-intro-card {
+  padding: 1.75rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+.intro-card-head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.intro-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(217, 119, 6, 0.15);
+  color: #d97706;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.intro-author {
+  font-size: 0.82rem;
+  color: var(--fg-mute);
+}
+.intro-title {
+  margin: 0 0 12px;
+  font-size: 1.4rem;
+  color: var(--fg);
+  font-weight: 800;
+}
+.intro-premise-banner {
+  padding: 10px 14px;
+  background: rgba(217, 119, 6, 0.08);
+  border-left: 4px solid #d97706;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 12px;
+}
+.intro-desc {
+  font-size: 0.92rem;
+  color: var(--fg-dim);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* 4 Dimensions Grid */
+.fourfold-dims-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 16px;
+}
+.dim-card {
+  padding: 1.25rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--dim-accent, #d97706);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dim-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.dim-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--dim-accent, #d97706);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.dim-trinity {
+  font-size: 0.72rem;
+  color: var(--fg-mute);
+  text-align: right;
+}
+.dim-title {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--fg);
+  font-weight: 800;
+}
+.dim-definition {
+  font-size: 0.86rem;
+  color: var(--fg);
+  line-height: 1.5;
+  background: var(--bg-soft);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+.dim-theology, .dim-method {
+  font-size: 0.84rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+}
+.dim-prompt {
+  margin-top: auto;
+  font-size: 0.82rem;
+  color: var(--fg);
+  background: rgba(217, 119, 6, 0.08);
+  padding: 8px 10px;
+  border-radius: 6px;
+  line-height: 1.45;
+}
+
+/* Case Selector */
+.fourfold-case-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+.case-btn {
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.case-btn:hover {
+  background: var(--bg-soft);
+}
+.case-btn.active {
+  background: #d97706;
+  color: #fff;
+  border-color: #d97706;
+}
+.case-display-card {
+  display: none;
+  padding: 1.5rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.case-display-card.active {
+  display: block;
+}
+.case-card-top {
+  margin-bottom: 1.25rem;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.case-title {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+  color: var(--fg);
+  font-weight: 800;
+}
+.case-verse {
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+.case-times-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.case-time-item {
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px solid var(--line-soft);
+}
+.case-time-item.t1 { border-top: 3px solid #d97706; }
+.case-time-item.t2 { border-top: 3px solid #2563eb; }
+.case-time-item.t3 { border-top: 3px solid #dc2626; }
+.case-time-item.t4 { border-top: 3px solid #059669; }
+.ct-label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ct-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #fff;
+  background: #554e44;
+}
+.case-time-item.t1 .ct-num { background: #d97706; }
+.case-time-item.t2 .ct-num { background: #2563eb; }
+.case-time-item.t3 .ct-num { background: #dc2626; }
+.case-time-item.t4 .ct-num { background: #059669; }
+.ct-text {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+.herm-banner-callout {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(217, 119, 6, 0.08));
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.callout-icon {
+  font-size: 2.2rem;
+}
+.callout-body {
+  flex: 1;
+  min-width: 240px;
+}
+.callout-body h4 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  color: var(--fg);
+}
+.callout-body p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+}
+.callout-btn {
+  padding: 8px 16px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 7px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Methods Grid (Tab 2) */
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+.method-card {
+  padding: 1.5rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--m-accent, #2563eb);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.m-card-header {
+  display: flex;
+  justify-content: space-between;
+}
+.m-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--m-accent, #2563eb);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.m-title {
+  margin: 0;
+  font-size: 1.18rem;
+  color: var(--fg);
+  font-weight: 800;
+}
+.m-summary {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+}
+.m-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.m-step-item {
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+}
+.m-step-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+.m-step-detail {
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+}
+.m-suitable {
+  margin-top: auto;
+  font-size: 0.82rem;
+  color: var(--fg);
+  background: var(--bg-soft);
+  padding: 8px 10px;
+  border-radius: 6px;
+  line-height: 1.45;
+}
+
+/* Seminaries Grid (Tab 3) */
+.seminaries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+.seminary-card {
+  padding: 1.5rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--sem-accent, #059669);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sem-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sem-emblem {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--sem-accent, #059669);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.sem-header-text h4 {
+  margin: 0 0 2px;
+  font-size: 1.15rem;
+  color: var(--fg);
+  font-weight: 800;
+}
+.sem-tradition {
+  font-size: 0.78rem;
+  color: var(--fg-mute);
+}
+.sem-heritage {
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+  background: var(--bg-soft);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+.sem-pillars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sem-pillar-item {
+  padding: 8px 10px;
+  background: var(--bg);
+  border-radius: 6px;
+}
+.pillar-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 3px;
+}
+.pillar-desc {
+  font-size: 0.8rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+}
+.sem-quote {
+  margin-top: auto;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--sem-accent, #059669);
+  line-height: 1.45;
+  border-left: 3px solid var(--sem-accent, #059669);
+  padding-left: 8px;
+}
+
+/* Denominations Grid */
+.denoms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.denom-card {
+  padding: 1.25rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--d-accent, #059669);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.d-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--d-accent, #059669);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.d-name {
+  margin: 6px 0 4px;
+  font-size: 1.05rem;
+  color: var(--fg);
+  font-weight: 800;
+}
+.d-movement {
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+}
+.d-features {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: var(--fg);
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.d-method {
+  margin-top: auto;
+  font-size: 0.8rem;
+  color: var(--fg);
+  background: var(--bg-soft);
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+/* Korean Grid (Tab 4) */
+.korean-hero-box, .safeguards-hero-box {
+  padding: 1.5rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 1.75rem;
+}
+.korean-hero-box h3, .safeguards-hero-box h3 {
+  margin: 0 0 6px;
+  font-size: 1.3rem;
+  color: var(--fg);
+}
+.korean-hero-box p, .safeguards-hero-box p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+.korean-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+.kr-card {
+  padding: 1.5rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--kr-accent, #0284c7);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.kr-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--kr-accent, #0284c7);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.kr-title {
+  margin: 6px 0 2px;
+  font-size: 1.15rem;
+  color: var(--fg);
+  font-weight: 800;
+}
+.kr-pastor {
+  font-size: 0.8rem;
+  color: var(--fg-mute);
+}
+.kr-method-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.kr-method-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.kr-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.kr-step-row {
+  padding: 8px 10px;
+  background: var(--bg);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+}
+.kr-discipleship-tool {
+  font-size: 0.82rem;
+  color: var(--fg);
+  background: var(--bg-soft);
+  padding: 8px 10px;
+  border-radius: 6px;
+  line-height: 1.45;
+}
+
+/* Safeguards (Tab 5) */
+.three-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-bottom: 2rem;
+}
+.pillar-card {
+  padding: 1.25rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--ok);
+  border-radius: 10px;
+}
+.pillar-head {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ok);
+  margin-bottom: 6px;
+}
+.pillar-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+}
+.creeds-solas-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+.creeds-card, .solas-card {
+  padding: 1.25rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.creeds-card h4, .solas-card h4 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  color: var(--fg);
+}
+.creed-item {
+  font-size: 0.84rem;
+  color: var(--fg-dim);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.solas-card ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.84rem;
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+.cults-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.cult-card {
+  padding: 1.25rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--seal);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cult-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+.cult-name {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--seal);
+  font-weight: 800;
+}
+.cult-danger-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--seal);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.cult-modus {
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+  background: rgba(192, 56, 43, 0.06);
+  padding: 8px;
+  border-radius: 6px;
+}
+.cult-refutation {
+  font-size: 0.82rem;
+  color: var(--fg);
+  line-height: 1.45;
+  background: var(--bg-soft);
+  padding: 8px;
+  border-radius: 6px;
+}
+
+/* Workbench (Tab 6) */
+.workbench-sub-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.wb-tab-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.wb-tab-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.wb-pane {
+  display: none;
+}
+.wb-pane.active {
+  display: block;
+}
+.quiz-container, .note-gen-container {
+  padding: 1.75rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.quiz-head h4, .note-gen-head h4 {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+  color: var(--fg);
+}
+.quiz-head p, .note-gen-head p {
+  margin: 0 0 1.25rem;
+  font-size: 0.88rem;
+  color: var(--fg-dim);
+}
+.quiz-question-card {
+  padding: 1rem;
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.q-prompt {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 10px;
+}
+.q-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.q-option-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.86rem;
+  color: var(--fg);
+  transition: all 0.2s;
+}
+.q-option-label:hover {
+  background: var(--bg-soft);
+}
+.quiz-action-bar {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+.quiz-diagnose-btn {
+  padding: 10px 24px;
+  background: #d97706;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.quiz-diagnose-btn:hover {
+  background: #b45309;
+}
+.diag-card {
+  padding: 1.5rem;
+  background: var(--bg);
+  border: 2px solid var(--diag-color, #d97706);
+  border-radius: 10px;
+  animation: fadeIn 0.3s;
+}
+.diag-head {
+  font-size: 1.15rem;
+  color: var(--diag-color, #d97706);
+  margin-bottom: 4px;
+}
+.diag-method-en {
+  font-size: 0.82rem;
+  color: var(--fg-mute);
+  margin-bottom: 10px;
+}
+.diag-flow {
+  font-size: 0.88rem;
+  color: var(--fg);
+  background: var(--bg-soft);
+  padding: 10px;
+  border-radius: 6px;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.diag-desc {
+  font-size: 0.86rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+  margin: 0 0 12px;
+}
+.diag-action-btn {
+  padding: 8px 16px;
+  background: var(--diag-color, #d97706);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Note Generator Form */
+.note-mode-selector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.note-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--fg-dim);
+  cursor: pointer;
+}
+.note-mode-pill.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.note-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.note-field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.note-field-row label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.note-input, .note-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 0.88rem;
+  box-sizing: border-box;
+}
+.note-input:focus, .note-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.note-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.note-btn-generate, .note-btn-copy {
+  padding: 10px 18px;
+  border-radius: 7px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.note-btn-generate {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+.note-btn-generate:hover {
+  background: var(--accent-hi);
+}
+.note-btn-copy {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+}
+.note-btn-copy:hover {
+  background: var(--bg-soft);
+}
+.generated-note-card {
+  padding: 1.5rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+.gn-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.gn-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.gn-date {
+  font-size: 0.78rem;
+  color: var(--fg-mute);
+}
+.gn-ref {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: var(--fg);
+}
+.gn-scripture {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  background: var(--bg-soft);
+  border-left: 4px solid var(--accent);
+  font-size: 0.92rem;
+  color: var(--fg);
+  line-height: 1.6;
+}
+.gn-section {
+  margin-bottom: 12px;
+}
+.gn-section h4 {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  color: var(--fg);
+}
+.gn-section p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+}
+.gn-section.prayer-bg {
+  padding: 10px 12px;
+  background: rgba(13, 148, 136, 0.07);
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .herm-hero-header { padding: 1.5rem 1rem; }
+  .herm-hero-title { font-size: 1.45rem; }
+  .herm-nav-pills { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 8px; }
+  .herm-pill { flex-shrink: 0; }
+  .fourfold-times-grid { grid-template-columns: 1fr; }
+  .methods-grid, .seminaries-grid, .korean-grid { grid-template-columns: 1fr; }
+}
+

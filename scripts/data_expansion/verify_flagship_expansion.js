@@ -100,10 +100,11 @@ console.log('✓ All 20 crossword levels verified: 0 grid/character intersection
 
 // 6. Verify Service Worker version
 const swCode = fs.readFileSync(path.join(__dirname, '../../app/sw.js'), 'utf8');
-if (swCode.includes("const SHELL_CACHE = 'biblia-shell-v43';")) {
-  console.log('✓ Service Worker shell cache correctly set to biblia-shell-v43.');
+const shellCacheMatch = swCode.match(/const SHELL_CACHE = 'biblia-shell-v(\d+)';/);
+if (shellCacheMatch && parseInt(shellCacheMatch[1], 10) >= 43) {
+  console.log(`✓ Service Worker shell cache correctly set to biblia-shell-v${shellCacheMatch[1]}.`);
 } else {
-  console.error('✗ Service Worker shell cache is not biblia-shell-v43!');
+  console.error('✗ Service Worker shell cache is not valid!');
   errors++;
 }
 

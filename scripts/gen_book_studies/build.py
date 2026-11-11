@@ -33,6 +33,7 @@ from geo_theology_ot import GEO_THEOLOGY_OT
 from geo_theology_nt import GEO_THEOLOGY_NT
 from dossier_intertext_ot import DOSSIER_INTERTEXT_OT
 from dossier_intertext_nt import DOSSIER_INTERTEXT_NT
+from fourfold_time_data import build_fourfold_time_for_book
 
 APP_DATA_DIR = os.path.abspath(os.path.join(current_dir, "..", "..", "app", "data"))
 os.makedirs(APP_DATA_DIR, exist_ok=True)
@@ -63,7 +64,7 @@ def validate_all_books():
         "pastoralApplications", "bibliography", "expertCouncilPerspectives",
         "academicPaper", "youthGuide", "macroStructureChart",
         "geographyMap", "theologyMatrixChart",
-        "bookDossier", "canonicalIntertextuality"
+        "bookDossier", "canonicalIntertextuality", "fourfoldTimeHermeneutics"
     ]
     meta_keys = [
         "bookNo", "nameZh", "nameEn", "originalTitle", "abbr", "testament",
@@ -95,6 +96,11 @@ def validate_all_books():
         assert di_data, f"Book {idx} missing dossier_intertext data"
         book["bookDossier"] = di_data["bookDossier"]
         book["canonicalIntertextuality"] = di_data["canonicalIntertextuality"]
+
+        # Inject fourfoldTimeHermeneutics (莊信德《重返聖經現場：四重時間的聖經詮釋學》& 台灣各大神學院/宗派研經透鏡)
+        book["fourfoldTimeHermeneutics"] = build_fourfold_time_for_book(book)
+        assert len(book["fourfoldTimeHermeneutics"]["fourTimes"]) == 4, f"Book {idx} must have 4 times"
+        assert len(book["fourfoldTimeHermeneutics"]["taiwanTheologicalPrism"]) == 6, f"Book {idx} must have 6 theological prisms"
 
         for k in required_keys:
             assert k in book, f"Book {idx} ({book['meta']['nameZh']}) missing top-level key '{k}'"
@@ -756,6 +762,88 @@ def build_book_guide_renderer_js(all_books):
     return html;
   }
 
+  function renderBookFourfoldTimeHtml(bookNo, options) {
+    options = options || {};
+    bookNo = parseInt(bookNo, 10);
+    var isStandalone = !!options.isStandalone;
+    var isCompact = !!options.compact;
+    var showHeading = options.showHeading !== false;
+    var customTitle = options.title;
+
+    var studyData = getBookStudyData(bookNo);
+    if (!studyData || !studyData.fourfoldTimeHermeneutics) {
+      return '<div class="book-outline-empty">查無此書卷四重時間聖經詮釋資料</div>';
+    }
+
+    var ft = studyData.fourfoldTimeHermeneutics;
+    var bookName = (studyData.meta) ? studyData.meta.nameZh : ('第 ' + bookNo + ' 卷');
+    var headingText = customTitle || ft.sceneTitle || ('⏳ 《' + escapeHtml(bookName) + '》四重時間重返聖經現場與台灣神學研經透鏡');
+    var hermLink = isStandalone ? 'index.html#ref/hermeneutics' : '#ref/hermeneutics';
+
+    var html = '<div class="biblia-fourfold-time-box' + (isCompact ? ' compact' : '') + '" data-bookno="' + bookNo + '">';
+
+    if (showHeading) {
+      html += '<div class="fourfold-header">';
+      html += '  <div class="fourfold-header-top">';
+      html += '    <span class="fourfold-badge"><i class="fas fa-hourglass-half"></i> 四重時間聖經詮釋學 · 校園書房 VID=73</span>';
+      html += '    <div class="fourfold-header-links">';
+      if (ft.videoUrl) {
+        html += '      <a href="' + escapeHtml(ft.videoUrl) + '" target="_blank" rel="noopener noreferrer" class="fourfold-ext-btn"><i class="fas fa-video"></i> 校園書房 VID=73 影音 ↗</a>';
+      }
+      html += '      <a href="' + hermLink + '" class="fourfold-hub-btn"><i class="fas fa-compass"></i> 主流研經法與台灣神學院大全 ➔</a>';
+      html += '    </div>';
+      html += '  </div>';
+      html += '  <h3 class="fourfold-header-title">' + escapeHtml(headingText) + '</h3>';
+      if (ft.sourceRef) {
+        html += '  <p class="fourfold-header-sub">' + escapeHtml(ft.sourceRef) + ' · 將詮釋主權交還給正在說話的三一上帝</p>';
+      }
+      html += '</div>';
+    }
+
+    if (ft.fourTimes && ft.fourTimes.length) {
+      html += '<div class="fourfold-times-grid">';
+      var timeColors = ['#d97706', '#2563eb', '#dc2626', '#059669'];
+      ft.fourTimes.forEach(function(tm, idx) {
+        var accentColor = timeColors[idx % 4];
+        html += '<div class="fourfold-time-card" data-time="' + tm.timeNo + '" style="--ft-accent:' + accentColor + ';">';
+        html += '  <div class="ft-card-head">';
+        html += '    <span class="ft-time-pill">' + escapeHtml(tm.badge) + '</span>';
+        html += '    <span class="ft-trinity-tag">' + escapeHtml(tm.trinityRole) + '</span>';
+        html += '  </div>';
+        html += '  <h4 class="ft-card-title">' + escapeHtml(tm.title) + '</h4>';
+        if (tm.sceneFocus) {
+          html += '  <div class="ft-scene-anchor"><strong>🎯 現場焦點：</strong>' + escapeHtml(tm.sceneFocus) + '</div>';
+        }
+        html += '  <p class="ft-card-desc">' + escapeHtml(tm.description) + '</p>';
+        if (tm.reflectionQuestion) {
+          html += '  <div class="ft-reflection-box"><i class="fas fa-lightbulb"></i> <strong>重返現場默想提問：</strong>' + escapeHtml(tm.reflectionQuestion) + '</div>';
+        }
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    if (ft.taiwanTheologicalPrism && ft.taiwanTheologicalPrism.length) {
+      html += '<div class="fourfold-prism-section">';
+      html += '  <div class="prism-sec-head">';
+      html += '    <h4 class="prism-sec-title"><i class="fas fa-university"></i> 台灣正統神學院（台神・華神・靈神・浸神・中神・正道）與五大教會體系研經透鏡</h4>';
+      html += '    <span class="prism-sec-sub">長老會 · 靈糧堂 · 行道會 · 浸信會 · 聖教會 多元互補亮光</span>';
+      html += '  </div>';
+      html += '  <div class="fourfold-prism-grid">';
+      ft.taiwanTheologicalPrism.forEach(function(pr) {
+        html += '    <div class="fourfold-prism-card">';
+        html += '      <div class="prism-card-title"><i class="fas fa-place-of-worship"></i> ' + escapeHtml(pr.tradition) + '</div>';
+        html += '      <div class="prism-card-body">' + escapeHtml(pr.focus) + '</div>';
+        html += '    </div>';
+      });
+      html += '  </div>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
   function renderBookStudyGuideHtml(bookNo, options) {
     options = options || {};
     var isStandalone = !!options.isStandalone;
@@ -1051,6 +1139,13 @@ def build_book_guide_renderer_js(all_books):
       html += '    </section>';
     }
 
+    // 5B. ⏳ 四重時間重返聖經現場與台灣正統神學研經透鏡 (Fourfold Time Hermeneutics & Taiwan Seminary/Denominational Prism)
+    if (data.fourfoldTimeHermeneutics) {
+      html += '    <section class="guide-section section-fourfold-time" id="guide-sec-fourfold" data-section-title="四重時間釋經" data-section-icon="fa-hourglass-half">';
+      html += renderBookFourfoldTimeHtml(bookNo, { isStandalone: isStandalone, showHeading: true });
+      html += '    </section>';
+    }
+
     // 6. Literary Structure & Detailed Outline
     html += '    <section class="guide-section section-structure" id="guide-sec-structure" data-section-title="宏觀架構大綱" data-section-icon="fa-sitemap">';
     html += '      <h2 class="guide-section-title"><i class="fas fa-sitemap"></i> 文學體裁、結構特點與逐段深度大綱</h2>';
@@ -1256,6 +1351,7 @@ def build_book_guide_renderer_js(all_books):
   window.renderBookTheologyMatrixHtml = renderBookTheologyMatrixHtml;
   window.renderBookDossierHtml = renderBookDossierHtml;
   window.renderBookIntertextualityHtml = renderBookIntertextualityHtml;
+  window.renderBookFourfoldTimeHtml = renderBookFourfoldTimeHtml;
   window.renderBookStudyGuideHtml = renderBookStudyGuideHtml;
   window.renderSurveyGuideHtml = renderSurveyGuideHtml;
   window.ALL_BOOKS_META = ALL_BOOKS_META;

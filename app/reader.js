@@ -367,7 +367,8 @@ var BIBLIA = (function () {
     'data/ref_infographics.js',
     'data/reader_tutorial.js',
     'data/knowledge_base.js',
-    'data/challenge_data.js'
+    'data/challenge_data.js',
+    'data/hermeneutics_guide.js'
   ];
 
   function ensureRefData(cb) {
@@ -656,7 +657,7 @@ var BIBLIA = (function () {
       'refPanelBookStudy', 'refPanelOtSurvey', 'refPanelNtSurvey',
       'refPanelProphecy', 'refPanelGeography', 'refPanelCharacters', 'refPanelWordStudy',
       'refPanelApologetics', 'refPanelCovenantsCreeds', 'refWidescreenBtn', 'refMain',
-      'refPanelRevStudy', 'refPanelTimeline', 'refPanelReaderGuide',
+      'refPanelRevStudy', 'refPanelTimeline', 'refPanelReaderGuide', 'refPanelHermeneutics',
       'startDailyVerseCard', 'dailyVerseTheme', 'dailyVerseShuffleBtn', 'dailyVerseText',
       'dailyVerseEn', 'dailyVerseOrig', 'dailyVerseRef', 'dailyVerseCopyBtn', 'dailyVerseShareBtn', 'dailyVerseReadBtn',
       'startQuickNavBtn', 'quickNavBtn', 'quickNavBtnText', 'quickNavModal', 'quickNavOverlay',
@@ -2554,6 +2555,9 @@ var BIBLIA = (function () {
       if (refState && refState.activeTab === 'book_study' && refState.currentBookStudyNo) {
         refHash += '/' + refState.currentBookStudyNo;
       }
+      if (refState && refState.activeTab === 'hermeneutics' && refState.hermSubTab) {
+        refHash += '/' + refState.hermSubTab;
+      }
       targetHash = refHash;
       stateObj = { view: 'ref', tab: refState.activeTab, bookNo: refState.currentBookStudyNo };
     } else if (el.searchView && !el.searchView.hidden) {
@@ -2632,6 +2636,9 @@ var BIBLIA = (function () {
         }
         if (refTab === 'timeline' && subParam) {
           refState.timelineTab = subParam === 'eras' ? 'overview' : subParam;
+        }
+        if (refTab === 'hermeneutics' && subParam) {
+          refState.hermSubTab = subParam;
         }
         if (refTab === 'characters' && subParam) {
           refState.charCategory = 'all';
@@ -4098,8 +4105,9 @@ var BIBLIA = (function () {
 
   /* ===================== 聖經補充資料邏輯 ===================== */
   var refState = {
-    activeTab: 'intros',      // 'intros' | 'ot_survey' | 'nt_survey' | 'su101' | 'book_study' | 'rev_study' | 'timeline' | 'reader_guide' | 'audio' | 'prophecy' | 'geography' | 'characters' | 'word_study' | 'apologetics' | 'covenants_creeds'
+    activeTab: 'intros',      // 'intros' | 'ot_survey' | 'nt_survey' | 'su101' | 'book_study' | 'rev_study' | 'timeline' | 'reader_guide' | 'hermeneutics' | 'audio' | 'prophecy' | 'geography' | 'characters' | 'word_study' | 'apologetics' | 'covenants_creeds'
     currentBookStudyNo: 1,
+    hermSubTab: 'fourfold',
     su101Quarter: 'all',
     su101Search: '',
     introsCategory: 'all',
@@ -4220,6 +4228,7 @@ var BIBLIA = (function () {
     if (el.refPanelRevStudy) el.refPanelRevStudy.hidden = (refState.activeTab !== 'rev_study');
     if (el.refPanelTimeline) el.refPanelTimeline.hidden = (refState.activeTab !== 'timeline');
     if (el.refPanelReaderGuide) el.refPanelReaderGuide.hidden = (refState.activeTab !== 'reader_guide');
+    if (el.refPanelHermeneutics) el.refPanelHermeneutics.hidden = (refState.activeTab !== 'hermeneutics');
     if (el.refPanelAudio) el.refPanelAudio.hidden = (refState.activeTab !== 'audio');
 
     if (refState.activeTab !== 'audio' && !refDataReady()) {
@@ -4230,7 +4239,7 @@ var BIBLIA = (function () {
         characters: el.refPanelCharacters, word_study: el.refPanelWordStudy,
         apologetics: el.refPanelApologetics, covenants_creeds: el.refPanelCovenantsCreeds,
         rev_study: el.refPanelRevStudy, timeline: el.refPanelTimeline,
-        reader_guide: el.refPanelReaderGuide
+        reader_guide: el.refPanelReaderGuide, hermeneutics: el.refPanelHermeneutics
       }[refState.activeTab];
       if (panel) panel.innerHTML = '<div class="reader-skeleton ref-skeleton" role="status" aria-label="資料載入中">' +
         '<div class="sk-line" style="width:60%"></div><div class="sk-line"></div><div class="sk-line" style="width:85%"></div>' +
@@ -4256,6 +4265,7 @@ var BIBLIA = (function () {
     else if (refState.activeTab === 'rev_study') renderRefPanelRevStudy();
     else if (refState.activeTab === 'timeline') renderRefPanelTimeline();
     else if (refState.activeTab === 'reader_guide') renderRefPanelReaderGuide();
+    else if (refState.activeTab === 'hermeneutics') renderRefPanelHermeneutics();
     else if (refState.activeTab === 'audio') renderRefPanelAudio();
   }
 
@@ -5080,6 +5090,21 @@ var BIBLIA = (function () {
       container.innerHTML = window.renderReaderTutorialHtml();
     } else {
       container.innerHTML = '<div class="ref-empty-state">研經教學指南載入中...</div>';
+    }
+  }
+
+  function renderRefPanelHermeneutics() {
+    var container = el.refPanelHermeneutics;
+    if (!container) return;
+    if (typeof window.renderHermeneuticsGuideHtml === 'function') {
+      container.innerHTML = window.renderHermeneuticsGuideHtml({
+        subTab: refState.hermSubTab || 'fourfold'
+      });
+      if (typeof window.initHermeneuticsInteractions === 'function') {
+        window.initHermeneuticsInteractions(container);
+      }
+    } else {
+      container.innerHTML = '<div class="ref-empty-state">研經法指南載入中...</div>';
     }
   }
 
