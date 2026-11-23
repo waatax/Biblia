@@ -13,6 +13,20 @@ const FONT_CACHE = 'biblia-fonts-v1';
 const KEEP = [SHELL_CACHE, DATA_CACHE, FONT_CACHE];
 
 // 只預存首屏必要的小檔；研經導讀等大型參考資料改為用到時才進快取
+// 頁面以 ?v=NN 引用的檔案要以「同一網址」預存，否則 staleWhileRevalidate 的精確比對永遠不命中
+const ASSET_V = '46';
+const VERSIONED = [
+  './style.css',
+  './reader.js',
+  './memory.js',
+  './data/books.js',
+  './data/memory_777.js',
+  './data/plan_2026_q4.js',
+  './data/plan_2026_q3.js',
+  './data/plan_su101_2026.js',
+  './data/golden_verses.js',
+  './data/morph_codes.js'
+];
 const SHELL_ASSETS = [
   './',
   './index.html',
@@ -20,23 +34,13 @@ const SHELL_ASSETS = [
   './challenge.js',
   './data/challenge_data.js',
   './memory.html',
-  './memory.js',
   './book_guide.html',
   './schedule.html',
-  './style.css',
-  './reader.js',
   './manifest.json',
   './icons/icon.svg',
-  './data/books.js',
-  './data/memory_777.js',
   './data/knowledge_base.js',
-  './data/hermeneutics_guide.js',
-  './data/plan_2026_q4.js',
-  './data/plan_2026_q3.js',
-  './data/plan_su101_2026.js',
-  './data/golden_verses.js',
-  './data/morph_codes.js'
-];
+  './data/hermeneutics_guide.js'
+].concat(VERSIONED.map((u) => u + '?v=' + ASSET_V));
 
 const DATA_PATH = /\/data\/(text|words)\/|\/data\/strong_(index|dict)_/;
 
