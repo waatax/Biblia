@@ -7,18 +7,22 @@
  *                採 cache-first、永不背景重抓，且外殼改版時「不」清除，
  *                讀過的書卷與預存的和合本一直留著。經文資料真的重建時才改它的版號。
  */
-const SHELL_CACHE = 'biblia-shell-v47';
+const SHELL_CACHE = 'biblia-shell-v48';
 const DATA_CACHE = 'biblia-data-v1';
 const FONT_CACHE = 'biblia-fonts-v1';
 const KEEP = [SHELL_CACHE, DATA_CACHE, FONT_CACHE];
 
 // 只預存首屏必要的小檔；研經導讀等大型參考資料改為用到時才進快取
 // 頁面以 ?v=NN 引用的檔案要以「同一網址」預存，否則 staleWhileRevalidate 的精確比對永遠不命中
-const ASSET_V = '47';
+const ASSET_V = '48';
 const VERSIONED = [
   './style.css',
+  './learning.css',
   './reader.js',
+  './learning_engine.js',
   './memory.js',
+  './challenge.js',
+  './data/challenge_data.js',
   './data/books.js',
   './data/memory_777.js',
   './data/plan_2026_q4.js',
@@ -31,8 +35,6 @@ const SHELL_ASSETS = [
   './',
   './index.html',
   './challenge.html',
-  './challenge.js',
-  './data/challenge_data.js',
   './memory.html',
   './book_guide.html',
   './schedule.html',

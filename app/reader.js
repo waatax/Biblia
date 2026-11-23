@@ -7189,6 +7189,10 @@ var BIBLIA = (function () {
       '<div class="ch">' + data.en + ' ' + state.chap + '</div>';
     el.reader.appendChild(head);
 
+    if (window.BibliaLearn && typeof window.BibliaLearn.mountChapterTop === 'function') {
+      window.BibliaLearn.mountChapterTop(el.reader, data, state.chap, chapter);
+    }
+
     var bOutlineBtn = head.querySelector('.breadcrumb-outline-btn');
     if (bOutlineBtn) {
       bOutlineBtn.addEventListener('click', function (e) {
@@ -7219,6 +7223,10 @@ var BIBLIA = (function () {
       frag.appendChild(row);
     });
     el.reader.appendChild(frag);
+
+    if (window.BibliaLearn && typeof window.BibliaLearn.mountChapterBottom === 'function') {
+      window.BibliaLearn.mountChapterBottom(el.reader, data, state.chap, chapter);
+    }
 
     if (state.strong) paintStrong();
     if (workbenchState.isOpen) renderWorkbenchContent();

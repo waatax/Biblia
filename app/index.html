@@ -45,7 +45,8 @@
 })();
 </script>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;700&display=swap"></noscript>
-<link rel="stylesheet" href="style.css?v=46">
+<link rel="stylesheet" href="style.css?v=48">
+<link rel="stylesheet" href="learning.css?v=48">
 <script>
 /* 直接開啟經文網址（#read/書卷/章）時，趁 reader.js 還在下載就先抓這一卷的和合本。 */
 (function () {
@@ -180,7 +181,10 @@
       </div>
     </div>
 
-    <!-- ===================== 2. 每日經文 ===================== -->
+    <!-- ===================== 2. 讀懂・讀通・讀出興趣 — 科學讀經中樞 ===================== -->
+    <div class="start-card start-learning-hub" id="startLearningHub"></div>
+
+    <!-- ===================== 3. 每日經文 ===================== -->
     <div class="start-card start-daily-card" id="startDailyVerseCard">
       <div class="daily-card-head">
         <div class="daily-head-left">
@@ -239,6 +243,7 @@
     <!-- ===================== 主要功能快捷入口 ===================== -->
     <nav class="start-quick" aria-label="主要功能">
       <a href="#startPickCard" class="start-quick-tile"><span aria-hidden="true">📖</span><span>讀經</span></a>
+      <a href="#startLearningHub" class="start-quick-tile"><span aria-hidden="true">🚀</span><span>路線</span></a>
       <a href="#ref/hermeneutics" class="start-quick-tile"><span aria-hidden="true">🧭</span><span>研經法</span></a>
       <a href="memory.html" class="start-quick-tile"><span aria-hidden="true">🧠</span><span>背誦</span></a>
       <a href="challenge.html" class="start-quick-tile"><span aria-hidden="true">🎮</span><span>挑戰</span></a>
@@ -301,7 +306,7 @@
 
         <div class="start-plan-body">
           <p style="font-size:0.86rem; color:var(--fg-dim); margin:0 0 10px; line-height:1.55;">
-            用<strong>科學又有趣</strong>的方法學聖經，任何程度都能上手：<strong>12 大全新與經典益智模式</strong>、<strong>漸進線索</strong>越少線索答對分數越高、<strong>選擇題／填空題</strong>隨時切換、<strong>語音朗讀</strong>題目與解答、答錯立即看<strong>易混淆辨析</strong>與<strong>間隔重複錯題複習</strong>；每題解答更附<strong>手繪風插圖與聖經百科直達連結</strong>，一鍵跳轉相關人物、地名地圖與 66 卷書卷導讀百科：
+            用<strong>「看・做・回饋」科學遊戲化</strong>學聖經：<strong>13 大益智模式・1,206 題驗證題庫</strong>（含是非快答、漸進線索、選擇／填空雙模式、語音朗讀），答錯立即看<strong>易混淆辨析</strong>並收入<strong>Leitner 間隔重複錯題本</strong>，每題解答皆可一鍵直達原文經節與百科導讀：
           </p>
           <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
             <a href="challenge.html#char" class="start-chip-btn" style="text-decoration:none;">👤 猜聖經人名 (150 位 · 漸進線索)</a>
@@ -400,14 +405,6 @@
         </div>
       </div>
 
-    </div>
-
-    <!-- 首頁下方顯著挑戰連結區 -->
-    <div style="text-align:center; margin: 26px 0 16px;">
-      <a href="challenge.html" class="btn btn-ghost" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; padding:12px 24px; font-weight:700; border:1px solid var(--line); border-radius:var(--r-pill); background:var(--bg-alt); box-shadow:var(--sh-1);">
-        <span aria-hidden="true" style="font-size:1.2rem;">🎮</span>
-        <span>前往【聖經挑戰旗艦殿堂】（12大益智模式 · 620+題庫 · 150人物 · 100地名 · 130經文 · 20關填字 · 20組年代 · 48項成就） →</span>
-      </a>
     </div>
 
     <p class="start-foot">
@@ -1770,12 +1767,13 @@
 <!-- 首屏只載入必要的小檔（defer：不阻擋畫面、依序執行）。
      研經導讀、時間軸等約 2 MB 參考資料改在進入「聖經補充資料」時才載入；
      經文依「版本 × 書卷」分檔按需載入；Strong 索引只在 Strong 搜尋時載入。 -->
-<script defer src="data/plan_2026_q4.js?v=46"></script>
-<script defer src="data/plan_2026_q3.js?v=46"></script>
-<script defer src="data/plan_su101_2026.js?v=46"></script>
-<script defer src="data/golden_verses.js?v=46"></script>
-<script defer src="data/morph_codes.js?v=46"></script>
-<script defer src="reader.js?v=46"></script>
+<script defer src="data/plan_2026_q4.js?v=48"></script>
+<script defer src="data/plan_2026_q3.js?v=48"></script>
+<script defer src="data/plan_su101_2026.js?v=48"></script>
+<script defer src="data/golden_verses.js?v=48"></script>
+<script defer src="data/morph_codes.js?v=48"></script>
+<script defer src="reader.js?v=48"></script>
+<script defer src="learning_engine.js?v=48"></script>
 <script>
 /* 首頁背誦卡：顯示個人進度 */
 (function () {
@@ -1807,7 +1805,7 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
 })();
 </script>
-<script defer src="data/books.js?v=46"></script>
+<script defer src="data/books.js?v=48"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {

@@ -1,0 +1,1031 @@
+/* ============================================================================
+ * Biblia Ultralearning & See-Do-Feedback UI Styles (learning.css)
+ * 完整相容五大主題（和紙白、枯茶、若竹、藍鼠、墨玄）與手機／桌面響應式版面
+ * ============================================================================ */
+
+/* ---------- 首頁科學讀經中樞 ---------- */
+.start-learning-hub {
+  border-top: 4px solid var(--accent);
+  background: var(--bg-alt);
+}
+
+.ul-hub-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.ul-hub-eyebrow {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.ul-hub-title {
+  margin: 0 0 4px;
+  font-size: 1.18rem;
+  line-height: 1.35;
+  color: var(--fg);
+}
+
+.ul-hub-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+}
+
+.ul-hub-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* 三維成長儀表 */
+.ul-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.ul-pillar {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  transition: transform 0.16s ease, border-color 0.16s ease;
+}
+
+.ul-pillar:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.ul-pillar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+.ul-pillar-badge {
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.ul-pillar-see .ul-pillar-badge { background: rgba(29, 78, 216, 0.12); color: #2563eb; }
+.ul-pillar-do .ul-pillar-badge { background: rgba(21, 128, 61, 0.13); color: #16a34a; }
+.ul-pillar-fb .ul-pillar-badge { background: rgba(217, 119, 6, 0.14); color: #d97706; }
+
+.ul-pillar-desc {
+  font-size: 0.77rem;
+  color: var(--fg-dim);
+  line-height: 1.4;
+}
+
+/* 今日 5 分鐘 看 → 做 → 回饋 循環 */
+.ul-loop-box {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+.ul-loop-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.ul-loop-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.ul-loop-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 9px;
+  border-radius: 999px;
+}
+
+.ul-loop-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ul-loop-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.ul-loop-step:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.ul-loop-step.done {
+  border-color: rgba(22, 163, 74, 0.45);
+  background: rgba(22, 163, 74, 0.08);
+}
+
+.ul-step-check {
+  flex: 0 0 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.ul-loop-step.done .ul-step-check {
+  background: #16a34a;
+  color: #fff;
+}
+
+.ul-step-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ul-step-body strong {
+  font-size: 0.84rem;
+  line-height: 1.25;
+}
+
+.ul-step-body small {
+  font-size: 0.74rem;
+  color: var(--fg-dim);
+  line-height: 1.35;
+  margin-top: 2px;
+}
+
+/* 階梯學習路線 */
+.ul-quest-section {
+  margin-bottom: 12px;
+}
+
+.ul-quest-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.ul-quest-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-dim);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ul-quest-tab:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.ul-quest-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.ul-qt-prog {
+  font-size: 0.72rem;
+  opacity: 0.88;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(128, 128, 128, 0.16);
+}
+
+.ul-quest-tab.active .ul-qt-prog {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.ul-quest-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--q-accent, var(--accent));
+  border-radius: 13px;
+  padding: 13px 15px;
+}
+
+.ul-quest-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ul-quest-badge {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--q-accent, var(--accent));
+  margin-bottom: 3px;
+}
+
+.ul-quest-name {
+  margin: 0 0 4px;
+  font-size: 1.02rem;
+  color: var(--fg);
+}
+
+.ul-quest-desc {
+  margin: 0 0 4px;
+  font-size: 0.84rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+}
+
+.ul-quest-principle {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--q-accent, var(--accent));
+  font-weight: 600;
+}
+
+.ul-quest-go {
+  white-space: nowrap;
+  text-decoration: none;
+  align-self: center;
+}
+
+.ul-quest-next-why {
+  margin-top: 10px;
+  padding: 8px 11px;
+  border-radius: 9px;
+  background: var(--bg-alt);
+  border: 1px dashed var(--line);
+  font-size: 0.82rem;
+  color: var(--fg);
+  line-height: 1.45;
+}
+
+.ul-stops-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.ul-stop-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg-dim);
+  font-size: 0.76rem;
+  text-decoration: none;
+  transition: all 0.14s ease;
+}
+
+.ul-stop-pill:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.ul-stop-pill.is-next {
+  border-color: var(--q-accent, var(--accent));
+  color: var(--fg);
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.ul-stop-pill.is-done {
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.4);
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.ul-stop-num {
+  font-weight: 800;
+  font-size: 0.72rem;
+}
+
+/* 弱點特訓橫幅 */
+.ul-drill-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  border: 1px solid var(--ring);
+}
+
+.ul-drill-info {
+  font-size: 0.84rem;
+  color: var(--fg);
+  line-height: 1.45;
+}
+
+.ul-drill-tag {
+  display: inline-block;
+  font-size: 0.73rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-right: 6px;
+}
+
+.ul-drill-btn {
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ---------- 閱讀器章前：讀懂導航卡 (Chapter Orientation) ---------- */
+.ul-orient-card {
+  margin: 0 0 18px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--g-color, var(--accent));
+  background: var(--bg-alt);
+  overflow: hidden;
+  font-family: var(--font-ui, inherit);
+}
+
+.ul-orient-quest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding: 7px 14px;
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.8rem;
+  color: var(--fg);
+}
+
+.ul-orient-quest-why {
+  color: var(--fg-dim);
+}
+
+.ul-orient-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+}
+
+.ul-orient-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.ul-genre-chip {
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--g-color, var(--accent));
+  white-space: nowrap;
+}
+
+.ul-book-hook {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.4;
+}
+
+.ul-mastered-pill {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.14);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.ul-orient-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ul-mini-btn {
+  padding: 4px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-dim);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ul-mini-btn:hover,
+.ul-mini-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.ul-orient-body {
+  padding: 0 14px 13px;
+  border-top: 1px dashed var(--line);
+}
+
+.ul-orient-card.is-collapsed .ul-orient-body {
+  display: none;
+}
+
+.ul-orient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 10px;
+}
+
+.ul-orient-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--g-color, var(--accent));
+  margin-bottom: 5px;
+}
+
+.ul-orient-text {
+  margin: 0 0 6px;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.ul-orient-pitfall {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+}
+
+.ul-orient-qs {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.ul-orient-qs li {
+  margin-bottom: 4px;
+}
+
+/* 盲測回想模式（遮蔽上方經文，點擊單節可偷看） */
+.reader.ul-recall-blur .verse .cell {
+  filter: blur(7px);
+  opacity: 0.45;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+  user-select: none;
+}
+
+.reader.ul-recall-blur .verse:hover .cell,
+.reader.ul-recall-blur .verse:active .cell {
+  filter: blur(0);
+  opacity: 1;
+}
+
+/* ---------- 閱讀器章末：讀通檢核站 (Chapter Mastery Station) ---------- */
+.ul-mastery-station {
+  margin: 30px 0 24px;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  background: var(--bg-alt);
+  font-family: var(--font-ui, inherit);
+}
+
+.ul-station-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.ul-station-eyebrow {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
+
+.ul-station-title {
+  margin: 0 0 4px;
+  font-size: 1.08rem;
+  color: var(--fg);
+}
+
+.ul-station-sub {
+  margin: 0;
+  font-size: 0.83rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+}
+
+.btn-mastered {
+  background: #16a34a;
+  color: #fff;
+  border-color: #16a34a;
+}
+
+.ul-station-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.ul-station-panel {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 13px 14px;
+}
+
+.ul-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.ul-panel-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* 章末即時微測驗 */
+.ul-quiz-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  color: var(--fg-dim);
+  margin-bottom: 6px;
+}
+
+.ul-quiz-prompt {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--fg);
+  padding: 9px 11px;
+  border-radius: 9px;
+  background: var(--bg-alt);
+}
+
+.ul-quiz-opts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.ul-quiz-opt {
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.ul-quiz-opt:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.ul-quiz-opt.is-correct {
+  background: rgba(22, 163, 74, 0.16);
+  border-color: #16a34a;
+  color: #15803d;
+}
+
+.ul-quiz-opt.is-wrong {
+  background: rgba(220, 38, 38, 0.14);
+  border-color: #dc2626;
+  color: #b91c1c;
+}
+
+.ul-quiz-fb {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: 9px;
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+
+.ul-quiz-fb.ok { background: rgba(22, 163, 74, 0.1); border: 1px solid rgba(22, 163, 74, 0.35); }
+.ul-quiz-fb.err { background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.35); }
+
+.ul-quiz-full {
+  font-size: 0.79rem;
+  color: var(--fg-dim);
+  margin: 4px 0 8px;
+}
+
+.ul-quiz-done {
+  text-align: center;
+  padding: 12px 6px;
+}
+
+.ul-quiz-score {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+/* 費曼與問題筆記 */
+.ul-field {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.ul-field span {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--fg-dim);
+  margin-bottom: 4px;
+}
+
+.ul-field textarea,
+.ul-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  font-size: 0.86rem;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.ul-field textarea:focus,
+.ul-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.ul-feynman-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ul-save-hint {
+  font-size: 0.76rem;
+  color: var(--fg-dim);
+}
+
+.ul-station-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.ul-station-links a {
+  text-decoration: none;
+}
+
+/* ---------- 學習中樞彈窗（66 卷地圖 / 費曼筆記本 / 科學讀經法學院） ---------- */
+.ul-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.ul-modal[hidden] {
+  display: none;
+}
+
+.ul-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 12, 16, 0.56);
+  backdrop-filter: blur(3px);
+}
+
+.ul-modal-dialog {
+  position: relative;
+  width: min(920px, 100%);
+  max-height: min(86vh, 780px);
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ul-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-alt);
+}
+
+.ul-modal-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ul-mtab {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-dim);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ul-mtab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.ul-modal-close {
+  border: none;
+  background: transparent;
+  color: var(--fg-dim);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.ul-modal-body {
+  padding: 16px 18px 22px;
+  overflow-y: auto;
+}
+
+.ul-modal-lead {
+  margin: 0 0 14px;
+  font-size: 0.88rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+}
+
+.ul-map-group {
+  margin-bottom: 14px;
+}
+
+.ul-map-gtitle {
+  margin: 0 0 7px;
+  font-size: 0.88rem;
+}
+
+.ul-map-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 7px;
+}
+
+.ul-map-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 7px 9px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.ul-map-cell:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.ul-map-cell.has-prog {
+  border-color: rgba(22, 163, 74, 0.5);
+}
+
+.ul-mc-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.ul-mc-stat {
+  font-size: 0.7rem;
+  color: var(--fg-dim);
+}
+
+.ul-mc-bar {
+  display: block;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.ul-mc-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+}
+
+/* 費曼筆記本 */
+.ul-empty-log {
+  text-align: center;
+  padding: 28px 16px;
+}
+
+.ul-empty-log p {
+  color: var(--fg-dim);
+  max-width: 440px;
+  margin: 8px auto 16px;
+  line-height: 1.55;
+}
+
+.ul-log-list {
+  display: grid;
+  gap: 10px;
+}
+
+.ul-log-card {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+}
+
+.ul-log-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.ul-log-ref {
+  font-weight: 800;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.ul-log-date {
+  font-size: 0.76rem;
+  color: var(--fg-dim);
+}
+
+.ul-log-q {
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.ul-log-ans summary {
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.ul-log-ans p {
+  margin: 6px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+/* 科學讀經法學院 */
+.ul-aca-pillars {
+  display: grid;
+  gap: 12px;
+}
+
+.ul-aca-card {
+  padding: 14px 16px;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+}
+
+.ul-aca-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.ul-aca-card ul {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.ul-aca-card li {
+  margin-bottom: 5px;
+}
+
+.ul-aca-card a {
+  text-decoration: none;
+}
+
+/* ---------- 響應式調整 ---------- */
+@media (max-width: 760px) {
+  .ul-pillars,
+  .ul-loop-steps,
+  .ul-orient-grid,
+  .ul-station-grid {
+    grid-template-columns: 1fr;
+  }
+  .ul-quiz-opts {
+    grid-template-columns: 1fr;
+  }
+  .ul-mastery-station {
+    padding: 14px;
+  }
+}

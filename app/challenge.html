@@ -24,7 +24,7 @@
 })();
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;600;700;900&display=swap">
-<link rel="stylesheet" href="style.css?v=47">
+<link rel="stylesheet" href="style.css?v=48">
 <style>
 /* ===================== 聖經挑戰專屬高質感樣式 (Bible Challenge Design System) ===================== */
 :root {
@@ -3088,9 +3088,12 @@ ol.tl-events-list {
     </section>
 
     <section class="tips-panel" id="tipsPanel" hidden aria-label="科學學習法">
-      <div class="tips-intro">這裡的每個設計都根據認知科學的研究：主動回想、間隔複習、交錯練習與即時回饋，能讓記憶更持久。</div>
+      <div class="tips-intro">融合 Scott H. Young《超速學習》與《精進的科學》：主動回想（Retrieval）、弱點特訓（Drill）、交錯變異（Variability）與即時回饋（Feedback），讓你真正讀懂、讀通、讀出興趣。</div>
       <div class="tips-grid" id="tipsGrid"></div>
     </section>
+
+    <!-- 超速學習弱點特訓與跨模組回饋列 -->
+    <div id="ulChallengeCoach" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 14px;margin:0 0 12px;border-radius:12px;border:1px solid var(--line);background:var(--accent-soft);font-size:0.84rem;"></div>
 
     <!-- 遊戲分頁切換列 -->
     <nav class="game-tabs-bar" role="tablist" aria-label="聖經小遊戲模式切換">
@@ -3265,8 +3268,44 @@ ol.tl-events-list {
   <div id="toastStack" class="toast-stack" aria-live="polite"></div>
 
   <!-- 資料庫與遊戲引擎 Script -->
-  <script src="data/challenge_data.js?v=47"></script>
-  <script src="challenge.js?v=47"></script>
+  <script src="data/challenge_data.js?v=48"></script>
+  <script src="challenge.js?v=48"></script>
+  <script src="learning_engine.js?v=48"></script>
+  <script>
+  (function () {
+    function renderCoach() {
+      var el = document.getElementById('ulChallengeCoach');
+      if (!el || !window.BibliaLearn) return;
+      var s = window.BibliaLearn.gatherEcosystemStats();
+      var msg = '', cta = '', targetHash = '#mixed';
+      if (s.chDueMistakes > 0) {
+        msg = '<strong>🎯 弱點精準特訓 (Drill)：</strong>目前有 <strong>' + s.chDueMistakes + ' 題到期錯題</strong>，優先攻克最弱環節，記憶效率提升 3 倍！';
+        cta = '攻克到期錯題 →';
+        targetHash = '#mistakes';
+      } else if (s.chWeakest && s.chWeakest.acc < 80) {
+        msg = '<strong>🎯 弱點精準特訓 (Drill)：</strong>「' + s.chWeakest.name + '」目前正確率 ' + s.chWeakest.acc + '%，來一輪 3 分鐘專攻突破盲點！';
+        cta = '專攻 ' + s.chWeakest.name + ' →';
+        targetHash = s.chWeakest.hash;
+      } else {
+        msg = '<strong>🎲 交錯變異練習 (Variability)：</strong>《精進的科學》指出交錯題型比重複單一題型更能打通長期記憶！';
+        cta = '開始全能交錯挑戰 →';
+        targetHash = '#mixed';
+      }
+      el.innerHTML =
+        '<span>' + msg + '</span>' +
+        '<span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
+          '<a href="' + targetHash + '" class="btn btn-primary" style="padding:5px 12px;font-size:0.8rem;text-decoration:none;">' + cta + '</a>' +
+          '<a href="index.html#startLearningHub" class="btn btn-ghost" style="padding:5px 10px;font-size:0.8rem;text-decoration:none;">🚀 科學讀經中樞</a>' +
+        '</span>';
+    }
+    document.addEventListener('DOMContentLoaded', renderCoach);
+    document.addEventListener('click', function (e) {
+      if (e.target && e.target.closest && e.target.closest('.opt-btn, .tf-btn, .check-btn, .cw-check-btn, .tl-check-btn')) {
+        if (window.BibliaLearn) window.BibliaLearn.markDailyStep('feedback');
+      }
+    });
+  })();
+  </script>
 
   <!-- 離線 Service Worker -->
   <script>
