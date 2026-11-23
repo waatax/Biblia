@@ -1,18 +1,18 @@
 {
-  "quizTotal": 882,
-  "levelTotal": 146,
+  "quizTotal": 1002,
+  "levelTotal": 204,
   "characters": 150,
   "places": 100,
   "verses": 273,
-  "crosswords": 20,
-  "timelineDecks": 20,
-  "achievements": 48,
+  "crosswords": 38,
+  "timelineDecks": 40,
+  "achievements": 64,
   "quotes": 100,
   "trivia": 153,
-  "parables": 40,
+  "parables": 80,
   "books": 66,
   "scrambles": 86,
-  "matches": 20,
+  "matches": 40,
   "learningTips": 8,
-  "truefalse": 0
+  "truefalse": 80
 }

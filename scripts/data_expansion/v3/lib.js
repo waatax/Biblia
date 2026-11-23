@@ -45,7 +45,7 @@ function loadData() {
   return ctx.window.BIBLIA_CHALLENGE_DATA;
 }
 
-const strip = (s) => String(s || '').replace(/[\s，。；：！？、…．.·,;:!?\-—─「」『』（）()]/g, '');
+const strip = (s) => String(s || '').replace(/[·•\s，。；：！？、…．.·,;:!?\-—─「」『』（）()]/g, '');
 
 module.exports = { ROOT, DATA, DATA_FILE, books, byName, chapters, parseRef, loadData, strip };
 
@@ -76,6 +76,7 @@ function refText(ref) {
 
 /* 以原文對齊節錄：回傳原文中對應 seg 的片段（延伸到子句邊界），找不到回傳 null */
 function alignExcerpt(seg, src) {
+  src = canon(src);
   const a = strip(seg);
   if (a.length < 4) return null;
   // 建立 src 去標點後 → 原始索引對照

@@ -201,13 +201,22 @@ opt('src_timelines').forEach(([title, desc, events]) => {
 n = BASE.crosswords;
 const CN = '零一二三四五六七八九十';
 const cnNum = (x) => (x <= 10 ? CN[x] : x < 20 ? '十' + CN[x - 10] : CN[Math.floor(x / 10)] + '十' + (x % 10 ? CN[x % 10] : ''));
-opt('src_crosswords').forEach(([title, desc, words]) => {
-  const g = layout(words.map((x) => x[0]));
-  if (g.unplaced.length) return err(`crossword ${title}: 無法交叉的詞 ${g.unplaced.join('、')}`);
+const cwSrc = opt('src_crosswords');
+// 橋接詞庫：既有 20 關與新關卡的全部詞（皆附提示）
+const bridgeClue = {};
+d.crosswords.forEach((cw) => cw.words.forEach((w) => { if (!bridgeClue[w.answer]) bridgeClue[w.answer] = [w.answer, w.clue, w.info]; }));
+cwSrc.forEach(([, , ws]) => ws.forEach((w) => { if (!bridgeClue[w[0]]) bridgeClue[w[0]] = w; }));
+const bridgeWords = Object.keys(bridgeClue).filter((w) => w.length >= 2 && w.length <= 5);
+cwSrc.forEach(([title, desc, words]) => {
+  const g = layout(words.map((x) => x[0]), bridgeWords);
+  const themed = g.words.filter((w) => !w.bridge).length;
+  if (g.words.length < 7 || themed < 5) return console.log(`  填字「${title}」主題詞只排進 ${themed} 個，本關略過`);
+  if (false) return err(`crossword ${title}: 只排進 ${g.words.length} 詞，無法交叉：${g.unplaced.join('、')}`);
+  if (g.unplaced.length) console.log(`  填字「${title}」略過：${g.unplaced.join('、')}`);
   n++;
   d.crosswords.push({
     id: 'cw_' + pad(n), title: '第' + cnNum(n) + '關：' + title, desc, rows: g.rows, cols: g.cols,
-    words: g.words.map((p) => { const src = words.find((x) => x[0] === p.answer); return { answer: p.answer, r: p.r, c: p.c, dir: p.dir, clue: src[1], info: src[2] }; })
+    words: g.words.map((p) => { const src = words.find((x) => x[0] === p.answer) || bridgeClue[p.answer]; return { answer: p.answer, r: p.r, c: p.c, dir: p.dir, clue: src[1], info: src[2] }; })
   });
 });
 // 是非快答

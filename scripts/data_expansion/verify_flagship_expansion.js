@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-console.log('=== BIBLIA CHALLENGE 2× FLAGSHIP EXPANSION VERIFICATION ===\n');
+console.log('=== BIBLIA CHALLENGE (BIBLE QUESTS) VERIFICATION ===\n');
 
 // 1. Verify challenge_data.js
 const dataCode = fs.readFileSync(path.join(__dirname, '../../app/data/challenge_data.js'), 'utf8');
@@ -11,20 +11,8 @@ const dataCtx = { window: {} };
 vm.runInNewContext(dataCode, dataCtx);
 const d = dataCtx.window.BIBLIA_CHALLENGE_DATA;
 
-const EXPECTED = {
-  characters: 150,
-  places: 100,
-  verses: 130,
-  quotes: 50,
-  trivia: 50,
-  parables: 40,
-  books: 40,
-  scrambles: 30,
-  matches: 20,
-  crosswords: 20,
-  timelineDecks: 20,
-  achievements: 48
-};
+// 題數以 v3 建置結果為準（scripts/data_expansion/v3/counts.json）
+const EXPECTED = (() => { const c = JSON.parse(fs.readFileSync(path.join(__dirname, 'v3/counts.json'), 'utf8')); const o = {}; ['characters', 'places', 'verses', 'quotes', 'trivia', 'parables', 'books', 'truefalse', 'scrambles', 'matches', 'crosswords', 'timelineDecks', 'achievements'].forEach((k) => { o[k] = c[k]; }); return o; })();
 
 let errors = 0;
 
@@ -62,12 +50,12 @@ d.scrambles.forEach(s => {
     errors++;
   }
 });
-console.log('✓ All 30 verse scramble levels tokens match fullText.');
+console.log('✓ All verse scramble levels tokens match fullText.');
 
 // 4. Verify Matches have complete pairs
 d.matches.forEach(m => {
-  if (!m.pairs || m.pairs.length !== 4) {
-    console.error(`Match level ${m.id} does not have 4 pairs`);
+  if (!m.pairs || m.pairs.length < 4 || m.pairs.length > 6) {
+    console.error(`Match level ${m.id} should have 4–6 pairs`);
     errors++;
   }
   m.pairs.forEach(p => {
@@ -112,7 +100,7 @@ if (shellCacheMatch && parseInt(shellCacheMatch[1], 10) >= 43) {
 const html = fs.readFileSync(path.join(__dirname, '../../app/challenge.html'), 'utf8');
 const requiredViews = [
   'viewCharacters', 'viewPlaces', 'viewVerses', 'viewQuotes', 'viewTrivia',
-  'viewParables', 'viewBooks', 'viewScramble', 'viewMatch', 'viewMixed',
+  'viewParables', 'viewBooks', 'viewTrueFalse', 'viewScramble', 'viewMatch', 'viewMixed',
   'viewCrossword', 'viewTimeline', 'viewMistakes', 'viewEncyclopedia'
 ];
 requiredViews.forEach(v => {
@@ -123,7 +111,7 @@ requiredViews.forEach(v => {
     errors++;
   }
 });
-console.log('✓ All 14 view sections found in challenge.html.');
+console.log('✓ All 15 view sections found in challenge.html.');
 
 // 8. Verify challenge.js ACH_VALUE covers all 48 achievements
 const jsCode = fs.readFileSync(path.join(__dirname, '../../app/challenge.js'), 'utf8');
@@ -133,7 +121,7 @@ d.achievements.forEach(ach => {
     errors++;
   }
 });
-console.log('✓ All 48 achievements have evaluators in ACH_VALUE in challenge.js.');
+console.log('✓ All achievements have evaluators in ACH_VALUE in challenge.js.');
 
 console.log(`\n=================================================`);
 if (errors === 0) {

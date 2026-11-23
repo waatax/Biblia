@@ -65,7 +65,8 @@
     quote: { icon: '💬', label: '名言', ask: '這句話是誰說的' },
     trivia: { icon: '🔢', label: '奧祕', ask: '這個聖經奧祕的正確答案' },
     parable: { icon: '🕊️', label: '比喻與神蹟', ask: '這是哪一個比喻或神蹟' },
-    books: { icon: '📚', label: '書卷', ask: '這是哪一卷聖經書卷' }
+    books: { icon: '📚', label: '書卷', ask: '這是哪一卷聖經書卷' },
+    truefalse: { icon: '⚖️', label: '是非', ask: '這句敘述是對還是錯' }
   };
 
   var DIFF_META = {
@@ -377,7 +378,7 @@
     } else if (t === 'place') {
       html += '    <div class="ency-card-title">🗺️ 聖經地理百科：<strong>' + esc(target) + '</strong>' + (q.region ? ' <small>（' + esc(q.region) + '）</small>' : '') + '</div>';
     } else {
-      html += '    <div class="ency-card-title">📘 書卷與經文百科：<strong>《' + esc(bookName) + '》</strong> <small>（' + esc(q.ref || '') + '）</small></div>';
+      html += '    <div class="ency-card-title">📘 書卷與經文百科：<strong>《' + esc(bookName) + '》</strong>' + (refStr ? ' <small>（' + esc(String(refStr).split('/')[0].trim()) + '）</small>' : '') + '</div>';
     }
 
     if (rel.chars.length || rel.places.length) {
@@ -469,7 +470,8 @@
       ['quotes', 'quote'],
       ['trivia', 'trivia'],
       ['parables', 'parable'],
-      ['books', 'books']
+      ['books', 'books'],
+      ['truefalse', 'truefalse']
     ].forEach(function (pair) {
       (d[pair[0]] || []).forEach(function (q) {
         q._type = pair[1];
@@ -487,6 +489,7 @@
     if (type === 'trivia') return d.trivia || [];
     if (type === 'parable') return d.parables || [];
     if (type === 'books') return d.books || [];
+    if (type === 'truefalse') return d.truefalse || [];
     return [];
   }
 
@@ -812,13 +815,17 @@
       var s = '';
       if (t === 'verse') {
         s = '經文填空。出處：' + q.ref + '。' + q.blankText + '。提示：' + q.hint + '。';
+      } else if (t === 'truefalse') {
+        s = '是非題：' + q.statement + '。這句話對還是錯？';
       } else {
-        s = '請猜猜看，這是' + TYPE_META[t].ask + '？';
+        if (t === 'quote' && q.quote) s += '這句話：' + q.quote + '。';
+        if (t === 'trivia' && q.question) s += q.question + '。';
+        s += '請猜猜看：' + TYPE_META[t].ask + '？';
         q.clues.slice(0, ctx.revealed).forEach(function (c, i) {
           s += '線索' + '一二三四五'.charAt(i) + '：' + c + '。';
         });
       }
-      if (ctx.inputMode === 'choice' && ctx.choices) {
+      if ((ctx.inputMode === 'choice' || t === 'truefalse') && ctx.choices) {
         s += '選項：';
         ctx.choices.forEach(function (c, i) {
           if (ctx.removed && ctx.removed.indexOf(c) !== -1) return;
@@ -833,7 +840,8 @@
     function answerText(q, pick, ok) {
       var ans = answerOf(q);
       var s = ok ? '答對了！答案是：' + ans + '。' : '正確答案是：' + ans + '。你的回答是：' + (pick || '未作答') + '。';
-      if (!ok && q.mistakeExplanation) s += '辨析：' + q.mistakeExplanation;
+      if (q.explanation) s += q.explanation;
+      else if (!ok && q.mistakeExplanation) s += '辨析：' + q.mistakeExplanation;
       if (q.nameMeaning) s += '名字的意思是：' + q.nameMeaning + '。';
       var desc = q.bio || q.notes || q.meaning;
       if (desc) s += desc;
@@ -993,6 +1001,7 @@
         triviaCorrect: 0,
         parableCorrect: 0,
         booksCorrect: 0,
+        tfCorrect: 0,
         mistakesCorrected: 0,
         masteredCount: 0,
         audioListenedCount: 0,
@@ -1196,6 +1205,7 @@
         else if (t === 'trivia') state.triviaCorrect = (state.triviaCorrect || 0) + 1;
         else if (t === 'parable') state.parableCorrect = (state.parableCorrect || 0) + 1;
         else if (t === 'books') state.booksCorrect = (state.booksCorrect || 0) + 1;
+        else if (t === 'truefalse') state.tfCorrect = (state.tfCorrect || 0) + 1;
         if (opts.mixed) state.mixedCorrect++;
         if (opts.firstClue) state.firstClueWins++;
         res.review = reviewSuccess(q.id);
@@ -1313,7 +1323,25 @@
       ach_total300: function (s) { return s.totalCorrect || 0; },
       ach_total500: function (s) { return s.totalCorrect || 0; },
       ach_xp10000: function (s) { return s.score || 0; },
-      ach_crown: function (s) { return (s.achievements || []).length; }
+      ach_crown: function (s) { return (s.achievements || []).length; },
+
+      // v3 新增成就
+      ach_tf_20: function (s) { return s.tfCorrect || 0; },
+      ach_tf_60: function (s) { return s.tfCorrect || 0; },
+      ach_quote_60: function (s) { return s.quoteCorrect || 0; },
+      ach_trivia_80: function (s) { return s.triviaCorrect || 0; },
+      ach_parable_50: function (s) { return s.parableCorrect || 0; },
+      ach_book_66: function (s) { return s.booksCorrect || 0; },
+      ach_verse_200: function (s) { return s.verseCorrect || 0; },
+      ach_scramble_60: function (s) { return count(s.scrambleSolved); },
+      ach_match_40: function (s) { return count(s.matchSolved); },
+      ach_cw_35: function (s) { return count(s.crosswordsSolved); },
+      ach_timeline_40: function (s) { return count(s.timelineSolved); },
+      ach_total1000: function (s) { return s.totalCorrect || 0; },
+      ach_first_clue_50: function (s) { return s.firstClueWins || 0; },
+      ach_mixed_100: function (s) { return s.mixedCorrect || 0; },
+      ach_mastered30: function (s) { return s.masteredCount || 0; },
+      ach_xp30000: function (s) { return s.score || 0; }
     };
 
     function achProgress(ach) {
@@ -1419,7 +1447,7 @@
   // ========================================================
   var ChallengeApp = (function () {
     var TABS = [
-      'char', 'place', 'verse', 'quote', 'trivia', 'parable', 'books',
+      'char', 'place', 'verse', 'quote', 'trivia', 'parable', 'books', 'truefalse',
       'scramble', 'match', 'mixed', 'crossword', 'timeline', 'mistakes', 'encyclopedia'
     ];
     var QUIZ_CONTAINERS = {
@@ -1430,6 +1458,7 @@
       trivia: 'triviaQuizContainer',
       parable: 'parableQuizContainer',
       books: 'booksQuizContainer',
+      truefalse: 'tfQuizContainer',
       mixed: 'mixedQuizContainer',
       mistakes: 'mistakesQuizContainer'
     };
@@ -1475,6 +1504,7 @@
         trivia: document.getElementById('viewTrivia'),
         parable: document.getElementById('viewParables'),
         books: document.getElementById('viewBooks'),
+        truefalse: document.getElementById('viewTrueFalse'),
         scramble: document.getElementById('viewScramble'),
         match: document.getElementById('viewMatch'),
         mixed: document.getElementById('viewMixed'),
@@ -1753,7 +1783,8 @@
             listOf('quote'),
             listOf('trivia'),
             listOf('parable'),
-            listOf('books')
+            listOf('books'),
+            listOf('truefalse')
           )
         : listOf(mode);
       var diff = StateManager.get().settings.difficulty;
@@ -1808,14 +1839,17 @@
       showQuestion();
     }
 
+    function isTF(q) { return typeOf(q) === 'truefalse'; }
+    function effMode(q) { return isTF(q) ? 'choice' : inputMode; }
+
     function showQuestion() {
       if (!session || !session.pool.length) return;
       var q = session.pool[session.idx % session.pool.length];
       var t = typeOf(q);
       qs = {
         q: q,
-        revealed: t === 'verse' ? 0 : 1,
-        choices: shuffle(q.options),
+        revealed: (t === 'verse' || t === 'truefalse') ? 0 : 1,
+        choices: t === 'truefalse' ? ['對', '錯'] : shuffle(q.options),
         removed: [],
         answered: false,
         hintUsed: false,
@@ -1854,7 +1888,8 @@
             listOf('quote'),
             listOf('trivia'),
             listOf('parable'),
-            listOf('books')
+            listOf('books'),
+            listOf('truefalse')
           )
         : listOf(mode);
       var counts = { 1: 0, 2: 0, 3: 0 };
@@ -1913,25 +1948,29 @@
       html += '    <span class="diff-badge diff-' + d + '" title="難度">' + DIFF_META[d].stars + ' ' + DIFF_META[d].label + '</span>';
       if (t === 'char' && q.category) html += '    <span class="quiz-cat-badge">' + esc(q.category) + '</span>';
       html += '  </div>';
+      if (!isTF(q)) {
       html += '  <div class="quiz-mode-switch" role="group" aria-label="切換作答方式">';
       html += '    <button type="button" class="mode-switch-btn ' + (inputMode === 'choice' ? 'active' : '') + '" data-mode="choice" aria-pressed="' + (inputMode === 'choice') + '">選擇題</button>';
       html += '    <button type="button" class="mode-switch-btn ' + (inputMode === 'fill' ? 'active' : '') + '" data-mode="fill" aria-pressed="' + (inputMode === 'fill') + '">填空題 +30</button>';
       html += '  </div>';
+      } else {
+        html += '  <span class="tf-hint">⚡ 快答：先憑直覺判斷，再看經文印證</span>';
+      }
       html += '</div>';
 
       html += roundDots();
       html += '<div id="quizPromptBox">' + renderPrompt() + '</div>';
 
       html += '<div class="quiz-interactive-zone" id="quizInteractiveZone">';
-      html += inputMode === 'choice' ? renderChoiceOptions() : renderFillInInputs();
+      html += effMode(q) === 'choice' ? renderChoiceOptions() : renderFillInInputs();
       html += '</div>';
 
       html += '<div class="lifeline-row" id="lifelineRow">';
       html += ttsButton('ttsSpeakQuestionBtn', '念題目');
-      if (inputMode === 'choice') {
+      if (inputMode === 'choice' && !isTF(q)) {
         html += '<button type="button" class="lifeline-btn" id="fiftyBtn"' + (qs.fiftyUsed || qs.answered ? ' disabled' : '') + ' title="刪去兩個錯誤選項（本題 −40 XP）">✂️ 刪去兩個錯誤選項 <small>−40</small></button>';
       }
-      html += '<span class="kbd-hint">鍵盤：1–4 作答 · Enter 下一題 · S 朗讀</span>';
+      html += '<span class="kbd-hint">' + (isTF(q) ? '鍵盤：1 對 · 2 錯' : '鍵盤：1–4 作答') + ' · Enter 下一題 · S 朗讀</span>';
       html += '</div>';
 
       html += '<div class="quiz-result-feedback" id="quizFeedbackBox" hidden></div>';
@@ -1954,10 +1993,22 @@
         html += '</div>';
         return html;
       }
+      if (t === 'truefalse') {
+        html += '<div class="quiz-prompt-box tf-prompt-box">';
+        html += '  <div class="clue-list-heading"><span>⚖️ 這句敘述是對還是錯？</span></div>';
+        html += '  <div class="tf-statement">' + esc(q.statement) + '</div>';
+        html += '</div>';
+        return html;
+      }
       var total = q.clues.length;
       var shown = qs.answered ? total : qs.revealed;
       html += '<div class="quiz-prompt-box">';
-      html += '  <div class="clue-list-heading"><span>🔎 猜猜這是' + TYPE_META[t].ask + '？</span>';
+      if (t === 'quote' && q.quote) {
+        html += '  <blockquote class="quote-hero">「' + esc(q.quote) + '」</blockquote>';
+      } else if (t === 'trivia' && q.question) {
+        html += '  <div class="trivia-question">❓ ' + esc(q.question) + '</div>';
+      }
+      html += '  <div class="clue-list-heading"><span>🔎 ' + (t === 'trivia' ? '提示線索' : '猜猜看：' + TYPE_META[t].ask + '？') + '</span>';
       html += '    <span class="clue-count">線索 ' + shown + ' / ' + total + '</span></div>';
       html += '  <ol class="clues-ordered-list">';
       q.clues.forEach(function (clue, idx) {
@@ -2195,11 +2246,11 @@
     function computeXp() {
       var q = qs.q;
       var parts = [['基礎', session.review ? 120 : 100]];
-      if (typeOf(q) !== 'verse') {
+      if (typeOf(q) !== 'verse' && typeOf(q) !== 'truefalse') {
         var bonus = CLUE_BONUS[qs.revealed - 1] || 0;
         if (bonus) parts.push([bonus > 0 ? '線索 ' + qs.revealed + '/' + q.clues.length : '線索全開', bonus]);
       }
-      if (inputMode === 'fill') parts.push(['填空', 30]);
+      if (effMode(q) === 'fill') parts.push(['填空', 30]);
       if (qs.hintUsed) parts.push(['提示首字', -30]);
       if (qs.fiftyUsed) parts.push(['刪去兩項', -40]);
       var sum = 0;
@@ -2216,7 +2267,7 @@
 
       qs.answered = true;
       qs.pick = userVal;
-      var firstClue = typeOf(q) !== 'verse' && qs.revealed === 1;
+      var firstClue = typeOf(q) !== 'verse' && typeOf(q) !== 'truefalse' && qs.revealed === 1;
 
       var res = StateManager.recordAnswer(q, ok, userVal, { mixed: session.mode === 'mixed', firstClue: ok && firstClue });
       var xp = null;
@@ -2246,8 +2297,8 @@
       // 作答後：顯示所有線索、標出正解、鎖定工具
       refreshPrompt();
       var zone = document.getElementById('quizInteractiveZone');
-      if (zone && inputMode === 'choice') zone.innerHTML = renderChoiceOptions();
-      if (inputMode === 'fill') {
+      if (zone && effMode(q) === 'choice') zone.innerHTML = renderChoiceOptions();
+      if (effMode(q) === 'fill') {
         var input = document.getElementById('fillTextInput');
         if (input) {
           input.disabled = true;
@@ -2283,6 +2334,9 @@
       if (q.nameMeaning) {
         return '把「' + answerOf(q) + '」和字義「' + q.nameMeaning.replace(/\s*\([^)]*\)/g, '') + '」連在一起記，再配上一個畫面：' + q.clues[q.clues.length - 1].slice(0, 28) + '…';
       }
+      if (t === 'truefalse') return '打開 ' + (q.verseRef || '經文') + ' 讀一次原文，再用自己的話把正確的說法講一遍。';
+      if (t === 'quote') return '想像「' + answerOf(q) + '」在「' + (q.occasion || '當時的場合') + '」說出這句話的畫面。';
+      if (t === 'trivia') return '把答案「' + answerOf(q) + '」和出處 ' + (q.verseRef || '') + ' 綁在一起記。';
       return '用一句話說出「' + answerOf(q) + '」最關鍵的事蹟，並和相似的選項作對比。';
     }
 
@@ -2331,8 +2385,8 @@
       if (!ok) {
         html += '<div class="mistake-clarify-box">';
         html += '  <div class="mistake-clarify-title"><span>❌</span> 你的作答：<strong>「' + esc(userVal || '未填寫') + '」</strong>　✅ 正確答案：<strong>「' + esc(target) + '」</strong></div>';
-        html += '  <div class="mistake-clarify-content"><strong>💡 易混淆辨析：</strong>' + esc(q.mistakeExplanation || '請留意線索中的原文字義、歷史時代與關鍵事蹟，區分同時代的其他人物或事件。') + '</div>';
-      var other = t !== 'verse' ? findByName(userVal, t) : null;
+        html += '  <div class="mistake-clarify-content"><strong>💡 易混淆辨析：</strong>' + esc(q.mistakeExplanation || q.explanation || '請留意線索中的原文字義、歷史時代與關鍵事蹟，區分同時代的其他人物或事件。') + '</div>';
+      var other = (t === 'char' || t === 'place') ? findByName(userVal, t) : null;
       if (other && other !== q && testament(other) === testament(q)) {
         var otherEncyHash = t === 'char' ? 'index.html#ref/characters/' + encodeURIComponent(answerOf(other)) : 'index.html#ref/geography/' + encodeURIComponent(answerOf(other));
         html += '  <div class="contrast-card">';
@@ -2347,12 +2401,15 @@
     html += reviewLine(res);
 
     html += '<div class="fb-body">';
+    if (t === 'truefalse') html += '  <div class="fb-info-row"><span class="fb-label">敘述：</span>' + esc(q.statement) + '</div>';
+    if (t === 'quote' && q.occasion) html += '  <div class="fb-info-row"><span class="fb-label">場合：</span>' + esc(q.occasion) + '</div>';
+    if (t === 'trivia' && q.question) html += '  <div class="fb-info-row"><span class="fb-label">題目：</span>' + esc(q.question) + '</div>';
     html += '  <div class="fb-target-row"><span class="fb-label">標準答案：</span><strong class="fb-target-name">' + esc(target) + '</strong>';
     if (q.nameMeaning) html += '<span class="fb-name-meaning">（' + esc(q.nameMeaning) + '）</span>';
     html += '  </div>';
     if (q.era) html += '  <div class="fb-info-row"><span class="fb-label">歷史時代：</span>' + esc(q.era) + '</div>';
     if (q.region) html += '  <div class="fb-info-row"><span class="fb-label">地理位置：</span>' + esc(q.region) + '</div>';
-    var descText = q.bio || q.notes || q.meaning || '';
+    var descText = q.bio || q.notes || q.meaning || (ok ? (q.explanation || q.mistakeExplanation || '') : '');
     if (descText) html += '  <p class="fb-desc-text">' + esc(descText) + '</p>';
     if (t === 'verse') {
       html += '  <div class="fb-verse-box"><div class="fb-verse-ref">📜 ' + esc(q.ref) + '</div><div class="fb-verse-text">「' + esc(q.fullText) + '」</div></div>';
@@ -2552,7 +2609,7 @@
       if (!quizActive()) return;
       if (elements.achievementsModal && !elements.achievementsModal.hidden) return;
 
-      if (inputMode === 'choice' && !qs.answered && ['1', '2', '3', '4'].indexOf(e.key) !== -1) {
+      if (effMode(qs.q) === 'choice' && !qs.answered && ['1', '2', '3', '4'].indexOf(e.key) !== -1) {
         var btn = quizRoot().querySelectorAll('.quiz-opt-btn')[parseInt(e.key, 10) - 1];
         if (btn && !btn.disabled) btn.click();
       } else if (qs.answered && (e.key === ' ' || e.key === 'Enter')) {
@@ -3404,6 +3461,7 @@
         html += '  <div style="font-size:1.15rem; font-weight:800; color:var(--ok);">🎉 經文重組大獲全勝！</div>';
         html += '  <div style="font-size:1.1rem; font-family:var(--font-serif); line-height:1.7; margin:6px 0;">「' + esc(lvl.fullText) + '」</div>';
         html += '  <div style="font-size:0.88rem; color:var(--fg-dim);">📖 經文出處：' + esc(lvl.ref) + '</div>';
+        if (lvl.meaning) html += '  <div class="scramble-meaning">💡 ' + esc(lvl.meaning) + '</div>';
         if (rLink) {
           html += '  <div style="margin-top:6px;"><a href="' + rLink + '" target="_blank" rel="noopener" class="ency-action-link primary-ency-link" style="display:inline-flex;">📖 在聖經閱讀器中開啟 ↗</a></div>';
         }
@@ -3587,7 +3645,7 @@
       html += '  </select></div>';
       html += '</div>';
 
-      html += '<div class="tl-howto">' + (solved ? '🎉 恭喜！本關 4 組聖經關聯卡片皆已成功配對！' : '👆 點選左欄一張卡片，再點選右欄一張卡片進行配對；配對成功將鎖定並揭示其歷史意義。') + '</div>';
+      html += '<div class="tl-howto">' + (solved ? '🎉 恭喜！本關 ' + lvl.pairs.length + ' 組聖經關聯卡片皆已成功配對！' : '👆 點選左欄一張卡片，再點選右欄一張卡片進行配對；配對成功將鎖定並揭示其歷史意義。') + '</div>';
 
       // 雙欄配對網格 (Two-column Match Grid)
       html += '<div class="match-grid-container">';
@@ -3622,9 +3680,19 @@
 
       html += '</div>'; // match-grid-container
 
+      if (solved) {
+        html += '<div class="match-recap"><div class="match-recap-title">📚 本關重點回顧</div>';
+        lvl.pairs.forEach(function (p) {
+          var pl = p.ref ? readerLink({ ref: p.ref, _type: 'verse' }) : '';
+          html += '<div class="match-recap-row"><div><b>' + esc(p.left) + '</b> 🔗 <b>' + esc(p.right) + '</b></div><span>' + esc(p.explanation) + '</span>' + (pl ? '<a href="' + pl + '" target="_blank" rel="noopener" class="ency-rel-chip read-chip">📖 ' + esc(p.ref) + ' ↗</a>' : '') + '</div>';
+        });
+        html += '</div>';
+      }
+
       // 解說橫幅
       if (matchState.lastExplanation) {
-        html += '<div class="match-explanation-banner">💡 <b>配對成功！</b> ' + esc(matchState.lastExplanation) + '</div>';
+        var mLink = matchState.lastRef ? readerLink({ ref: matchState.lastRef, _type: 'verse' }) : '';
+        html += '<div class="match-explanation-banner">💡 <b>配對成功！</b> ' + esc(matchState.lastExplanation) + (mLink ? ' <a href="' + mLink + '" target="_blank" rel="noopener" class="ency-rel-chip read-chip">📖 ' + esc(matchState.lastRef) + ' ↗</a>' : '') + '</div>';
       }
 
       // 控制與下一關
@@ -3707,6 +3775,7 @@
         // MATCH!
         matchState.matchedPairs[left.pairIdx] = true;
         matchState.lastExplanation = left.text + ' 🔗 ' + right.text + ' — ' + left.explanation;
+        matchState.lastRef = matchState.level.pairs[left.pairIdx].ref || '';
         matchState.selectedLeft = null;
         matchState.selectedRight = null;
         SoundEngine.playCorrect();
@@ -3719,7 +3788,7 @@
           var goal = StateManager.bumpDaily(true);
           SoundEngine.playWin();
           ConfettiEngine.fire(90);
-          Toast.show('🎉 4 組聖經配對全數正確！獲得 +' + xp + ' XP', 'ok');
+          Toast.show('🎉 ' + totalPairs + ' 組聖經配對全數正確！獲得 +' + xp + ' XP', 'ok');
           if (goal) setTimeout(celebrateGoal, 700);
         }
         renderMatchUI();
@@ -4017,7 +4086,8 @@
         ['quote', '💬 誰說這句話'],
         ['trivia', '🔢 聖經奧祕'],
         ['parable', '🕊️ 比喻與神蹟'],
-        ['books', '📚 書卷正典']
+        ['books', '📚 書卷正典'],
+        ['truefalse', '⚖️ 是非快答']
       ].forEach(function (x) {
         var c = coverage(x[0]);
         var pct = c.total ? Math.round(c.n / c.total * 100) : 0;

@@ -6,8 +6,8 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#fbf9f5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
-<title>Biblia 聖經挑戰旗艦版 — 12大益智遊戲 · 600+海量題庫 · 猜人名地名 · 經文重組 · 聖經配對 · 十字填字 · 年代排序</title>
-<meta name="description" content="用科學又有趣的方法學聖經：150位聖經人物、100處聖經地名、130節金句填空、誰說這句話、聖經數字奧祕、比喻神蹟、書卷解密、經文重組、奇妙配對、十字填字與年代排序。語音朗讀、答錯即時解說、間隔重複錯題本、48項榮譽成就。">
+<title>聖經挑戰 - Bible Quests｜Biblia</title>
+<meta name="description" content="聖經挑戰 Bible Quests：13 種遊戲、1206 題關卡，所有解答都附和合本經文連結。猜人物 150、地名 100、經文填空 273、誰說這句話 100、數字與知識 153、比喻神蹟 80、66 卷書卷、是非快答 80、經文重組 86、配對 40、十字填字 38、年代排序 40。語音朗讀、間隔複習錯題本、64 項成就。">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
 <link rel="apple-touch-icon" href="icons/icon.svg">
@@ -24,7 +24,7 @@
 })();
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;600;700;900&display=swap">
-<link rel="stylesheet" href="style.css?v=44">
+<link rel="stylesheet" href="style.css?v=47">
 <style>
 /* ===================== 聖經挑戰專屬高質感樣式 (Bible Challenge Design System) ===================== */
 :root {
@@ -2919,6 +2919,77 @@ ol.tl-events-list {
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
 }
+.quote-hero {
+  margin: 0 0 12px;
+  padding: 14px 18px;
+  border-left: 4px solid var(--accent);
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
+  line-height: 1.75;
+  color: var(--fg);
+}
+.trivia-question {
+  margin: 0 0 12px;
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.6;
+  color: var(--fg);
+}
+.tf-statement {
+  margin-top: 6px;
+  padding: 18px 20px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  border: 1px dashed var(--line-soft);
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: var(--fg);
+}
+.tf-hint {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--fg-dim);
+}
+#tfQuizContainer .quiz-options-grid {
+  grid-template-columns: 1fr 1fr;
+}
+#tfQuizContainer .quiz-opt-btn .opt-text,
+.tf-prompt-box ~ .quiz-interactive-zone .opt-text {
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+.scramble-meaning {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--fg-dim);
+}
+.match-recap {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+}
+.match-recap-title {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.match-recap-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line-soft);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.match-recap-row:first-of-type { border-top: 0; }
+.match-recap-row span { color: var(--fg-dim); flex: 1 1 220px; }
 .match-explanation-banner {
   margin-top: 12px;
   padding: 12px 16px;
@@ -3044,6 +3115,9 @@ ol.tl-events-list {
       <button type="button" class="game-nav-tab" data-tab="books" role="tab" aria-selected="false">
         <span>📚</span> 書卷正典解密
       </button>
+      <button type="button" class="game-nav-tab" data-tab="truefalse" role="tab" aria-selected="false">
+        <span>⚖️</span> 是非快答
+      </button>
       <button type="button" class="game-nav-tab" data-tab="scramble" role="tab" aria-selected="false">
         <span>🔤</span> 經文重組大師
       </button>
@@ -3106,6 +3180,11 @@ ol.tl-events-list {
     <!-- 7. 聖經書卷正典解密 View -->
     <section id="viewBooks" class="game-view-panel" hidden>
       <div id="booksQuizContainer"></div>
+    </section>
+
+    <!-- 是非快答 View -->
+    <section id="viewTrueFalse" class="game-view-panel" hidden>
+      <div id="tfQuizContainer"></div>
     </section>
 
     <!-- 8. 經文重組大師 View -->
@@ -3186,8 +3265,8 @@ ol.tl-events-list {
   <div id="toastStack" class="toast-stack" aria-live="polite"></div>
 
   <!-- 資料庫與遊戲引擎 Script -->
-  <script src="data/challenge_data.js?v=43"></script>
-  <script src="challenge.js?v=43"></script>
+  <script src="data/challenge_data.js?v=47"></script>
+  <script src="challenge.js?v=47"></script>
 
   <!-- 離線 Service Worker -->
   <script>

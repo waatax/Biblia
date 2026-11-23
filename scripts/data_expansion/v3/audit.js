@@ -1,5 +1,5 @@
 /* 稽核：題庫內所有引用經文必須與內建和合本一致（或為其節錄） */
-const { parseRef, loadData, strip } = require('./lib');
+const { parseRef, loadData, strip, canon } = require('./lib');
 const d = loadData();
 let bad = 0, total = 0, noref = 0;
 const show = process.argv.includes('-v');
@@ -8,7 +8,7 @@ function check(kind, id, ref, text) {
   const p = parseRef(ref);
   if (!p) { noref++; if (show) console.log('NOREF', kind, id, ref); return; }
   // 節錄允許以 ... 或 … 分段，每段都必須出現在原文
-  const whole = strip(p.text);
+  const whole = strip(canon(p.text));
   const parts = String(text).split(/\.\.\.|…+/).map(strip).filter(Boolean);
   if (!parts.every((x) => whole.includes(x))) { bad++; if (show) console.log('DIFF', kind, id, ref, '\n   has:', text, '\n   unv:', p.text.slice(0, 160)); }
 }
